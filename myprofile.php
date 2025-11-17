@@ -31,8 +31,7 @@ include "fetch_my_photos.php";
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="fontawesome/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="bsicons/bsicons/bootstrap-icons.min.css">
-    </link>
-    <link rel="stylesheet" href="RemixIcon-master/RemixIcon-master/fonts/remixicon.css">
+    <link rel="stylesheet" href="sweetalert/sweetalert2.min.css">
     <script src="Jquery File/jquery-3.7.1.min.js"></script>
 </head>
 
@@ -298,7 +297,7 @@ include "fetch_my_photos.php";
                                                 <p><?= $infos['username']; ?></p>
                                             </div>
                                             <div class="edit-div">
-                                                <input type="text" class="form-control" name="update_name" id="username" value="<?= $infos['username']; ?>">
+                                                <input type="text" class="form-control" name="update_name" id="username" onkeyup="checkName()" value="<?= $infos['username']; ?>">
                                                 <span id="err_username"></span>
                                             </div>
                                         </li>
@@ -308,7 +307,7 @@ include "fetch_my_photos.php";
                                                 <p><?= $infos['display_name'] ?? '..'; ?></p>
                                             </div>
                                             <div class="edit-div">
-                                                <input type="text" class="form-control" name="update_dname" id="userdname" value="<?= $infos['display_name']; ?>">
+                                                <input type="text" class="form-control" name="update_dname" onkeyup="checkDname()" id="userdname" value="<?= $infos['display_name']; ?>">
                                                 <span id="err_dname"></span>
                                             </div>
                                         </li>
@@ -318,7 +317,7 @@ include "fetch_my_photos.php";
                                                 <p><?= $infos['email']; ?></p>
                                             </div>
                                             <div class="edit-div">
-                                                <input type="email" class="form-control" name="update_email" id="useremail" value="<?= $infos['email']; ?>">
+                                                <input type="email" class="form-control" name="update_email" id="useremail" onkeyup="checkEmail()" value="<?= $infos['email']; ?>">
                                                 <span id="err_useremail"></span>
                                             </div>
                                         </li>
@@ -328,7 +327,7 @@ include "fetch_my_photos.php";
                                                 <p><?= $infos['phone_number'] ?? '..'; ?></p>
                                             </div>
                                             <div class="edit-div">
-                                                <input type="tel" class="form-control" name="update_phone" id="userphone" value="<?= $infos['phone_number']; ?>">
+                                                <input type="tel" class="form-control" name="update_phone" onkeyup="checkPhone()" id="userphone" value="<?= $infos['phone_number']; ?>">
                                                 <span id="err_userphone"></span>
                                             </div>
                                         </li>
@@ -500,6 +499,7 @@ include "fetch_my_photos.php";
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="tooltip.js"></script>
     <script src="edit_informations.js"></script>
+    <script src="sweetalert/sweetalert2.min.js"></script>
     <script src="edit_profile.js"></script>
     <script src="chart.js-4.5.1/package/dist/chart.umd.js"></script>
     <script>
