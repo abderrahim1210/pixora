@@ -186,7 +186,7 @@ $totalImages = $stm->fetch(PDO::FETCH_ASSOC);
         <?php include "footer_dashboard.php"; ?>
     </main>
     <div class="container-fluid">
-        <nav class="navbar navbar-expand fixed-bottom nav3 mx-auto mb-2" role="tablist">
+        <nav class="navbar navbar-expand fixed-bottom nav3 mx-auto" role="tablist">
             <ul class="navbar-nav" id="ul3">
                 <li class="nav-item"><a data-bs-target="#photos" data-bs-toggle="tab" class="nav-link active tooltip-tab" title="My photos"><i class="fa-solid fa-image"></i></a></li>
                 <li class="nav-item"><a data-bs-target="#licensing" data-bs-toggle="tab" class="nav-link tooltip-tab" title="Licensing"><i class="fa-solid fa-certificate"></i></a></li>
@@ -196,8 +196,8 @@ $totalImages = $stm->fetch(PDO::FETCH_ASSOC);
             </ul>
         </nav>
     </div>
-    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="rotate_icon.js"></script>
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="tooltip.js"></script>
     <script src="copyright.js"></script>
 </body>

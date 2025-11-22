@@ -95,7 +95,7 @@ $totalLikes = $cnt->fetchColumn();
                         </div>
                         <div class="edit_div mb-1">
                             <div class="form-floating">
-                                <textarea name="update_title" id="title" class="form-control"><?= $photo['title']; ?></textarea>
+                                <textarea name="update_title" data-bs-toggle="tooltip" title="Edit title" id="title" class="form-control"><?= $photo['title']; ?></textarea>
                                 <label for="title" class="form-label">Title</label>
                             </div>
                         </div>
@@ -108,7 +108,7 @@ $totalLikes = $cnt->fetchColumn();
                         </div>
                         <div class="edit_div mb-1">
                             <div class="form-floating">
-                                <textarea name="update_description" id="description" class="form-control"><?= $photo['description']; ?></textarea>
+                                <textarea name="update_description" data-bs-toggle="tooltip" title="Edit description" id="description" class="form-control"><?= $photo['description']; ?></textarea>
                                 <label for="description" class="form-label">Description</label>
                             </div>
                         </div>
@@ -127,7 +127,7 @@ $totalLikes = $cnt->fetchColumn();
                             <p><?= $cat_name['name'] ?? "Null"; ?></p>
                         </div>
                         <div class="edit_div">
-                            <textarea name="update_category" id="Category" class="form-control" rows="1"><?= $cat_name['name'] ?? ""; ?></textarea>
+                            <textarea name="update_category" id="Category" data-bs-toggle="tooltip" title="Edit category" class="form-control" rows="1"><?= $cat_name['name'] ?? ""; ?></textarea>
                         </div>
                     </li>
                     <li>
@@ -164,7 +164,7 @@ $totalLikes = $cnt->fetchColumn();
                             <p><?= $photo['visibility']; ?></p>
                         </div>
                         <div class="edit_div">
-                            <select name="update_visibility" class="form-control">
+                            <select name="update_visibility" data-bs-toggle="tooltip" title="Edit visibility" class="form-control">
                                 <option value="Private" <?php if ($photo['visibility'] == "private") echo "selected"; ?>>Private</option>
                                 <option value="Public" <?php if ($photo['visibility'] == "public") echo "selected"; ?>>Public</option>
                             </select>
@@ -182,12 +182,6 @@ $totalLikes = $cnt->fetchColumn();
             </ul>
             <div class="comments">
                 <h5>Comments</h5>
-                <form action="" class="comment-form" method="post">
-                    <div class="input-group">
-                        <textarea id="up_comment" placeholder="Type your comment ..." class="form-control" rows="1" cols="1"></textarea>
-                        <button type="submit" class="btn btn-primary">Post</button>
-                    </div>
-                </form>
                 <ul class="comments-list mt-4">
                     <li class="comment-item">
                         <img src="outils/pngs/useracc2.png" alt="user" class="comment-avatar">
@@ -208,6 +202,7 @@ $totalLikes = $cnt->fetchColumn();
     <script src="bootstrap/js/bootstrap-select.min.js"></script>
     <script src="sweetalert/sweetalert2.min.js"></script>
     <script src="confirm-alert.js"></script>
+    <script src="tooltip.js"></script>
     <script>
         const edit_button = document.getElementById('editBtn');
         const saveChanges = document.getElementById('saveChangeBtn');

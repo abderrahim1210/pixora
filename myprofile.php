@@ -187,7 +187,7 @@ include "fetch_my_photos.php";
                                     <h3 class="fw-semibold mb-1"><?= $infos['display_name']; ?></h3>
                                 </div>
                                 <div>
-                                    <p class="mb-1" style="text-decoration: underline;" data-bs-toggle="tooltip" title="View in map"><i id="location_icon" class="fas fa-location-dot"></i> <?= $infos['Location'] ?? "Casablanca"; ?></p>
+                                    <p class="mb-1" style="text-decoration: underline;" data-bs-toggle="tooltip" title="View in map"><i id="location_icon" class="fas fa-location-dot"></i> <?= $infos['country'] ?? ""; ?></p>
                                 </div>
                                 <div>
                                     <p class="mb-1">@<?= $infos['username']; ?></p>
@@ -365,9 +365,9 @@ include "fetch_my_photos.php";
                                             </div>
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Location</strong>
+                                            <strong>Country</strong>
                                             <div class="display-div">
-                                                <p><?= $infos['location'] ?? ".."; ?></p>
+                                                <p><?= $infos['country'] ?? ".."; ?></p>
                                             </div>
                                             <div class="edit-div">
                                                 <div class="dropdown">
@@ -375,7 +375,7 @@ include "fetch_my_photos.php";
                                                         Select a country
                                                     </button>
                                                     <ul class="dropdown-menu" id="countryListe"></ul>
-                                                    <input type="hidden" name="update_location" id="selectedCountry" value="<?= $infos['location'] ?>">
+                                                    <input type="hidden" name="update_location" id="selectedCountry" value="<?= $infos['country'] ?>">
                                                 </div>
                                             </div>
                                         </li>
