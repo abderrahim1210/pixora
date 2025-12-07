@@ -37,30 +37,10 @@ $totalImages = $stm->fetch(PDO::FETCH_ASSOC);
     </link>
     <link rel="stylesheet" href="RemixIcon-master/RemixIcon-master/fonts/remixicon.css">
     <script src="Jquery File/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="Notyf/notyf.min.css">
 </head>
 
 <body>
-    <?php if (!empty($_SESSION['biomess'])): ?>
-        <div class="alert mt-2 mb-2">
-            <?= $_SESSION['biomess']; ?>
-            <button type="button" class="btn btn-close" data-bs-dismiss="alert"></button>
-            <?php unset($_SESSION['biomess']); ?>
-        </div>
-    <?php endif; ?>
-    <?php if (!empty($_SESSION['delmess'])): ?>
-        <div class="alert mt-2 mb-2">
-            <?= $_SESSION['delmess']; ?>
-            <button type="button" class="btn btn-close" data-bs-dismiss="alert"></button>
-            <?php /* unset($_SESSION['delmess']); */ ?>
-        </div>
-    <?php endif; ?>
-    <?php if (!empty($_SESSION['upload_mess'])): ?>
-        <div class="alert mt-2 mb-2">
-            <?= $_SESSION['upload_mess']; ?>
-            <button type="button" class="btn btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        <?php unset($_SESSION['upload_mess']); ?>
-    <?php endif; ?>
     <main>
         <?php include "navbar.php"; ?>
         <div class="modal fade" id="bio" aria-hidden="true" tabindex="-1">
@@ -178,6 +158,14 @@ $totalImages = $stm->fetch(PDO::FETCH_ASSOC);
                                     </div>
                                 <?php endforeach; ?>
                             </div>
+                            <?php if ($photoStmt->rowCount() === 0): ?>
+                                <div class="empty-content">
+                                    <div class="mb-5">
+                                        <i class="fa-solid fa-camera" onclick="window.location.href = 'upload.php'" style="cursor: pointer;"></i>
+                                        <h4>No photos yet — start sharing your moments!</h4>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -200,6 +188,9 @@ $totalImages = $stm->fetch(PDO::FETCH_ASSOC);
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="tooltip.js"></script>
     <script src="copyright.js"></script>
+    <script src="Notyf/notyf.min.js"></script>
+    <script src="notyf.js"></script>
+    <?php include 'sessions.php'; ?>
 </body>
 
 </html>

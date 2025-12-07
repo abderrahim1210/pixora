@@ -3,7 +3,7 @@ include "db.php";
 include "fn.php";
 session_start();
 if ((!isset($_SESSION['px_id']) || !is_numeric($_SESSION['px_id'])) && (!isset($_COOKIE['px_userid']) || (!is_numeric($_COOKIE['px_userid'])))) {
-    $_SESSION['upErr'] = "You have to logged first for upload a file.";
+    $_SESSION['flash'] = "You have to logged first for upload a file.";
     header("Location:login.php");
     exit();
 }
@@ -21,21 +21,30 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_FILES['photoFile'])) {
     $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
     if ($_FILES['photoFile']['size'] > (100 * 1024 * 1024)) {
-        $_SESSION["upload_mess"] = "The files is large.";
+        $_SESSION["flash"][] = [
+            'type' => 'error',
+            'message' => 'The files is large'
+        ];
         $uploadOk = false;
         $_SESSION['statu'] = "Size problem";
     }
 
     $allowed = ['png', 'jpg', 'jpeg'];
     if (!in_array($file_type, $allowed)) {
-        $_SESSION["upload_mess"] = "We are not allow this files";
+        $_SESSION["flash"][] = [
+            'type' => 'error',
+            'message' => 'We are not allow this files'
+        ];
         $uploadOk = false;
         $_SESSION['statu'] = "Type problem";
     }
 
     if ($uploadOk == true) {
         if (move_uploaded_file($_FILES["photoFile"]["tmp_name"], $target_file)) {
-            $_SESSION['upload_mess'] = "Uploaded files successfully";
+            $_SESSION['flash'][] = [
+                'type' => 'success',
+                'message' => 'Uploaded files successfully'
+            ];
             $_SESSION['statu'] = "Okay";
 
             $stmt = $conn->prepare("SELECT id FROM categories WHERE name = :name LIMIT 1");

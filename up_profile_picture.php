@@ -1,6 +1,6 @@
 <?php
 include "verify_profile.php";
-
+session_start();
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $target_dir = "profile_pictures/";
     $file_type = strtolower(pathinfo($_FILES['profileImage']['name'], PATHINFO_EXTENSION));
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             $add_photo->bindValue(":id", $id, PDO::PARAM_INT);
             $add_photo->bindValue(":tk", $tk, PDO::PARAM_STR);
             $add_photo->execute();
-            $_SESSION['addProfilePicture'][] = [
+            $_SESSION['flash'][] = [
                 'type' => 'success',
                 'message' => 'Profile picture updated successfully'
             ];
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             exit();
         }
     } else {
-        $_SESSION['addProfilePicture'][] = [
+        $_SESSION['flash'][] = [
             'type' => 'error',
             'message' => 'Failed to upload profile picture. Please try again.'
         ];

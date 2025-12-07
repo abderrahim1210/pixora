@@ -6,7 +6,7 @@
         $comment_id = $_POST['comment_id'] ?? null;
         if(!$comment_id || !is_numeric($comment_id)){
             $ok = false;
-            $_SESSION['commentMess'][] = [
+            $_SESSION['flash'][] = [
                 'type' => 'error',
                 'message' => 'Comment not found'
             ];
@@ -22,7 +22,7 @@
 
         if(!$comment){
             $ok = false;
-            $_SESSION['commentMess'][] = [
+            $_SESSION['flash'][] = [
                 'type' => 'error',
                 'message' => 'You can not edit this comment'
             ];
@@ -31,7 +31,7 @@
         }
 
         if($content === ''){
-            $_SESSION['commentMess'][] = [
+            $_SESSION['flash'][] = [
                 'type' => 'error',
                 'message' => 'Comment updated failed'
             ];
@@ -44,14 +44,14 @@
             $up_comment -> bindValue(":content",$content,PDO::PARAM_STR);
             $up_comment -> bindValue(":id",$comment_id,PDO::PARAM_INT);
             $up_comment -> execute();
-            $_SESSION['commentMess'][] = [
+            $_SESSION['flash'][] = [
                 'type' => 'success',
                 'message' => 'Comment updated successfully'
             ];
             header("Location:photo_preview.php?id=$photo_id");
             exit();
         }else{
-            $_SESSION['commentMess'][] = [
+            $_SESSION['flash'][] = [
                 'type' => 'error',
                 'message' => 'Comment updated failed'
             ];

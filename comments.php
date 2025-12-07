@@ -4,7 +4,7 @@ include_once "convert_date.php";
 <ul class="comments-list mt-4">
     <?php foreach ($cs as &$c): ?>
         <li class="comment-item">
-            <img src="outils/pngs/useracc2.png" alt="user" class="comment-avatar">
+            <img src="<?= (!empty($c['photo_profile']) ? 'profile_pictures/' . $c['photo_profile'] : 'outils/pngs/useracc2.png') ?>" alt="user" class="comment-avatar">
             <div class="comment-body d-flex justify-content-between align-items-start">
                 <div>
                     <h6 class="comment-author"><?= $c['username']; ?><small><?= $c['updated_at'] ? ' Edited' : '' ?></small></h6>

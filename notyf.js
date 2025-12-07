@@ -17,6 +17,15 @@ const notyf = new Notyf({
             }
         },
         {
+            type: 'info',
+            background: '#3b82f6',
+            icon: {
+                className: 'fas fa-info-circle',
+                tagName: 'i',
+                color : '#fff'
+            }
+        },
+        {
             type: 'error',
             background: 'red',
             icon: {

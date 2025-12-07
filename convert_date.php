@@ -18,11 +18,11 @@ function timeAgo($timestamp)
     } elseif ($diff < 2592000) {
         $weeks = floor($diff / 604800);
         return $weeks . ' week' . ($weeks > 1 ? 's ' : '') . ' ago';
-    } elseif ($diff < 3153600) {
+    } elseif ($diff < 31536000) {
         $months = floor($diff / 2592000);
         return $months . ' month' . ($months > 1 ? 's ' : '') . ' ago';
     } else {
-        $years = floor($diff / 3153600);
+        $years = floor($diff / 31536000);
         return $years . ' year' . ($years > 1 ? 's ' : '') . ' ago';
     }
 }

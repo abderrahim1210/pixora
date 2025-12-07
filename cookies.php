@@ -1,7 +1,11 @@
 <?php
     session_start();
+    $_SESSION['flash'] = [];
     if((!isset($_SESSION['px_id']) || !is_numeric($_SESSION['px_id'])) && (isset($_COOKIE['px_userid']))){
-        $_SESSION['cookieerr'] = "You have to logged first for start cookies.";
+        $_SESSION['flash'][] = [
+            'type' => 'error',
+            'message' => 'You have to logged first for start cookies.'
+        ];
         header("Location:login.php");
         exit();
     }else{
@@ -20,7 +24,10 @@
         setcookie($email,$email_value,time() + (86400 * 30),'/');
         setcookie($bio,$bio_value,time() + (86400 * 30),'/');
         setcookie($date,$date_value,time() + (86400 * 30),'/');
-        $_SESSION['cookiemess'] = "You are accept the cookies of Pixora website.";
+        $_SESSION['flash'][] = [
+            'type' => 'success',
+            'message' => 'You are accept the cookies of Pixora website.'
+        ];
         header("Location:pixora.php");
         exit();
     }

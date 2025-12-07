@@ -50,7 +50,7 @@ $cnt->bindValue(":photoid", $photo['id'], PDO::PARAM_INT);
 $cnt->execute();
 $totalLikes = $cnt->fetchColumn();
 
-$comments = $conn->prepare("SELECT c.id ,c.photo_id, c.user_id, c.content, c.created_at, c.updated_at, u.username
+$comments = $conn->prepare("SELECT c.id ,c.photo_id, c.user_id, c.content, c.created_at, c.updated_at, u.username,u.photo_profile
 FROM comments c
 JOIN users u ON c.user_id = u.id
 WHERE c.photo_id = :photo_id
@@ -81,13 +81,6 @@ include_once 'convert_date.php';
 </head>
 
 <body>
-    <?php if (!empty($_SESSION['photomess'])): ?>
-        <div class="alert mt-2 mb-2">
-            <?= $_SESSION['photomess']; ?>
-            <button type="button" class="btn btn-close" data-bs-dismiss="alert"></button>
-            <?php unset($_SESSION['photomess']); ?>
-        </div>
-    <?php endif; ?>
     <?php include "navbar.php"; ?>
     <div class="container-fluid photo-page mt-3 mb-3">
         <div class="photo-viewer">

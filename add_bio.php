@@ -12,7 +12,10 @@
     $stmt -> bindParam(":bio",$bio,PDO::PARAM_STR);
     $stmt -> bindParam(":id",$id,PDO::PARAM_INT);
     $stmt -> execute();
-    $_SESSION['biomess'] = "Bio added successfully";
+    $_SESSION['flash'][] = [
+        'type' => 'success',
+        'message' => 'Bio added successfully'
+    ];
     header("Location:myphotos.php");
     exit();
 ?>

@@ -887,6 +887,33 @@ a {
     color: #d93025;
 }
 
+.empty-content{
+    width: fit-content;
+    padding: 20px;
+    margin: auto !important;
+}
+
+.empty-content div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.empty-content h4{
+    width: 300px;
+    font-weight: 600;
+}
+
+.empty-content i{
+    font-size: 40px;
+}
+
+#countrySelect{
+    z-index: 9999 !important;
+}
+
 @media only screen and (max-width:768px) {
     /*.container {
         width: 100%;

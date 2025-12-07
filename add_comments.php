@@ -4,7 +4,7 @@
         $ok = true;
         $content = trim($_POST['comment_content']);
         if($content === ''){
-            $_SESSION['commentMess'][] = [
+            $_SESSION['flash'][] = [
                 'type' => 'error',
                 'message' => 'Comment not added by empty' 
             ];
@@ -19,14 +19,14 @@
             $add_comment -> bindValue(":user_id",$id,PDO::PARAM_INT);
             $add_comment -> bindValue(":content",$content,PDO::PARAM_STR);
             $add_comment -> execute();
-            $_SESSION['commentMess'][] = [
+            $_SESSION['flash'][] = [
                 'type' => 'success',
                 'message' => 'Comment added successfully'
             ];
             header("Location:photo_preview.php?id=$photo_id");
             exit();
         }else{
-            $_SESSION['commentMess'][] = [
+            $_SESSION['flash'][] = [
                 'type' => 'error',
                 'message' => 'Comment added failed'
             ];

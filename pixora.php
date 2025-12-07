@@ -43,16 +43,10 @@ foreach ($rows as &$row) {
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="fontawesome/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="bsicons/bsicons/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="Notyf/notyf.min.css">
 </head>
 
 <body>
-    <?php if (!empty($_SESSION['cookiemess'])): ?>
-        <div class="alert mt-2 mb-2">
-            <?= $_SESSION['cookiemess']; ?>
-            <button type="button" class="btn btn-close" data-bs-dismiss="alert"></button>
-            <?php unset($_SESSION['cookiemess']); ?>
-        </div>
-    <?php endif; ?>
     <?php include "navbar.php"; ?>
     <div class="div2">
         <div class="container-fluid p-0">
@@ -110,18 +104,18 @@ foreach ($rows as &$row) {
                                     <form action="add_comments.php" class="comment-form" method="post">
                                         <input type="hidden" name="photo_id" value="<?= $row['id']; ?>">
                                         <div class="input-group">
-                                            <textarea id="up_comment" name="comment_content" placeholder="Type your comment ..." class="form-control" rows="1" cols="1"></textarea>
-                                            <button type="submit" class="btn btn-primary disabled" id="postBtn">Post</button>
+                                            <textarea class="up_comment form-control" name="comment_content" placeholder="Type your comment ..." class="form-control" rows="1" cols="1"></textarea>
+                                            <button type="submit" class="btn btn-primary postBtn disabled">Post</button>
                                         </div>
                                     </form>
                                     <hr>
                                     <div class="mt-3">
                                         <h4 class="fw-bold">All comments</h4>
                                         <?php
-                                        $comments = $conn->prepare("SELECT c.id, c.photo_id, c.user_id, c.content, c.created_at, c.updated_at, u.username FROM comments c JOIN users u ON c.user_id = u.id WHERE c.photo_id = :photo_id ORDER BY c.created_at ASC");
-                                        $comments -> bindValue(":photo_id",$row['id'],PDO::PARAM_INT);
-                                        $comments -> execute();
-                                        $cs = $comments -> fetchAll(PDO::FETCH_ASSOC);
+                                        $comments = $conn->prepare("SELECT c.id, c.photo_id, c.user_id, c.content, c.created_at, c.updated_at, u.username,u.photo_profile FROM comments c JOIN users u ON c.user_id = u.id WHERE c.photo_id = :photo_id ORDER BY c.created_at ASC");
+                                        $comments->bindValue(":photo_id", $row['id'], PDO::PARAM_INT);
+                                        $comments->execute();
+                                        $cs = $comments->fetchAll(PDO::FETCH_ASSOC);
                                         ?>
                                         <?php include "comments.php"; ?>
                                     </div>
@@ -281,7 +275,7 @@ foreach ($rows as &$row) {
                     <div class="card photographers">
                         <div class="card-body">
                             <div class="mt-3 mb-3">
-                                <img src="outils/pngs/useracc2.png" width="100px" height="auto" alt="">
+                                <img src="<?= (!empty($user['photo_profile']) ? 'profile_pictures/' . $user['photo_profile'] : 'outils/pngs/useracc2.png') ?>" id="imgAcc" width="100px" height="auto" alt="">
                             </div>
                             <div class="mt-3 mb-3">
                                 <a href="profil_preview.php?id=<?= $user['id']; ?>"><?= $user['username']; ?></a>
@@ -325,7 +319,22 @@ foreach ($rows as &$row) {
     <script src="follows.js" defer></script>
     <script src="quotes.js" defer></script>
     <script src="copyright.js"></script>
-    <script src="comment_button_action.js"></script>
+    <script>
+        document.querySelectorAll('.comment-form').forEach(form => {
+            const textarea = form.querySelector('.up_comment');
+            const btn = form.querySelector('.postBtn');
+            textarea.addEventListener('input', () => {
+                if (textarea.value.trim() === "") {
+                    btn.classList.add('disabled');
+                } else {
+                    btn.classList.remove('disabled');
+                }
+            });
+        });
+    </script>
+    <script src="Notyf/notyf.min.js"></script>
+    <script src="notyf.js"></script>
+    <?php include 'sessions.php'; ?>
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 
