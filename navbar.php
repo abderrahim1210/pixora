@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand p-2 nav1">
         <div class="container-fluid d-flex">
             <ul class="navbar-nav me-auto" id="ul1">
-                <li class="nav-item" title="Welcome to Picora">
+                <li class="nav-item" title="Welcome to Pixora">
                     <a style="cursor: pointer;" onclick="return location.reload();"
                         class="nav-link nav-brand p-0 m-0">
                         <img src="outils/pngs/logo_styled.png" style="padding: 0%;width: 100px;;height: auto;margin: 0;"

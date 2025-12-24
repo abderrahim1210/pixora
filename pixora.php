@@ -129,7 +129,7 @@ foreach ($rows as &$row) {
                     <div class="card">
                         <a id="caption" href="photo_preview.php?id=<?= $row['id']; ?>">
                             <div class="photo">
-                                <img src="photos/<?= $row['filename']; ?>" alt="photo">
+                                <img src="photos/<?= $row['filename']; ?>" oncontextmenu="return false" alt="photo">
                                 <div class="info">
                                     <div>
                                         <h5><?= $row['title']; ?></h5>

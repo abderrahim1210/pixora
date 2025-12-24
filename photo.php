@@ -84,7 +84,7 @@ include_once 'convert_date.php';
     <?php include "navbar.php"; ?>
     <div class="container-fluid photo-page mt-3 mb-3">
         <div class="photo-viewer">
-            <img src="photos/<?= $photo['filename']; ?>" width="100%" class="img-fluid" alt="<?= $photo['title']; ?>">
+            <img src="photos/<?= $photo['filename']; ?>" oncontextmenu="return false" width="100%" class="img-fluid" alt="<?= $photo['title']; ?>">
         </div>
         <div class="details-panel">
             <ul class="list-group mt-3">

@@ -20,6 +20,21 @@ $stm = $conn->prepare("SELECT COUNT(*) AS total_images FROM photos WHERE user_id
 $stm->bindValue(":usid", $id, PDO::PARAM_INT);
 $stm->execute();
 $totalImages = $stm->fetch(PDO::FETCH_ASSOC);
+
+$ps = $conn -> prepare("SELECT p.* FROM photos p JOIN likes l ON p.id = l.photo_id WHERE l.user_id = :id");
+$ps -> bindValue(":id",$id,PDO::PARAM_INT);
+$ps -> execute();
+$photosLikes = $ps -> fetchAll(PDO::FETCH_ASSOC);
+
+$countLikePhoto = $conn -> prepare("SELECT COUNT(*) AS totalLikePhotos FROM photos p JOIN likes l ON p.id = l.photo_id WHERE l.user_id = :id");
+$countLikePhoto -> bindValue(":id",$id,PDO::PARAM_INT);
+$countLikePhoto -> execute();
+$likesCount = $countLikePhoto -> fetch(PDO::FETCH_ASSOC);
+
+$g = $conn -> prepare("SELECT * FROM galleries WHERE user_id = :id");
+$g -> bindValue(":id",$id,PDO::PARAM_INT);
+$g -> execute();
+$galleries = $g -> fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,74 +49,13 @@ $totalImages = $stm->fetch(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="fontawesome/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="bsicons/bsicons/bootstrap-icons.min.css">
-    </link>
-    <link rel="stylesheet" href="RemixIcon-master/RemixIcon-master/fonts/remixicon.css">
     <script src="Jquery File/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="Notyf/notyf.min.css">
 </head>
 
 <body>
-    <main>
+    <main class="main-content">
         <?php include "navbar.php"; ?>
-        <div class="modal fade" id="bio" aria-hidden="true" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1>Add bio</h1>
-                    </div>
-                    <div class="modal-body">
-                        <form action="add_bio.php?id=<?= $infos['id']; ?>" method="post">
-                            <label for="bio" class="form-label">Bio</label>
-                            <textarea name="bioProfil" id="bio" class="form-control"><?= $infos['bio']; ?></textarea>
-                            <button type="submit" class="btn mt-2 mb-2" id="addBio">Add bio</button>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="lang" aria-hidden="true" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1>Site Language</h1>
-                    </div>
-                    <div class="modal-body">
-                        <div>
-                            <label for="language" class="form-label">Language</label>
-                            <select name="lang" id="language" class="form-select">
-                                <option value="English">English</option>
-                                <option value="Arabic">Arabic</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="theme" aria-hidden="true" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1>Theme</h1>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-switch">
-                            <input type="checkbox" class="form-check-input"> Theme
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="container-fluid">
             <div class="row div">
                 <nav class="navbar navbar-expand nav2 sticky-top" id="demo">
@@ -121,19 +75,7 @@ $totalImages = $stm->fetch(PDO::FETCH_ASSOC);
                             <h2>My photos <p class="d-inline text-primary">(<?= $totalImages['total_images']; ?> photos)</p>
                             </h2>
                         </div>
-                        <div class="filter_bar">
-                            <nav class="nav">
-                                <li class="nav-item">
-                                    <select name="" class="form-select" id="">
-                                        <option value="default">Filter by <i class="fa-solid fa-filter"></i></option>
-                                        <option value="date">Date</option>
-                                        <option value="views">Views</option>
-                                        <option value="likes">Likes</option>
-                                        <option value="comments">Comments</option>
-                                    </select>
-                                </li>
-                            </nav>
-                        </div>
+                        <?php include 'filter_photos.php'; ?>
                         <div class="container-fluid">
                             <div class="myphotos mt-3 mb-3">
                                 <?php foreach ($photos as $photo): ?>
@@ -159,7 +101,7 @@ $totalImages = $stm->fetch(PDO::FETCH_ASSOC);
                                 <?php endforeach; ?>
                             </div>
                             <?php if ($photoStmt->rowCount() === 0): ?>
-                                <div class="empty-content">
+                                <div class="empty-content text-center">
                                     <div class="mb-5">
                                         <i class="fa-solid fa-camera" onclick="window.location.href = 'upload.php'" style="cursor: pointer;"></i>
                                         <h4>No photos yet — start sharing your moments!</h4>
@@ -168,11 +110,131 @@ $totalImages = $stm->fetch(PDO::FETCH_ASSOC);
                             <?php endif; ?>
                         </div>
                     </div>
+                    <div class="tab-pane fade show" id="licensing">
+                        <div class="mt-2 mb-2">
+                            <h2>Licensing  <p class="d-inline text-primary">(<?= $totalImages['total_images']; ?> photos)</p>
+                            </h2>
+                        </div>
+                        <?php include 'filter_photos.php'; ?>
+                        <div class="container-fluid">
+                            <div class="myphotos mt-3 mb-3">
+                                <?php foreach ($photos as $photo): ?>
+                                    <div class="card">
+                                        <div class="card-body p-0">
+                                            <div class="image">
+                                                <a href="photo.php?id=<?= $photo['id']; ?>">
+                                                    <img src="photos/<?= $photo['filename']; ?>" class="img-fluid">
+                                                </a>
+                                            </div>
+                                            <div class="d-flex justify-content-between p-2">
+                                                <div>
+                                                    <h5><?= $photo['title']; ?></h5>
+                                                </div>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <div>
+                                                        <p><?= $photo['visibility']; ?></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <?php if ($photoStmt->rowCount() === 0): ?>
+                                <div class="empty-content text-center">
+                                    <div class="mb-5">
+                                        <i class="fa-solid fa-camera" onclick="window.location.href = 'upload.php'" style="cursor: pointer;"></i>
+                                        <h4>No licensing photos yet — start licensing your best shots!</h4>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="likes">
+                        <div class="mt-2 mb-2">
+                            <h2>Likes  <p class="d-inline text-primary">(<?= $likesCount['totalLikePhotos']; ?> photos)</p>
+                            </h2>
+                        </div>
+                        <?php include 'filter_photos.php'; ?>
+                        <div class="container-fluid">
+                            <div class="myphotos mt-3 mb-3">
+                                <?php foreach ($photosLikes as $photoLike): ?>
+                                    <div class="card">
+                                        <div class="card-body p-0">
+                                            <div class="image">
+                                                <a href="photo_preview.php?id=<?= $photoLike['id']; ?>">
+                                                    <img src="photos/<?= $photoLike['filename']; ?>" class="img-fluid">
+                                                </a>
+                                            </div>
+                                            <div class="d-flex justify-content-between p-2">
+                                                <div>
+                                                    <h5><?= $photoLike['title']; ?></h5>
+                                                </div>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <div>
+                                                        <p><?= $photoLike['visibility']; ?></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <?php if ($ps->rowCount() === 0): ?>
+                                <div class="empty-content text-center">
+                                    <div class="mb-5">
+                                        <i class="fa-solid fa-camera" onclick="window.location.href = 'upload.php'" style="cursor: pointer;"></i>
+                                        <h4>No licensing photos yet — start licensing your best shots!</h4>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="galleries">
+                        <div class="mt-2 mb-2">
+                            <h2>Galleries  <p class="d-inline text-primary">(<?= 0; ?> galleries)</p>
+                            </h2>
+                        </div>
+                        <?php include 'filter_photos.php'; ?>
+                        <div class="container-fluid">
+                            <div class="myphotos mt-3 mb-3">
+                                <?php foreach ($galleries as $gallery): ?>
+                                    <div class="card">
+                                        <div class="card-body p-0">
+                                            <div class="image">
+                                                <a href="photo_preview.php?id=<?= $photoLike['id']; ?>">
+                                                    <img src="photos/<?= $photoLike['filename']; ?>" class="img-fluid">
+                                                </a>
+                                            </div>
+                                            <div class="d-flex justify-content-between p-2">
+                                                <div>
+                                                    <h5><?= $photoLike['title']; ?></h5>
+                                                </div>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <div>
+                                                        <p><?= $photoLike['visibility']; ?></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <?php if ($g->rowCount() === 0): ?>
+                                <div class="empty-content text-center">
+                                    <div class="mb-5">
+                                        <i class="fa-solid fa-camera" onclick="window.location.href = 'upload.php'" style="cursor: pointer;"></i>
+                                        <h4>No galleries yet — create your first one!</h4>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <?php include "footer_dashboard.php"; ?>
     </main>
+    <?php include "footer_dashboard.php"; ?>
     <div class="container-fluid">
         <nav class="navbar navbar-expand fixed-bottom nav3 mx-auto" role="tablist">
             <ul class="navbar-nav" id="ul3">
