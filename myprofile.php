@@ -1,25 +1,3 @@
-<?php
-include "db.php";
-session_start();
-
-$id = intval($_SESSION['px_id'] ?? $_COOKIE['px_userid']);
-if (!isset($id) || !is_numeric($id)) {
-    $_SESSION['dberr'] = "You have to logged first for display dasheboard.";
-    header("Location:login.php");
-    exit();
-}
-
-
-$info = $conn->prepare("SELECT * FROM users WHERE id = :id");
-$info->bindValue(":id", $id, PDO::PARAM_INT);
-$info->execute();
-$infos = $info->fetch();
-
-$pPicture = basename($infos['photo_profile']);
-
-include "statistics_profile.php";
-include "fetch_my_photos.php";
-?>
 <!DOCTYPE html>
 <html lang="en">
 

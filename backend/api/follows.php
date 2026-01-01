@@ -1,18 +1,20 @@
 <?php
-    include "db.php";
-    $uss = $conn -> prepare("SELECT * FROM users");
-    $uss -> execute();
-    $users_f = $uss -> fetchAll(PDO::FETCH_ASSOC);
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Content-Type: application/json; charset=UTF-8");
+require_once __DIR__ . "/../config/db.php";
+$uss = $conn->prepare("SELECT * FROM users");
+$uss->execute();
+$users_f = $uss->fetchAll(PDO::FETCH_ASSOC);
 
-    $id = intval($_SESSION['px_id'] ?? $_COOKIE['px_userid']);
+$id = intval($_SESSION['px_id'] ?? $_COOKIE['px_userid']);
 
-    foreach($users_f as &$user_f){
-        $stmt = $conn -> prepare("SELECT 1 FROM follows WHERE follower_id = :me AND following_id = :id");
-        $stmt -> bindValue(":me",$id,PDO::PARAM_INT);
-        $stmt -> bindValue(":id",$user_f['id'],PDO::PARAM_INT);
-        $stmt -> execute();
-        $isFollowing = $stmt -> rowCount() > 0;
-        $btnText = $isFollowing ? "Followed" : "Follow";
-        $btnClass = $isFollowing ? "active" : "";
-    }
-?>
+foreach ($users_f as &$user_f) {
+    $stmt = $conn->prepare("SELECT 1 FROM follows WHERE follower_id = :me AND following_id = :id");
+    $stmt->bindValue(":me", $id, PDO::PARAM_INT);
+    $stmt->bindValue(":id", $user_f['id'], PDO::PARAM_INT);
+    $stmt->execute();
+    $isFollowing = $stmt->rowCount() > 0;
+    $user_f['followText'] = $isFollowing ? "Followed" : "Follow";
+    $user_f['followClasse'] = $isFollowing ? "active" : "";
+}

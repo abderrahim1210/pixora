@@ -1,10 +1,10 @@
-import './App.css'
+import { AppRoutes } from './components/Pages/routes/AppRoutes'
 
 function App() {
 
   return (
     <>
-            
+      <AppRoutes />
     </>
   )
 }

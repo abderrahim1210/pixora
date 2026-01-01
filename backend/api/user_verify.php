@@ -1,5 +1,8 @@
 <?php
-include "db.php";
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Content-Type: application/json; charset=UTF-8");
+require_once __DIR__ . "/../config/db.php";
 if (isset($_COOKIE['px_user_token'])) {
     $stmt = $conn->prepare("SELECT * FROM users WHERE token = :tk LIMIT 1");
     $stmt->bindValue(":tk", $_COOKIE['px_user_token']);

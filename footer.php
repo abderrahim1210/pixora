@@ -1,31 +1,3 @@
-<style>
-    footer h3 {
-        color: var(--special_color);
-    }
-
-    footer mark {
-        background-color: white;
-    }
-
-    footer {
-        background-color: rgb(24, 24, 24);
-        height: 210px;
-    }
-
-    .navFot {
-        display: flex;
-        justify-content: center;
-    }
-
-    .navFot .nav-item .nav-link {
-        text-decoration: none;
-        color: white;
-    }
-
-    .navFot .nav-item .nav-link:hover {
-        color: var(--special_color);
-    }
-</style>
 <footer>
     <div class="container-fluid d-flex justify-content-center">
         <h3 class="mt-2">Pixora</h3>

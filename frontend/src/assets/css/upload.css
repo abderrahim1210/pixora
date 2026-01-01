@@ -259,13 +259,13 @@ body {
     transform: scale(1.05);
 }
 
-.step{
+/* .step{
     display: none;
 }
 
 .step.active{
     display: block;
-}
+} */
 
 .pagination{
     margin-top: 20px;
@@ -289,10 +289,6 @@ body {
     color: var(--special_color);
     /* border: 1px solid black; */
 }
-
-/* .uploadCard{
-    border: 4px dotted black;
-} */
 
 .uploadCard .card-body{
     border: 3px dashed black;

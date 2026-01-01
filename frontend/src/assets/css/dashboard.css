@@ -1,12 +1,12 @@
 @font-face {
     font-family: "Outfit";
-    src: url("Outfit/Outfit-VariableFont_wght.ttf");
+    src: url("../Fonts/Outfit/Outfit-VariableFont_wght.ttf");
     font-style: normal;
 }
 
 @font-face {
     font-family: "Outfit";
-    src: url("Outfit/Outfit-VariableFont_wght.ttf");
+    src: url("../Fonts/Outfit/Outfit-VariableFont_wght.ttf");
     font-weight: bold;
 }
 

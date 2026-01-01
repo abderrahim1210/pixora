@@ -1,5 +1,8 @@
 <?php
-include "db.php";
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Content-Type: application/json; charset=UTF-8");
+require_once __DIR__ . "/../config/db.php";
 
 $stm = $conn -> prepare(" SELECT p.id, COUNT(l.id) AS totalLikes
     FROM photos p

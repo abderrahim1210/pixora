@@ -1,6 +1,4 @@
-<?php
-    include "sign-up.php";
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 

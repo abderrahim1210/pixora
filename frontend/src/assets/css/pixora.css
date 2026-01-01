@@ -1,12 +1,12 @@
 @font-face {
     font-family: "Outfit";
-    src: url("Outfit/Outfit-VariableFont_wght.ttf");
+    src: url("../Fonts/Outfit/Outfit-VariableFont_wght.ttf");
     font-style: normal;
 }
 
 @font-face {
     font-family: "Outfit";
-    src: url("Outfit/static/Outfit-Bold.ttf");
+    src: url("../Fonts/Outfit/static/Outfit-Bold.ttf");
     font-weight: bold;
 }
 
@@ -146,7 +146,7 @@ header{
 }
 
 .div2 {
-    background-image: url("outils/backgrounds/background_pixora_2.jpg");
+    background-image: url("../outils/backgrounds/background_pixora_2.jpg");
     padding: 160px;
     background-position: center;
     background-repeat: no-repeat;

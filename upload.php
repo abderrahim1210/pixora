@@ -1,8 +1,3 @@
-<?php
-ob_start();
-include "upload_photo.php";
-ob_end_flush();
-?>
 <!DOCTYPE html>
 <html lang="en">
 

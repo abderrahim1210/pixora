@@ -1,35 +1,3 @@
-<?php
-include "db.php";
-include "likes.php";
-session_start();
-include "user_verify.php";
-$stmt = $conn->prepare("SELECT * FROM photos WHERE visibility = 'public'");
-$stmt->execute();
-$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$stm = $conn->prepare("SELECT * FROM users");
-$stm->execute();
-$users = $stm->fetchAll(PDO::FETCH_ASSOC);
-
-$userid = intval($_SESSION['px_id'] ?? $_COOKIE['px_userid'] ?? null);
-
-foreach ($rows as &$row) {
-    if (!empty($userid)) {
-        $lk = $conn->prepare("SELECT COUNT(*) FROM likes WHERE user_id = :userid AND photo_id = :photoid");
-        $lk->bindValue(":userid", $userid, PDO::PARAM_INT);
-        $lk->bindValue(":photoid", $row['id'], PDO::PARAM_INT);
-        $lk->execute();
-        $row['isLiked'] = $lk->fetchColumn() > 0;
-    } else {
-        $row['isLiked'] = false;
-    }
-    $cnt = $conn->prepare("SELECT COUNT(*) FROM likes WHERE photo_id = :photoid");
-    $cnt->bindValue(":photoid", $row['id'], PDO::PARAM_INT);
-    $cnt->execute();
-    $row['totalLikes'] = $cnt->fetchColumn();
-}
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,11 +33,6 @@ foreach ($rows as &$row) {
             </div>
         </div>
         <br>
-        <!-- <figcaption class="figure-caption">
-            <p>Photo by <a
-                    href="https://unsplash.com/photos/man-holding-camera-taking-picture--nK88n4_v4w?utm_content=creditShareLink&utm_medium=referral&utm_source=unsplash">@unsplash</a>
-            </p>
-        </figcaption> -->
     </div>
     <div class="sticky-top">
         <nav class="navbar navbar-expand nav2">
@@ -287,7 +250,6 @@ foreach ($rows as &$row) {
                     </div>
                 <?php endforeach; ?>
             </div>
-            <br><br><br><br><br><br><br><br><br><br>
         </div>
         <div class="container-fluid tab-pane fade show mt-3 mb-3" id="about">
             <h1 class="text-center mt-2 mb-2">About Pixora</h1>

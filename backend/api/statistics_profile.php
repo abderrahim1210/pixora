@@ -1,10 +1,16 @@
 <?php
-include "db.php";
-if (!isset($_SESSION['px_id']) && !isset($_COOKIE['px_userid'])) {
+session_start();
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Content-Type: application/json");
+require_once __DIR__ . "/../config/db.php";
+/* if (!isset($_SESSION['px_id']) && !isset($_COOKIE['px_userid'])) {
     header("Location:login.php");
     exit;
-}
-$id = intval($_SESSION['px_id'] ?? $_COOKIE['px_userid']);
+} */
+$id = $_SESSION['px_id'] ?? $_COOKIE['px_userid'];
 $followerCount = $conn->prepare("SELECT COUNT(*) FROM follows WHERE following_id = :fwid");
 $followerCount->bindValue(":fwid", $id, PDO::PARAM_INT);
 $followerCount->execute();
@@ -24,8 +30,17 @@ $likeCount = $conn->prepare("SELECT COUNT(*) FROM likes WHERE photo_id IN (SELEC
 $likeCount->bindValue(":user_id", $id, PDO::PARAM_INT);
 $likeCount->execute();
 $likes = $likeCount->fetchColumn();
+echo json_encode([
+    'success' => true,
+    'data' => [
+        'followers' => $follower,
+        'followings' => $following,
+        'photosCount' => $photos_count,
+        'likes' => $likes
+    ]
+]);
 
-$months = [];
+/* $months = [];
 $likesChart = [];
 $followersChart = [];
 $followingsChart = [];
@@ -67,3 +82,4 @@ if ($id > 0) {
         $photosChart[] = $photosData[$m] ?? 0;
     }
 }
+ */
