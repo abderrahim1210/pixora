@@ -24,7 +24,7 @@ export const Login = () => {
     }
   }
   return (
-    <>
+    <div data-bs-page="login">
       <div className="dv1">
         <div className="dv1-0 login_div">
           <div>Login Page</div>
@@ -95,6 +95,6 @@ export const Login = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };

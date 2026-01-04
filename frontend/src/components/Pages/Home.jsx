@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import {
   FaCamera,
+  FaCameraRetro,
   FaCog,
   FaComment,
   FaHeart,
+  FaInfoCircle,
   FaSearch,
+  FaStar,
   FaUser,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -14,13 +17,14 @@ import { Footer } from "./Footer";
 import axios from "axios";
 import { Modal, Button } from "react-bootstrap";
 import { setFavicon } from "../utils/SetFavicon";
+import { FiStar } from "react-icons/fi";
+import { MdCategory, MdRecommend } from "react-icons/md";
 export const Home = (props) => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
   const [users, setUsers] = useState([]);
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleOpen = () => setShow(true);
+  const [usrSearched, setUsrSearched] = useState([]);
+  const [search, setSearch] = useState("");
   useEffect(() => {
     axios
       .get("http://localhost/Pixora/backend/api/homepage.php")
@@ -28,13 +32,31 @@ export const Home = (props) => {
         if (res.data.success) {
           setPhotos(res.data.photos);
           setUsers(res.data.users);
+          setUsrSearched(res.data.users);
         }
       });
     setFavicon("/outils/favicons/favicon.jpg");
   }, []);
+
+  useEffect(() => {
+    if (search.trim() === "") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setUsrSearched(users);
+    } else {
+      setUsrSearched(
+        users.filter((u) =>
+          u.username.toLowerCase().startsWith(search.toLowerCase())
+        )
+      );
+    }
+  }, [search, users]);
+
+  const show = props.modalState;
+  const handleOpen = props.openModal;
+  const handleClose = props.closeModal;
   const user = props.data;
   return (
-    <>
+    <div data-bs-page="pixora">
       <Navbar data={user} />
       <div className="div2">
         <div className="container-fluid p-0">
@@ -83,7 +105,7 @@ export const Home = (props) => {
                 data-bs-toggle="tab"
                 title="For you"
               >
-                For you
+                <MdRecommend /> For you
               </a>
             </li>
             <li className="nav-item">
@@ -94,7 +116,7 @@ export const Home = (props) => {
                 data-bs-toggle="tab"
                 title="Categories"
               >
-                Categories
+                <MdCategory /> Categories
               </a>
             </li>
             <li className="nav-item">
@@ -105,7 +127,7 @@ export const Home = (props) => {
                 data-bs-toggle="tab"
                 title="Photographers"
               >
-                Photographers
+                <FaCamera /> Photographers
               </a>
             </li>
             <li className="nav-item">
@@ -116,7 +138,7 @@ export const Home = (props) => {
                 data-bs-toggle="tab"
                 title="About"
               >
-                About
+                <FaInfoCircle /> About
               </a>
             </li>
           </ul>
@@ -170,7 +192,7 @@ export const Home = (props) => {
                     </div>
                   </Modal.Body>
                 </Modal>
-                <div className="card">
+                <div className="card" key={p.id}>
                   <a
                     id="caption"
                     href="photo_preview.php?id=<?= $row['id']; ?>"
@@ -180,10 +202,7 @@ export const Home = (props) => {
                       id="caption"
                       href="photo_preview.php?id=<?= $row['id']; ?>"
                     >
-                      <img
-                        src={`/photos/${p.filename}`}
-                        alt="photo"
-                      />
+                      <img src={`/photos/${p.filename}`} alt="photo" />
                     </a>
                     <div className="info">
                       <a
@@ -342,49 +361,72 @@ export const Home = (props) => {
               name
               id="searchAtPhotographer"
               className="form-control"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               placeholder="Type name of photographer ..."
             />
-            <button type="button" className="btn searchButton2">
+            {/* <button type="button" onClick={handleSearch} className="btn searchButton2">
               <CiSearch size={20} color={"black"} />
-            </button>
+            </button> */}
           </div>
           <div className="container-fluid div3">
-            {users.map((u) => (
-              <div className="card photographers">
-                <div className="card-body">
-                  <div className="mt-3 mb-3">
-                    <img
-                      src={`${
-                        u.photo_profile
-                          ? "http://localhost/Pixora/profile_pictures/" +
-                            u.photo_profile
-                          : "/outils/pngs/useracc2.png"
-                      }`}
-                      id="imgAcc"
-                      width="100px"
-                      height="auto"
-                      alt=""
-                    />
-                  </div>
-                  <div className="mt-3 mb-3">
-                    <a href="profil_preview.php?id=<?= $user['id']; ?>">
-                      {u.username}
-                    </a>
-                  </div>
-                  <div className="mt-3 mb-3">
-                    <button
-                      type="button"
-                      data-user_id="<?= $user['id']; ?>"
-                      className="followButton <?= $btnClass; ?> btn"
-                      id="followButton"
-                    >
-                      Follow
-                    </button>
+            {usrSearched.length > 0 ? (
+              usrSearched.map((u) => (
+                <div className="card photographers" key={u.id}>
+                  <div className="card-body">
+                    <div className="mt-3 mb-3">
+                      <img
+                        src={`${
+                          u.photo_profile
+                            ? `profile_pictures/${u.photo_profile}`
+                            : "/outils/pngs/useracc2.png"
+                        }`}
+                        id="imgAcc"
+                        width="100px"
+                        height="auto"
+                        alt=""
+                      />
+                    </div>
+                    <div className="mt-3 mb-3">
+                      <a href="profil_preview.php?id=<?= $user['id']; ?>">
+                        {u.username}
+                      </a>
+                    </div>
+                    {u.id !== user.id ? (
+                      <div className="mt-3 mb-3">
+                        <button
+                          type="button"
+                          data-user_id="<?= $user['id']; ?>"
+                          className="followButton <?= $btnClass; ?> btn"
+                          id="followButton"
+                        >
+                          Follow
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="mt-3 mb-3">
+                        <button
+                          type="button"
+                          data-user_id="<?= $user['id']; ?>"
+                          className="followButton <?= $btnClass; ?> btn"
+                          id="followButton"
+                          onClick={() => navigate("/myprofile")}
+                        >
+                          View profile
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="empty-content text-center">
+                <div className="mb-5 d-flex justify-content-center align-items-center">
+                  <FaCameraRetro size={40} style={{ cursor: "pointer" }} />
+                  <h4>No photographers found - Try searching with another name</h4>
+                </div>
               </div>
-            ))}
-            {/*?php endforeach; ?*/}
+            )}
           </div>
         </div>
         <div
@@ -454,6 +496,6 @@ export const Home = (props) => {
         </nav>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };

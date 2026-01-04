@@ -124,7 +124,7 @@ export const Navbar = (props) => {
                   </a>
                   <ul className="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a href="myphotos.php" className="dropdown-item">
+                      <a onClick={() => navigate('/myphotos')} className="dropdown-item">
                         my photos
                       </a>
                     </li>
@@ -223,7 +223,7 @@ export const Navbar = (props) => {
                   <FiUpload /> Upload
                 </button>
               </li>
-              {props.data ? (
+              {props?.data?.id ? (
                 <div>
                   <img
                     src={props.data.profile_picture?`/profile_pictures/${props.data.profile_picture}`:`/outils/pngs/useracc2.png`}

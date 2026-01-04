@@ -3,7 +3,7 @@ import { Copyright } from "./Copyright";
 //import '../../assets/css/footer.css'
 export const Footer = () => {
   return (
-    <>
+    <div data-bs-page="footer">
       <footer>
         <div className="container-fluid d-flex justify-content-center">
           <h3 className="mt-2">Pixora</h3>
@@ -46,6 +46,6 @@ export const Footer = () => {
         </div>
         <Copyright />
       </footer>
-    </>
+    </div>
   );
 };

@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-//import '../../assets/css/upload.css'
 export const Upload = () => {
   const [step, setStep] = useState(1);
   const next = () => setStep((s) => s + 1);
   const prev = () => setStep((s) => s - 1);
   return (
-    <>
+    <div data-bs-page="upload">
       <div className="dv1">
         <div className="upload-box text-center">
           <div className="mt-5 mb-3">
@@ -30,7 +29,7 @@ export const Upload = () => {
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
   function StepOne({ next }) {
     return (
@@ -47,7 +46,7 @@ export const Upload = () => {
                 type="radio"
                 name="typePhoto"
                 defaultValue="free"
-                hidden=""
+                hidden
               />
               <div className="card-body">
                 <img
@@ -70,7 +69,7 @@ export const Upload = () => {
                 type="radio"
                 name="typePhoto"
                 defaultValue="licensed"
-                hidden=""
+                hidden
               />
               <div className="card-body">
                 <img
@@ -132,7 +131,7 @@ export const Upload = () => {
                     </div>
                     <div className="selected_photo">
                       <img src="" style={{ display: "none" }} id="preview" />
-                      <table className="table photoInformations">
+                      {/* <table className="table photoInformations">
                         <tbody>
                           <tr>
                             <td>Name</td>
@@ -155,7 +154,7 @@ export const Upload = () => {
                             <td id="photoOrientation" />
                           </tr>
                         </tbody>
-                      </table>
+                      </table> */}
                     </div>
                   </div>
                 </div>
