@@ -413,12 +413,12 @@ export const MyProfile = (props) => {
                     <div className="d-flex justify-content-end align-items-center">
                       <button
                         type="button"
-                        className="btn p-2"
+                        className="btn"
                         id="editInfos"
                         title="Edit"
                         onClick={() => setEdit(prev => !prev)}
                       >
-                        <FaPencil />
+                        <FaPencil size={15} />
                       </button>
                     </div>
                     <form
@@ -429,7 +429,7 @@ export const MyProfile = (props) => {
                       <input type="hidden" name="user_id" defaultValue="" />
                       <ul className="list-group">
                         {edit ? (
-                          <>
+                          <div key={"edit"}>
                             <li className="list-group-item">
                               <strong>Username</strong>
                               <div className="edit-div">
@@ -518,8 +518,8 @@ export const MyProfile = (props) => {
                                   name="update_gender"
                                   id="usergender"
                                 >
-                                  <option value={user.gender} hidden="" />
-                                  <option value="Male">Male</option>
+                                  <option value={user.gender} disabled hidden>Choose gender</option>
+                                  <option value="Male" >Male</option>
                                   <option value="Female">Female</option>
                                 </select>
                               </div>
@@ -535,7 +535,7 @@ export const MyProfile = (props) => {
                                     <option value={user?.country}>{user?.country}</option>
                                     {
                                       countries.map(c => (
-                                        <option value={c.id}>{c.name}</option>
+                                        <option key={c.id} value={c.id}>{c.name}</option>
                                       ))
                                     }
                                   </select>
@@ -604,9 +604,9 @@ export const MyProfile = (props) => {
                                 <span id="err_insta" />
                               </div>
                             </li>
-                          </>
+                          </div>
                         ) : (
-                          <>
+                          <div key={"View"}>
                             <li className="list-group-item">
                               <strong>Username</strong>
                               <div className="display-div">
@@ -679,7 +679,7 @@ export const MyProfile = (props) => {
                                 <p className="itgm">{user.instagram}</p>
                               </div>
                             </li>
-                          </>
+                          </div>
                         )}
                       </ul>
                       <div className="d-flex justify-content-end align-items-center mb-2">

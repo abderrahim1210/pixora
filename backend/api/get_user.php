@@ -18,6 +18,6 @@ if (isset($_SESSION['px_id'])) {
         ]
     ]);
 }else{
-    http_response_code(401);
+    //http_response_code(401);
     echo json_encode(['success' => false,'message' => 'Not logged in']);
 }

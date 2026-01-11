@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 export const Navbar = (props) => {
   const navigate = useNavigate();
   return (
-    <>
+    <div data-bs-page="navbar">
       <header className="d-flex d-sm-flex d-md-block">
         <nav className="navbar navbar-expand p-2 nav1">
           <div className="container-fluid d-flex">
@@ -469,6 +469,6 @@ export const Navbar = (props) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };

@@ -11,7 +11,7 @@ import {
   FaStar,
   FaUser,
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import axios from "axios";
@@ -55,6 +55,10 @@ export const Home = (props) => {
   const handleOpen = props.openModal;
   const handleClose = props.closeModal;
   const user = props.data;
+
+  function slugiFy(text){
+    return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+  }
   return (
     <div data-bs-page="pixora">
       <Navbar data={user} />
@@ -152,7 +156,7 @@ export const Home = (props) => {
           <h1 className="text-center fw-bold">For you</h1>
           <div className="photos">
             {photos.map((p) => (
-              <>
+              <div className="card" key={p.id}>
                 <Modal show={show} onHide={handleClose}>
                   <Modal.Header closeButton>
                     <Modal.Title>Comments</Modal.Title>
@@ -192,53 +196,53 @@ export const Home = (props) => {
                     </div>
                   </Modal.Body>
                 </Modal>
-                <div className="card" key={p.id}>
-                  <a
+                <Link
+                  key={p.id}
+                  id="caption"
+                  style={{cursor:"pointer"}}
+                ></Link>
+                <div className="photo">
+                  <Link
                     id="caption"
-                    href="photo_preview.php?id=<?= $row['id']; ?>"
-                  ></a>
-                  <div className="photo">
+                    style={{cursor:"pointer"}}
+                    to={`/photo_preview/${p.id}/${slugiFy(p.title)}`}
+                  >
+                    <img src={`/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
+                  </Link>
+                  <div className="info">
                     <a
                       id="caption"
                       href="photo_preview.php?id=<?= $row['id']; ?>"
                     >
-                      <img src={`/photos/${p.filename}`} alt="photo" />
-                    </a>
-                    <div className="info">
-                      <a
-                        id="caption"
-                        href="photo_preview.php?id=<?= $row['id']; ?>"
-                      >
-                        <div>
-                          <h5>{p.title}</h5>
-                        </div>
-                      </a>
                       <div>
-                        <a id="caption" href="photo_preview.php">
-                          <input
-                            type="hidden"
-                            name="photo_id"
-                            defaultValue={p.id}
-                          />
-                        </a>
-                        <a
-                          href="#"
-                          className="likeButton <?= $row['isLiked'] ? 'active' : '' ?>"
-                          data-photo-id="<?= $row['id']; ?>"
-                        >
-                          <FaHeart />{" "}
-                          <span id="likes_count-<?= $row['id']; ?>">
-                            {p.totalLikes}
-                          </span>
-                        </a>
-                        <a href="#" onClick={handleOpen}>
-                          <FaComment />
-                        </a>
+                        <h5>{p.title}</h5>
                       </div>
+                    </a>
+                    <div>
+                      <Link id="caption">
+                        <input
+                          type="hidden"
+                          name="photo_id"
+                          defaultValue={p.id}
+                        />
+                      </Link>
+                      <a
+                        href="#"
+                        className="likeButton <?= $row['isLiked'] ? 'active' : '' ?>"
+                        data-photo-id="<?= $row['id']; ?>"
+                      >
+                        <FaHeart />{" "}
+                        <span id="likes_count-<?= $row['id']; ?>">
+                          {p.totalLikes}
+                        </span>
+                      </a>
+                      <a style={{cursor:"pointer"}} onClick={handleOpen}>
+                        <FaComment />
+                      </a>
                     </div>
                   </div>
                 </div>
-              </>
+              </div>
             ))}
           </div>
         </div>
@@ -246,7 +250,7 @@ export const Home = (props) => {
           className="container-fluid tab-pane fade show mt-3 mb-3"
           id="categories"
         >
-          <h1>Categories</h1>
+          <h1 className="fw-bold text-center">Categories</h1>
           <div className="container-fluid mt-3 mb-3">
             <div className="categories">
               <div className="category">
@@ -354,11 +358,10 @@ export const Home = (props) => {
           className="container-fluid tab-pane fade show mt-3 mb-3"
           id="photographers"
         >
-          <h1 className="text-center">Photographers</h1>
+          <h1 className="fw-bold text-center">Photographers</h1>
           <div className="mt-3 mb-3 d-flex justify-content-center">
             <input
               type="search"
-              name
               id="searchAtPhotographer"
               className="form-control"
               value={search}
@@ -423,7 +426,9 @@ export const Home = (props) => {
               <div className="empty-content text-center">
                 <div className="mb-5 d-flex justify-content-center align-items-center">
                   <FaCameraRetro size={40} style={{ cursor: "pointer" }} />
-                  <h4>No photographers found - Try searching with another name</h4>
+                  <h4>
+                    No photographers found - Try searching with another name
+                  </h4>
                 </div>
               </div>
             )}

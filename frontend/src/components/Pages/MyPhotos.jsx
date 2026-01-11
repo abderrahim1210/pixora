@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "./Navbar";
 import axios from "axios";
-import { FaCamera } from "react-icons/fa";
+import { FaCamera, FaCertificate, FaChartLine, FaFileContract, FaHeart } from "react-icons/fa";
 import { Copyright } from "./Copyright";
 import { FooterDash } from "./FooterDash";
+import { GiPadlock } from "react-icons/gi";
+import { MdPhotoLibrary, MdVerified } from "react-icons/md";
+import { RiChat1Line } from "react-icons/ri";
 
 export const MyPhotos = (props) => {
   const [photos, setPhotos] = useState([]);
@@ -42,7 +45,7 @@ export const MyPhotos = (props) => {
                       data-bs-toggle="tab"
                       className="nav-link active"
                     >
-                      <i className="fas fa-image" /> my photos
+                      <FaCamera /> my photos
                     </a>
                   </li>
                   <li className="nav-item">
@@ -51,7 +54,7 @@ export const MyPhotos = (props) => {
                       data-bs-toggle="tab"
                       className="nav-link"
                     >
-                      <i className="fas fa-certificate" /> licsensing
+                      <MdVerified /> licsensing
                     </a>
                   </li>
                   <li className="nav-item">
@@ -60,7 +63,7 @@ export const MyPhotos = (props) => {
                       data-bs-toggle="tab"
                       className="nav-link"
                     >
-                      <i className="fas fa-heart" /> likes
+                      <FaHeart /> likes
                     </a>
                   </li>
                   <li className="nav-item">
@@ -69,7 +72,7 @@ export const MyPhotos = (props) => {
                       data-bs-toggle="tab"
                       className="nav-link"
                     >
-                      <i className="fas fa-images" /> galeries
+                      <MdPhotoLibrary /> galeries
                     </a>
                   </li>
                   <li className="nav-item">
@@ -78,7 +81,7 @@ export const MyPhotos = (props) => {
                       data-bs-toggle="tab"
                       className="nav-link"
                     >
-                      <i className="fas fa-chart-line" /> statistics
+                      <FaChartLine /> statistics
                     </a>
                   </li>
                 </ul>
@@ -140,7 +143,7 @@ export const MyPhotos = (props) => {
                 </div>
                 <div className="container-fluid">
                   <div className="myphotos mt-3 mb-3">
-                    <div className="card">
+                    {/* <div className="card">
                       <div className="card-body p-0">
                         <div className="image">
                           <a href="photo.php?id=">
@@ -158,15 +161,11 @@ export const MyPhotos = (props) => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="empty-content text-center">
                     <div className="mb-5">
-                      <i
-                        className="fa-solid fa-camera"
-                        /* onclick="window.location.href = 'upload.php'" */
-                        style={{ cursor: "pointer" }}
-                      />
+                      <MdVerified size={50} />
                       <h4>
                         No licensing photos yet — start licensing your best
                         shots!
@@ -186,8 +185,8 @@ export const MyPhotos = (props) => {
                 </div>
                 <div className="container-fluid">
                   <div className="myphotos mt-3 mb-3">
-                    {photosLikes.map((p) => (
-                      <div className="card">
+                    {photosLikes.length > 0 ? photosLikes.map((p) => (
+                      <div className="card" key={p.id}>
                         <div className="card-body p-0">
                           <div className="image">
                             <a href="photo_preview.php?id=">
@@ -206,20 +205,16 @@ export const MyPhotos = (props) => {
                           </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                  <div className="empty-content text-center">
+                    )) : (
+                      <div className="empty-content text-center">
                     <div className="mb-5">
-                      <i
-                        className="fa-solid fa-camera"
-                        /* onclick="window.location.href = 'upload.php'" */
-                        style={{ cursor: "pointer" }}
-                      />
+                      <FaHeart size={50} />
                       <h4>
-                        No licensing photos yet — start licensing your best
-                        shots!
+                        Nothing liked… yet! Start exploring
                       </h4>
                     </div>
+                  </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -232,7 +227,7 @@ export const MyPhotos = (props) => {
                 </div>
                 <div className="container-fluid">
                   <div className="myphotos mt-3 mb-3">
-                    <div className="card">
+                    {/* <div className="card">
                       <div className="card-body p-0">
                         <div className="image">
                           <a href="photo_preview.php?id=">
@@ -250,16 +245,49 @@ export const MyPhotos = (props) => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="empty-content text-center">
                     <div className="mb-5">
-                      <i
-                        className="fa-solid fa-camera"
-                        /* onclick="window.location.href = 'upload.php'" */
-                        style={{ cursor: "pointer" }}
-                      />
+                      <MdPhotoLibrary size={50} />
                       <h4>No galleries yet — create your first one!</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="tab-pane fade show" id="statistics">
+                <div className="mt-2 mb-2">
+                  <h2>
+                    Statistics{" "}
+                    <p className="d-inline text-primary">( )</p>
+                  </h2>
+                </div>
+                <div className="container-fluid">
+                  <div className="myphotos mt-3 mb-3">
+                    {/* <div className="card">
+                      <div className="card-body p-0">
+                        <div className="image">
+                          <a href="photo_preview.php?id=">
+                            <img src="photos/" className="img-fluid" />
+                          </a>
+                        </div>
+                        <div className="d-flex justify-content-between p-2">
+                          <div>
+                            <h5 />
+                          </div>
+                          <div className="d-flex justify-content-center align-items-center">
+                            <div>
+                              <p />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div> */}
+                  </div>
+                  <div className="empty-content text-center">
+                    <div className="mb-5">
+                      <FaChartLine size={50} />
+                      <h4>No statistics found for now - try later</h4>
                     </div>
                   </div>
                 </div>

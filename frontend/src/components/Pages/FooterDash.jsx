@@ -4,15 +4,15 @@ export const FooterDash = () => {
   return (
     <div data-bs-page="footer-dashboard">
       <footer>
-        <div class="ft">
-          <nav class="nav">
-            <li class="nav-item">
-              <a href="#" class="nav-link">
+        <div className="ft">
+          <nav className="nav">
+            <li className="nav-item">
+              <a href="#" className="nav-link">
                 Terms of use
               </a>
             </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
+            <li className="nav-item">
+              <a href="#" className="nav-link">
                 Privacy & conditons
               </a>
             </li>

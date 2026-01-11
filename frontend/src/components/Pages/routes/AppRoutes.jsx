@@ -8,6 +8,7 @@ import { MyProfile } from "../MyProfile";
 import axios from "axios";
 import { MyPhotos } from "../MyPhotos";
 import { Navbar } from "../Navbar";
+import { PhotoPreview } from "../PhotoPreview";
 export const AppRoutes = () => {
   const [user, setUser] = useState({});
   const [show, setShow] = useState(null);
@@ -22,7 +23,8 @@ export const AppRoutes = () => {
         if (res.data.success) {
           setUser(res.data.user);
         }
-      });
+      }).catch((err) => {console.error('You have an error'+err?.response?.status)}
+      );
   }, []);
   return (
     <>
@@ -33,6 +35,7 @@ export const AppRoutes = () => {
       <Route path="/signup" element={<SignUp />} />
       <Route path="/myphotos" element={<MyPhotos data={user} />} />
       <Route path="/myprofile" element={<MyProfile data={user} openModal={handleOpen} closeModal={handleClose} modalState={show} />} />
+      <Route path="/photo_preview/:id/:slug" element={<PhotoPreview />} />
     </Routes>
     </>
   );
