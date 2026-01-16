@@ -9,6 +9,7 @@ import axios from "axios";
 import { MyPhotos } from "../MyPhotos";
 import { Navbar } from "../Navbar";
 import { PhotoPreview } from "../PhotoPreview";
+import { Photo } from "../Photo";
 export const AppRoutes = () => {
   const [user, setUser] = useState({});
   const [show, setShow] = useState(null);
@@ -33,9 +34,10 @@ export const AppRoutes = () => {
       <Route path="/upload" element={<Upload />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
-      <Route path="/myphotos" element={<MyPhotos data={user} />} />
-      <Route path="/myprofile" element={<MyProfile data={user} openModal={handleOpen} closeModal={handleClose} modalState={show} />} />
-      <Route path="/photo_preview/:id/:slug" element={<PhotoPreview />} />
+      <Route path={`/${user?.username}/myphotos`} element={<MyPhotos data={user} />} />
+      <Route path={`/${user?.username}/myprofile`} element={<MyProfile data={user} openModal={handleOpen} closeModal={handleClose} modalState={show} />} />
+      <Route path="/photo_preview/:id/:slug" element={<PhotoPreview data={user} />} />
+      <Route path="/photo/:id/:slug" element={<Photo data={user} />} />
     </Routes>
     </>
   );

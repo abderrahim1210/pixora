@@ -1,21 +1,27 @@
 <?php
-include "db.php";
-include "likes.php";
 session_start();
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Content-Type: application/json; charset=UTF-8");
+require_once __DIR__ . "/../config/db.php";
+require_once __DIR__ . "/../api/likes.php";
 
-header("Content-Type: application/json");
-$photo_id = intval($_POST['photo_id']);
+// $photo_id = json_decode('photoid');
+$input = json_decode(file_get_contents('php://input'), true);
+$photo_id = intval($input['photo_id'] ?? 0);
 $user_id = intval($_SESSION['px_id'] ?? $_COOKIE['px_userid'] ?? null);
 
 if(!isset($user_id)){
     echo json_encode(['success' => false, 'message' => 'You must login first']);
-    header("Location:login.php");
-    exit;
+    // header("Location:login.php");
+    // exit;
 }
 
 if($photo_id < 0){
     echo json_encode(['success' => false,"message" => "Invalid photo"]);
-    exit;
+    // exit;
 }
 
 $check = $conn->prepare("SELECT 1 FROM likes WHERE user_id = :userid AND photo_id = :photoid LIMIT 1");

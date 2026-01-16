@@ -101,12 +101,9 @@ const Comments = (props) => {
                                 method="post"
                                 className="delCommentForm"
                               >
-                                <button
-                                  type="button"
-                                  className="deleteComment btn dropdown-item"
-                                >
+                                <a className="deleteComment">
                                   <FaTrash /> Delete
-                                </button>
+                                </a>
                                 <input
                                   type="hidden"
                                   name="photo_id"
@@ -123,10 +120,14 @@ const Comments = (props) => {
                         ) : (
                           <>
                             <Dropdown.Item>
-                                <FaCopy /> Copy
+                                <a>
+                                  <FaCopy /> Copy
+                                </a>
                             </Dropdown.Item>
                             <Dropdown.Item>
-                                <FaFlag /> Report
+                                <a>
+                                  <FaFlag /> Report
+                                </a>
                             </Dropdown.Item>
                             <Dropdown.Item>
                               <form
@@ -134,12 +135,9 @@ const Comments = (props) => {
                                 method="post"
                                 className="delCommentForm"
                               >
-                                <button
-                                  type="button"
-                                  className="deleteComment btn dropdown-item"
-                                >
+                                <a className="deleteComment">
                                   <FaTrash /> Delete
-                                </button>
+                                </a>
                                 <input
                                   type="hidden"
                                   name="photo_id"

@@ -13,6 +13,7 @@ if (isset($_SESSION['px_id'])) {
             'name' => $_SESSION['px_name'],
             'email' => $_SESSION['px_email'],
             'created_at' => $_SESSION['px_datetime'],
+            'username' => $_SESSION['px_name'],
             'profile_picture' => $_SESSION['px_profile_picture'],
             'cover_picture' => $_SESSION['px_cover_image']
         ]

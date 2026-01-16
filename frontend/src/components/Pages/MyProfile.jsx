@@ -35,7 +35,7 @@ import { Modal } from "react-bootstrap";
 import { MdUpload } from "react-icons/md";
 import { FiEye, FiTrash, FiUpload } from "react-icons/fi";
 import { FooterDash } from "./FooterDash";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Login } from "./Login";
 
 export const MyProfile = (props) => {
@@ -43,7 +43,7 @@ export const MyProfile = (props) => {
   const [photos, setPhotos] = useState([]);
   const [statistics, setStatistics] = useState({});
   const [edit, setEdit] = useState(false);
-  const [countries,setCountries] = useState([]);
+  const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     axios
@@ -55,7 +55,7 @@ export const MyProfile = (props) => {
         if (res.data.success) {
           setUser(res.data.user);
           setPhotos(res.data.photos);
-        }else{
+        } else {
           navigate('/login');
         }
       });
@@ -68,12 +68,15 @@ export const MyProfile = (props) => {
           setStatistics(res.data.data);
         }
       });
-      axios.get("/json/countries.json").then((res) => res.data).then(data => setCountries(data));
+    axios.get("/json/countries.json").then((res) => res.data).then(data => setCountries(data));
   }, []);
   const show = props.modalState;
   const handleOpen = props.openModal;
   const handleClose = props.closeModal;
   const userCurr = props.data;
+  function slugiFy(text){
+    return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+  }
   return (
     <div data-bs-page="myprofile">
       <Navbar data={userCurr} />
@@ -120,7 +123,7 @@ export const MyProfile = (props) => {
                   <li className="list-group-item">
                     <a
                       href="#"
-                      /* onclick="document.getElementById('cover_file').click();" */
+                    /* onclick="document.getElementById('cover_file').click();" */
                     >
                       <i className="fas fa-upload" /> Upload cover picture
                     </a>
@@ -211,6 +214,7 @@ export const MyProfile = (props) => {
                   <div className="container-fluid p-0 profileImages">
                     <div
                       className="coverImage"
+                      onContextMenu={(e) => e.preventDefault()}
                       style={{
                         backgroundImage: user.cover_image
                           ? `url("/cover_images/${user.cover_image}")`
@@ -258,6 +262,7 @@ export const MyProfile = (props) => {
                             ? "/profile_pictures/" + user.photo_profile
                             : "/outils/pngs/useracc2.png"
                         }
+                        onContextMenu={(e) => e.preventDefault()}
                         width="100px"
                         className="img_acc"
                         id="imgAcc"
@@ -331,9 +336,9 @@ export const MyProfile = (props) => {
                     )}
                   </div>
                   <div className="container-fluid pm-button mt-3">
-                    <a href="myphotos.php" className="btn" id="managePhotos">
+                    <Link to={`/${user.username}/myphotos`} className="btn" id="managePhotos">
                       manage my photos
-                    </a>
+                    </Link>
                   </div>
                   <div className="container-fluid">
                     <div className="myphotos mb-3">
@@ -342,12 +347,13 @@ export const MyProfile = (props) => {
                           <div className="card" key={p.id}>
                             <div className="card-body p-0">
                               <div className="image">
-                                <a href="photo.php?id=">
-                                  <img
-                                    src={"/photos/" + p.filename}
-                                    className="img-fluid"
-                                  />
-                                </a>
+                                <Link
+                                  id="caption"
+                                  style={{ cursor: "pointer" }}
+                                  to={`/photo/${p.id}/${slugiFy(p.title)}`}
+                                >
+                                  <img src={`/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
+                                </Link>
                               </div>
                               <div className="d-flex justify-content-between p-2">
                                 <div>

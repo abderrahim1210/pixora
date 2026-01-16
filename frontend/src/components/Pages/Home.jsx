@@ -27,7 +27,7 @@ export const Home = (props) => {
   const [search, setSearch] = useState("");
   useEffect(() => {
     axios
-      .get("http://localhost/Pixora/backend/api/homepage.php")
+      .get("http://localhost/Pixora/backend/api/homepage.php",{withCredentials:true})
       .then((res) => {
         if (res.data.success) {
           setPhotos(res.data.photos);
@@ -56,8 +56,23 @@ export const Home = (props) => {
   const handleClose = props.closeModal;
   const user = props.data;
 
-  function slugiFy(text){
+  function slugiFy(text) {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+  }
+
+  const handleLike = async (photoid) => {
+    try {
+      const res = await axios.post("http://localhost/Pixora/backend/api/add_like.php", { photo_id: photoid }, { withCredentials: true });
+      if (res.data.success) {
+        setPhotos((prevPhotos) => 
+          prevPhotos.map((p) => 
+            p.id === photoid ? { ...p, isLiked: !p.isLiked, totalLikes: res.data.totalLikes } : p
+          )
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
   return (
     <div data-bs-page="pixora">
@@ -199,12 +214,12 @@ export const Home = (props) => {
                 <Link
                   key={p.id}
                   id="caption"
-                  style={{cursor:"pointer"}}
+                  style={{ cursor: "pointer" }}
                 ></Link>
                 <div className="photo">
                   <Link
                     id="caption"
-                    style={{cursor:"pointer"}}
+                    style={{ cursor: "pointer" }}
                     to={`/photo_preview/${p.id}/${slugiFy(p.title)}`}
                   >
                     <img src={`/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
@@ -212,7 +227,7 @@ export const Home = (props) => {
                   <div className="info">
                     <a
                       id="caption"
-                      href="photo_preview.php?id=<?= $row['id']; ?>"
+                      href="photo_preview.php"
                     >
                       <div>
                         <h5>{p.title}</h5>
@@ -227,16 +242,16 @@ export const Home = (props) => {
                         />
                       </Link>
                       <a
-                        href="#"
-                        className="likeButton <?= $row['isLiked'] ? 'active' : '' ?>"
-                        data-photo-id="<?= $row['id']; ?>"
+                        className={`likeButton ${p.isLiked ? 'active' : ''}`}
+                        data-photo-id={p.id}
+                        onClick={() => handleLike(p.id)}
                       >
                         <FaHeart />{" "}
-                        <span id="likes_count-<?= $row['id']; ?>">
+                        <span id={`likes_count-${p.id}`}>
                           {p.totalLikes}
                         </span>
                       </a>
-                      <a style={{cursor:"pointer"}} onClick={handleOpen}>
+                      <a style={{ cursor: "pointer" }} onClick={handleOpen}>
                         <FaComment />
                       </a>
                     </div>
@@ -379,11 +394,10 @@ export const Home = (props) => {
                   <div className="card-body">
                     <div className="mt-3 mb-3">
                       <img
-                        src={`${
-                          u.photo_profile
-                            ? `profile_pictures/${u.photo_profile}`
-                            : "/outils/pngs/useracc2.png"
-                        }`}
+                        src={`${u.photo_profile
+                          ? `profile_pictures/${u.photo_profile}`
+                          : "/outils/pngs/useracc2.png"
+                          }`}
                         id="imgAcc"
                         width="100px"
                         height="auto"

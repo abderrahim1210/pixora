@@ -36,6 +36,6 @@ foreach ($rows as &$row) {
 echo json_encode([
     'success' => true,
     'photos' => $rows,
-    'users' => $users,
+    'users' => $users
 ]);
 ?>

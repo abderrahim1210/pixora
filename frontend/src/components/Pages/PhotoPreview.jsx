@@ -7,30 +7,42 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Comments from "./Comments";
 
-export const PhotoPreview = () => {
-  const {id} = useParams();
-  const [photo,setPhoto] = useState({});
-  const [category,setCategory] = useState({});
-  const [likes,setLikes] = useState("");
-  const [comments,setComments] = useState([]);
-  const [userId,setUserID] = useState();
+export const PhotoPreview = (props) => {
+  const { id } = useParams();
+  const [photo, setPhoto] = useState({});
+  const [category, setCategory] = useState({});
+  const [likes, setLikes] = useState("");
+  const [comments, setComments] = useState([]);
+  const [userId, setUserID] = useState();
   useEffect(() => {
-    axios.get("http://localhost/Pixora/backend/api/photoPreview.php",{params:{id},withCredentials:true})
-    .then((res) => {
-      if(res.data.success){
-        setPhoto(res.data.photo);
-        setCategory(res.data.category);
-        setLikes(res.data.likes);
-        setComments(res.data.comments);
-        setUserID(res.data.currUser);
+    axios.get("http://localhost/Pixora/backend/api/photoPreview.php", { params: { id }, withCredentials: true })
+      .then((res) => {
+        if (res.data.success) {
+          setPhoto(res.data.photo);
+          setCategory(res.data.category);
+          setLikes(res.data.likes);
+          setComments(res.data.comments);
+          setUserID(res.data.currUser);
+        }
+      }).catch(err => {
+        console.error(err);
+      });
+  }, [id]);
+  const handleLike = async (photoid) => {
+    try {
+      const res = await axios.post("http://localhost/Pixora/backend/api/add_like.php", { photo_id: photoid }, { withCredentials: true });
+      if (res.data.success) {
+        setPhoto((prevPhoto) =>
+          ({...prevPhoto, isLiked: !prevPhoto.isLiked, totalLikes: res.data.totalLikes })
+        );
       }
-    }).catch(err => {
-      console.error(err);
-    });
-  },[id]);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   return (
     <div data-bs-page="photo">
-      <Navbar />
+      <Navbar data={props.data} />
       <div className="container-fluid photo-page mt-3 mb-3">
         <div className="photo-viewer">
           <img
@@ -44,20 +56,19 @@ export const PhotoPreview = () => {
         <div className="details-panel">
           <div className="socialActions">
             <div>
-              <input type="hidden" name="photo_id" defaultValue="" />
-              <a href="#" className="likeButton " data-photo-id="">
-                <FiHeart />
-                {/* <span id="likes_count-"></span> */}
+              <input type="hidden" name="photo_id" defaultValue={photo.id} />
+              <a className={`likeButton ${photo.isLiked ? 'active' : ''}`} style={{cursor:"pointer"}} onClick={() => handleLike(photo.photo_id)} data-photo-id={photo.id}>
+                {photo.isLiked ? <FaHeart size={20} /> : <FiHeart size={20} />}
               </a>
             </div>
             <div>
-              <a id="commentButton">
-                <FaComment />
+              <a id="commentButton" style={{cursor:"pointer"}}>
+                <FaComment size={20} />
               </a>
             </div>
             <div>
               <a href="#" id="shareButton">
-                <FaShare />
+                <FaShare size={20} />
               </a>
             </div>
           </div>

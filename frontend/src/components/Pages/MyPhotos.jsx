@@ -7,6 +7,7 @@ import { FooterDash } from "./FooterDash";
 import { GiPadlock } from "react-icons/gi";
 import { MdPhotoLibrary, MdVerified } from "react-icons/md";
 import { RiChat1Line } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 export const MyPhotos = (props) => {
   const [photos, setPhotos] = useState([]);
@@ -29,7 +30,9 @@ export const MyPhotos = (props) => {
         }
       });
   }, []);
-
+  function slugiFy(text) {
+    return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+  }
   return (
     <div data-bs-page="myphotos">
       <Navbar data={user} />
@@ -104,12 +107,13 @@ export const MyPhotos = (props) => {
                         <div className="card" key={p.id}>
                           <div className="card-body p-0">
                             <div className="image">
-                              <a href="photo.php?id=">
-                                <img
-                                  src={"/photos/" + p.filename}
-                                  className="img-fluid"
-                                />
-                              </a>
+                              <Link
+                                id="caption"
+                                style={{ cursor: "pointer" }}
+                                to={`/photo/${p.id}/${slugiFy(p.title)}`}
+                              >
+                                <img src={`/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
+                              </Link>
                             </div>
                             <div className="d-flex justify-content-between p-2">
                               <div>
@@ -189,9 +193,13 @@ export const MyPhotos = (props) => {
                       <div className="card" key={p.id}>
                         <div className="card-body p-0">
                           <div className="image">
-                            <a href="photo_preview.php?id=">
-                              <img src={`/photos/${p.filename}`} className="img-fluid" />
-                            </a>
+                            <Link
+                              id="caption"
+                              style={{ cursor: "pointer" }}
+                              to={`/photo_preview/${p.id}/${slugiFy(p.title)}`}
+                            >
+                              <img src={`/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
+                            </Link>
                           </div>
                           <div className="d-flex justify-content-between p-2">
                             <div>
@@ -207,13 +215,13 @@ export const MyPhotos = (props) => {
                       </div>
                     )) : (
                       <div className="empty-content text-center">
-                    <div className="mb-5">
-                      <FaHeart size={50} />
-                      <h4>
-                        Nothing liked… yet! Start exploring
-                      </h4>
-                    </div>
-                  </div>
+                        <div className="mb-5">
+                          <FaHeart size={50} />
+                          <h4>
+                            Nothing liked… yet! Start exploring
+                          </h4>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>

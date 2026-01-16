@@ -124,7 +124,7 @@ export const Navbar = (props) => {
                   </a>
                   <ul className="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a onClick={() => navigate('/myphotos')} className="dropdown-item">
+                      <a onClick={() => navigate(`/${props.data.username}/myphotos`)} style={{cursor:"pointer"}} className="dropdown-item">
                         my photos
                       </a>
                     </li>
@@ -232,7 +232,7 @@ export const Navbar = (props) => {
                     alt="Useraccount"
                     id="imgAcc"
                     title="My profil"
-                    onClick={() => navigate('/myprofile')}
+                    onClick={() => navigate(`/${props.data.username}/myprofile`)}
                   />
                 </div>
               ) : (
