@@ -37,6 +37,20 @@ import { FiEye, FiTrash, FiUpload } from "react-icons/fi";
 import { FooterDash } from "./FooterDash";
 import { Link, useNavigate } from "react-router-dom";
 import { Login } from "./Login";
+import { useRef } from "react";
+import { useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
+// import LightGallery from 'lightgallery/react';
+
+// import lgThumbnail from 'lightgallery/plugins/thumbnail';
+// import lgZoom from 'lightgallery/plugins/zoom';
+
+// import 'lightgallery/css/lightgallery.css';
+// import 'lightgallery/css/lg-thumbnail.css';
+// import 'lightgallery/css/lg-zoom.css';
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import "yet-another-react-lightbox/styles.css";
 
 export const MyProfile = (props) => {
   const [user, setUser] = useState({});
@@ -45,6 +59,41 @@ export const MyProfile = (props) => {
   const [edit, setEdit] = useState(false);
   const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();
+  // const galleryRef = useRef(null);
+  const [open,setOpen] = useState(false);
+  const [slides,setSlides] = useState([]);
+  const handleOpenSlide = (image) => {
+    setSlides([{src:image.url,title:image.title}]);
+    setOpen(true);
+  }
+  const onSubmit = async (data) => {
+    try {
+      const res = await axios.post('http://localhost/Pixora/backend/api/edit_profile.php', data, { withCredentials: true });
+      if (res.data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Updated!",
+          text: "Your profile has been updated successfully.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } else {
+        Swal.fire({
+          icon: "info",
+          title: "No changes",
+          confirmButtonColor: "rgb(0, 120, 255)",
+          text: res.data.message || "No updates detected.",
+        });
+      }
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong. Try again.",
+      });
+    }
+  }
   useEffect(() => {
     axios
       .get("http://localhost/Pixora/backend/api/myProfile.php", {
@@ -62,6 +111,9 @@ export const MyProfile = (props) => {
     axios
       .get("http://localhost/Pixora/backend/api/statistics_profile.php", {
         withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        }
       })
       .then((res) => {
         if (res.data.success) {
@@ -70,52 +122,71 @@ export const MyProfile = (props) => {
       });
     axios.get("/json/countries.json").then((res) => res.data).then(data => setCountries(data));
   }, []);
+  // if (!user.id) return navigate('/login');
+  const handleLogOut = async () => {
+    try {
+      const res = await axios.post('http://localhost/Pixora/backend/api/logout.php', { done: true }, { withCredentials: true });
+      if (res.data.success) {
+        navigate('/login');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
   const show = props.modalState;
   const handleOpen = props.openModal;
   const handleClose = props.closeModal;
   const userCurr = props.data;
-  function slugiFy(text){
+  function slugiFy(text) {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
   }
   return (
     <div data-bs-page="myprofile">
       <Navbar data={userCurr} />
       {show === "profilePicture" && (
-        <Modal show={show} onHide={handleClose} centered>
-          <Modal.Header>
-            <Modal.Body>
-              <div>
-                <ul className="list-group profile_settings p-0">
-                  <li className="list-group-item">
-                    <a href="#">
-                      <FiUpload size={25} /> Upload profile picture
-                    </a>
-                  </li>
-                  <li className="list-group-item">
-                    <a href="#" /* onclick="previewProfilePicture();" */>
-                      <FiEye size={25} />
-                      Preview profile picture
-                    </a>
-                  </li>
-                  <li className="list-group-item deleteOption">
-                    <form
-                      action="delete_profile_picture.php"
-                      id="delPhotoProfileForm"
-                      method="post"
-                    >
-                      <a href="#" /* onclick="delProfilePhoto()" */>
-                        <FiTrash size={25} /> Delete profile picture
+        <>
+          <Modal show={show} onHide={handleClose} centered>
+            <Modal.Header>
+              <Modal.Body>
+                <div>
+                  <ul className="list-group profile_settings p-0">
+                    <li className="list-group-item">
+                      <a href="#">
+                        <FiUpload size={25} /> Upload profile picture
                       </a>
-                    </form>
-                  </li>
-                </ul>
-              </div>
-            </Modal.Body>
-          </Modal.Header>
-        </Modal>
+                    </li>
+                    <li className="list-group-item">
+                      <a href="#" onClick={(e) => {
+                        e.preventDefault();
+                        handleClose();
+                        setTimeout(() => {
+                          handleOpenSlide({url:`/profile_pictures/${user.photo_profile}`,title:'Profile Image'})
+                        }, 200);
+                      }}>
+                        <FiEye size={25} />
+                        Preview profile picture
+                      </a>
+                    </li>
+                    <li className="list-group-item deleteOption">
+                      <form
+                        action="delete_profile_picture.php"
+                        id="delPhotoProfileForm"
+                        method="post"
+                      >
+                        <a href="#" /* onclick="delProfilePhoto()" */>
+                          <FiTrash size={25} /> Delete profile picture
+                        </a>
+                      </form>
+                    </li>
+                  </ul>
+                </div>
+              </Modal.Body>
+            </Modal.Header>
+          </Modal>
+        </>
       )}
       {show === "coverImage" && (
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleClose} centered>
           <Modal.Header closeButton>
             <Modal.Body>
               <div>
@@ -125,12 +196,18 @@ export const MyProfile = (props) => {
                       href="#"
                     /* onclick="document.getElementById('cover_file').click();" */
                     >
-                      <i className="fas fa-upload" /> Upload cover picture
+                      <FiUpload size={25} /> Upload cover picture
                     </a>
                   </li>
                   <li className="list-group-item">
-                    <a href="#" /* onclick="previewCoverPicture();" */>
-                      <i className="fas fa-eye" /> Preview cover picture
+                    <a href="#" onClick={(e) => {
+                      e.preventDefault();
+                      handleClose();
+                      setTimeout(() => {
+                        handleOpenSlide({url:`/cover_images/${user.cover_image}`,title:'Cover Image'})
+                      }, 200);
+                    }}>
+                      <FiEye size={25} /> Preview cover picture
                     </a>
                   </li>
                   <li className="list-group-item deleteOption">
@@ -140,7 +217,7 @@ export const MyProfile = (props) => {
                       method="post"
                     >
                       <a href="#" /* onclick="delCoverPhoto()" */>
-                        <i className="fas fa-trash" /> Delete cover picture
+                        <FiTrash size={25} /> Delete cover picture
                       </a>
                     </form>
                   </li>
@@ -150,16 +227,13 @@ export const MyProfile = (props) => {
           </Modal.Header>
         </Modal>
       )}
-      <div className="profilePreview" style={{ display: "none" }}>
-        <a href="profile_pictures/">
-          <img src="profile_pictures/" />
-        </a>
-      </div>
-      <div className="coverPreview" style={{ display: "none" }}>
-        <a href="cover_images/">
-          <img src="cover_images/" />
-        </a>
-      </div>
+      <Lightbox
+        open={open}
+        close={() => setOpen(false)}
+        plugins={[Zoom]}
+        slides={slides}
+      >
+      </Lightbox>
       <main>
         <div className="container-fluid">
           <div className="row div">
@@ -221,7 +295,9 @@ export const MyProfile = (props) => {
                           : `linear-gradient(135deg, #454545 0%, #353535 100%)`,
                         backgroundAttachment: "fixed",
                         backgroundRepeat: "no-repeat",
+                        cursor: "pointer"
                       }}
+                      onClick={() => handleOpen('coverImage')}
                     >
                       <div className="d-flex justify-content-center">
                         <form
@@ -262,6 +338,7 @@ export const MyProfile = (props) => {
                             ? "/profile_pictures/" + user.photo_profile
                             : "/outils/pngs/useracc2.png"
                         }
+                        onClick={() => handleOpen("profilePicture")}
                         onContextMenu={(e) => e.preventDefault()}
                         width="100px"
                         className="img_acc"
@@ -428,9 +505,7 @@ export const MyProfile = (props) => {
                       </button>
                     </div>
                     <form
-                      action="edit_profile.php"
-                      id="editProfileForm"
-                      method="post"
+                      onSubmit={handleSubmit(onSubmit)}
                     >
                       <input type="hidden" name="user_id" defaultValue="" />
                       <ul className="list-group">
@@ -444,6 +519,7 @@ export const MyProfile = (props) => {
                                   className="form-control"
                                   name="update_name"
                                   id="username"
+                                  {...register('username')}
                                   /* onKeyUp="checkName()" */
                                   defaultValue={user.username}
                                 />
@@ -458,6 +534,7 @@ export const MyProfile = (props) => {
                                   className="form-control"
                                   name="update_dname"
                                   /* onKeyUp="checkDname() */
+                                  {...register('display_name')}
                                   id="userdname"
                                   defaultValue={user.displayname}
                                 />
@@ -473,6 +550,7 @@ export const MyProfile = (props) => {
                                   name="update_email"
                                   id="useremail"
                                   /* onKeyUp="checkEmail() */
+                                  {...register('email')}
                                   defaultValue={user.email}
                                 />
                                 <span id="err_useremail" />
@@ -486,6 +564,7 @@ export const MyProfile = (props) => {
                                   className="form-control"
                                   name="update_phone"
                                   /* onkeyup="checkPhone()" */
+                                  {...register('tel')}
                                   id="userphone"
                                   defaultValue={user.phone_number}
                                 />
@@ -500,6 +579,7 @@ export const MyProfile = (props) => {
                                   id="bio"
                                   className="form-control"
                                   rows={1}
+                                  {...register('bio')}
                                   defaultValue={user.bio}
                                 />
                               </div>
@@ -512,6 +592,7 @@ export const MyProfile = (props) => {
                                   className="form-control"
                                   name="update_birth"
                                   id="userbirth"
+                                  {...register('birth_date')}
                                   defaultValue={user.birth_date}
                                 />
                               </div>
@@ -523,6 +604,7 @@ export const MyProfile = (props) => {
                                   className="form-control"
                                   name="update_gender"
                                   id="usergender"
+                                  {...register('gender')}
                                 >
                                   <option value={user.gender} disabled hidden>Choose gender</option>
                                   <option value="Male" >Male</option>
@@ -537,6 +619,7 @@ export const MyProfile = (props) => {
                                   <select
                                     className="form-control"
                                     id="countrySelect"
+                                    {...register('country')}
                                   >
                                     <option value={user?.country}>{user?.country}</option>
                                     {
@@ -563,6 +646,7 @@ export const MyProfile = (props) => {
                                   className="form-control"
                                   rows={1}
                                   /* onKeyUp="checkFace()" */
+                                  {...register('facebook')}
                                   defaultValue={user.facebook}
                                 />
                                 <span id="err_face" />
@@ -577,6 +661,7 @@ export const MyProfile = (props) => {
                                   className="form-control"
                                   rows={1}
                                   /* onKeyUp="checkWebsite */
+                                  {...register('website')}
                                   defaultValue={user.website}
                                 />
                                 <span id="err_website" />
@@ -590,8 +675,9 @@ export const MyProfile = (props) => {
                                   id="x"
                                   className="form-control"
                                   rows={1}
-                                  /* onKeyUp="checkX()"
-                                   */ defaultValue={user.x}
+                                  /* onKeyUp="checkX()" */
+                                  {...register('x')}
+                                  defaultValue={user.x}
                                 />
                                 <span id="err_x" />
                               </div>
@@ -605,6 +691,7 @@ export const MyProfile = (props) => {
                                   className="form-control"
                                   rows={1}
                                   /* onKeyUp="checkInsta() */
+                                  {...register('instagram')}
                                   defaultValue={user.instagram}
                                 />
                                 <span id="err_insta" />
@@ -700,7 +787,7 @@ export const MyProfile = (props) => {
                       </div>
                       <button
                         type="submit"
-                        className="btn w-100 disabled"
+                        className={`btn w-100 ${!edit && 'disabled'}`}
                         id="saveChangeBtn"
                       >
                         Save changes
@@ -764,7 +851,7 @@ export const MyProfile = (props) => {
                           <p>Sign out from your current session.</p>
                         </div>
                       </div>
-                      <a href="logout.php" className="btn btn-sm">
+                      <a onClick={handleLogOut} style={{ cursor: "pointer" }} className="btn btn-sm">
                         Log out
                       </a>
                     </div>

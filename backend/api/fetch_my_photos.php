@@ -7,13 +7,13 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Content-Type: application/json");
 require_once __DIR__. "/../config/db.php";
 
-if (!isset($_SESSION['px_id']) && !isset($_COOKIE['px_userid'])) {
+/* if (!isset($_SESSION['px_id'])) {
     $_SESSION['dberr'] = "You have to logged first for display dasheboard.";
     header("Location:login.php");
     exit();
 }
-
-$id = $_SESSION['px_id'] ?? $_COOKIE['px_userid'];
+ */
+$id = $_SESSION['px_id'] ?? null;
 
 $photoStmt = $conn->prepare("SELECT * FROM  photos WHERE user_id = :id");
 $photoStmt->bindValue(":id", $id, PDO::PARAM_INT);

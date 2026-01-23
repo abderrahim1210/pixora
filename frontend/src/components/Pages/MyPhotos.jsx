@@ -7,7 +7,7 @@ import { FooterDash } from "./FooterDash";
 import { GiPadlock } from "react-icons/gi";
 import { MdPhotoLibrary, MdVerified } from "react-icons/md";
 import { RiChat1Line } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const MyPhotos = (props) => {
   const [photos, setPhotos] = useState([]);
@@ -15,6 +15,8 @@ export const MyPhotos = (props) => {
   const [photosCount, setPhotosCount] = useState(0);
   const [likesCountPhotos, setLikesCountPhotos] = useState(0);
   const user = props.data;
+  const navigate = useNavigate();
+  if (!user.id) navigate('/login');
   useEffect(() => {
     axios
       .get("http://localhost/Pixora/backend/api/fetch_my_photos.php", {
@@ -27,6 +29,8 @@ export const MyPhotos = (props) => {
           setPhotosLikes(res.data.photosLikes);
           setPhotosCount(res.data.photosCount);
           setLikesCountPhotos(res.data.likesCountPhotos);
+        }else{
+          navigate('/login');
         }
       });
   }, []);

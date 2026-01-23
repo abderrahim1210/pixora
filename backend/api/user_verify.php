@@ -3,9 +3,9 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Content-Type: application/json; charset=UTF-8");
 require_once __DIR__ . "/../config/db.php";
-if (isset($_COOKIE['px_user_token'])) {
-    $stmt = $conn->prepare("SELECT * FROM users WHERE token = :tk LIMIT 1");
-    $stmt->bindValue(":tk", $_COOKIE['px_user_token']);
+if (isset($_SESSION['px_id'])) {
+    $stmt = $conn->prepare("SELECT * FROM users WHERE id = :id LIMIT 1");
+    $stmt->bindValue(":id", $_SESSION['px_id'],PDO::PARAM_INT);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($user) {

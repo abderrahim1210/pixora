@@ -6,13 +6,20 @@ import { FaLocationDot, FaPhotoFilm } from "react-icons/fa6";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Comments from "./Comments";
+
+import LightBox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import 'yet-another-react-lightbox/styles.css';
+
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
     const [category, setCategory] = useState({});
     const [likes, setLikes] = useState("");
+    const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
     const [userId, setUserID] = useState();
+    const [open, setOpen] = useState(false);
     useEffect(() => {
         axios.get("http://localhost/Pixora/backend/api/photoPreview.php", { params: { id }, withCredentials: true })
             .then((res) => {
@@ -39,17 +46,43 @@ export const Photo = (props) => {
             console.log(err);
         }
     }
+    const handleComment = async () => {
+        try {
+            const res = await axios.post('http://localhost/Pixora/backend/api/add_comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
+            if (res.data.success) {
+                console.log('Comment added succesfully');
+            } else {
+                console.log(res.data.message);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
     return (
         <div data-bs-page="photo">
             <Navbar data={props.data} />
             <div className="container-fluid photo-page mt-3 mb-3">
                 <div className="photo-viewer">
+                    <LightBox
+                        open={open}
+                        close={() => setOpen(false)}
+                        slides={[{ src: `/photos/${photo.filename}`, title: photo.title }]}
+                        plugins={[Zoom]}
+                        carousel={{
+                            arrows: false
+                        }}
+                    />
                     <img
                         src={`/photos/${photo.filename}`}
                         onContextMenu={(e) => e.preventDefault()}
                         width="100%"
                         className="img-fluid"
                         alt={photo.title}
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                            setOpen(true);
+                        }
+                        }
                     />
                 </div>
                 <div className="details-panel">
@@ -132,10 +165,8 @@ export const Photo = (props) => {
                     </ul>
                     <div className="comments">
                         <h5>Comments</h5>
-                        <form
-                            action="add_comments.php"
+                        <div
                             className="comment-form"
-                            method="post"
                         >
                             <div className="input-group">
                                 <textarea
@@ -145,18 +176,19 @@ export const Photo = (props) => {
                                     className="form-control"
                                     rows={1}
                                     cols={1}
-                                    defaultValue={""}
+                                    value={comment}
+                                    onChange={(e) => setComment(e.target.value)}
                                 />
                                 <input type="hidden" name="photo_id" defaultValue="" />
                                 <button
-                                    type="submit"
-                                    className="btn btn-primary disabled"
+                                    className="btn btn-primary"
+                                    onClick={handleComment}
                                     id="postBtn"
                                 >
                                     Post
                                 </button>
                             </div>
-                        </form>
+                        </div>
                         <Comments data={comments} currUser={userId} />
                     </div>
                 </div>

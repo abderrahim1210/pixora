@@ -1,7 +1,18 @@
 <?php
-include "db.php";
-include "fn.php";
 session_start();
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Content-Type: application/json");
+require_once __DIR__ . "/../config/db.php";
+require_once __DIR__ . "/../api/fn.php";
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
 $isValid = false;
 $randomNumber = rand(100,9999);
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
@@ -34,7 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $checkUser = $user->fetchColumn();
 
         if ($checkUser) {
-            $_SESSION['signerr'] = "User is already exist.";
+            // $_SESSION['signerr'] = "User is already exist.";
+            echo json_encode(['success' => false,'message' => 'User is already exist']);
             $isValid = false;
         } else {
             $isValid = true;
@@ -49,7 +61,7 @@ if ($isValid) {
     $appendUser->bindValue(":useremail", $useremail);
     $appendUser->bindValue(":userpass", $hashedPass);
     $appendUser->execute();
-    header("Location:login.php");
+    echo json_encode(['success' => true]);
     exit();
 }
 ?>

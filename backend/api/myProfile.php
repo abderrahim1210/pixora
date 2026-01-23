@@ -9,7 +9,7 @@ require_once __DIR__ . "/../config/db.php";
 //require_once __DIR__ . "/../api/statistics_profile.php";
 //require_once __DIR__ . "../api/fetch_my_photos.php";
 
-$id = intval($_SESSION['px_id'] ?? $_COOKIE['px_userid']);
+$id = intval($_SESSION['px_id']);
 
 $info = $conn->prepare("SELECT * FROM users WHERE id = :id");
 $info->bindValue(":id", $id, PDO::PARAM_INT);
@@ -23,6 +23,7 @@ if ($infos) {
     echo json_encode([
         'success' => true,
         'user' => [
+            'id' => $infos['id'],
             'displayname' => $infos['display_name'],
             'email' => $infos['email'],
             'username' => $infos['username'],

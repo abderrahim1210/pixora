@@ -11,7 +11,7 @@ require_once __DIR__ . "/../api/likes.php";
 // $photo_id = json_decode('photoid');
 $input = json_decode(file_get_contents('php://input'), true);
 $photo_id = intval($input['photo_id'] ?? 0);
-$user_id = intval($_SESSION['px_id'] ?? $_COOKIE['px_userid'] ?? null);
+$user_id = intval($_SESSION['px_id'] ?? null);
 
 if(!isset($user_id)){
     echo json_encode(['success' => false, 'message' => 'You must login first']);

@@ -10,11 +10,13 @@ import {
 import { FaPencil } from "react-icons/fa6";
 import { FiCheck } from "react-icons/fi";
 import { Dropdown } from "react-bootstrap";
+import axios from "axios";
 
 const Comments = (props) => {
   const comments = props.data;
   const currUser = props.currUser;
   const [isEditing, setIsEditing] = useState(null);
+  const [comment, setComment] = useState("");
   const handleEdit = () => {
     setIsEditing(true);
   }
@@ -22,8 +24,21 @@ const Comments = (props) => {
   const handleReset = () => {
     setIsEditing(false);
   }
+
+  const handleUpComment = async (commentId,newContent) => {
+    try {
+      const res = await axios.post('http://localhost/Pixora/backend/api/update_comment.php', { photo_id: props.photoId, content: newContent ,comment_id: commentId }, { withCredentials: true });
+      if (res.data.success) {
+        console.log(res.data.message);
+      } else {
+        console.log(res.data.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
   return (
-    <>
+    <div data-bs-page="comments">
       <ul className="comments-list mt-4">
         {comments.length > 0 ? (
           comments.map((c) => (
@@ -48,16 +63,15 @@ const Comments = (props) => {
                   </div>)}
                   {isEditing === c.id && (
                     <div className="edit-div">
-                      <form
-                        action="update_comment.php"
+                      <div
                         className="upCommentForm"
-                        method="post"
                       >
                         <textarea
                           name="comment_content"
                           className="form-control mt-1"
                           rows={1}
                           defaultValue={c.content}
+                          // onChange={(e) => setComment(e.target.value)}
                         />
                         <input
                           type="hidden"
@@ -69,13 +83,17 @@ const Comments = (props) => {
                           name="comment_id"
                           defaultValue={c.id}
                         />
-                      </form>
+                      </div>
                     </div>
                   )}
                   <span className="comment-date">{c.created_at}</span>
                 </div>
                 <div className="postition-relative">
-                  {isEditing === c.id && (<><button className="saveChange btn p-1" onClick={() => setIsEditing(null)}>
+                  {isEditing === c.id && (<><button className="saveChange btn p-1" onClick={() => {
+                    const newContent = document.querySelector(`textarea[name="comment_content"]`).value;
+                    handleUpComment(c.id,newContent);
+                    setIsEditing(null)}
+                    }>
                     <FaCheck />
                   </button>
                     <button className="resetChange btn p-1 text-danger" onClick={() => setIsEditing(null)}>
@@ -93,17 +111,15 @@ const Comments = (props) => {
                               <FaPencil /> Edit
                             </Dropdown.Item>
                             <Dropdown.Item>
-                                <FaCopy /> Copy
+                              <FaCopy /> Copy
                             </Dropdown.Item>
                             <Dropdown.Item>
-                              <form
-                                action="delete_comment.php"
-                                method="post"
+                              <div
                                 className="delCommentForm"
                               >
-                                <a className="deleteComment">
+                                <button className="btn p-0">
                                   <FaTrash /> Delete
-                                </a>
+                                </button>
                                 <input
                                   type="hidden"
                                   name="photo_id"
@@ -114,30 +130,28 @@ const Comments = (props) => {
                                   name="comment_id"
                                   defaultValue={c.id}
                                 />
-                              </form>
+                              </div>
                             </Dropdown.Item>
                           </>
                         ) : (
                           <>
                             <Dropdown.Item>
-                                <a>
-                                  <FaCopy /> Copy
-                                </a>
+                              <button className="btn p-0">
+                                <FaCopy /> Copy
+                              </button>
                             </Dropdown.Item>
                             <Dropdown.Item>
-                                <a>
-                                  <FaFlag /> Report
-                                </a>
+                              <button className="btn p-0">
+                                <FaFlag /> Report
+                              </button>
                             </Dropdown.Item>
                             <Dropdown.Item>
-                              <form
-                                action="delete_comment.php"
-                                method="post"
+                              <div
                                 className="delCommentForm"
                               >
-                                <a className="deleteComment">
+                                <button className="btn p-0">
                                   <FaTrash /> Delete
-                                </a>
+                                </button>
                                 <input
                                   type="hidden"
                                   name="photo_id"
@@ -148,7 +162,7 @@ const Comments = (props) => {
                                   name="comment_id"
                                   defaultValue={c.id}
                                 />
-                              </form>
+                              </div>
                             </Dropdown.Item>
                           </>
                         )}
@@ -172,7 +186,7 @@ const Comments = (props) => {
           </div>
         )}
       </ul>
-    </>
+    </div>
   );
 };
 

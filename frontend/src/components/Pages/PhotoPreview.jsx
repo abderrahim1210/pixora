@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Navbar } from "./Navbar";
 import { FiCalendar, FiCommand, FiHeart, FiImage, FiTag, FiUser } from "react-icons/fi";
 import { FaCalendar, FaComment, FaCommentAlt, FaHeart, FaShare, FaTag, FaUser } from "react-icons/fa";
@@ -7,13 +7,20 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Comments from "./Comments";
 
+import LightBox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import 'yet-another-react-lightbox/styles.css';
+
+
 export const PhotoPreview = (props) => {
   const { id } = useParams();
   const [photo, setPhoto] = useState({});
   const [category, setCategory] = useState({});
   const [likes, setLikes] = useState("");
+  const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [userId, setUserID] = useState();
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     axios.get("http://localhost/Pixora/backend/api/photoPreview.php", { params: { id }, withCredentials: true })
       .then((res) => {
@@ -33,8 +40,21 @@ export const PhotoPreview = (props) => {
       const res = await axios.post("http://localhost/Pixora/backend/api/add_like.php", { photo_id: photoid }, { withCredentials: true });
       if (res.data.success) {
         setPhoto((prevPhoto) =>
-          ({...prevPhoto, isLiked: !prevPhoto.isLiked, totalLikes: res.data.totalLikes })
+          ({ ...prevPhoto, isLiked: !prevPhoto.isLiked, totalLikes: res.data.totalLikes })
         );
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const handleComment = async () => {
+    try {
+      const res = await axios.post('http://localhost/Pixora/backend/api/add_comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
+      if (res.data.success) {
+        console.log('Comment added succesfully');
+      } else {
+        console.log(res.data.message);
       }
     } catch (err) {
       console.log(err);
@@ -45,24 +65,37 @@ export const PhotoPreview = (props) => {
       <Navbar data={props.data} />
       <div className="container-fluid photo-page mt-3 mb-3">
         <div className="photo-viewer">
+          <LightBox
+            open={open}
+            close={() => setOpen(false)}
+            slides={[{ src: `/photos/${photo.filename}`, title: photo.title }]}
+            plugins={[Zoom]}
+            carousel={{
+              arrows: false
+            }}
+          />
           <img
             src={`/photos/${photo.filename}`}
             onContextMenu={(e) => e.preventDefault()}
             width="100%"
             className="img-fluid"
             alt={photo.title}
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setOpen(true);
+            }
+            }
           />
         </div>
         <div className="details-panel">
           <div className="socialActions">
             <div>
-              <input type="hidden" name="photo_id" defaultValue={photo.id} />
-              <a className={`likeButton ${photo.isLiked ? 'active' : ''}`} style={{cursor:"pointer"}} onClick={() => handleLike(photo.photo_id)} data-photo-id={photo.id}>
+              <a className={`likeButton ${photo.isLiked ? 'active' : ''}`} style={{ cursor: "pointer" }} onClick={() => handleLike(photo.photo_id)} data-photo-id={photo.id}>
                 {photo.isLiked ? <FaHeart size={20} /> : <FiHeart size={20} />}
               </a>
             </div>
             <div>
-              <a id="commentButton" style={{cursor:"pointer"}}>
+              <a id="commentButton" style={{ cursor: "pointer" }}>
                 <FaComment size={20} />
               </a>
             </div>
@@ -116,10 +149,8 @@ export const PhotoPreview = (props) => {
           </ul>
           <div className="comments">
             <h5>Comments</h5>
-            <form
-              action="add_comments.php"
+            <div
               className="comment-form"
-              method="post"
             >
               <div className="input-group">
                 <textarea
@@ -129,19 +160,20 @@ export const PhotoPreview = (props) => {
                   className="form-control"
                   rows={1}
                   cols={1}
-                  defaultValue={""}
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
                 />
                 <input type="hidden" name="photo_id" defaultValue="" />
                 <button
-                  type="submit"
-                  className="btn btn-primary disabled"
+                  className="btn btn-primary"
+                  onClick={handleComment}
                   id="postBtn"
                 >
                   Post
                 </button>
               </div>
-            </form>
-            <Comments data={comments} currUser={userId} />
+            </div>
+            <Comments data={comments} photoId={photo.id} currUser={userId} />
           </div>
         </div>
       </div>

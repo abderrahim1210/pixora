@@ -16,11 +16,14 @@
     "react": "^19.2.0",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.0",
+    "react-hook-form": "^7.71.1",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.11.0",
     "react-select": "^5.10.2",
     "redux": "^5.0.1",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.1.19",
+    "sweetalert2": "^11.26.17",
+    "yet-another-react-lightbox": "^3.28.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

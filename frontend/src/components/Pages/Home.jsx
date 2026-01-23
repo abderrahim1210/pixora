@@ -19,20 +19,24 @@ import { Modal, Button } from "react-bootstrap";
 import { setFavicon } from "../utils/SetFavicon";
 import { FiStar } from "react-icons/fi";
 import { MdCategory, MdRecommend } from "react-icons/md";
+import Comments from "./Comments";
 export const Home = (props) => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
   const [users, setUsers] = useState([]);
   const [usrSearched, setUsrSearched] = useState([]);
   const [search, setSearch] = useState("");
+  const [activePhoto, setActivePhoto] = useState(null);
+  // const [comments, setComments] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost/Pixora/backend/api/homepage.php",{withCredentials:true})
+      .get("http://localhost/Pixora/backend/api/homepage.php", { withCredentials: true })
       .then((res) => {
         if (res.data.success) {
           setPhotos(res.data.photos);
           setUsers(res.data.users);
           setUsrSearched(res.data.users);
+          // setComments(res.data.comments);
         }
       });
     setFavicon("/outils/favicons/favicon.jpg");
@@ -64,22 +68,28 @@ export const Home = (props) => {
     try {
       const res = await axios.post("http://localhost/Pixora/backend/api/add_like.php", { photo_id: photoid }, { withCredentials: true });
       if (res.data.success) {
-        setPhotos((prevPhotos) => 
-          prevPhotos.map((p) => 
+        setPhotos((prevPhotos) =>
+          prevPhotos.map((p) =>
             p.id === photoid ? { ...p, isLiked: !p.isLiked, totalLikes: res.data.totalLikes } : p
           )
         );
+      } else {
+        navigate('/login');
       }
     } catch (err) {
       console.log(err);
     }
+  }
+  const handleComments = (p) => {
+    setActivePhoto(p);
+    handleOpen("comments");
   }
   return (
     <div data-bs-page="pixora">
       <Navbar data={user} />
       <div className="div2">
         <div className="container-fluid p-0">
-          <h1>discover amazing photos on Pixora</h1>
+          <h1 style={{fontWeight:"700"}}>discover amazing photos on Pixora</h1>
           <p id="quote" className="mt-2 mb-2">
             Every photo tells a story. What’s yours?
           </p>
@@ -170,47 +180,49 @@ export const Home = (props) => {
         >
           <h1 className="text-center fw-bold">For you</h1>
           <div className="photos">
-            {photos.map((p) => (
-              <div className="card" key={p.id}>
-                <Modal show={show} onHide={handleClose}>
-                  <Modal.Header closeButton>
-                    <Modal.Title>Comments</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
+            {activePhoto && (
+              <Modal show={show === "comments"} className="modal-comments" onHide={handleClose}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Comments</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="modalBody">
+                  <div className="comments">
                     <form
                       action="add_comments.php"
                       className="comment-form"
                       method="post"
                     >
-                      <input
-                        type="hidden"
-                        name="photo_id"
-                        defaultValue={p.id}
-                      />
+                      <input type="hidden" name="photo_id" defaultValue="" />
                       <div className="input-group">
                         <textarea
-                          className="up_comment form-control"
+                          id="up_comment"
                           name="comment_content"
                           placeholder="Type your comment ..."
+                          className="form-control"
                           rows={1}
                           cols={1}
                           defaultValue={""}
                         />
                         <button
                           type="submit"
-                          className="btn btn-primary postBtn disabled"
+                          className="btn btn-primary disabled"
+                          id="postBtn"
                         >
                           Post
                         </button>
                       </div>
                     </form>
-                    <hr />
-                    <div className="mt-3">
-                      <h4 className="fw-bold">All comments</h4>
-                      {""}
-                    </div>
-                  </Modal.Body>
-                </Modal>
+                  </div>
+                  <hr />
+                  <div className="mt-3">
+                    <h4 className="fw-bold">All comments</h4>
+                    <Comments data={activePhoto.comments} currUser={user} />
+                  </div>
+                </Modal.Body>
+              </Modal>
+            )}
+            {photos.map((p) => (
+              <div className="card" key={p.id}>
                 <Link
                   key={p.id}
                   id="caption"
@@ -227,7 +239,6 @@ export const Home = (props) => {
                   <div className="info">
                     <a
                       id="caption"
-                      href="photo_preview.php"
                     >
                       <div>
                         <h5>{p.title}</h5>
@@ -242,7 +253,7 @@ export const Home = (props) => {
                         />
                       </Link>
                       <a
-                        className={`likeButton ${p.isLiked ? 'active' : ''}`}
+                        className={`likeButton ${(user.id && p.isLiked) ? 'active' : ''}`}
                         data-photo-id={p.id}
                         onClick={() => handleLike(p.id)}
                       >
@@ -251,7 +262,7 @@ export const Home = (props) => {
                           {p.totalLikes}
                         </span>
                       </a>
-                      <a style={{ cursor: "pointer" }} onClick={handleOpen}>
+                      <a style={{ cursor: "pointer" }} onClick={() => handleComments(p)}>
                         <FaComment />
                       </a>
                     </div>
@@ -383,9 +394,6 @@ export const Home = (props) => {
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Type name of photographer ..."
             />
-            {/* <button type="button" onClick={handleSearch} className="btn searchButton2">
-              <CiSearch size={20} color={"black"} />
-            </button> */}
           </div>
           <div className="container-fluid div3">
             {usrSearched.length > 0 ? (
@@ -515,6 +523,6 @@ export const Home = (props) => {
         </nav>
       </div>
       <Footer />
-    </div>
+    </div >
   );
 };
