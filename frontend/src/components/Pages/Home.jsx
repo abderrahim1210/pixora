@@ -20,6 +20,7 @@ import { setFavicon } from "../utils/SetFavicon";
 import { FiStar } from "react-icons/fi";
 import { MdCategory, MdRecommend } from "react-icons/md";
 import Comments from "./Comments";
+import {CopyToClipboard} from 'copy-to-clipboard';
 export const Home = (props) => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
@@ -27,7 +28,8 @@ export const Home = (props) => {
   const [usrSearched, setUsrSearched] = useState([]);
   const [search, setSearch] = useState("");
   const [activePhoto, setActivePhoto] = useState(null);
-  // const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState("");
+  const [text,setText] = useState("");
   useEffect(() => {
     axios
       .get("http://localhost/Pixora/backend/api/homepage.php", { withCredentials: true })
@@ -36,7 +38,6 @@ export const Home = (props) => {
           setPhotos(res.data.photos);
           setUsers(res.data.users);
           setUsrSearched(res.data.users);
-          // setComments(res.data.comments);
         }
       });
     setFavicon("/outils/favicons/favicon.jpg");
@@ -44,7 +45,6 @@ export const Home = (props) => {
 
   useEffect(() => {
     if (search.trim() === "") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUsrSearched(users);
     } else {
       setUsrSearched(
@@ -62,6 +62,14 @@ export const Home = (props) => {
 
   function slugiFy(text) {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+  }
+
+  const handleComment = async (id) => {
+    try {
+      await axios.post('http://localhost/Pixora/backend/api/add_comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const handleLike = async (photoid) => {
@@ -89,7 +97,7 @@ export const Home = (props) => {
       <Navbar data={user} />
       <div className="div2">
         <div className="container-fluid p-0">
-          <h1 style={{fontWeight:"700"}}>discover amazing photos on Pixora</h1>
+          <h1 style={{ fontWeight: "700" }}>discover amazing photos on Pixora</h1>
           <p id="quote" className="mt-2 mb-2">
             Every photo tells a story. What’s yours?
           </p>
@@ -182,41 +190,40 @@ export const Home = (props) => {
           <div className="photos">
             {activePhoto && (
               <Modal show={show === "comments"} className="modal-comments" onHide={handleClose}>
-                <Modal.Header closeButton>
+                {/* <Modal.Header closeButton>
                   <Modal.Title>Comments</Modal.Title>
-                </Modal.Header>
+                </Modal.Header> */}
                 <Modal.Body className="modalBody">
-                  <div className="comments">
-                    <form
-                      action="add_comments.php"
-                      className="comment-form"
-                      method="post"
-                    >
+                  <h3>Comments</h3>
+                  <div
+                    className="comment-form"
+                  >
+                    <div className="input-group">
+                      <textarea
+                        id="up_comment"
+                        name="comment_content"
+                        placeholder="Type your comment ..."
+                        className="form-control"
+                        rows={1}
+                        cols={1}
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                      />
                       <input type="hidden" name="photo_id" defaultValue="" />
-                      <div className="input-group">
-                        <textarea
-                          id="up_comment"
-                          name="comment_content"
-                          placeholder="Type your comment ..."
-                          className="form-control"
-                          rows={1}
-                          cols={1}
-                          defaultValue={""}
-                        />
-                        <button
-                          type="submit"
-                          className="btn btn-primary disabled"
-                          id="postBtn"
-                        >
-                          Post
-                        </button>
-                      </div>
-                    </form>
+                      <button
+                        className={`btn btn-primary ${comment === "" ? "disabled" : ""}`}
+                        onClick={() => handleComment(activePhoto.id)}
+                        id="postBtn"
+                      >
+                        Post
+                      </button>
+                    </div>
                   </div>
                   <hr />
                   <div className="mt-3">
                     <h4 className="fw-bold">All comments</h4>
-                    <Comments data={activePhoto.comments} currUser={user} />
+                    {/* <Comments data={comments} photoId={photo.photo_id} currUser={userId} /> */}
+                    <Comments data={activePhoto.comments} photoId={activePhoto.id} currUser={user} />
                   </div>
                 </Modal.Body>
               </Modal>

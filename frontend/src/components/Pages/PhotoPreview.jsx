@@ -6,11 +6,19 @@ import { FaLocationDot, FaPhotoFilm } from "react-icons/fa6";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Comments from "./Comments";
-
+import Swal from 'sweetalert2';
 import LightBox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
-
+import { Notyf } from 'notyf';
+import 'notyf/notyf.min.css';
+const notyf = new Notyf({
+  duration: 4000,
+  position: {
+    x: "right",
+    y: "top",
+  }
+});
 
 export const PhotoPreview = (props) => {
   const { id } = useParams();
@@ -21,6 +29,7 @@ export const PhotoPreview = (props) => {
   const [comments, setComments] = useState([]);
   const [userId, setUserID] = useState();
   const [open, setOpen] = useState(false);
+  
   useEffect(() => {
     axios.get("http://localhost/Pixora/backend/api/photoPreview.php", { params: { id }, withCredentials: true })
       .then((res) => {
@@ -52,9 +61,10 @@ export const PhotoPreview = (props) => {
     try {
       const res = await axios.post('http://localhost/Pixora/backend/api/add_comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
       if (res.data.success) {
-        console.log('Comment added succesfully');
-      } else {
-        console.log(res.data.message);
+        notyf.success(res.data.message);
+        console.log(res.data);
+      }else{
+        notyf.error(res.data.message);
       }
     } catch (err) {
       console.log(err);
@@ -173,7 +183,7 @@ export const PhotoPreview = (props) => {
                 </button>
               </div>
             </div>
-            <Comments data={comments} photoId={photo.id} currUser={userId} />
+            <Comments data={comments} photoId={photo.photo_id} currUser={userId} />
           </div>
         </div>
       </div>

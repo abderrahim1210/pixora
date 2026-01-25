@@ -40,14 +40,6 @@ import { Login } from "./Login";
 import { useRef } from "react";
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
-// import LightGallery from 'lightgallery/react';
-
-// import lgThumbnail from 'lightgallery/plugins/thumbnail';
-// import lgZoom from 'lightgallery/plugins/zoom';
-
-// import 'lightgallery/css/lightgallery.css';
-// import 'lightgallery/css/lg-thumbnail.css';
-// import 'lightgallery/css/lg-zoom.css';
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
@@ -122,7 +114,6 @@ export const MyProfile = (props) => {
       });
     axios.get("/json/countries.json").then((res) => res.data).then(data => setCountries(data));
   }, []);
-  // if (!user.id) return navigate('/login');
   const handleLogOut = async () => {
     try {
       const res = await axios.post('http://localhost/Pixora/backend/api/logout.php', { done: true }, { withCredentials: true });
@@ -187,7 +178,7 @@ export const MyProfile = (props) => {
       )}
       {show === "coverImage" && (
         <Modal show={show} onHide={handleClose} centered>
-          <Modal.Header closeButton>
+          <Modal.Header>
             <Modal.Body>
               <div>
                 <ul className="list-group profile_settings">

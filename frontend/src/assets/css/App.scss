@@ -23,10 +23,9 @@
 }
 
 :root {
-  /*  --special_color: rgb(244, 162, 97);
-    --special_dark-color: rgb(46, 46, 46); */
   --special_color: rgb(0, 120, 255);
   --special_dark-color: white;
+  --box_sahdow : 0 8px 24px rgba(0,0,0,0.1);
 
 }
 
@@ -41,17 +40,7 @@ body {
   font-family: "Outfit", "sans-serif";
   font-size: 17px;
   background-color: white;
-  /* background-image: url("outils/backgrounds/back9.jpg"); */
-  /* background: linear-gradient(135deg, #ffffff, rgb(242, 133, 1)); */
 }
-
-// .modal-comments .modalBody .comments {
-//     padding: 20px;
-//     margin-top: 30px;
-//     background-color: white;
-//     border-radius: 20px;
-//     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-//   }
 
 .comment-form .form-control {
   border-radius: 30px;
@@ -399,31 +388,6 @@ body {
   .empty-content i {
     font-size: 40px;
   }
-
-  /* 
-#searchButton {
-    background-color: var(--special_dark-color);
-    color: white;
-    transition: transform 0.3s ease;
-}
-
-#searchButton:hover {
-    background-color: white;
-    color: var(--special_dark-color);
-    transform: scale(1.1);
-}
-
-#uploadButton {
-    background-color: var(--special_color);
-    color: white;
-    transition: transform 0.3s ease;
-}
-
-#uploadButton:hover {
-    background-color: white;
-    color: var(--special_color);
-    transform: scale(1.1);
-} */
 
   .figure-caption p {
     color: white;
@@ -933,6 +897,7 @@ body {
 
   .dropdown-menu {
     border: none;
+    box-shadow: var(--box_sahdow);
   }
 
   /* .form-select{
@@ -2771,7 +2736,14 @@ body {
 }
 
 [data-bs-page="comments"] {
-  .comments {
+  .drp{
+    border: none;
+  }
+  .drpMenu{
+    border: none;
+    box-shadow: var(--box_sahdow);
+  }
+  /*.comments {
     padding: 20px;
     margin-top: 30px;
     background-color: white;
@@ -2874,5 +2846,5 @@ body {
   .reportComment:hover {
     background-color: #ed3d3d !important;
     color: white;
-  }
+  }*/
 }

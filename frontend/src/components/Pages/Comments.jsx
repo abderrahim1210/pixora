@@ -11,7 +11,17 @@ import { FaPencil } from "react-icons/fa6";
 import { FiCheck } from "react-icons/fi";
 import { Dropdown } from "react-bootstrap";
 import axios from "axios";
-
+import Swal from 'sweetalert2';
+import copy from 'copy-to-clipboard';
+import { Notyf } from 'notyf';
+import 'notyf/notyf.min.css';
+const notyf = new Notyf({
+  duration: 4000,
+  position: {
+    x: "right",
+    y: "top",
+  }
+});
 const Comments = (props) => {
   const comments = props.data;
   const currUser = props.currUser;
@@ -25,13 +35,66 @@ const Comments = (props) => {
     setIsEditing(false);
   }
 
-  const handleUpComment = async (commentId,newContent) => {
+  const handleCopy = (text) => {
+    copy(text);
+    // Swal.fire({
+    //   icon: "success",
+    //   title: "Comment copied!",
+    //   text: "Comment copied successfully",
+    //   timer: 2000,
+    //   showConfirmButton: false,
+    // });
+    notyf.success('Comment copied successfully');
+  }
+
+  const handleUpComment = async (commentId, newContent) => {
     try {
-      const res = await axios.post('http://localhost/Pixora/backend/api/update_comment.php', { photo_id: props.photoId, content: newContent ,comment_id: commentId }, { withCredentials: true });
+      const res = await axios.post('http://localhost/Pixora/backend/api/update_comment.php', { photo_id: props.photoId, content: newContent, comment_id: commentId }, { withCredentials: true });
       if (res.data.success) {
-        console.log(res.data.message);
+        /* Swal.fire({
+          icon: "success",
+          title: "Updated!",
+          text: res.data.message,
+          timer: 2000,
+          showConfirmButton: false,
+        }); */
+        notyf.success(res.data.message);
       } else {
-        console.log(res.data.message);
+        /* Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: res.data.message,
+          timer: 2000,
+          showConfirmButton: false,
+        }); */
+        notyf.error(res.data.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const handleDelComment = async (commentId) => {
+    try {
+      const res = await axios.delete('http://localhost/Pixora/backend/api/delete_comment.php', { data: { comment_id: commentId, user_id: currUser, photo_id: props.photoId }, withCredentials: true });
+      if (res.data.success) {
+        /* Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: res.data.message,
+          timer: 2000,
+          showConfirmButton: false,
+        }); */
+        notyf.success(res.data.message);
+      } else {
+        /* Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: res.data.message,
+          timer: 2000,
+          showConfirmButton: false,
+        }); */
+        notyf.error(res.data.message);
       }
     } catch (err) {
       console.log(err);
@@ -70,18 +133,9 @@ const Comments = (props) => {
                           name="comment_content"
                           className="form-control mt-1"
                           rows={1}
+                          onChange={(e) => setComment(e.target.value)}
                           defaultValue={c.content}
-                          // onChange={(e) => setComment(e.target.value)}
-                        />
-                        <input
-                          type="hidden"
-                          name="photo_id"
-                          defaultValue={c.photo_id}
-                        />
-                        <input
-                          type="hidden"
-                          name="comment_id"
-                          defaultValue={c.id}
+                        // value={comment}
                         />
                       </div>
                     </div>
@@ -90,10 +144,10 @@ const Comments = (props) => {
                 </div>
                 <div className="postition-relative">
                   {isEditing === c.id && (<><button className="saveChange btn p-1" onClick={() => {
-                    const newContent = document.querySelector(`textarea[name="comment_content"]`).value;
-                    handleUpComment(c.id,newContent);
-                    setIsEditing(null)}
-                    }>
+                    handleUpComment(c.id, comment);
+                    setIsEditing(null)
+                  }
+                  }>
                     <FaCheck />
                   </button>
                     <button className="resetChange btn p-1 text-danger" onClick={() => setIsEditing(null)}>
@@ -110,59 +164,20 @@ const Comments = (props) => {
                             <Dropdown.Item onClick={() => setIsEditing(c.id)}>
                               <FaPencil /> Edit
                             </Dropdown.Item>
-                            <Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleCopy(c.content)}>
                               <FaCopy /> Copy
                             </Dropdown.Item>
-                            <Dropdown.Item>
-                              <div
-                                className="delCommentForm"
-                              >
-                                <button className="btn p-0">
-                                  <FaTrash /> Delete
-                                </button>
-                                <input
-                                  type="hidden"
-                                  name="photo_id"
-                                  defaultValue=""
-                                />
-                                <input
-                                  type="hidden"
-                                  name="comment_id"
-                                  defaultValue={c.id}
-                                />
-                              </div>
+                            <Dropdown.Item onClick={() => handleDelComment(c.id)}>
+                              <FaTrash /> Delete
                             </Dropdown.Item>
                           </>
                         ) : (
                           <>
-                            <Dropdown.Item>
-                              <button className="btn p-0">
-                                <FaCopy /> Copy
-                              </button>
+                            <Dropdown.Item onClick={() => handleCopy(c.content)}>
+                              <FaCopy /> Copy
                             </Dropdown.Item>
                             <Dropdown.Item>
-                              <button className="btn p-0">
-                                <FaFlag /> Report
-                              </button>
-                            </Dropdown.Item>
-                            <Dropdown.Item>
-                              <div
-                                className="delCommentForm"
-                              >
-                                <button className="btn p-0">
-                                  <FaTrash /> Delete
-                                </button>
-                                <input
-                                  type="hidden"
-                                  name="photo_id"
-                                  defaultValue=""
-                                />
-                                <input
-                                  type="hidden"
-                                  name="comment_id"
-                                  defaultValue={c.id}
-                                />
-                              </div>
+                              <FaFlag /> Report
                             </Dropdown.Item>
                           </>
                         )}

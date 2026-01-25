@@ -6,35 +6,18 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Content-Type: application/json; charset=UTF-8");
 require_once __DIR__ . "/../config/db.php";
-// require_once __DIR__ . "/../api/verify_for_comment.php";
-// include 'verify_for_comment.php';
 
 $input = json_decode(file_get_contents('php://input'), true);
 $photo_id = intval($input['photo_id'] ?? 0);
 $comment = $input['comment'] ?? "";
-// $user = $conn->prepare("SELECT * FROM users WHERE token = :tk");
-// $user->bindValue(":tk", $_COOKIE['px_user_token'], PDO::PARAM_STR);
-// $user->execute();
-// $usr = $user->fetch(PDO::FETCH_ASSOC);
-$id = $usr['id'] ?? $_SESSION['px_id'] ?? $_COOKIE['px_userid'];
+$id = $_SESSION['px_id'] ?? 0;
 if (!$id || !is_numeric($id)) {
-    // $_SESSION['flash'][] = [
-    //     'type' => 'error',
-    //     'message' => 'User not found'
-    // ];
-    // header("Location:photo_preview.php?id=$photo_id");
     echo json_encode(['success' => false,'message' => 'User not found']);
     exit();
 }
 $id = intval($id);
 
-// $photo_id = $_POST['photo_id'] ?? null;
 if (!$photo_id || !is_numeric($photo_id)) {
-    // $_SESSION['flash'][] = [
-    //     'type' => 'error',
-    //     'message' => 'Photo not found'
-    // ];
-    // header("Location:photo_preview.php?id=$photo_id");
     echo json_encode(['success' => false,'message' => 'Photo not found']);
     exit();
 }
@@ -42,11 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $ok = true;
     $comment = trim($comment);
     if ($comment === '') {
-        // $_SESSION['flash'][] = [
-        //     'type' => 'error',
-        //     'message' => 'Comment not added by empty'
-        // ];
-        // header("Location:photo_preview.php?id=$photo_id");
         echo json_encode(['success' => false,'message' => 'comment not added empty']);
         exit();
         $ok = false;
@@ -58,19 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $add_comment->bindValue(":user_id", $id, PDO::PARAM_INT);
         $add_comment->bindValue(":content", $comment, PDO::PARAM_STR);
         $add_comment->execute();
-        // $_SESSION['flash'][] = [
-        //     'type' => 'success',
-        //     'message' => 'Comment added successfully'
-        // ];
-        // header("Location:photo_preview.php?id=$photo_id");
-        echo json_encode(['success' => true]);
+        echo json_encode(['success' => true,'message' => 'Comment added successfully']);
         exit();
     } else {
-        // $_SESSION['flash'][] = [
-        //     'type' => 'error',
-        //     'message' => 'Comment added failed'
-        // ];
-        // header("Location:photo_preview.php?id=$photo_id");
         echo json_encode(['success' => false,'message' => 'comment added failed']);
         exit();
     }

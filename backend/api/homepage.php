@@ -40,11 +40,14 @@ foreach ($rows as &$row) {
     ORDER BY c.created_at ASC");
     $comments->bindValue(":photo_id", $row['id'], PDO::PARAM_INT);
     $comments->execute();
-    $row['comments'] = $comments->fetchAll(PDO::FETCH_ASSOC);
+    $cs = $comments->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($cs as &$c) {
+        $c['created_at'] = timeAgo($c['created_at']);
+    }
+    $row['comments'] = $cs;
 }
 echo json_encode([
     'success' => true,
     'photos' => $rows,
     'users' => $users
 ]);
-?>

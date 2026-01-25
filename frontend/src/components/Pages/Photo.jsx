@@ -11,6 +11,16 @@ import LightBox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
 
+import { Notyf } from 'notyf';
+import 'notyf/notyf.min.css';
+const notyf = new Notyf({
+    duration: 4000,
+    position: {
+        x: "right",
+        y: "top",
+    }
+});
+
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -50,9 +60,9 @@ export const Photo = (props) => {
         try {
             const res = await axios.post('http://localhost/Pixora/backend/api/add_comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
             if (res.data.success) {
-                console.log('Comment added succesfully');
+                notyf.success(res.data.message);
             } else {
-                console.log(res.data.message);
+                notyf.error(res.data.message);
             }
         } catch (err) {
             console.log(err);
@@ -156,7 +166,7 @@ export const Photo = (props) => {
                             </button>
                             <button
                                 type="submit"
-                                className="btn w-100 mb-2 disabled"
+                                className={"btn w-100 mb-2 disabled"}
                                 id="saveChangeBtn"
                             >
                                 Save changes
@@ -181,7 +191,7 @@ export const Photo = (props) => {
                                 />
                                 <input type="hidden" name="photo_id" defaultValue="" />
                                 <button
-                                    className="btn btn-primary"
+                                    className={`btn btn-primary ${comment === "" ? "disabled" : ""}`}
                                     onClick={handleComment}
                                     id="postBtn"
                                 >
@@ -189,7 +199,7 @@ export const Photo = (props) => {
                                 </button>
                             </div>
                         </div>
-                        <Comments data={comments} currUser={userId} />
+                        <Comments data={comments} photoId={photo.photo_id} currUser={userId} />
                     </div>
                 </div>
             </div>
