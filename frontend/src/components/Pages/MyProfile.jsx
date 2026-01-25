@@ -43,8 +43,10 @@ import Swal from 'sweetalert2';
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
+import { useModal } from "../context/ModalProvider";
+import { useAuth } from "../context/AuthProvider";
 
-export const MyProfile = (props) => {
+export const MyProfile = () => {
   const [user, setUser] = useState({});
   const [photos, setPhotos] = useState([]);
   const [statistics, setStatistics] = useState({});
@@ -124,10 +126,12 @@ export const MyProfile = (props) => {
       console.log(err);
     }
   }
-  const show = props.modalState;
-  const handleOpen = props.openModal;
-  const handleClose = props.closeModal;
-  const userCurr = props.data;
+  // const show = props.modalState;
+  // const handleOpen = props.openModal;
+  // const handleClose = props.closeModal;
+  // const userCurr = props.data;
+  const {show,openModal,closeModal} = useModal();
+  const {userCurr} = useAuth();
   function slugiFy(text) {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
   }

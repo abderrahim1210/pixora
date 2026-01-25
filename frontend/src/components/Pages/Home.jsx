@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import {
   FaCamera,
@@ -21,6 +21,8 @@ import { FiStar } from "react-icons/fi";
 import { MdCategory, MdRecommend } from "react-icons/md";
 import Comments from "./Comments";
 import {CopyToClipboard} from 'copy-to-clipboard';
+import { useAuth } from '../context/AuthProvider'
+import { useModal } from "../context/ModalProvider";
 export const Home = (props) => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
@@ -55,10 +57,12 @@ export const Home = (props) => {
     }
   }, [search, users]);
 
-  const show = props.modalState;
-  const handleOpen = props.openModal;
-  const handleClose = props.closeModal;
-  const user = props.data;
+  // const show = props.modalState;
+  // const handleOpen = props.openModal;
+  // const handleClose = props.closeModal;
+  // const user = props.data;
+  const {show,openModal,closeModal} = useModal();
+  const {user} = useAuth();
 
   function slugiFy(text) {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
@@ -90,7 +94,7 @@ export const Home = (props) => {
   }
   const handleComments = (p) => {
     setActivePhoto(p);
-    handleOpen("comments");
+    openModal("comments");
   }
   return (
     <div data-bs-page="pixora">
@@ -189,7 +193,7 @@ export const Home = (props) => {
           <h1 className="text-center fw-bold">For you</h1>
           <div className="photos">
             {activePhoto && (
-              <Modal show={show === "comments"} className="modal-comments" onHide={handleClose}>
+              <Modal show={show === "comments"} className="modal-comments" onHide={closeModal}>
                 {/* <Modal.Header closeButton>
                   <Modal.Title>Comments</Modal.Title>
                 </Modal.Header> */}

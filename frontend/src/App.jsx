@@ -1,11 +1,14 @@
 import { AppRoutes } from './components/Pages/routes/AppRoutes'
-
+import { AuthProvider } from './components/context/AuthProvider';
+import { ModalProvider } from './components/context/ModalProvider';
 function App() {
 
   return (
-    <>
-      <AppRoutes />
-    </>
+    <AuthProvider>
+      <ModalProvider>
+        <AppRoutes />
+      </ModalProvider>
+    </AuthProvider>
   )
 }
 

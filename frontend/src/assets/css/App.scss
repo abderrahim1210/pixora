@@ -2091,7 +2091,6 @@ body {
 }
 
 [data-bs-page="upload"] {
-
   #imgAcc,
   #imgAcc1 {
     border: 1px solid black;
@@ -2331,11 +2330,12 @@ body {
     border-radius: 50px;
     color: white;
     font-weight: 600;
+    transition: none;
   }
 
   .pagination .page-item .page-link:hover {
-    background-color: white;
-    color: var(--special_color);
+    background-color: rgb(1, 86, 183);
+    color: white;
     /* border: 1px solid black; */
   }
 
