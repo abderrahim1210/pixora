@@ -7,14 +7,24 @@ import { FooterDash } from "./FooterDash";
 import { GiPadlock } from "react-icons/gi";
 import { MdPhotoLibrary, MdVerified } from "react-icons/md";
 import { RiChat1Line } from "react-icons/ri";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
+import { Notyf } from 'notyf';
+import 'notyf/notyf.min.css';
+const notyf = new Notyf({
+  duration: 4000,
+  position: {
+    x: "right",
+    y: "top",
+  }
+});
 
 export const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
   const [photosLikes, setPhotosLikes] = useState([]);
   const [photosCount, setPhotosCount] = useState(0);
   const [likesCountPhotos, setLikesCountPhotos] = useState(0);
+  const location = useLocation();
   const { user } = useAuth();
   const navigate = useNavigate();
   if (!user.id) navigate('/login');
@@ -35,6 +45,12 @@ export const MyPhotos = () => {
         }
       });
   }, []);
+  useEffect(() => {
+    if (location.state?.uploaded) {
+      notyf.success(location.state.message);
+      navigate(location.pathname,{replace:true,state:{}})
+    }
+  },[location.state]);
   function slugiFy(text) {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
   }

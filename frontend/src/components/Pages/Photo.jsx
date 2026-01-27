@@ -13,6 +13,7 @@ import 'yet-another-react-lightbox/styles.css';
 
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
+import { Truncate } from "./Truncate";
 const notyf = new Notyf({
     duration: 4000,
     position: {
@@ -116,10 +117,18 @@ export const Photo = (props) => {
                     </div>
                     <ul className="list-group mt-3">
                         <li>
-                            <h4>{photo.title}</h4>
+                            <Truncate text={photo.title} maxChars={50}>
+                                {({text,toggle,open,showMore}) => (
+                                    <h4>{text}{showMore && (<span className="showmore" onClick={toggle}>{open ? "Less" : "Show more"}</span>)}</h4>
+                                )}
+                            </Truncate>
                         </li>
-                        <li>
-                            <p>{photo.description}</p>
+                        <li className="d-flex flex-column gap-0">
+                            <Truncate text={photo.description} maxLines={3}>
+                                {({toggle,open,className,style}) => (
+                                    <><p className={className} style={style}>{photo.description}</p><span className="showmore" onClick={toggle}>{open ? "Less" : "Show more"}</span></>
+                                )}
+                            </Truncate>
                         </li>
                         <li>
                             <FaCalendar />
