@@ -9,15 +9,16 @@ import { MdPhotoLibrary, MdVerified } from "react-icons/md";
 import { RiChat1Line } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
-import { Notyf } from 'notyf';
-import 'notyf/notyf.min.css';
-const notyf = new Notyf({
-  duration: 4000,
-  position: {
-    x: "right",
-    y: "top",
-  }
-});
+// import { Notyf } from 'notyf';
+// import 'notyf/notyf.min.css';
+// const notyf = new Notyf({
+//   duration: 4000,
+//   position: {
+//     x: "right",
+//     y: "top",
+//   }
+// });
+import { notyf } from "../../assets/js/notyf";
 
 export const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);

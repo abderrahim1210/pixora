@@ -86,7 +86,7 @@ export const Home = (props) => {
           )
         );
       } else {
-        navigate('/login');
+        navigate('/login',{state:{liked:true,message:"You have to logged first for add like"}});
       }
     } catch (err) {
       console.log(err);
@@ -243,7 +243,7 @@ export const Home = (props) => {
                   <Link
                     id="caption"
                     style={{ cursor: "pointer" }}
-                    to={`/photo_preview/${p.id}/${slugiFy(p.title)}`}
+                    to={`/photo/${p.id}/${slugiFy(p.title)}`}
                   >
                     <img src={`/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
                   </Link>

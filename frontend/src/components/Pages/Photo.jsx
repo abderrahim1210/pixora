@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "./Navbar";
 import { FiCalendar, FiCommand, FiHeart, FiImage, FiTag, FiUser } from "react-icons/fi";
-import { FaCalendar, FaComment, FaCommentAlt, FaHeart, FaShare, FaSync, FaTag, FaUser } from "react-icons/fa";
-import { FaLocationDot, FaPhotoFilm } from "react-icons/fa6";
+import { FaCalendar, FaCheck, FaCircle, FaComment, FaCommentAlt, FaHeart, FaShare, FaSync, FaTag, FaUser } from "react-icons/fa";
+import { FaLocationDot, FaPencil, FaPhotoFilm } from "react-icons/fa6";
 import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { initEdit, toggleEdit, updateField } from "../Store/photoSlice";
 import axios from "axios";
 import Comments from "./Comments";
 
@@ -11,16 +13,9 @@ import LightBox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
 
-import { Notyf } from 'notyf';
-import 'notyf/notyf.min.css';
 import { Truncate } from "./Truncate";
-const notyf = new Notyf({
-    duration: 4000,
-    position: {
-        x: "right",
-        y: "top",
-    }
-});
+import { useAuth } from "../context/AuthProvider";
+import { notyf } from '../../assets/js/notyf';
 
 export const Photo = (props) => {
     const { id } = useParams();
@@ -31,6 +26,11 @@ export const Photo = (props) => {
     const [comments, setComments] = useState([]);
     const [userId, setUserID] = useState();
     const [open, setOpen] = useState(false);
+    const { user } = useAuth();
+    const isUser = user.username === photo.username;
+    const { fields, isEdit, dirty } = useSelector(state => state.photo);
+    const dispatch = useDispatch();
+
     useEffect(() => {
         axios.get("http://localhost/Pixora/backend/api/photoPreview.php", { params: { id }, withCredentials: true })
             .then((res) => {
@@ -45,6 +45,7 @@ export const Photo = (props) => {
                 console.error(err);
             });
     }, [id]);
+    // console.log(category)
     const handleLike = async (photoid) => {
         try {
             const res = await axios.post("http://localhost/Pixora/backend/api/add_like.php", { photo_id: photoid }, { withCredentials: true });
@@ -67,6 +68,34 @@ export const Photo = (props) => {
             }
         } catch (err) {
             console.log(err);
+        }
+    }
+    useEffect(() => {
+        if (photo) {
+            dispatch(initEdit({
+                title: photo.title,
+                description: photo.description,
+                category: category.name,
+                location: photo.location
+            }));
+        }
+    }, [photo, category]);
+    const handleEdit = async (data) => {
+        try {
+            const res = await axios.post('http://localhost/Pixora/backend/api/edit_photo.php', { photo_id: photo.photo_id, title: fields?.title, description: fields?.description, location: fields?.location, category: fields?.category }, { withCredentials: true });
+            // console.log(res.data);
+            // console.log(data)
+            if (res.data.success) {
+                // console.log(res.data);
+                notyf.success(res.data.message);
+                dispatch(initEdit(data))
+            } else {
+                // console.log(res.data);
+                notyf.error(res.data.message);
+            }
+        } catch (err) {
+            // console.error(err);
+            console.error(err);
         }
     }
     return (
@@ -117,18 +146,24 @@ export const Photo = (props) => {
                     </div>
                     <ul className="list-group mt-3">
                         <li>
-                            <Truncate text={photo.title} maxChars={50}>
-                                {({text,toggle,open,showMore}) => (
+                            {isEdit.title ? (<div><textarea rows={1} name="title" value={fields.title} onChange={(e) => dispatch(updateField({ field: "title", value: e.target.value }))} className="form-control" /></div>) : <Truncate text={photo.title} maxChars={50}>
+                                {({ text, toggle, open, showMore }) => (
                                     <h4>{text}{showMore && (<span className="showmore" onClick={toggle}>{open ? "Less" : "Show more"}</span>)}</h4>
                                 )}
-                            </Truncate>
+                            </Truncate>}
+                            <div className="d-flex justify-content-end">
+                                {isUser && (<button className="btn p-0" onClick={() => dispatch(toggleEdit("title"))}>{!isEdit.title ? (<FaPencil />) : (<FaCheck />)}</button>)}
+                            </div>
                         </li>
-                        <li className="d-flex flex-column gap-0">
-                            <Truncate text={photo.description} maxLines={3}>
-                                {({toggle,open,className,style}) => (
-                                    <><p className={className} style={style}>{photo.description}</p><span className="showmore" onClick={toggle}>{open ? "Less" : "Show more"}</span></>
+                        <li>
+                            {isEdit.description ? (<div><textarea name="description" className="form-control" rows={1} value={fields.description} onChange={(e) => dispatch(updateField({ field: "description", value: e.target.value }))} /></div>) : <Truncate text={photo.description} maxLines={3}>
+                                {({ text, open, toggle, showMore, className, style }) => (
+                                    <div><p className={className} style={style}>{text}</p>{showMore && (<span className="showmore" onClick={toggle}>{open ? "Less" : "Show more"}</span>)}</div>
                                 )}
-                            </Truncate>
+                            </Truncate>}
+                            <div className="d-flex justify-content-end">
+                                {isUser && (<button className="btn p-0" onClick={() => dispatch(toggleEdit("description"))}>{!isEdit.description ? (<FaPencil />) : (<FaCheck />)}</button>)}
+                            </div>
                         </li>
                         <li>
                             <FaCalendar />
@@ -142,7 +177,16 @@ export const Photo = (props) => {
                         </li>
                         <li>
                             <FaTag />
-                            <p>{category.name}</p>
+                            {isEdit.category ? (<div>{/* <textarea name="category" rows={1} className="form-control" value={fields.category} onChange={(e) => dispatch(updateField({field:"category",value:e.target.value}))} /> */} <select value={fields.category} onChange={(e) => dispatch(updateField({ field: "category", value: e.target.value }))} name="category">
+                                <option value="Landscape">Landscape</option>
+                                <option value="Travel">Travel</option>
+                                <option value="Animal">Animal</option>
+                                <option value="Artchitecture">Artchitecture</option>
+                                <option value="Nature">Nature</option>
+                                <option value="Art">Art</option></select> </div>) : <p>{fields.category}</p>}
+                            <div className="d-flex justify-content-end">
+                                {isUser && (<button className="btn p-0" onClick={() => dispatch(toggleEdit("category"))}>{isEdit.category ? (<FaCheck />) : (<FaPencil />)}</button>)}
+                            </div>
                         </li>
                         <li>
                             <FaHeart />
@@ -158,7 +202,10 @@ export const Photo = (props) => {
                         </li>
                         <li>
                             <FaLocationDot />
-                            <p>{photo.location ?? "..."}</p>
+                            {isEdit.location ? (<div><input name="location" type="text" className="form-control" value={fields.location} onChange={(e) => dispatch(updateField({ field: "location", value: e.target.value }))} /></div>) : (<p>{photo.location}</p>)}
+                            <div className="d-flex justify-content-end">
+                                {user.username === photo.username && (<button className="btn" onClick={() => dispatch(toggleEdit("location"))}>{!isEdit.location ? (<FaPencil />) : (<FaCheck />)}</button>)}
+                            </div>
                         </li>
                         <li>
                             <FaPhotoFilm />
@@ -175,8 +222,10 @@ export const Photo = (props) => {
                             </button>
                             <button
                                 type="submit"
-                                className={"btn w-100 mb-2 disabled"}
+                                className={`btn w-100 mb-2 ${!dirty ? "disabled" : ""}`}
                                 id="saveChangeBtn"
+                                onClick={() => handleEdit(fields)}
+                                disabled={!dirty}
                             >
                                 Save changes
                             </button>

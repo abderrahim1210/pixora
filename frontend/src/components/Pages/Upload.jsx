@@ -5,20 +5,14 @@ import { useAuth } from "../context/AuthProvider";
 import LightBox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
-import { Notyf } from 'notyf';
-import 'notyf/notyf.min.css';
-const notyf = new Notyf({
-  duration: 4000,
-  position: {
-    x: "right",
-    y: "top",
-  }
-});
+
+import { notyf } from "../../assets/js/notyf";
 
 export const Upload = () => {
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
   const {user} = useAuth();
+  if (!user.id) return navigate('/login');
   const [photo, setPhoto] = useState({
     title: "",
     type: "",

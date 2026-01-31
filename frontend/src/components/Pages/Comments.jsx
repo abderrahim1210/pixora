@@ -13,15 +13,16 @@ import { Dropdown } from "react-bootstrap";
 import axios from "axios";
 import Swal from 'sweetalert2';
 import copy from 'copy-to-clipboard';
-import { Notyf } from 'notyf';
-import 'notyf/notyf.min.css';
-const notyf = new Notyf({
-  duration: 4000,
-  position: {
-    x: "right",
-    y: "top",
-  }
-});
+// import { Notyf } from 'notyf';
+// import 'notyf/notyf.min.css';
+// const notyf = new Notyf({
+//   duration: 4000,
+//   position: {
+//     x: "right",
+//     y: "top",
+//   }
+// });
+import { notyf } from "../../assets/js/notyf";
 const Comments = (props) => {
   const comments = props.data;
   const currUser = props.currUser;

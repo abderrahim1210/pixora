@@ -1,28 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
+import { notyf } from "../../assets/js/notyf";
+
 export const Login = () => {
-  const [email,setEmail] = useState('');
-  const [password,setPassword] = useState('');
-  const [error,setError] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
-      const res = await axios.post('http://localhost/Pixora/backend/api/log-in.php',{email,password}, { withCredentials: true });
-      if(res.data.success) {
+    try {
+      const res = await axios.post('http://localhost/Pixora/backend/api/log-in.php', { email, password }, { withCredentials: true });
+      if (res.data.success) {
         console.log("User logged successfully");
         setError('');
         navigate('/');
-      }else{
+      } else {
         console.log("User logged error");
         setError(res.data.message || 'Invalid credentials');
       }
     }
-    catch(err){
+    catch (err) {
       setError(err.response?.data?.message || 'Server error')
     }
   }
+  useEffect(() => {
+    if (location.state?.liked) {
+      notyf.error(location.state.message);
+      navigate(location.pathname, { replace: true, state: {} })
+    }
+  }, [location.state]);
   return (
     <div data-bs-page="login">
       <div className="dv1">
@@ -77,7 +85,7 @@ export const Login = () => {
                   </label>
                 </div>
                 <div className="mt-2 mb-2">
-                  You don't have a account ? <a href="signup.php">Sign up</a>
+                  You don't have a account ? <a href="#" onClick={navigate('/signup')}>Sign up</a>
                 </div>
                 <div className="mt-2 mb-2">
                   <button

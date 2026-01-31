@@ -8,7 +8,7 @@ import { MyProfile } from "../MyProfile";
 import axios from "axios";
 import { MyPhotos } from "../MyPhotos";
 import { Navbar } from "../Navbar";
-import { PhotoPreview } from "../PhotoPreview";
+// import { PhotoPreview } from "../PhotoPreview";
 import { Photo } from "../Photo";
 export const AppRoutes = () => {
   // const [user, setUser] = useState({});
@@ -25,7 +25,7 @@ export const AppRoutes = () => {
       <Route path="/signup" element={<SignUp />} />
       <Route path={`/:username/myphotos`} element={<MyPhotos />} />
       <Route path={`/:username/myprofile`} element={<MyProfile />} />
-      <Route path="/photo_preview/:id/:slug" element={<PhotoPreview />} />
+      {/* <Route path="/photo_preview/:id/:slug" element={<PhotoPreview />} /> */}
       <Route path="/photo/:id/:slug" element={<Photo />} />
     </Routes>
     </>

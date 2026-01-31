@@ -60,6 +60,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
         $c['created_at'] = timeAgo($c['created_at']);
     }
     
+
     echo json_encode([
         "success" => true,
         "photo" => $photo,

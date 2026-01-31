@@ -253,8 +253,7 @@ export const Navbar = () => {
                     <a
                       onClick={() => navigate("/signup")}
                       style={{ cursor: "pointer" }}
-                      className="nav-link"
-                      id="signup"
+                      className="nav-link signup"
                       title="Signu up"
                     >
                       Sign Up
