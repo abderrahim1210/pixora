@@ -1955,7 +1955,7 @@ body {
   }
 }
 
-#signup{
+#signup,#login{
   background: linear-gradient(280deg, rgb(0, 120, 255), rgb(0, 54, 115)) !important;
   // background-image: url("../../../public/outils/backgrounds/background_pixora_1.jpg");
 }
@@ -2100,6 +2100,27 @@ body {
   .actionButton:hover {
     background-color: rgb(0, 54, 115);
     // color: var(--special_color);
+  }
+
+  .connect-google{
+    display: flex;
+    justify-content: center;
+    width:fit-content;
+    margin: auto;
+    align-items: center;
+  }
+
+  .connect-google .btn{
+    background-color:var(--special_color);
+    color: white;
+    font-weight: 600;
+    gap: 5px;
+    text-transform: capitalize;
+    border-radius: 50px;
+  }
+
+  .connect-google .btn:hover{
+    background-color: rgb(0, 54, 115);
   }
 
   @media only screen and (max-width: 768px) {

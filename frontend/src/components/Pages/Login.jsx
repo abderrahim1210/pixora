@@ -13,7 +13,6 @@ export const Login = () => {
     try {
       const res = await axios.post('http://localhost/Pixora/backend/api/log-in.php', { email, password }, { withCredentials: true });
       if (res.data.success) {
-        console.log("User logged successfully");
         setError('');
         navigate('/');
       } else {
@@ -32,7 +31,7 @@ export const Login = () => {
     }
   }, [location.state]);
   return (
-    <div data-bs-page="login">
+    <div data-bs-page="login" id="login">
       <div className="dv1">
         <div className="dv1-0 login_div">
           <div>Login Page</div>
@@ -85,13 +84,12 @@ export const Login = () => {
                   </label>
                 </div>
                 <div className="mt-2 mb-2">
-                  You don't have a account ? <a href="#" onClick={navigate('/signup')}>Sign up</a>
+                  You don't have a account ? <a href="#" onClick={() => navigate('/signup')}>Sign up</a>
                 </div>
-                <div className="mt-2 mb-2">
+                <div className="actionsButton mt-2 mb-2">
                   <button
                     type="submit"
-                    className="btn w-100"
-                    id="signupButton"
+                    className="btn w-100 actionButton"
                     title="Click for login."
                   >
                     Login

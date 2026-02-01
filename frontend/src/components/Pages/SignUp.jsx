@@ -2,12 +2,14 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { notyf } from "../../assets/js/notyf";
+import { FaGoogle } from "react-icons/fa";
 
 
 export const SignUp = () => {
   const [step, setStep] = useState(1);
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
+  const [error,setError] = useState("");
   const [user, setUser] = useState({
     username: "",
     email: "",
@@ -185,6 +187,9 @@ function StepTwo({ next, prev, step, navigate, user, setUser }) {
           </div>
           <div className="mt-2 mb-2">
             You have a account ? <a href="/login" onClick={() => navigate('/login')}>Login</a>
+          </div>
+          <div className="connect-google">
+            <button className="btn d-flex align-items-center"><FaGoogle /> Connect with google</button>
           </div>
           <div className="actions mt-2 mb-2">
             <button
