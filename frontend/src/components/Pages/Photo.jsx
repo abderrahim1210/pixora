@@ -16,16 +16,19 @@ import 'yet-another-react-lightbox/styles.css';
 import { Truncate } from "./Truncate";
 import { useAuth } from "../context/AuthProvider";
 import { notyf } from '../../assets/js/notyf';
+// import { Select } from "react-select";
 
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
     const [category, setCategory] = useState({});
+    const [categories, setCategories] = useState([]);
     const [likes, setLikes] = useState("");
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
     const [userId, setUserID] = useState();
     const [open, setOpen] = useState(false);
+    const [cities,setCities] = useState(null);
     const { user } = useAuth();
     const isUser = user.username === photo.username;
     const { fields, isEdit, dirty } = useSelector(state => state.photo);
@@ -40,6 +43,7 @@ export const Photo = (props) => {
                     setLikes(res.data.likes);
                     setComments(res.data.comments);
                     setUserID(res.data.currUser);
+                    setCategories(res.data.categories);
                 }
             }).catch(err => {
                 console.error(err);
@@ -75,26 +79,30 @@ export const Photo = (props) => {
             dispatch(initEdit({
                 title: photo.title,
                 description: photo.description,
-                category: category.name,
+                category_id: photo.category_id,
                 location: photo.location
             }));
         }
     }, [photo, category]);
+    useEffect(() => {
+        try{
+            axios.get('http://localhost/Pixora/frontend/public/json/countries+cities.json')
+        .then(res => res.data)
+        .then(data => setCities(data));
+        }catch(err){
+            console.log(err);
+        }
+    },[]);
     const handleEdit = async (data) => {
         try {
-            const res = await axios.post('http://localhost/Pixora/backend/api/edit_photo.php', { photo_id: photo.photo_id, title: fields?.title, description: fields?.description, location: fields?.location, category: fields?.category }, { withCredentials: true });
-            // console.log(res.data);
-            // console.log(data)
+            const res = await axios.post('http://localhost/Pixora/backend/api/edit_photo.php', { photo_id: photo.photo_id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id }, { withCredentials: true });
             if (res.data.success) {
-                // console.log(res.data);
                 notyf.success(res.data.message);
                 dispatch(initEdit(data))
             } else {
-                // console.log(res.data);
                 notyf.error(res.data.message);
             }
         } catch (err) {
-            // console.error(err);
             console.error(err);
         }
     }
@@ -177,13 +185,11 @@ export const Photo = (props) => {
                         </li>
                         <li>
                             <FaTag />
-                            {isEdit.category ? (<div>{/* <textarea name="category" rows={1} className="form-control" value={fields.category} onChange={(e) => dispatch(updateField({field:"category",value:e.target.value}))} /> */} <select value={fields.category} onChange={(e) => dispatch(updateField({ field: "category", value: e.target.value }))} name="category">
-                                <option value="Landscape">Landscape</option>
-                                <option value="Travel">Travel</option>
-                                <option value="Animal">Animal</option>
-                                <option value="Artchitecture">Artchitecture</option>
-                                <option value="Nature">Nature</option>
-                                <option value="Art">Art</option></select> </div>) : <p>{fields.category}</p>}
+                            {isEdit.category ? (<div><select className="form-select" value={fields.category_id} onChange={(e) => dispatch(updateField({ field: "category_id", value: Number(e.target.value) }))} name="category">
+                                {
+                                    categories.map((c) => (<option key={c.id} value={c.id}>{c.name}</option>))
+                                }
+                            </select> </div>) : <p>{categories.find(c => c.id === fields.category_id)?.name || "Unknown"}</p>}
                             <div className="d-flex justify-content-end">
                                 {isUser && (<button className="btn p-0" onClick={() => dispatch(toggleEdit("category"))}>{isEdit.category ? (<FaCheck />) : (<FaPencil />)}</button>)}
                             </div>
@@ -206,6 +212,7 @@ export const Photo = (props) => {
                             <div className="d-flex justify-content-end">
                                 {user.username === photo.username && (<button className="btn" onClick={() => dispatch(toggleEdit("location"))}>{!isEdit.location ? (<FaPencil />) : (<FaCheck />)}</button>)}
                             </div>
+                            {/* <Select /> */}
                         </li>
                         <li>
                             <FaPhotoFilm />

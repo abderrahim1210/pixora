@@ -20,9 +20,10 @@ import { setFavicon } from "../utils/SetFavicon";
 import { FiStar } from "react-icons/fi";
 import { MdCategory, MdRecommend } from "react-icons/md";
 import Comments from "./Comments";
-import {CopyToClipboard} from 'copy-to-clipboard';
+import { CopyToClipboard } from 'copy-to-clipboard';
 import { useAuth } from '../context/AuthProvider'
 import { useModal } from "../context/ModalProvider";
+import { Truncate } from "./Truncate";
 export const Home = (props) => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
@@ -31,7 +32,7 @@ export const Home = (props) => {
   const [search, setSearch] = useState("");
   const [activePhoto, setActivePhoto] = useState(null);
   const [comment, setComment] = useState("");
-  const [text,setText] = useState("");
+  const [text, setText] = useState("");
   useEffect(() => {
     axios
       .get("http://localhost/Pixora/backend/api/homepage.php", { withCredentials: true })
@@ -61,8 +62,8 @@ export const Home = (props) => {
   // const handleOpen = props.openModal;
   // const handleClose = props.closeModal;
   // const user = props.data;
-  const {show,openModal,closeModal} = useModal();
-  const {user} = useAuth();
+  const { show, openModal, closeModal } = useModal();
+  const { user } = useAuth();
 
   function slugiFy(text) {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
@@ -86,7 +87,7 @@ export const Home = (props) => {
           )
         );
       } else {
-        navigate('/login',{state:{liked:true,message:"You have to logged first for add like"}});
+        navigate('/login', { state: { liked: true, message: "You have to logged first for add like" } });
       }
     } catch (err) {
       console.log(err);
@@ -252,7 +253,12 @@ export const Home = (props) => {
                       id="caption"
                     >
                       <div>
-                        <h5>{p.title}</h5>
+                        {/* <h5>{p.title}</h5> */}
+                        <Truncate text={p.title} maxChars={25}>
+                          {({ text }) => (
+                            <h5>{text}</h5>
+                          )}
+                        </Truncate>
                       </div>
                     </a>
                     <div>

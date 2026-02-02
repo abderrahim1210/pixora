@@ -3,7 +3,7 @@ const initialState = {
     fields: {
         title: "",
         description: "",
-        category: "",
+        category_id: "",
         location: ""
     },
     dirty: false,

@@ -29,10 +29,14 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     $photo = $stm1->fetch(PDO::FETCH_ASSOC);
     $photo['upload_date'] = timeAgo($photo['upload_date']);
     
-    $category = $conn->prepare("SELECT * FROM categories WHERE id = :id");
+    $category = $conn->prepare("SELECT name FROM categories WHERE id = :id");
     $category->bindValue(":id", $photo['category_id'], PDO::PARAM_INT);
     $category->execute();
     $cat_name = $category->fetch(PDO::FETCH_ASSOC);
+
+    $stm2 = $conn -> prepare("SELECT * FROM categories");
+    $stm2 -> execute();
+    $categories = $stm2 -> fetchAll(PDO::FETCH_ASSOC);
     
     if ($userid) {
         $lk = $conn->prepare("SELECT COUNT(*) FROM likes WHERE user_id = :userid AND photo_id = :photoid");
@@ -67,7 +71,8 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
         "likes" => $totalLikes,
         "currUser" => $currentUser,
         "category" => $cat_name,
-        "comments" => $cs
+        "comments" => $cs,
+        "categories" => $categories
     ]);
 }
 ?>

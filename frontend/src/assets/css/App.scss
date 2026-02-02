@@ -30,7 +30,7 @@
 }
 
 .form-control:focus,
-.btn:focus {
+.btn:focus,.form-select:focus {
   box-shadow: none;
   outline: none;
 }
@@ -2539,6 +2539,7 @@ body {
 
   .showmore{
     color: var(--special_color);
+    cursor: pointer;
   }
 
   .details-panel h4 {
