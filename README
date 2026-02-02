@@ -1,0 +1,83 @@
+# 📸 Pixora
+
+**Pixora** is a modern web platform designed for sharing, discovering, and licensing photos.  
+It connects **photographers** with **users**, offering a built-in **communication system** and a flexible **licensing model** to protect creators’ rights and enable legal photo usage.
+
+---
+
+## 🚀 Features
+
+### 👤 Users & Photographers
+- User authentication (Sign up / Login)
+- Photographer profiles and portfolios
+- Public photographer pages
+
+### 🖼️ Photo Management
+- Upload high-quality photos
+- Categories and tags
+- Location-based photos
+- Advanced search and filtering
+- Like and save photos ❤️
+
+### 💬 Communication System
+- Direct messaging between users and photographers
+- Collaboration and photo purchase requests
+- Conversation history tracking
+
+### 📜 Licensing System
+- Multiple license types:
+  - Personal Use License
+  - Commercial Use License
+  - Exclusive License
+- Clear usage terms for each photo
+- Photographer rights protection
+- Licensing linked to each uploaded photo
+
+### ✏️ Content Editing
+- Inline content editing
+- Update title, description, category, and location
+
+---
+
+## 🛠️ Technologies Used
+
+### Frontend
+- React.js
+- Redux Toolkit
+- React Icons
+- CSS / Tailwind / Bootstrap
+
+### Backend
+- PHP
+- MySQL
+- RESTful API
+- Authentication (Sessions / JWT)
+
+### Tools
+- Vite
+- Git & GitHub
+- VS Code
+
+---
+
+## 📂 Project Structure
+
+pixora/
+│
+├── frontend/
+│ ├── src/
+│ │ ├── components/
+│ │ ├── pages/
+│ │ ├── redux/
+│ │ ├── services/
+│ │ └── utils/
+│ └── package.json
+│
+├── backend/
+│ ├── api/
+│ ├── config/
+│ ├── controllers/
+│ ├── middleware/
+│ └── database.sql
+│
+└── README.md
