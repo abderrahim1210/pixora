@@ -16,7 +16,7 @@ import 'yet-another-react-lightbox/styles.css';
 import { Truncate } from "./Truncate";
 import { useAuth } from "../context/AuthProvider";
 import { notyf } from '../../assets/js/notyf';
-// import { Select } from "react-select";
+// import Select from "react-select";
 
 export const Photo = (props) => {
     const { id } = useParams();
@@ -28,7 +28,8 @@ export const Photo = (props) => {
     const [comments, setComments] = useState([]);
     const [userId, setUserID] = useState();
     const [open, setOpen] = useState(false);
-    const [cities,setCities] = useState(null);
+    // const [cities, setCities] = useState([]);
+    // const [selectedCity, setSelectedCity] = useState(null);
     const { user } = useAuth();
     const isUser = user.username === photo.username;
     const { fields, isEdit, dirty } = useSelector(state => state.photo);
@@ -84,15 +85,23 @@ export const Photo = (props) => {
             }));
         }
     }, [photo, category]);
-    useEffect(() => {
-        try{
-            axios.get('http://localhost/Pixora/frontend/public/json/countries+cities.json')
-        .then(res => res.data)
-        .then(data => setCities(data));
-        }catch(err){
-            console.log(err);
-        }
-    },[]);
+    // useEffect(() => {
+    //     try {
+    //         axios.get('/json/countries+cities.json')
+    //             .then(res => {
+    //                 // const allCities = res.data.flatMap(country => country.cities.map(city => ({value:city,label:city})));
+    //                 const allCities = [];
+    //                 res.data.forEach(country => {
+    //                     country.cities.forEach(city => {
+    //                         allCities.push({ value: city, label: city });
+    //                     });
+    //                 });
+    //                 setCities(allCities);
+    //             });
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // }, []);
     const handleEdit = async (data) => {
         try {
             const res = await axios.post('http://localhost/Pixora/backend/api/edit_photo.php', { photo_id: photo.photo_id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id }, { withCredentials: true });
@@ -212,13 +221,19 @@ export const Photo = (props) => {
                             <div className="d-flex justify-content-end">
                                 {user.username === photo.username && (<button className="btn" onClick={() => dispatch(toggleEdit("location"))}>{!isEdit.location ? (<FaPencil />) : (<FaCheck />)}</button>)}
                             </div>
-                            {/* <Select /> */}
+                            {/* <Select
+                                options={cities}
+                                value={selectedCity}
+                                onChange={setSelectedCity}
+                                placeholder={"Choose a city ..."}
+                                isSearchable
+                            /> */}
                         </li>
                         <li>
                             <FaPhotoFilm />
                             <p>...</p>
                         </li>
-                        <div className="d-flex justify-content-end align-items-center mb-2">
+                        {user.username === photo.username && (<div className="d-flex justify-content-end align-items-center flex-column mb-2">
                             <button
                                 type="reset"
                                 className="btn tooltip-tab d-none"
@@ -236,7 +251,8 @@ export const Photo = (props) => {
                             >
                                 Save changes
                             </button>
-                        </div>
+                            <button type="button" class="btn w-100" id="deletePhoto">Delete</button>
+                        </div>)}
                     </ul>
                     <div className="comments">
                         <h5>Comments</h5>

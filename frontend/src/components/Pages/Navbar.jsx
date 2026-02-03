@@ -205,13 +205,13 @@ export const Navbar = () => {
                 </div>
               </li>
             </ul>
-            <ul className="navbar-nav d-none d-md-flex" id="ul2">
-              <li className="nav-item">
-                <a href="#" className="nav-link" title="Notifications">
+            <ul className="navbar-nav d-none d-md-flex" id="ul2-1">
+              <li className="nav-item send-bell">
+                <a href="#" className="nav-link" title="Messages">
                   <FiSend />
                 </a>
               </li>
-              <li className="nav-item">
+              <li className="nav-item send-bell">
                 <a href="#" className="nav-link" title="Notifications">
                   <FiBell />
                 </a>
@@ -245,6 +245,7 @@ export const Navbar = () => {
                       style={{ cursor: "pointer" }}
                       className="nav-link"
                       title="Login"
+                      id="loginButton"
                     >
                       Login
                     </a>
@@ -255,6 +256,7 @@ export const Navbar = () => {
                       style={{ cursor: "pointer" }}
                       className="nav-link signup"
                       title="Signu up"
+                      id="signupButton"
                     >
                       Sign Up
                     </a>

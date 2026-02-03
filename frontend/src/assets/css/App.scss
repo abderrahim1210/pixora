@@ -864,7 +864,7 @@ body {
     border-color: none !important;
   }
 
-  #ul1 {
+  #ul1 ,#ul2-1{
     display: flex;
     align-items: center;
   }
@@ -873,7 +873,7 @@ body {
     text-transform: capitalize;
   }
 
-  #ul2 .nav-item .nav-link:hover:not(#upload_button) {
+  #ul2 .nav-item .nav-link:hover:not(#upload_button), #ul2-1 #loginButton:hover,.send-bell a:hover {
     color: var(--special_color);
   }
 
@@ -959,15 +959,15 @@ body {
     color: black;
   }
 
-  #signup {
+  #signupButton {
     background-color: var(--special_color);
     color: white;
     border-radius: 4px;
   }
 
-  #signup:hover {
-    background-color: white;
-    color: var(--special_color);
+  #signupButton:hover {
+    background-color: rgb(0, 54, 115);
+    // color: white;
   }
 
   .offcanvas,
@@ -1025,7 +1025,7 @@ body {
     color: #444 !important;
   }
 
-  #ul2 {
+  #ul2,#ul2-1 {
     gap: 7px;
   }
 
@@ -1962,21 +1962,12 @@ body {
 
 [data-bs-page="login"],
 [data-bs-page="signup"] {
-  // body {
-  //   // background-image: url("../../../public/outils/backgrounds/background.jpg") !important;
-  //   margin: 0;
-  //   font-family: "Outfit", "sans-serif";
-  //   font-size: 16px;
-  //   // background-position: center;
-  //   // background-repeat: no-repeat;
-  //   // background-attachment: fixed;
-  // }
 
   .form-control:focus,
   .btn:focus,.form-select:focus {
     outline: none !important;
     box-shadow: none !important;
-    border: none;
+    // border: none;
   }
 
   .dv1 {
@@ -1985,32 +1976,22 @@ body {
     -webkit-backdrop-filter: blur(20px);
     display: flex;
     color: white;
-    /*     justify-content: center;
-    align-items: center;*
-    flex-direction: column;*/
   }
 
   .login-box {
-    // background-color: rgba(255, 255, 255, 0.959) !important;
-    // background-image: url("../../../public/outils/backgrounds/background.jpg");
-    // background: linear-gradient(280deg, rgb(0, 120, 255), rgb(0, 54, 115)) !important;
     color: black;
     width: 100%;
-    /* max-width: 400px; */
     flex: 1;
-    /* margin: auto; */
     display: flex;
     justify-content: center;
-    /* flex-direction: column;*/
     align-items: center;
-    /*border-radius: 10px;
-    border: 1px solid black;
-    box-sizing: border-box;
-    box-shadow: 3px 3px 1px 0px black;
-    font-weight: 600;*/
     margin: auto;
     height: 100vh;
     padding: 20px;
+  }
+
+  .form-control:focus,.form-select:focus {
+    border-bottom: 2px solid var(--special_color);
   }
 
   .login_div {
@@ -2058,10 +2039,6 @@ body {
   .form-select{
     border-radius: 0;
     border: none;
-  }
-
-  .form-control:focus.form-select:focus {
-    border-bottom: 2px solid var(--special_color);
   }
 
   .form-check-input:focus {
