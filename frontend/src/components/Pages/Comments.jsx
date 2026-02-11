@@ -13,15 +13,7 @@ import { Dropdown } from "react-bootstrap";
 import axios from "axios";
 import Swal from 'sweetalert2';
 import copy from 'copy-to-clipboard';
-// import { Notyf } from 'notyf';
-// import 'notyf/notyf.min.css';
-// const notyf = new Notyf({
-//   duration: 4000,
-//   position: {
-//     x: "right",
-//     y: "top",
-//   }
-// });
+
 import { notyf } from "../../assets/js/notyf";
 const Comments = (props) => {
   const comments = props.data;
@@ -38,19 +30,12 @@ const Comments = (props) => {
 
   const handleCopy = (text) => {
     copy(text);
-    // Swal.fire({
-    //   icon: "success",
-    //   title: "Comment copied!",
-    //   text: "Comment copied successfully",
-    //   timer: 2000,
-    //   showConfirmButton: false,
-    // });
     notyf.success('Comment copied successfully');
   }
 
   const handleUpComment = async (commentId, newContent) => {
     try {
-      const res = await axios.post('http://localhost/Pixora/backend/api/update_comment.php', { photo_id: props.photoId, content: newContent, comment_id: commentId }, { withCredentials: true });
+      const res = await axios.put('http://localhost/Pixora/backend/api/comments.php', { photo_id: props.photoId, content: newContent, comment_id: commentId }, { withCredentials: true });
       if (res.data.success) {
         /* Swal.fire({
           icon: "success",
@@ -77,7 +62,7 @@ const Comments = (props) => {
 
   const handleDelComment = async (commentId) => {
     try {
-      const res = await axios.delete('http://localhost/Pixora/backend/api/delete_comment.php', { data: { comment_id: commentId, user_id: currUser, photo_id: props.photoId }, withCredentials: true });
+      const res = await axios.delete('http://localhost/Pixora/backend/api/comments.php', { data: { comment_id: commentId, user_id: currUser, photo_id: props.photoId }, withCredentials: true });
       if (res.data.success) {
         /* Swal.fire({
           icon: "success",
@@ -86,6 +71,7 @@ const Comments = (props) => {
           timer: 2000,
           showConfirmButton: false,
         }); */
+        console.log(res.data);
         notyf.success(res.data.message);
       } else {
         /* Swal.fire({
@@ -95,6 +81,7 @@ const Comments = (props) => {
           timer: 2000,
           showConfirmButton: false,
         }); */
+        console.log(res.data);
         notyf.error(res.data.message);
       }
     } catch (err) {

@@ -5,7 +5,7 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Content-Type: application/json; charset=UTF-8");
 require_once __DIR__ . "/../config/db.php";
-require_once __DIR__ . "/../api/fn.php";
+require_once __DIR__ . "/../utils/fn.php";
 session_start();
 $isValid = true;
 $emailPattern = "/^[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|hotmail\.com|[a-zA-Z]\.(ma|org|com))$/";

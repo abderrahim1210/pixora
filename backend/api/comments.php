@@ -1,103 +1,123 @@
 <?php
-include_once "convert_date.php";
-?>
-<ul class="comments-list mt-4">
-    <?php foreach ($cs as &$c): ?>
-        <li class="comment-item">
-            <img src="<?= (!empty($c['photo_profile']) ? 'profile_pictures/' . $c['photo_profile'] : 'outils/pngs/useracc2.png') ?>" alt="user" class="comment-avatar">
-            <div class="comment-body d-flex justify-content-between align-items-start">
-                <div>
-                    <h6 class="comment-author"><?= $c['username']; ?><small><?= $c['updated_at'] ? ' Edited' : '' ?></small></h6>
-                    <div class="display-div">
-                        <p class="comment-text"><?= htmlspecialchars($c['content'], ENT_QUOTES, 'UTF-8'); ?></p>
-                    </div>
-                    <div class="edit-div">
-                        <form action="update_comment.php" class="upCommentForm" method="post">
-                            <textarea name="comment_content" class="form-control mt-1" rows="1"><?= $c['content']; ?></textarea>
-                            <input type="hidden" name="photo_id" value="<?= $c['photo_id']; ?>">
-                            <input type="hidden" name="comment_id" value="<?= $c['id']; ?>">
-                        </form>
-                    </div>
+session_start();
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: GET, POST,DELETE,PUT, OPTIONS");
+header("Content-Type: application/json; charset=UTF-8");
+require_once __DIR__ . "/../config/db.php";
 
-                    <span class="comment-date"><?= timeAgo($c['created_at']); ?></span>
-                </div>
-                <div class="postition-relative">
-                    <button class="saveChange btn p-1"><i class="fas fa-check"></i></button>
-                    <button class="resetChange btn p-1 text-danger"><i class="fas fa-times"></i></button>
-                    <a href="#" data-bs-toggle="dropdown" style="color: #222;" data-bs-target="#drp1" class="menuBtn"><i class="fas fa-ellipsis-v"></i></a>
-                    <div class="dropdown" id="drp1">
-                        <ul class="dropdown-menu">
-                            <?php if ($userid == $c['user_id']): ?>
-                                <li><a style="cursor: pointer;" class="editComment dropdown-item"><i class="fas fa-pencil"></i> Edit</a></li>
-                                <li><a href="#" class="copyComment dropdown-item"><i class="fas fa-copy"></i> Copy</a></li>
-                                <li>
-                                    <form action="delete_comment.php" method="post" class="delCommentForm">
-                                        <button type="button" class="deleteComment btn dropdown-item"><i class="fas fa-trash"></i> Delete</button>
-                                        <input type="hidden" name="photo_id" value="<?= $c['photo_id']; ?>">
-                                        <input type="hidden" name="comment_id" value="<?= $c['id']; ?>">
-                                    </form>
-                                </li>
-                            <?php else: ?>
-                                <li><a class="btn copyComment dropdown-item"><i class="fas fa-copy"></i> Copy</a></li>
-                                <li><button class="btn dropdown-item reportComment"><i class="fas fa-flag"></i> Report</button></li>
-                                <li>
-                                    <form action="delete_comment.php" method="post" class="delCommentForm">
-                                        <button type="button" class="deleteComment btn dropdown-item"><i class="fas fa-trash"></i> Delete</button>
-                                        <input type="hidden" name="photo_id" value="<?= $c['photo_id']; ?>">
-                                        <input type="hidden" name="comment_id" value="<?= $c['id']; ?>">
-                                    </form>
-                                </li>
-                            <?php endif; ?>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </li>
-    <?php endforeach; ?>
-</ul>
-<?php if ($comments->rowCount() <= 0): ?>
-    <div class="mt-2 mb-2 text-center">
-        <i style="opacity: calc(0.8);color:#444;font-size:medium;">No comments yet — be the first to comment!</i>
-    </div>
-<?php endif; ?>
-<script>
-    document.querySelectorAll('.comment-item').forEach(item => {
-        const editComment = item.querySelector('.editComment');
-        const displayDiv = item.querySelector('.display-div');
-        const editDiv = item.querySelector('.edit-div');
-        const save = item.querySelector('.saveChange');
-        const reset = item.querySelector('.resetChange');
-        const menu = item.querySelector('.menuBtn');
-        const form = item.querySelector('.upCommentForm');
-        const delForm = item.querySelector('.delCommentForm');
-        const delButton = item.querySelector('.deleteComment');
-        editDiv.classList.add('d-none');
-        save.classList.add('d-none');
-        reset.classList.add('d-none');
+$input = json_decode(file_get_contents('php://input'), true);
+$photo_id = intval($input['photo_id'] ?? 0);
+$comment = $input['comment'] ?? "";
+$id = $_SESSION['px_id'] ?? 0;
+$comment_id = $input['comment_id'] ?? 0;
+$method = $_SERVER['REQUEST_METHOD'];
+$ok = true;
 
-        if (!editComment) return;
-        editComment.addEventListener('click', () => {
-            displayDiv.classList.toggle("d-none");
-            editDiv.classList.toggle("d-none");
-            menu.classList.add("d-none");
-            save.classList.toggle("d-none");
-            reset.classList.toggle("d-none");
-        });
+if (!$id || !is_numeric($id)) {
+    echo json_encode(['success' => false, 'message' => 'User not found']);
+    exit();
+}
+$id = intval($id);
 
-        reset.addEventListener('click', () => {
-            displayDiv.classList.toggle('d-none');
-            editDiv.classList.toggle('d-none');
-            menu.classList.toggle('d-none');
-            save.classList.toggle('d-none');
-            reset.classList.toggle('d-none');
-        });
+if (!$photo_id || !is_numeric($photo_id)) {
+    echo json_encode(['success' => false, 'message' => 'Photo not found']);
+    exit();
+}
 
-        save.addEventListener('click', () => {
-            form.submit();
-        });
+switch ($method) {
+    case 'POST':
+        $ok = true;
+        $comment = trim($comment);
+        if ($comment === '') {
+            echo json_encode(['success' => false, 'message' => 'comment not added empty']);
+            exit();
+            $ok = false;
+        }
+        if ($ok) {
+            $add_comment = $conn->prepare("INSERT INTO comments (photo_id,user_id,content) VALUES (:photo_id,:user_id,:content)");
+            $add_comment->bindValue(":photo_id", $photo_id, PDO::PARAM_INT);
+            $add_comment->bindValue(":user_id", $id, PDO::PARAM_INT);
+            $add_comment->bindValue(":content", $comment, PDO::PARAM_STR);
+            $add_comment->execute();
+            echo json_encode(['success' => true, 'message' => 'Comment added successfully']);
+            exit();
+        } else {
+            echo json_encode(['success' => false, 'message' => 'comment added failed']);
+            exit();
+        }
+        break;
 
-        delButton.addEventListener('click',()=>{
-            delForm.submit();
-        });
-    });
-</script>
+    case 'PUT':
+        $content = $input['content'] ?? "";
+        if (!$comment_id || !is_numeric($comment_id)) {
+            $ok = false;
+            echo json_encode(['success' => false, 'message' => 'comment not found']);
+            exit();
+        }
+
+        $find = $conn->prepare("SELECT * FROM comments WHERE id = :id AND user_id = :user_id");
+        $find->bindValue(":id", $comment_id, PDO::PARAM_INT);
+        $find->bindValue(":user_id", $id, PDO::PARAM_INT);
+        $find->execute();
+        $comment = $find->fetch(PDO::FETCH_ASSOC);
+
+        if (!$comment) {
+            $ok = false;
+            echo json_encode(['success' => false, 'message' => 'You can not edit this comment']);
+            exit();
+        }
+
+        if ($content === '') {
+            echo json_encode(['success' => false, 'message' => 'comment updated failed']);
+            exit();
+        }
+
+        if ($ok) {
+            $up_comment = $conn->prepare("UPDATE comments SET content = :content WHERE id = :id");
+            $up_comment->bindValue(":content", $content, PDO::PARAM_STR);
+            $up_comment->bindValue(":id", $comment_id, PDO::PARAM_INT);
+            $up_comment->execute();
+            echo json_encode(['success' => true, 'message' => 'comment updated successfully']);
+            exit();
+        } else {
+            echo json_encode(['success' => false, 'message' => 'comment updated failed']);
+            exit();
+        }
+        break;
+
+    case 'DELETE':
+        $user_id = intval($input['user_id'] ?? 0);
+        if (!$comment_id || !is_numeric($comment_id)) {
+            $ok = false;
+            echo json_encode(['success' => false, 'message' => 'Comment not found']);
+            exit();
+        }
+
+        $find = $conn->prepare("SELECT * FROM comments WHERE id = :id AND user_id = :user_id");
+        $find->bindValue(":id", $comment_id, PDO::PARAM_INT);
+        $find->bindValue(":user_id", $user_id, PDO::PARAM_INT);
+        $find->execute();
+        $comment = $find->fetch(PDO::FETCH_ASSOC);
+
+        if (!$comment) {
+            $ok = false;
+            echo json_encode(['success' => false, 'message' => 'You can not delete this comment']);
+            exit();
+        }
+
+        if ($ok) {
+            $del_comment = $conn->prepare("DELETE FROM comments WHERE id = :id AND user_id = :user_id AND photo_id = :pid");
+            $del_comment->bindValue(":id", $comment_id, PDO::PARAM_INT);
+            $del_comment->bindValue(":user_id", $user_id, PDO::PARAM_INT);
+            $del_comment->bindValue(":pid", $photo_id, PDO::PARAM_INT);
+            $del_comment->execute();
+            echo json_encode(['success' => true, 'message' => 'Comment deleted successfully']);
+            exit();
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Comment not deleted']);
+            exit();
+        }
+        break;
+}

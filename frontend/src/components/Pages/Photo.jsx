@@ -65,7 +65,7 @@ export const Photo = (props) => {
     }
     const handleComment = async () => {
         try {
-            const res = await axios.post('http://localhost/Pixora/backend/api/add_comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
+            const res = await axios.post('http://localhost/Pixora/backend/api/comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
             if (res.data.success) {
                 notyf.success(res.data.message);
             } else {
@@ -104,7 +104,7 @@ export const Photo = (props) => {
     // }, []);
     const handleEdit = async (data) => {
         try {
-            const res = await axios.post('http://localhost/Pixora/backend/api/edit_photo.php', { photo_id: photo.photo_id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id }, { withCredentials: true });
+            const res = await axios.post('http://localhost/Pixora/backend/api/photoPreview.php', { photo_id: photo.photo_id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id }, { withCredentials: true });
             if (res.data.success) {
                 notyf.success(res.data.message);
                 dispatch(initEdit(data))
@@ -251,7 +251,7 @@ export const Photo = (props) => {
                             >
                                 Save changes
                             </button>
-                            <button type="button" class="btn w-100" id="deletePhoto">Delete</button>
+                            <button type="button" className="btn w-100" id="deletePhoto">Delete</button>
                         </div>)}
                     </ul>
                     <div className="comments">

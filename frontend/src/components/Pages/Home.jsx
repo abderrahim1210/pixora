@@ -53,6 +53,7 @@ export const Home = (props) => {
       setUsrSearched(
         users.filter((u) =>
           u.username.toLowerCase().startsWith(search.toLowerCase())
+        
         )
       );
     }
@@ -71,7 +72,7 @@ export const Home = (props) => {
 
   const handleComment = async (id) => {
     try {
-      await axios.post('http://localhost/Pixora/backend/api/add_comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
+      await axios.post('http://localhost/Pixora/backend/api/comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
     } catch (err) {
       console.log(err);
     }
