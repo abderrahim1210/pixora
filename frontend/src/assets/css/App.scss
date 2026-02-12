@@ -632,13 +632,14 @@ body {
   .div3 {
     display: flex;
     align-items: center;
+    align-content: center;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 10px;
   }
 
   .div3 .card {
-    width: 300px;
+    width: 250px;
     text-align: center;
   }
 
@@ -775,17 +776,6 @@ body {
     color: var(--like_button);
   }
 
-  #download {
-    background-color: rgb(0, 129, 0);
-    color: white;
-    border-radius: 4px;
-    padding: 5px;
-  }
-
-  #download:hover {
-    background-color: rgb(49, 180, 49);
-  }
-
   .likeButton {
     margin-right: 10px;
   }
@@ -798,6 +788,10 @@ body {
     padding-bottom: 5px;
     background-color: var(--special_color);
     color: white;
+  }
+
+  #followButton:hover{
+    background-color: rgb(0, 54, 115);
   }
 
   #followButton.active {
@@ -819,6 +813,7 @@ body {
 
   #searchAtPhotographer::placeholder {
     font-style: italic;
+    color: #454545;
   }
 
   .categories {

@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import { CiSearch } from "react-icons/ci";
+import React, { useEffect, useState } from "react";
 import {
   FaCamera,
   FaCameraRetro,
@@ -15,16 +14,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import axios from "axios";
-import { Modal, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { setFavicon } from "../utils/SetFavicon";
-import { FiStar } from "react-icons/fi";
 import { MdCategory, MdRecommend } from "react-icons/md";
 import Comments from "./Comments";
-import { CopyToClipboard } from 'copy-to-clipboard';
 import { useAuth } from '../context/AuthProvider'
 import { useModal } from "../context/ModalProvider";
 import { Truncate } from "./Truncate";
-export const Home = (props) => {
+import { notyf } from "../../assets/js/notyf";
+export const Home = () => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
   const [users, setUsers] = useState([]);
@@ -32,7 +30,7 @@ export const Home = (props) => {
   const [search, setSearch] = useState("");
   const [activePhoto, setActivePhoto] = useState(null);
   const [comment, setComment] = useState("");
-  const [text, setText] = useState("");
+  const [follows,setFollows] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost/Pixora/backend/api/homepage.php", { withCredentials: true })
@@ -46,18 +44,33 @@ export const Home = (props) => {
     setFavicon("/outils/favicons/favicon.jpg");
   }, []);
 
+  const followURL = "http://localhost/Pixora/backend/api/follows.php";
   useEffect(() => {
+    axios.get(followURL,{withCredentials:true})
+    .then(res => {
+      const usersArray = res.data.users;
+      const ids = usersArray.map((f) => f.id);
+      setFollows(ids);
+    })
+  },[]);
+
+  useEffect(() => {
+    const updatedUsers = users.map((u) => ({
+      ...u,
+      followClasse: follows.includes(u.id) ? "active" : "",
+      followText: follows.includes(u.id) ? "Followed" : "Follow"
+    }));
     if (search.trim() === "") {
-      setUsrSearched(users);
+      setUsrSearched(updatedUsers);
     } else {
       setUsrSearched(
-        users.filter((u) =>
+        updatedUsers.filter((u) =>
           u.username.toLowerCase().startsWith(search.toLowerCase())
         
         )
       );
     }
-  }, [search, users]);
+  }, [search, users, follows]);
 
   // const show = props.modalState;
   // const handleOpen = props.openModal;
@@ -68,6 +81,21 @@ export const Home = (props) => {
 
   function slugiFy(text) {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+  }
+
+  const addFollow = async (id) => {
+    try{
+      const res = await axios.post(followURL,{followerID:id},{withCredentials:true});
+      if (res.data.status === "followed"){
+        setFollows(prev => [...prev,id]);
+        notyf.success("You are followed this user");
+      }else{
+        setFollows(prev => prev.filter(f => f !== id));
+        notyf.error("You are unfollowed this user");
+      }
+    }catch(err){
+      console.log(err);
+    }
   }
 
   const handleComment = async (id) => {
@@ -439,21 +467,20 @@ export const Home = (props) => {
                       <div className="mt-3 mb-3">
                         <button
                           type="button"
-                          data-user_id="<?= $user['id']; ?>"
-                          className="followButton <?= $btnClass; ?> btn"
+                          className={`followButton ${u.followClasse} btn`}
                           id="followButton"
+                          onClick={() => addFollow(u.id)}
                         >
-                          Follow
+                          {u.followText}
                         </button>
                       </div>
                     ) : (
                       <div className="mt-3 mb-3">
                         <button
                           type="button"
-                          data-user_id="<?= $user['id']; ?>"
-                          className="followButton <?= $btnClass; ?> btn"
+                          className="followButton btn"
                           id="followButton"
-                          onClick={() => navigate("/myprofile")}
+                          onClick={() => navigate(`${user.username}/myprofile`)}
                         >
                           View profile
                         </button>
