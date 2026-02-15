@@ -9,6 +9,7 @@ import { MdPhotoLibrary, MdVerified } from "react-icons/md";
 import { RiChat1Line } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
+import { Truncate } from "./Truncate";
 // import { Notyf } from 'notyf';
 // import 'notyf/notyf.min.css';
 // const notyf = new Notyf({
@@ -41,7 +42,7 @@ export const MyPhotos = () => {
           setPhotosLikes(res.data.photosLikes);
           setPhotosCount(res.data.photosCount);
           setLikesCountPhotos(res.data.likesCountPhotos);
-        }else{
+        } else {
           navigate('/login');
         }
       });
@@ -49,9 +50,9 @@ export const MyPhotos = () => {
   useEffect(() => {
     if (location.state?.uploaded) {
       notyf.success(location.state.message);
-      navigate(location.pathname,{replace:true,state:{}})
+      navigate(location.pathname, { replace: true, state: {} })
     }
-  },[location.state]);
+  }, [location.state]);
   function slugiFy(text) {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
   }
@@ -139,7 +140,11 @@ export const MyPhotos = () => {
                             </div>
                             <div className="d-flex justify-content-between p-2">
                               <div>
-                                <h5>{p.title}</h5>
+                                <Truncate text={p.title} maxChars={20}>
+                                  {({ text }) => (
+                                    <h5>{text}</h5>
+                                  )}
+                                </Truncate>
                               </div>
                               <div className="d-flex justify-content-center align-items-center">
                                 <div>
@@ -225,7 +230,11 @@ export const MyPhotos = () => {
                           </div>
                           <div className="d-flex justify-content-between p-2">
                             <div>
-                              <h5>{p.title}</h5>
+                              <Truncate text={p.title} maxChars={20}>
+                                {({ text }) => (
+                                  <h5>{text}</h5>
+                                )}
+                              </Truncate>
                             </div>
                             <div className="d-flex justify-content-center align-items-center">
                               <div>

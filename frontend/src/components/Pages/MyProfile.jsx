@@ -45,6 +45,8 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import { useModal } from "../context/ModalProvider";
 import { useAuth } from "../context/AuthProvider";
+import { Truncate } from "./Truncate";
+import { notyf } from "../../assets/js/notyf";
 
 export const MyProfile = () => {
   const [user, setUser] = useState({});
@@ -54,11 +56,12 @@ export const MyProfile = () => {
   const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
-  // const galleryRef = useRef(null);
-  const [open,setOpen] = useState(false);
-  const [slides,setSlides] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [slides, setSlides] = useState([]);
+  const profileRef = useRef();
+  const coverRef = useRef();
   const handleOpenSlide = (image) => {
-    setSlides([{src:image.url,title:image.title}]);
+    setSlides([{ src: image.url, title: image.title }]);
     setOpen(true);
   }
   const onSubmit = async (data) => {
@@ -126,12 +129,83 @@ export const MyProfile = () => {
       console.log(err);
     }
   }
-  // const show = props.modalState;
-  // const handleOpen = props.openModal;
-  // const handleClose = props.closeModal;
-  // const userCurr = props.data;
-  const {show,openModal,closeModal} = useModal();
-  const {userCurr} = useAuth();
+
+  const profilePicturesURL = "http://localhost/Pixora/backend/api/profile_pictures.php";
+
+  const handleProfileSelect = async () => {
+
+    const file = profileRef.current.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = async () => {
+      const base64Image = reader.result;
+      try {
+        const res = await axios.post(profilePicturesURL, { action_type: "profile_picture", profile_image: base64Image }, { withCredentials: true });
+        if (res.data.success) {
+          notyf.success(res.data.message);
+        } else {
+          notyf.error(res.data.message);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+  const handleCoverSelect = async () => {
+
+    const file = coverRef.current.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = async () => {
+      const base64Image = reader.result;
+      try {
+        const res = await axios.post(profilePicturesURL, { action_type: "cover_image", cover_image: base64Image }, { withCredentials: true });
+        if (res.data.success) {
+          notyf.success(res.data.message);
+        } else {
+          notyf.error(res.data.message);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+  const handleDeleteAvatar = async () => {
+    try {
+      const res = await axios.delete(profilePicturesURL, { withCredentials: true, data: { action_type: "delete_profile_picture" } });
+      if (res.success) {
+        notyf.success(res.message);
+      } else {
+        notyf.error(res.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const handleDeleteCover = async () => {
+    try {
+      const res = await axios.delete(profilePicturesURL, { withCredentials: true, data: { action_type: "delete_cover_image" } });
+      if (res.data.success) {
+        notyf.success(res.data.message);
+      } else {
+        notyf.error(res.data.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const { show, openModal, closeModal } = useModal();
+  const { userCurr } = useAuth();
   function slugiFy(text) {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
   }
@@ -140,40 +214,45 @@ export const MyProfile = () => {
       <Navbar data={userCurr} />
       {show === "profilePicture" && (
         <>
-          <Modal show={show} onHide={handleClose} centered>
+          <Modal show={show} onHide={closeModal} className="bottom-sheet-wrapper" dialogClassName="bottom-sheet-modal">
             <Modal.Header>
-              <Modal.Body>
+              <Modal.Body className="p-1">
                 <div>
-                  <ul className="list-group profile_settings p-0">
-                    <li className="list-group-item">
-                      <a href="#">
-                        <FiUpload size={25} /> Upload profile picture
+                  <div className="profile_settings p-0">
+                    <div className="sheet-item">
+                      <input type="file" ref={profileRef} onChange={handleProfileSelect} accept="image/*" hidden />
+                      <div className="sheet-icon">
+                        <FiUpload size={25} />
+                      </div>
+                      <a style={{ cursor: "pointer" }} className="sheet-link" onClick={() => (profileRef.current.click())}>
+                        <span>Upload profile picture</span>
                       </a>
-                    </li>
-                    <li className="list-group-item">
-                      <a href="#" onClick={(e) => {
+                    </div>
+                    <div className="sheet-item">
+                      <div className="sheet-icon">
+                        <FiEye size={25} />
+                      </div>
+                      <a href="#" className="sheet-link" onClick={(e) => {
                         e.preventDefault();
-                        handleClose();
+                        closeModal();
                         setTimeout(() => {
-                          handleOpenSlide({url:`/profile_pictures/${user.photo_profile}`,title:'Profile Image'})
+                          handleOpenSlide({ url: `/profile_pictures/${user.photo_profile}`, title: 'Profile Image' })
                         }, 200);
                       }}>
-                        <FiEye size={25} />
-                        Preview profile picture
+                        <span>Preview profile picture</span>
                       </a>
-                    </li>
-                    <li className="list-group-item deleteOption">
-                      <form
-                        action="delete_profile_picture.php"
-                        id="delPhotoProfileForm"
-                        method="post"
-                      >
-                        <a href="#" /* onclick="delProfilePhoto()" */>
-                          <FiTrash size={25} /> Delete profile picture
-                        </a>
-                      </form>
-                    </li>
-                  </ul>
+                    </div>
+                    <div className="sheet-item deleteOption">
+                      <div className="sheet-icon">
+                        <FiTrash size={25} />
+                      </div>
+                      <a style={{ cursor: "pointer" }} className="sheet-link" onClick={handleDeleteAvatar}>
+                        <span>
+                          Delete profile picture
+                        </span>
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </Modal.Body>
             </Modal.Header>
@@ -181,42 +260,47 @@ export const MyProfile = () => {
         </>
       )}
       {show === "coverImage" && (
-        <Modal show={show} onHide={handleClose} centered>
+        <Modal show={show} onHide={closeModal} className="bottom-sheet-wrapper" dialogClassName="bottom-sheet-modal">
           <Modal.Header>
-            <Modal.Body>
+            <Modal.Body className="p-1">
               <div>
-                <ul className="list-group profile_settings">
-                  <li className="list-group-item">
+                <div className="profile_settings p-0">
+                  <div className="sheet-item">
+                    <input type="file" ref={coverRef} onChange={handleCoverSelect} hidden />
+                    <div className="sheet-icon">
+                      <FiUpload size={25} />
+                    </div>
                     <a
-                      href="#"
-                    /* onclick="document.getElementById('cover_file').click();" */
+                      className="sheet-link"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => coverRef.current.click()}
                     >
-                      <FiUpload size={25} /> Upload cover picture
+                      <span>Upload cover picture</span>
                     </a>
-                  </li>
-                  <li className="list-group-item">
-                    <a href="#" onClick={(e) => {
+                  </div>
+                  <div className="sheet-item">
+                    <div className="sheet-icon">
+                      <FiEye size={25} />
+                    </div>
+                    <a href="#" className="sheet-link" onClick={(e) => {
                       e.preventDefault();
-                      handleClose();
+                      closeModal();
                       setTimeout(() => {
-                        handleOpenSlide({url:`/cover_images/${user.cover_image}`,title:'Cover Image'})
+                        handleOpenSlide({ url: `/cover_images/${user.cover_image}`, title: 'Cover Image' })
                       }, 200);
                     }}>
-                      <FiEye size={25} /> Preview cover picture
+                      <span>Preview cover picture</span>
                     </a>
-                  </li>
-                  <li className="list-group-item deleteOption">
-                    <form
-                      action="delete_cover_picture.php"
-                      id="delPhotoCoverForm"
-                      method="post"
-                    >
-                      <a href="#" /* onclick="delCoverPhoto()" */>
-                        <FiTrash size={25} /> Delete cover picture
-                      </a>
-                    </form>
-                  </li>
-                </ul>
+                  </div>
+                  <div className="sheet-item deleteOption">
+                    <div className="sheet-icon">
+                      <FiTrash size={25} />
+                    </div>
+                    <a style={{ cursor: "pointer" }} className="sheet-link" onClick={handleDeleteCover}>
+                      <span>Delete cover picture</span>
+                    </a>
+                  </div>
+                </div>
               </div>
             </Modal.Body>
           </Modal.Header>
@@ -292,7 +376,7 @@ export const MyProfile = () => {
                         backgroundRepeat: "no-repeat",
                         cursor: "pointer"
                       }}
-                      onClick={() => handleOpen('coverImage')}
+                      onClick={() => openModal('coverImage')}
                     >
                       <div className="d-flex justify-content-center">
                         <form
@@ -333,7 +417,7 @@ export const MyProfile = () => {
                             ? "/profile_pictures/" + user.photo_profile
                             : "/outils/pngs/useracc2.png"
                         }
-                        onClick={() => handleOpen("profilePicture")}
+                        onClick={() => openModal("profilePicture")}
                         onContextMenu={(e) => e.preventDefault()}
                         width="100px"
                         className="img_acc"
@@ -429,7 +513,11 @@ export const MyProfile = () => {
                               </div>
                               <div className="d-flex justify-content-between p-2">
                                 <div>
-                                  <h5>{p.title}</h5>
+                                  <Truncate text={p.title} maxChars={20}>
+                                    {({ text }) => (
+                                      <h5>{text}</h5>
+                                    )}
+                                  </Truncate>
                                 </div>
                                 <div className="d-flex justify-content-center align-items-center">
                                   <div>
