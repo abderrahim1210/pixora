@@ -16,6 +16,7 @@ import 'yet-another-react-lightbox/styles.css';
 import { Truncate } from "./Truncate";
 import { useAuth } from "../context/AuthProvider";
 import { notyf } from '../../assets/js/notyf';
+import Swal from "sweetalert2";
 // import Select from "react-select";
 
 export const Photo = (props) => {
@@ -85,6 +86,33 @@ export const Photo = (props) => {
             }));
         }
     }, [photo, category]);
+
+    const deletePhoto = () => {
+        Swal.fire({
+            title: 'Delete photo',
+            text:'Are you sure for delete this photo ?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes , upload it',
+            confirmButtonColor: 'rgb(0, 120, 255)',
+            cancelButtonText: 'Cancel'
+        }).then(async(result) => {
+            if (result.isConfirmed){
+                try{
+                    const res = await axios.delete('http://localhost/Pixora/backend/api/photo_system.php',{withCredentials:true,data:{photo_id:id}});
+                    console.log(res.data);
+                    if (res.data.success){
+                        notyf.success(res.data.message);
+                    }else{
+                        notyf.error(res.data.message);
+                    }
+                }catch(err){
+                    console.log(err);
+                }
+            }
+        })
+    }
+
     // useEffect(() => {
     //     try {
     //         axios.get('/json/countries+cities.json')
@@ -251,7 +279,7 @@ export const Photo = (props) => {
                             >
                                 Save changes
                             </button>
-                            <button type="button" className="btn w-100" id="deletePhoto">Delete</button>
+                            <button type="button" className="btn w-100" onClick={deletePhoto} id="deletePhoto">Delete</button>
                         </div>)}
                     </ul>
                     <div className="comments">

@@ -49,7 +49,7 @@ export const Upload = () => {
         image: photo.preview
       }
       if (file) {
-        const res = await axios.post('http://localhost/Pixora/backend/api/upload_photo.php', { photo_data: payload }, { withCredentials: true });
+        const res = await axios.post('http://localhost/Pixora/backend/api/photo_system.php', { photo_data: payload }, { withCredentials: true });
         if (res.data.success) {
           navigate(`/${user.username}/myphotos`,{state:{uploaded:true,message:res.data.message}});
         } else {
