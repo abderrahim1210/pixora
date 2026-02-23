@@ -2116,6 +2116,44 @@ body {
     background-color: rgb(0, 54, 115);
   }
 
+  #step1 h1{
+    font-size: 28px;
+    font-weight: 600;
+    color: #111;
+    margin: 0;
+  }
+
+  #step1 p{
+    font-size: 15px;
+    color: #666;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .features{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .feature-item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    color: #333;
+    background-color: rgba(255,255,255,0.6);
+    padding: 14px 14px;
+    border-radius: 10px;
+    transition: 0.2s;
+  }
+
+  .feature-item:hover{
+    background-color: rgba(255, 255, 255, 0.9);
+    transform: translateY(3px);
+  }
+
   @media only screen and (max-width: 768px) {
     .dv1 {
       margin: auto;

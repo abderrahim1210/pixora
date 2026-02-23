@@ -223,7 +223,7 @@ export const Home = () => {
           <h1 className="text-center fw-bold">For you</h1>
           <div className="photos">
             {activePhoto && (
-              <Modal show={show === "comments"} className="modal-comments" onHide={closeModal}>
+              <Modal show={show === "comments"} onHide={closeModal} className="bottom-sheet-wrapper modal-comments" dialogClassName="bottom-sheet-modal">
                 {/* <Modal.Header closeButton>
                   <Modal.Title>Comments</Modal.Title>
                 </Modal.Header> */}

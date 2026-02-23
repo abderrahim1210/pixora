@@ -2,7 +2,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { notyf } from "../../assets/js/notyf";
-import { FaGoogle } from "react-icons/fa";
+import { FaCamera, FaGoogle, FaHeart, FaUsers } from "react-icons/fa";
+import { FaPhotoFilm } from "react-icons/fa6";
+import { MdPhoto, MdPhotoCamera } from "react-icons/md";
 
 
 export const SignUp = () => {
@@ -51,7 +53,6 @@ export const SignUp = () => {
       const res = await axios.post('http://localhost/Pixora/backend/api/sign-up.php', payload, { withCredentials: true });
       console.log(res.data)
       if (res.data.success) {
-        // console.log(res.data.message);
         Swal.fire({
           icon: "success",
           title: "Sign up successfully",
@@ -101,9 +102,17 @@ export const SignUp = () => {
 
 function StepOne({ next, step }) {
   return (
-    <section className={`step ${step === 1 ? "active" : ""}`} id="step1" data-step={1}>
-      <div>Hey</div>
-      <button onClick={next} className={`actionButton btn w-50 next`}>Next</button>
+    <section className={`step  ${step === 1 ? "active" : ""}`} id="step1" data-step={1}>
+      <div>
+        <h4 className="fw-bold">Let's get started <MdPhotoCamera /></h4>
+        <p>Create your Pixora account and join the community.</p>
+        <div className="features mt-2 mb-2">
+          <div className="feature-item"><FaCamera /> Share Photos</div>
+          <div className="feature-item"><FaHeart /> Like posts</div>
+          <div className="feature-item"><FaUsers /> Follow creators</div>
+        </div>
+      </div>
+      <button onClick={next} className={`actionButton btn w-50 next`}>Create Account</button>
     </section>
 
   )

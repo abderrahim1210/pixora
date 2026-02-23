@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios'
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { notyf } from "../../assets/js/notyf";
 
 export const Login = () => {
@@ -84,7 +84,7 @@ export const Login = () => {
                   </label>
                 </div>
                 <div className="mt-2 mb-2">
-                  You don't have a account ? <a href="#" onClick={() => navigate('/signup')}>Sign up</a>
+                  You don't have a account ? <Link to={'/signup'}>Sign up</Link>
                 </div>
                 <div className="actionsButton mt-2 mb-2">
                   <button
