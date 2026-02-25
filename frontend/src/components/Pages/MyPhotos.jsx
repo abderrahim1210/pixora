@@ -20,12 +20,14 @@ import { Truncate } from "./Truncate";
 //   }
 // });
 import { notyf } from "../../assets/js/notyf";
+import PageSkeleton from "./PageSkeleton";
 
 export const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
   const [photosLikes, setPhotosLikes] = useState([]);
   const [photosCount, setPhotosCount] = useState(0);
   const [likesCountPhotos, setLikesCountPhotos] = useState(0);
+  const [loading,setLoading] = useState(false);
   const location = useLocation();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -42,6 +44,7 @@ export const MyPhotos = () => {
           setPhotosLikes(res.data.photosLikes);
           setPhotosCount(res.data.photosCount);
           setLikesCountPhotos(res.data.likesCountPhotos);
+          setLoading(true);
         } else {
           navigate('/login');
         }
@@ -125,7 +128,7 @@ export const MyPhotos = () => {
                 </div>
                 <div className="container-fluid">
                   <div className="myphotos mt-3 mb-3">
-                    {photos.length > 0 ? (
+                    {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos.length > 0 ? (
                       photos.map((p) => (
                         <div className="card" key={p.id}>
                           <div className="card-body p-0">

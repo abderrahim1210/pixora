@@ -22,6 +22,7 @@ import { useAuth } from '../context/AuthProvider'
 import { useModal } from "../context/ModalProvider";
 import { Truncate } from "./Truncate";
 import { notyf } from "../../assets/js/notyf";
+import PageSkeleton from './PageSkeleton';
 export const Home = () => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
@@ -30,7 +31,8 @@ export const Home = () => {
   const [search, setSearch] = useState("");
   const [activePhoto, setActivePhoto] = useState(null);
   const [comment, setComment] = useState("");
-  const [follows,setFollows] = useState([]);
+  const [follows, setFollows] = useState([]);
+  const [loading,setLoading] = useState(false);
   useEffect(() => {
     axios
       .get("http://localhost/Pixora/backend/api/homepage.php", { withCredentials: true })
@@ -39,6 +41,7 @@ export const Home = () => {
           setPhotos(res.data.photos);
           setUsers(res.data.users);
           setUsrSearched(res.data.users);
+          setLoading(true);
         }
       });
     setFavicon("/outils/favicons/favicon.jpg");
@@ -46,13 +49,13 @@ export const Home = () => {
 
   const followURL = "http://localhost/Pixora/backend/api/follows.php";
   useEffect(() => {
-    axios.get(followURL,{withCredentials:true})
-    .then(res => {
-      const usersArray = res.data.users;
-      const ids = usersArray.map((f) => f.id);
-      setFollows(ids);
-    })
-  },[]);
+    axios.get(followURL, { withCredentials: true })
+      .then(res => {
+        const usersArray = res.data.users;
+        const ids = usersArray.map((f) => f.id);
+        setFollows(ids);
+      })
+  }, []);
 
   useEffect(() => {
     const updatedUsers = users.map((u) => ({
@@ -66,16 +69,12 @@ export const Home = () => {
       setUsrSearched(
         updatedUsers.filter((u) =>
           u.username.toLowerCase().startsWith(search.toLowerCase())
-        
+
         )
       );
     }
   }, [search, users, follows]);
 
-  // const show = props.modalState;
-  // const handleOpen = props.openModal;
-  // const handleClose = props.closeModal;
-  // const user = props.data;
   const { show, openModal, closeModal } = useModal();
   const { user } = useAuth();
 
@@ -84,16 +83,16 @@ export const Home = () => {
   }
 
   const addFollow = async (id) => {
-    try{
-      const res = await axios.post(followURL,{followerID:id},{withCredentials:true});
-      if (res.data.status === "followed"){
-        setFollows(prev => [...prev,id]);
+    try {
+      const res = await axios.post(followURL, { followerID: id }, { withCredentials: true });
+      if (res.data.status === "followed") {
+        setFollows(prev => [...prev, id]);
         notyf.success("You are followed this user");
-      }else{
+      } else {
         setFollows(prev => prev.filter(f => f !== id));
         notyf.error("You are unfollowed this user");
       }
-    }catch(err){
+    } catch (err) {
       console.log(err);
     }
   }
@@ -262,7 +261,7 @@ export const Home = () => {
                 </Modal.Body>
               </Modal>
             )}
-            {photos.map((p) => (
+            {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos.map((p) => (
               <div className="card" key={p.id}>
                 <Link
                   key={p.id}

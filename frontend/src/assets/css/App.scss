@@ -193,6 +193,7 @@ body {
   margin: 0 !important;
   max-width: 100%;
   width: 100%;
+  overflow: scroll;
 }
 
 .bottom-sheet-modal .modal-content {
@@ -253,6 +254,65 @@ body {
 
   to {
     transform: translateY(0);
+  }
+}
+
+.loader{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    color: rgb(19, 94, 196);
+}
+
+.spinner-border{
+    color: rgb(19, 94, 196);
+}
+
+.skeleton-card{
+  width: 300px;
+}
+
+.skeleton-image{
+  width: 100%;
+  height: 200px;
+  background-color: #ddd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-text{
+  width: 60%;
+  height: 15px;
+  background: #ddd;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-image::after, .skeleton-text::after{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent);
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  100%{
+    left: 100%;
   }
 }
 

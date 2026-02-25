@@ -47,6 +47,7 @@ import { useModal } from "../context/ModalProvider";
 import { useAuth } from "../context/AuthProvider";
 import { Truncate } from "./Truncate";
 import { notyf } from "../../assets/js/notyf";
+import PageSkeleton from "./PageSkeleton";
 
 export const MyProfile = () => {
   const [user, setUser] = useState({});
@@ -60,6 +61,7 @@ export const MyProfile = () => {
   const [slides, setSlides] = useState([]);
   const profileRef = useRef();
   const coverRef = useRef();
+  const [loading, setLoading] = useState(false);
   const handleOpenSlide = (image) => {
     setSlides([{ src: image.url, title: image.title }]);
     setOpen(true);
@@ -101,6 +103,7 @@ export const MyProfile = () => {
         if (res.data.success) {
           setUser(res.data.user);
           setPhotos(res.data.photos);
+          setLoading(true);
         } else {
           navigate('/login');
         }
@@ -498,7 +501,7 @@ export const MyProfile = () => {
                   </div>
                   <div className="container-fluid">
                     <div className="myphotos mb-3">
-                      {photos.length > 0 ? (
+                      {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos.length > 0 ? (
                         photos.map((p) => (
                           <div className="card" key={p.id}>
                             <div className="card-body p-0">

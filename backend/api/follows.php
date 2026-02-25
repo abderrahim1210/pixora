@@ -14,18 +14,6 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'GET':
-        // $uss = $conn->prepare("SELECT * FROM users");
-        // $uss->execute();
-        // $users_f = $uss->fetchAll(PDO::FETCH_ASSOC);
-        // foreach ($users_f as &$user_f) {
-        //     $stmt = $conn->prepare("SELECT 1 FROM follows WHERE follower_id = :me AND following_id = :id");
-        //     $stmt->bindValue(":me", $id, PDO::PARAM_INT);
-        //     $stmt->bindValue(":id", $user_f['id'], PDO::PARAM_INT);
-        //     $stmt->execute();
-        //     $isFollowing = $stmt->rowCount() > 0;
-        //     $user_f['followText'] = $isFollowing ? "Followed" : "Follow";
-        //     $user_f['followClasse'] = $isFollowing ? "active" : "";
-        // }
         $stmt = $conn->prepare("SELECT users.id FROM users INNER JOIN follows ON users.id = follows.following_id WHERE follows.follower_id = :id");
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
         $stmt->execute();

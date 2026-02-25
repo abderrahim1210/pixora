@@ -38,18 +38,6 @@ if ($check->rowCount() === 0) {
     exit();
 }
 
-/* $username = $_POST['update_name'];
-$useremail = $_POST['update_email'];
-$userphone = $_POST['update_phone'];
-//$userbirth = $_POST['update_birth'];
-$userdisplayname = $_POST['update_dname'];
-$usergender = $_POST['update_gender'];
-$userlocation = $_POST['update_location'];
-$userbio = trim($_POST['update_bio']);
-$face = trim($_POST['face_link']);
-$insta = trim($_POST['insta_link']);
-$x = trim($_POST['x_link']);
-$website = trim($_POST['website_link']); */
 $editDetected = false;
 
 if ($username !== $old['username']) {
