@@ -1,0 +1,13 @@
+.form-control:focus,
+.btn:focus,
+.form-select:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+body {
+  margin: 0;
+  font-family: "Outfit", "sans-serif";
+  font-size: 17px;
+  background-color: white;
+}

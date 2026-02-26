@@ -1,0 +1,275 @@
+.clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.comment-form .form-control {
+  border-radius: 30px;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  background-color: #f0f0f0;
+  transition: border 0.3s ease, background 0.3s ease;
+}
+
+.comments-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.comment-form textarea {
+  resize: none;
+}
+
+.comment-form .form-control:focus {
+  border-color: var(--special_color);
+  background: #fff;
+  outline: none;
+}
+
+.comment-form button {
+  border-radius: 30px;
+  padding: 10px 15px;
+  transition: width 0.5s ease-in;
+  font-weight: 600;
+}
+
+.comment-form button:hover {
+  width: 80px;
+}
+
+.comment-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.comment-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-body {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 10px 15px;
+  flex: 1;
+}
+
+.comment-author {
+  margin: 0;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.comment-text {
+  margin: 15px 0;
+  font-size: 14px;
+  color: #444;
+}
+
+.comment-date {
+  color: #888;
+  font-size: 12px;
+}
+
+.comment-author small {
+  margin-left: 10px;
+  color: #444;
+  font-weight: lighter;
+}
+
+.deleteComment,
+.reportComment,
+.copyComment,
+.editComment {
+  transition: none;
+}
+
+.deleteComment:hover,
+.reportComment:hover {
+  background-color: #ed3d3d;
+  color: white;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.profile_settings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 18px;
+}
+
+.profile_settings .list-group-item {
+  border: none;
+  // border-bottom: 2px solid #454545;
+  border-radius: 0;
+}
+
+.profile_settings .list-group-item a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #454545;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.profile_settings .list-group-item i {
+  font-size: 20px;
+  color: var(--special_color);
+}
+
+.profile_settings .list-group-item a:hover {
+  color: var(--special_color);
+}
+
+.profile_settings .deleteOption i {
+  color: #d93025;
+}
+
+.bottom-sheet-wrapper {
+  display: flex !important;
+  align-items: flex-end !important;
+  margin: 0 !important;
+}
+
+.bottom-sheet-modal {
+  margin: 0 !important;
+  max-width: 100%;
+  width: 100%;
+  overflow: scroll;
+}
+
+.bottom-sheet-modal .modal-content {
+  border-radius: 20px 20px 0 0;
+  border: none;
+  padding: 10px 0;
+  animation: slideUp 0.3s ease;
+}
+
+.bottom-sheet-modal {
+  display: flex !important;
+  align-items: flex-end;
+}
+
+.sheet-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.sheet-item:hover {
+  background-color: #f5f7fa;
+}
+
+.sheet-icon {
+  color: white;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px;
+  background-color: var(--special_color);
+}
+
+.sheet-link {
+  color: var(--special_color);
+  text-decoration: none;
+  text-transform: capitalize;
+}
+
+.deleteOption .sheet-link {
+  color: #d93025;
+}
+
+.deleteOption .sheet-icon {
+  background-color: #d93025;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.loader{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    color: rgb(19, 94, 196);
+}
+
+.spinner-border{
+    color: rgb(19, 94, 196);
+}
+
+.skeleton-card{
+  width: 300px;
+}
+
+.skeleton-image{
+  width: 100%;
+  height: 200px;
+  background-color: #ddd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-text{
+  width: 60%;
+  height: 15px;
+  background: #ddd;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-image::after, .skeleton-text::after{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent);
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  100%{
+    left: 100%;
+  }
+}
+
+#signup,
+#login {
+  background: linear-gradient(280deg, rgb(0, 120, 255), rgb(0, 54, 115)) !important;
+}

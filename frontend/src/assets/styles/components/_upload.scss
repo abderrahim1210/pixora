@@ -1,0 +1,275 @@
+[data-bs-page="upload"] {
+
+  .card {
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.959);
+    backdrop-filter: blur(20px);
+  }
+
+  .card-body h1 {
+    color: var(--special_dark-color);
+    font-weight: bolder;
+  }
+
+  .form-control {
+    border: none;
+    border-bottom: 3px solid black;
+    background-color: #f0f0f0;
+    width: 400px;
+  }
+
+  .form-select {
+    border: none;
+    border-bottom: 3px solid var(--special_dark-color);
+  }
+
+  .form-select:focus {
+    border-bottom: 3px solid var(--special_color);
+  }
+
+  .form-control:focus {
+    background-color: #f0f0f0;
+    border-bottom: 3px solid var(--special_color);
+  }
+
+  .form-control::placeholder {
+    opacity: calc(0.8);
+  }
+
+  #upload {
+    display: flex;
+    justify-content: center;
+    border: 2px dashed var(--special_dark-color);
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #fff;
+  }
+
+  #upload p {
+    font-weight: 600;
+  }
+
+  #file_selected {
+    background-color: var(--special_color);
+    padding: 10px;
+    color: white;
+  }
+
+  .form-label {
+    font-weight: 600;
+    margin-left: 5px;
+  }
+
+  #uploadButton {
+    background-color: var(--special_color);
+    color: black;
+    width: 100%;
+  }
+
+  #uploadButton:hover {
+    background-color: lavender;
+    color: var(--special_dark-color);
+    border: 1px solid var(--special_dark-color);
+  }
+
+  .dv1 {
+    backdrop-filter: blur(30px);
+    display: flex;
+    color: white;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .upload-box {
+    color: black;
+    width: 100%;
+    flex: 1;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    text-transform: capitalize;
+  }
+
+  .upload_div {
+    background-image: url("outils/jpg/photographer5.png");
+  }
+
+  .form-control {
+    border: none;
+    border-radius: 0;
+    border-bottom: 2px solid var(--special_dark-color);
+    padding: 10px;
+  }
+
+  .form-control::placeholder {
+    opacity: calc(0.7);
+  }
+
+  .form-label {
+    margin-left: 2px;
+  }
+
+  .form-control:focus {
+    border-bottom: 2px solid var(--special_color);
+  }
+
+  .form-check-input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: none !important;
+  }
+
+  .form-check-input {
+    border: 1px solid black;
+  }
+
+  .form-check-input:checked {
+    background-color: var(--special_color);
+  }
+
+  .cards {
+    gap: 30px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    margin-top: 20px;
+  }
+
+  @media screen and (max-width:880px) {
+    .cards {
+      flex-direction: column;
+    }
+  }
+
+  .cards a {
+    text-decoration: none;
+  }
+
+  .cards div {
+    flex: 1 1 300px;
+    max-width: 400px;
+    min-width: 280px;
+  }
+
+  .card {
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    align-items: center;
+  }
+
+  .cards .card {
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .cards .card-body {
+    transition: transform 0.3s ease;
+  }
+
+  .cards .card:hover {
+    z-index: 10;
+    transform: scale(1.05);
+  }
+
+  .cards .card h3 {
+    font-weight: 700;
+  }
+
+  .cards .card i {
+    font-size: 15px;
+  }
+
+  .cards .card input[type="radio"]:checked+.card-body {
+    border: 2px solid var(--special_color);
+    border-radius: 10px;
+    background-color: #f0f8ff;
+    transform: scale(1.05);
+  }
+
+  .pagination {
+    margin-top: 20px;
+  }
+
+  .pagination .page-item {
+    margin: auto;
+  }
+
+  .pagination .page-item .page-link {
+    border: none;
+    padding: 10px 40px 10px 40px;
+    background-color: var(--special_color);
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    transition: none;
+  }
+
+  .pagination .page-item .page-link:hover {
+    background-color: rgb(1, 86, 183);
+    color: white;
+  }
+
+  .uploadCard {
+    transition: all 0.3s ease;
+  }
+
+  .uploadCard .card-body {
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 600px;
+  }
+
+  .uploadCard i {
+    font-size: 14px;
+    color: #454545;
+  }
+
+  textarea {
+    resize: none;
+  }
+
+  #preview {
+    border-radius: 10px;
+    margin-bottom: 10px;
+    height: auto;
+  }
+
+  .photo_details .form-control {
+    width: 600px;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .dv1 {
+      margin: auto;
+      padding: 0;
+    }
+
+    .dv1-1 {
+      margin: auto;
+      padding: 0;
+    }
+
+    .dv1-0 {
+      display: none;
+    }
+
+    .dv1-1 input,
+    .dv1-1 button {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+
+  .next.disabled {
+    background-color: #444 !important;
+    transition: color 0.3s ease;
+  }
+}
