@@ -15,9 +15,11 @@ import Swal from 'sweetalert2';
 import copy from 'copy-to-clipboard';
 
 import { notyf } from "../../assets/js/notyf";
+import { useAuth } from "../context/AuthProvider";
 const Comments = (props) => {
   const comments = props.data;
   const currUser = props.currUser;
+  const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(null);
   const [comment, setComment] = useState("");
   const handleEdit = () => {
@@ -123,7 +125,6 @@ const Comments = (props) => {
                           rows={1}
                           onChange={(e) => setComment(e.target.value)}
                           defaultValue={c.content}
-                        // value={comment}
                         />
                       </div>
                     </div>
@@ -167,6 +168,13 @@ const Comments = (props) => {
                             <Dropdown.Item>
                               <FaFlag /> Report
                             </Dropdown.Item>
+                            {
+                              user.role === "admin" && (
+                                <Dropdown.Item onClick={() => handleDelComment(c.id)}>
+                                  <FaTrash /> Delete
+                                </Dropdown.Item>
+                              )
+                            }
                           </>
                         )}
                       </Dropdown.Menu>

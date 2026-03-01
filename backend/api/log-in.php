@@ -79,6 +79,7 @@ if ($user) {
         $_SESSION['px_datetime'] = $user['created_at'];
         $_SESSION['px_profile_picture'] = $user['photo_profile'];
         $_SESSION['px_cover_image'] = $user['cover_image'];
+        $_SESSION['px_role'] = $user['role'];
         setcookie("px_user_token", $token, time() + (86400 * 30), '/', '', false, true);
         echo json_encode([
             'success' => true,
@@ -87,7 +88,8 @@ if ($user) {
                 'name' => $user['username'],
                 'email' => $user['email'],
                 'bio' => $user['bio'],
-                'created_at' => $user['created_at']
+                'created_at' => $user['created_at'],
+                'role' => $user['role']
             ]
         ]);
         exit();

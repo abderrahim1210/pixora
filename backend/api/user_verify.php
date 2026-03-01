@@ -14,6 +14,7 @@ if (isset($_SESSION['px_id'])) {
         $_SESSION['px_id'] = $user['id'];
         $_SESSION['px_bio'] = $user['bio'];
         $_SESSION['px_datetime'] = $user['created_at'];
+        $_SESSION['px_role'] = $user['role'];
     }else{
         setcookie('px_user_token','',time() - 3600,'/','',false,true);
     }

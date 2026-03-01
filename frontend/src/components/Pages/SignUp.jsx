@@ -5,6 +5,7 @@ import { notyf } from "../../assets/js/notyf";
 import { FaCamera, FaGoogle, FaHeart, FaUsers } from "react-icons/fa";
 import { FaPhotoFilm } from "react-icons/fa6";
 import { MdPhoto, MdPhotoCamera } from "react-icons/md";
+import Swal from "sweetalert2";
 
 
 export const SignUp = () => {

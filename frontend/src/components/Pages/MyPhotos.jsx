@@ -5,7 +5,7 @@ import { FaCamera, FaCertificate, FaChartLine, FaFileContract, FaHeart } from "r
 import { Copyright } from "./Copyright";
 import { FooterDash } from "./FooterDash";
 import { GiPadlock } from "react-icons/gi";
-import { MdPhotoLibrary, MdVerified } from "react-icons/md";
+import { MdAnalytics, MdPhotoLibrary, MdVerified } from "react-icons/md";
 import { RiChat1Line } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
@@ -21,13 +21,15 @@ import { Truncate } from "./Truncate";
 // });
 import { notyf } from "../../assets/js/notyf";
 import PageSkeleton from "./PageSkeleton";
+import PhotosTemplate from "./PhotosTemplate";
+import { EmptyContent } from "./EmptyContent";
 
 export const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
   const [photosLikes, setPhotosLikes] = useState([]);
   const [photosCount, setPhotosCount] = useState(0);
   const [likesCountPhotos, setLikesCountPhotos] = useState(0);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -129,42 +131,9 @@ export const MyPhotos = () => {
                 <div className="container-fluid">
                   <div className="myphotos mt-3 mb-3">
                     {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos.length > 0 ? (
-                      photos.map((p) => (
-                        <div className="card" key={p.id}>
-                          <div className="card-body p-0">
-                            <div className="image">
-                              <Link
-                                id="caption"
-                                style={{ cursor: "pointer" }}
-                                to={`/photo/${p.id}/${slugiFy(p.title)}`}
-                              >
-                                <img src={`/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
-                              </Link>
-                            </div>
-                            <div className="d-flex justify-content-between p-2">
-                              <div>
-                                <Truncate text={p.title} maxChars={20}>
-                                  {({ text }) => (
-                                    <h5>{text}</h5>
-                                  )}
-                                </Truncate>
-                              </div>
-                              <div className="d-flex justify-content-center align-items-center">
-                                <div>
-                                  <p>{p.visibility}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))
+                      <PhotosTemplate photos={photos} />
                     ) : (
-                      <div className="empty-content">
-                        <div className="mb-5 d-flex justify-content-center align-items-center">
-                          <FaCamera size={40} style={{ cursor: "pointer" }} />
-                          <h4>No photos yet — start sharing your moments!</h4>
-                        </div>
-                      </div>
+                      <EmptyContent icon={<FaCamera className="faIcon" />} text={"No photos yet — start sharing your moments!"} />
                     )}
                   </div>
                 </div>
@@ -197,15 +166,7 @@ export const MyPhotos = () => {
                       </div>
                     </div> */}
                   </div>
-                  <div className="empty-content text-center">
-                    <div className="mb-5">
-                      <MdVerified size={50} />
-                      <h4>
-                        No licensing photos yet — start licensing your best
-                        shots!
-                      </h4>
-                    </div>
-                  </div>
+                  <EmptyContent icon={<MdVerified className="faIcon" />} text={"No licensing photos yet — start licensing your best shots!"} />
                 </div>
               </div>
               <div className="tab-pane fade show" id="likes">
@@ -219,43 +180,10 @@ export const MyPhotos = () => {
                 </div>
                 <div className="container-fluid">
                   <div className="myphotos mt-3 mb-3">
-                    {photosLikes.length > 0 ? photosLikes.map((p) => (
-                      <div className="card" key={p.id}>
-                        <div className="card-body p-0">
-                          <div className="image">
-                            <Link
-                              id="caption"
-                              style={{ cursor: "pointer" }}
-                              to={`/photo_preview/${p.id}/${slugiFy(p.title)}`}
-                            >
-                              <img src={`/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
-                            </Link>
-                          </div>
-                          <div className="d-flex justify-content-between p-2">
-                            <div>
-                              <Truncate text={p.title} maxChars={20}>
-                                {({ text }) => (
-                                  <h5>{text}</h5>
-                                )}
-                              </Truncate>
-                            </div>
-                            <div className="d-flex justify-content-center align-items-center">
-                              <div>
-                                <p>{p.visibility}</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )) : (
-                      <div className="empty-content text-center">
-                        <div className="mb-5">
-                          <FaHeart size={50} />
-                          <h4>
-                            Nothing liked… yet! Start exploring
-                          </h4>
-                        </div>
-                      </div>
+                    {photosLikes.length > 0 ? (
+                      <PhotosTemplate photos={photosLikes} />
+                    ) : (
+                      <EmptyContent icon={<FaHeart className="faIcon" />} />
                     )}
                   </div>
                 </div>
@@ -326,12 +254,7 @@ export const MyPhotos = () => {
                       </div>
                     </div> */}
                   </div>
-                  <div className="empty-content text-center">
-                    <div className="mb-5">
-                      <FaChartLine size={50} />
-                      <h4>No statistics found for now - try later</h4>
-                    </div>
-                  </div>
+                  <EmptyContent icon={<FaChartLine className="faIcon" />} text={"No statistics found for now - try later"} />
                 </div>
               </div>
             </div>

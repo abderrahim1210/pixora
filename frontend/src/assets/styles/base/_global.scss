@@ -210,30 +210,30 @@
   }
 }
 
-.loader{
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: white;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    color: rgb(19, 94, 196);
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  color: rgb(19, 94, 196);
 }
 
-.spinner-border{
-    color: rgb(19, 94, 196);
+.spinner-border {
+  color: rgb(19, 94, 196);
 }
 
-.skeleton-card{
+.skeleton-card {
   width: 300px;
 }
 
-.skeleton-image{
+.skeleton-image {
   width: 100%;
   height: 200px;
   background-color: #ddd;
@@ -243,7 +243,7 @@
   overflow: hidden;
 }
 
-.skeleton-text{
+.skeleton-text {
   width: 60%;
   height: 15px;
   background: #ddd;
@@ -252,19 +252,20 @@
   overflow: hidden;
 }
 
-.skeleton-image::after, .skeleton-text::after{
+.skeleton-image::after,
+.skeleton-text::after {
   content: "";
   position: absolute;
   top: 0;
   left: -150px;
   height: 100%;
   width: 150px;
-  background: linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
   animation: shimmer 1.2s infinite;
 }
 
 @keyframes shimmer {
-  100%{
+  100% {
     left: 100%;
   }
 }
@@ -272,4 +273,86 @@
 #signup,
 #login {
   background: linear-gradient(280deg, rgb(0, 120, 255), rgb(0, 54, 115)) !important;
+}
+
+#followButton {
+  border-radius: 30px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: var(--special_color);
+  color: white;
+}
+
+#followButton:hover {
+  background-color: rgb(0, 54, 115);
+}
+
+#followButton.active {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: black;
+  border: 1px solid black;
+}
+
+.div3 {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.div3 .card {
+  width: 250px;
+  text-align: center;
+}
+
+.div3 .card .card-body a {
+  text-decoration: none;
+  color: black;
+}
+
+.empty-content {
+  width: fit-content;
+  padding: 20px;
+  margin: auto !important;
+}
+
+.empty-content div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.empty-content h4 {
+  width: 300px;
+  font-weight: 600;
+}
+
+.empty-content i {
+  font-size: 40px;
+}
+
+.empty-content .empty-content-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
+  margin-top: 50px;
+  text-align: center;
+}
+
+.faIcon{
+  font-size: 40px;
+  cursor: pointer;
+}
+
+.badge{
+  background-color: var(--special_color);
 }

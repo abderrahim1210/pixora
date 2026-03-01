@@ -6,7 +6,7 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Content-Type: application/json");
 require_once __DIR__ . "/../config/db.php";
-require_once __DIR__ . "/../api/fn.php";
+require_once __DIR__ . "/../utils/fn.php";
 
 $data = json_decode(file_get_contents('php://input'), true);
 $username = text_input($data['username']);

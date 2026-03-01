@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "./Navbar";
 import {
+  FaBan,
   FaCamera,
   FaChartLine,
   FaFacebook,
@@ -32,7 +33,7 @@ import {
 } from "react-icons/fa6";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
-import { MdUpload } from "react-icons/md";
+import { MdAnalytics, MdUpload } from "react-icons/md";
 import { FiEye, FiTrash, FiUpload } from "react-icons/fi";
 import { FooterDash } from "./FooterDash";
 import { Link, useNavigate } from "react-router-dom";
@@ -48,11 +49,15 @@ import { useAuth } from "../context/AuthProvider";
 import { Truncate } from "./Truncate";
 import { notyf } from "../../assets/js/notyf";
 import PageSkeleton from "./PageSkeleton";
+import AdminDashboard from "./AdminDashboard";
+import PhotosTemplate from "./PhotosTemplate";
+import { EmptyContent } from "./EmptyContent";
 
 export const MyProfile = () => {
   const [user, setUser] = useState({});
   const [photos, setPhotos] = useState([]);
   const [statistics, setStatistics] = useState({});
+  const [analytics, setAnalytics] = useState({});
   const [edit, setEdit] = useState(false);
   const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
@@ -122,6 +127,19 @@ export const MyProfile = () => {
       });
     axios.get("/json/countries.json").then((res) => res.data).then(data => setCountries(data));
   }, []);
+
+  useEffect(() => {
+    axios.get('http://localhost/Pixora/backend/api/adminAnalytics.php', { withCredentials: true })
+      .then(res => {
+        if (res.data.success) {
+          setAnalytics(res.data);
+          console.log(res.data);
+        } else {
+          console.log(res.data);
+        }
+      });
+  }, []);
+
   const handleLogOut = async () => {
     try {
       const res = await axios.post('http://localhost/Pixora/backend/api/logout.php', { done: true }, { withCredentials: true });
@@ -349,15 +367,25 @@ export const MyProfile = () => {
                       <FaGear /> settings
                     </a>
                   </li>
-                  <li className="nav-item">
-                    <a
-                      data-bs-target="#statistics"
-                      data-bs-toggle="tab"
-                      className="nav-link"
-                    >
-                      <FaChartLine /> statistics
-                    </a>
-                  </li>
+                  {user.role === "user" ? (
+                    <li className="nav-item">
+                      <a
+                        data-bs-target="#statistics"
+                        data-bs-toggle="tab"
+                        className="nav-link"
+                      >
+                        <FaChartLine /> statistics
+                      </a>
+                    </li>) : (<li className="nav-item">
+                      <a
+                        data-bs-target="#admin"
+                        data-bs-toggle="tab"
+                        className="nav-link"
+                      >
+                        <MdAnalytics /> Analytics
+                      </a>
+                    </li>
+                  )}
                 </ul>
               </div>
             </nav>
@@ -437,6 +465,11 @@ export const MyProfile = () => {
                       <h3 className="fw-semibold mb-1">{user?.displayname}</h3>
                     </div>
                     <div>
+                      {
+                        user.role === "admin" && (
+                          <span className="badge">Admin</span>
+                        )
+                      }
                       <p
                         className="mb-1 mx-auto"
                         style={{
@@ -495,54 +528,19 @@ export const MyProfile = () => {
                     )}
                   </div>
                   <div className="container-fluid pm-button mt-3">
-                    <Link to={`/${user.username}/myphotos`} className="btn" id="managePhotos">
+                    <Link to={`/${user.username}/myphotos`} className={`btn ${user.role === "admin" ? "disabled" : ""}`} id="managePhotos">
                       manage my photos
                     </Link>
                   </div>
                   <div className="container-fluid">
-                    <div className="myphotos mb-3">
+                    <div className="mb-3">
                       {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos.length > 0 ? (
-                        photos.map((p) => (
-                          <div className="card" key={p.id}>
-                            <div className="card-body p-0">
-                              <div className="image">
-                                <Link
-                                  id="caption"
-                                  style={{ cursor: "pointer" }}
-                                  to={`/photo/${p.id}/${slugiFy(p.title)}`}
-                                >
-                                  <img src={`/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
-                                </Link>
-                              </div>
-                              <div className="d-flex justify-content-between p-2">
-                                <div>
-                                  <Truncate text={p.title} maxChars={20}>
-                                    {({ text }) => (
-                                      <h5>{text}</h5>
-                                    )}
-                                  </Truncate>
-                                </div>
-                                <div className="d-flex justify-content-center align-items-center">
-                                  <div>
-                                    <p>{p.visibility}</p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <div className="empty-content">
-                          <div className="mb-5 d-flex justify-content-center align-items-center">
-                            <FaCamera size={40} style={{ cursor: "pointer" }} />
-                            <h4>No photos yet — start sharing your moments!</h4>
-                          </div>
-                        </div>
-                      )}
+                        <PhotosTemplate photos={photos} />
+                      ) : user.role === "user" ? (<EmptyContent icon={<FaCamera className="faIcon" />} text={"No photos yet — start sharing your moments!"} />) : (<EmptyContent icon={<FaBan className="faIcon" />} text={"Upload is not availabe for adminstrators"} />)}
                     </div>
-                    <a href="#" style={{ textDecoration: "underline" }}>
+                    {user.role === "user" && (<a href="#" style={{ textDecoration: "underline" }}>
                       Show more
-                    </a>
+                    </a>)}
                   </div>
                 </div>
               </div>
@@ -557,7 +555,7 @@ export const MyProfile = () => {
                       accept=".png, .jpg"
                     />
                     <img
-                      src={"/profile_pictures/" + user.photo_profile}
+                      src={user.photo_profile ? `/photo_pictures/${user.photo_profile}` : "/outils/pngs/useracc2.png"}
                       width="100px"
                       className="img_acc mt-2 mb-2"
                       id="imgAcc1"
@@ -965,22 +963,22 @@ export const MyProfile = () => {
                   </p>
                   <div className="stat-container">
                     <div className="stat-card">
-                      <FaUserPlus />
+                      <FaUserPlus size={25} className="stat-icon" />
                       <h3>Following</h3>
                       <p>{statistics.followings ?? 0}</p>
                     </div>
                     <div className="stat-card">
-                      <FaHeart />
+                      <FaHeart size={25} className="stat-icon" />
                       <h3>Likes</h3>
                       <p>{statistics.likes ?? 0}</p>
                     </div>
                     <div className="stat-card">
-                      <FaUsers />
+                      <FaUsers size={25} className="stat-icon" />
                       <h3>Followers</h3>
                       <p>{statistics.followers ?? 0}</p>
                     </div>
                     <div className="stat-card">
-                      <FaCamera />
+                      <FaCamera size={25} className="stat-icon" />
                       <h3>Photos</h3>
                       <p>{statistics.photosCount ?? 0}</p>
                     </div>
@@ -990,6 +988,7 @@ export const MyProfile = () => {
                   </div>
                 </div>
               </div>
+              <AdminDashboard analytics={analytics} />
             </div>
           </div>
         </div>

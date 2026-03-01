@@ -15,21 +15,26 @@ $comment_id = $input['comment_id'] ?? 0;
 $method = $_SERVER['REQUEST_METHOD'];
 $ok = true;
 
+$stm = $conn->prepare("SELECT * FROM users WHERE id = :id");
+$stm->bindValue(":id", $id, PDO::PARAM_INT);
+$stm->execute();
+$current_user = $stm->fetch(PDO::FETCH_ASSOC);
+
 if (!$id || !is_numeric($id)) {
     echo json_encode(['success' => false, 'message' => 'User not found']);
     exit();
 }
 $id = intval($id);
 
-if (!$photo_id || !is_numeric($photo_id)) {
-    echo json_encode(['success' => false, 'message' => 'Photo not found']);
-    exit();
-}
-
 switch ($method) {
     case 'POST':
         $ok = true;
         $comment = trim($comment);
+        if (!$photo_id || !is_numeric($photo_id)) {
+            echo json_encode(['success' => false, 'message' => 'Photo not found']);
+            exit();
+        }
+
         if ($comment === '') {
             echo json_encode(['success' => false, 'message' => 'comment not added empty']);
             exit();
@@ -44,7 +49,7 @@ switch ($method) {
             echo json_encode(['success' => true, 'message' => 'Comment added successfully']);
             exit();
         } else {
-            echo json_encode(['success' => false, 'message' => 'comment added failed']);
+            echo json_encode(['success' => false, 'message' => 'Comment added failed']);
             exit();
         }
         break;
@@ -95,23 +100,22 @@ switch ($method) {
             exit();
         }
 
-        $find = $conn->prepare("SELECT * FROM comments WHERE id = :id AND user_id = :user_id");
+        $find = $conn->prepare("SELECT * FROM comments WHERE id = :id");
         $find->bindValue(":id", $comment_id, PDO::PARAM_INT);
-        $find->bindValue(":user_id", $user_id, PDO::PARAM_INT);
+        // $find->bindValue(":user_id", $user_id, PDO::PARAM_INT);
         $find->execute();
         $comment = $find->fetch(PDO::FETCH_ASSOC);
 
-        if (!$comment) {
+        if ($comment['user_id'] != $id && $current_user['role'] !== "admin") {
             $ok = false;
             echo json_encode(['success' => false, 'message' => 'You can not delete this comment']);
             exit();
         }
-
         if ($ok) {
-            $del_comment = $conn->prepare("DELETE FROM comments WHERE id = :id AND user_id = :user_id AND photo_id = :pid");
+            $del_comment = $conn->prepare("DELETE FROM comments WHERE id = :id");
             $del_comment->bindValue(":id", $comment_id, PDO::PARAM_INT);
-            $del_comment->bindValue(":user_id", $user_id, PDO::PARAM_INT);
-            $del_comment->bindValue(":pid", $photo_id, PDO::PARAM_INT);
+            // $del_comment->bindValue(":user_id", $user_id, PDO::PARAM_INT);
+            // $del_comment->bindValue(":pid", $photo_id, PDO::PARAM_INT);
             $del_comment->execute();
             echo json_encode(['success' => true, 'message' => 'Comment deleted successfully']);
             exit();

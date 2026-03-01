@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "./Navbar";
 import { FiCalendar, FiCommand, FiHeart, FiImage, FiTag, FiUser } from "react-icons/fi";
-import { FaCalendar, FaCheck, FaCircle, FaComment, FaCommentAlt, FaHeart, FaShare, FaSync, FaTag, FaUser } from "react-icons/fa";
+import { FaCalendar, FaCheck, FaCircle, FaComment, FaCommentAlt, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaShare, FaSync, FaTag, FaUser } from "react-icons/fa";
 import { FaLocationDot, FaPencil, FaPhotoFilm } from "react-icons/fa6";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -240,6 +240,13 @@ export const Photo = (props) => {
                             <p></p>
                         </li>
                         <li>
+                            {
+                                photo.type === "licensed" ? (<><FaLock />
+                            <p>Licensed</p></>) : (<><FaLockOpen />
+                            <p>Free</p></>)
+                            }
+                        </li>
+                        <li>
                             <FiImage />
                             <p>...</p>
                         </li>
@@ -281,6 +288,13 @@ export const Photo = (props) => {
                             </button>
                             <button type="button" className="btn w-100" onClick={deletePhoto} id="deletePhoto">Delete</button>
                         </div>)}
+                        {
+                            user.role === "admin" && (
+                                <>
+                                <button type="button" className="btn w-100" onClick={deletePhoto} id="deletePhoto">Delete</button>
+                                </>
+                            )
+                        }
                     </ul>
                     <div className="comments">
                         <h5>Comments</h5>

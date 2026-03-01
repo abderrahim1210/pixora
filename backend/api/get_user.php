@@ -15,7 +15,8 @@ if (isset($_SESSION['px_id'])) {
             'created_at' => $_SESSION['px_datetime'],
             'username' => $_SESSION['px_name'],
             'profile_picture' => $_SESSION['px_profile_picture'],
-            'cover_picture' => $_SESSION['px_cover_image']
+            'cover_picture' => $_SESSION['px_cover_image'],
+            'role' => $_SESSION['px_role']
         ]
     ]);
 }else{

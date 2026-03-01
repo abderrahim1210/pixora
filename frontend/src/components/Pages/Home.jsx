@@ -466,7 +466,7 @@ export const Home = () => {
                       <div className="mt-3 mb-3">
                         <button
                           type="button"
-                          className={`followButton ${u.followClasse} btn`}
+                          className={`followButton ${u.followClasse} ${user.role === "admin" && "disabled"} btn`}
                           id="followButton"
                           onClick={() => addFollow(u.id)}
                         >

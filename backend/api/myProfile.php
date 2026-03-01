@@ -37,7 +37,8 @@ if ($infos) {
             'instagram' => $infos['instagram'],
             'facebook' => $infos['facebook'],
             'website' => $infos['website'],
-            'x' => $infos['x']
+            'x' => $infos['x'],
+            'role' => $infos['role']
         ],
         'photos' => $photos?: []
     ]);
