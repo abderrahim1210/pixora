@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { notyf } from "../../assets/js/notyf";
 import { FaCamera, FaGoogle, FaHeart, FaUsers } from "react-icons/fa";
 import { FaPhotoFilm } from "react-icons/fa6";
@@ -61,6 +61,7 @@ export const SignUp = () => {
           timer: 2000,
           showConfirmButton: true,
         });
+        navigate('/login');
       } else {
         notyf.error(res.data.message);
       }

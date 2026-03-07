@@ -427,10 +427,10 @@
     justify-content: end;
   }
 
-  .filter_bar select:focus {
-    border: none;
-    border: 1px solid var(--special_color);
-  }
+  // .filter_bar select:focus {
+  //   border: none;
+  //   border: 1px solid var(--special_color);
+  // }
 
   #upload_button {
     border: 1px solid black;
@@ -637,13 +637,13 @@
     color: #222;
   }
 
-  .filter_bar select {
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 50px;
-    padding-right: 20px;
-    padding-left: 20px;
-  }
+  // .filter_bar select {
+  //   background-color: white;
+  //   border: 1px solid black;
+  //   border-radius: 50px;
+  //   padding-right: 20px;
+  //   padding-left: 20px;
+  // }
 
   #edit_profile textarea {
     resize: none;

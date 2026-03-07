@@ -28,8 +28,7 @@
     padding: 20px;
   }
 
-  .form-control:focus,
-  .form-select:focus {
+  .form-control:focus{
     border-bottom: 2px solid var(--special_color);
   }
 

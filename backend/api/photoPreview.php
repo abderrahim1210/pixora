@@ -4,12 +4,17 @@ header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Content-Type: application/json");
+header("Content-Type: application/json; charset=UTF-8");
 require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../api/likes.php";
 require_once __DIR__ . '/../utils/convert_date.php';
 
+if($_SERVER['REQUEST_METHOD'] === "OPTIONS"){
+    http_response_code(200);
+    exit();
+}
 $method = $_SERVER['REQUEST_METHOD'];
+
 switch ($method) {
     case 'GET':
         if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -17,6 +22,7 @@ switch ($method) {
                 "success" => false,
                 "message" => "Id not found."
             ]);
+            exit();
         } else {
             $id = intval($_GET['id']);
             $currentUser = $_SESSION['px_id'] ?? null;
@@ -27,7 +33,7 @@ switch ($method) {
             $usr = $us->fetch(PDO::FETCH_ASSOC);
             $userid = $usr['id'] ?? null;
 
-            $stm1 = $conn->prepare("SELECT p.id AS photo_id, p.user_id,p.category_id, p.title,p.description,p.filename,p.visibility,p.isLiked,p.location,p.upload_date,u.id AS user_id,u.username,u.email FROM photos p JOIN users u ON p.user_id = u.id WHERE p.id = :pid");
+            $stm1 = $conn->prepare("SELECT p.id AS photo_id, p.user_id,p.category_id, p.title,p.description,p.filename,p.visibility,p.isLiked,p.location,p.upload_date,p.status,p.type,u.id AS user_id,u.username,u.email FROM photos p JOIN users u ON p.user_id = u.id WHERE p.id = :pid");
             $stm1->bindValue(":pid", $id, PDO::PARAM_INT);
             $stm1->execute();
             $photo = $stm1->fetch(PDO::FETCH_ASSOC);
@@ -41,6 +47,11 @@ switch ($method) {
             $stm2 = $conn->prepare("SELECT * FROM categories");
             $stm2->execute();
             $categories = $stm2->fetchAll(PDO::FETCH_ASSOC);
+
+            $cs = $conn->prepare('SELECT COUNT(*) FROM comments c JOIN photos p ON c.photo_id = p.id WHERE p.user_id = :id');
+            $cs->bindValue(':id',$userid,PDO::PARAM_INT);
+            $cs->execute();
+            $commentsCount = $cs->fetchColumn();
 
             if ($userid) {
                 $lk = $conn->prepare("SELECT COUNT(*) FROM likes WHERE user_id = :userid AND photo_id = :photoid");
@@ -76,12 +87,13 @@ switch ($method) {
                 "currUser" => $currentUser,
                 "category" => $cat_name,
                 "comments" => $cs,
-                "categories" => $categories
+                "categories" => $categories,                
             ]);
+            exit();
         }
         break;
 
-    case 'PUT':
+    case 'POST':
         $data = json_decode(file_get_contents('php://input'), true);
         $id = $data['photo_id'] ?? 0;
         $title = $data['title'] ?? null;

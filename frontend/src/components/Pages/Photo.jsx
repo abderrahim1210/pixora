@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "./Navbar";
 import { FiCalendar, FiCommand, FiHeart, FiImage, FiTag, FiUser } from "react-icons/fi";
-import { FaCalendar, FaCheck, FaCircle, FaComment, FaCommentAlt, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaShare, FaSync, FaTag, FaUser } from "react-icons/fa";
-import { FaLocationDot, FaPencil, FaPhotoFilm } from "react-icons/fa6";
-import { useParams } from "react-router-dom";
+import { FaCalendar, FaCheck, FaCheckCircle, FaCircle, FaClock, FaComment, FaCommentAlt, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaShare, FaSync, FaTag, FaUser } from "react-icons/fa";
+import { FaLocationDot, FaPencil, FaPhotoFilm, FaX } from "react-icons/fa6";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { initEdit, toggleEdit, updateField } from "../Store/photoSlice";
 import axios from "axios";
@@ -17,7 +17,8 @@ import { Truncate } from "./Truncate";
 import { useAuth } from "../context/AuthProvider";
 import { notyf } from '../../assets/js/notyf';
 import Swal from "sweetalert2";
-// import Select from "react-select";
+// import {Select} from "@headlessui/react";
+import AsyncSelect from "react-select/async";
 
 export const Photo = (props) => {
     const { id } = useParams();
@@ -29,12 +30,13 @@ export const Photo = (props) => {
     const [comments, setComments] = useState([]);
     const [userId, setUserID] = useState();
     const [open, setOpen] = useState(false);
-    // const [cities, setCities] = useState([]);
-    // const [selectedCity, setSelectedCity] = useState(null);
+    const [cities, setCities] = useState([]);
+    const [selectedCity, setSelectedCity] = useState(null);
     const { user } = useAuth();
     const isUser = user.username === photo.username;
     const { fields, isEdit, dirty } = useSelector(state => state.photo);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get("http://localhost/Pixora/backend/api/photoPreview.php", { params: { id }, withCredentials: true })
@@ -90,53 +92,67 @@ export const Photo = (props) => {
     const deletePhoto = () => {
         Swal.fire({
             title: 'Delete photo',
-            text:'Are you sure for delete this photo ?',
+            text: 'Are you sure for delete this photo ?',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonText: 'Yes , upload it',
-            confirmButtonColor: 'rgb(0, 120, 255)',
+            confirmButtonText: 'Yes , delete it',
+            confirmButtonColor: '#ed3d3d',
             cancelButtonText: 'Cancel'
-        }).then(async(result) => {
-            if (result.isConfirmed){
-                try{
-                    const res = await axios.delete('http://localhost/Pixora/backend/api/photo_system.php',{withCredentials:true,data:{photo_id:id}});
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const res = await axios.delete('http://localhost/Pixora/backend/api/photo_system.php', { withCredentials: true, data: { photo_id: id } });
                     console.log(res.data);
-                    if (res.data.success){
+                    if (res.data.success) {
                         notyf.success(res.data.message);
-                    }else{
+                    } else {
                         notyf.error(res.data.message);
                     }
-                }catch(err){
+                } catch (err) {
                     console.log(err);
+                } finally {
+                    return navigate(`/${user.username}/myprofile`);
                 }
             }
         })
     }
 
-    // useEffect(() => {
-    //     try {
-    //         axios.get('/json/countries+cities.json')
-    //             .then(res => {
-    //                 // const allCities = res.data.flatMap(country => country.cities.map(city => ({value:city,label:city})));
-    //                 const allCities = [];
-    //                 res.data.forEach(country => {
-    //                     country.cities.forEach(city => {
-    //                         allCities.push({ value: city, label: city });
-    //                     });
-    //                 });
-    //                 setCities(allCities);
-    //             });
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // }, []);
+    useEffect(() => {
+        try {
+            axios.get('/json/countries+cities.json')
+                .then(res => {
+                    // const allCities = res.data.flatMap(country => country.cities.map(city => ({value:city,label:city})));
+                    const allCities = [];
+                    res.data.forEach(country => {
+                        country.cities.forEach(city => {
+                            allCities.push({ value: city, label: city });
+                        });
+                    });
+                    setCities(allCities);
+                });
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);
+    const loadCities = (inputValue, callback) => {
+        if (!inputValue){
+            callback([]);
+            return;
+        }
+        const results = cities
+        .filter(city => city.label.toLowerCase().includes(inputValue.toLowerCase()))
+        .slice(0,20);
+        callback(results);
+    }
     const handleEdit = async (data) => {
         try {
             const res = await axios.post('http://localhost/Pixora/backend/api/photoPreview.php', { photo_id: photo.photo_id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id }, { withCredentials: true });
             if (res.data.success) {
-                notyf.success(res.data.message);
+                console.log(res.data);
                 dispatch(initEdit(data))
+                notyf.success(res.data.message);
             } else {
+                console.log(res.data)
                 notyf.error(res.data.message);
             }
         } catch (err) {
@@ -197,7 +213,7 @@ export const Photo = (props) => {
                                 )}
                             </Truncate>}
                             <div className="d-flex justify-content-end">
-                                {isUser && (<button className="btn p-0" onClick={() => dispatch(toggleEdit("title"))}>{!isEdit.title ? (<FaPencil />) : (<FaCheck />)}</button>)}
+                                {isUser && (<button className="btn p-0 pencil-item" onClick={() => dispatch(toggleEdit("title"))}>{!isEdit.title ? (<FaPencil />) : (<FaCheck />)}</button>)}
                             </div>
                         </li>
                         <li>
@@ -207,7 +223,7 @@ export const Photo = (props) => {
                                 )}
                             </Truncate>}
                             <div className="d-flex justify-content-end">
-                                {isUser && (<button className="btn p-0" onClick={() => dispatch(toggleEdit("description"))}>{!isEdit.description ? (<FaPencil />) : (<FaCheck />)}</button>)}
+                                {isUser && (<button className="btn pencil-item p-0" onClick={() => dispatch(toggleEdit("description"))}>{!isEdit.description ? (<FaPencil />) : (<FaCheck />)}</button>)}
                             </div>
                         </li>
                         <li>
@@ -222,13 +238,13 @@ export const Photo = (props) => {
                         </li>
                         <li>
                             <FaTag />
-                            {isEdit.category ? (<div><select className="form-select" value={fields.category_id} onChange={(e) => dispatch(updateField({ field: "category_id", value: Number(e.target.value) }))} name="category">
+                            {isEdit.category ? (<div><select className="form-control" value={fields.category_id} onChange={(e) => dispatch(updateField({ field: "category_id", value: Number(e.target.value) }))} name="category">
                                 {
                                     categories.map((c) => (<option key={c.id} value={c.id}>{c.name}</option>))
                                 }
                             </select> </div>) : <p>{categories.find(c => c.id === fields.category_id)?.name || "Unknown"}</p>}
                             <div className="d-flex justify-content-end">
-                                {isUser && (<button className="btn p-0" onClick={() => dispatch(toggleEdit("category"))}>{isEdit.category ? (<FaCheck />) : (<FaPencil />)}</button>)}
+                                {isUser && (<button className="btn pencil-item p-0" onClick={() => dispatch(toggleEdit("category"))}>{isEdit.category ? (<FaCheck />) : (<FaPencil />)}</button>)}
                             </div>
                         </li>
                         <li>
@@ -237,13 +253,22 @@ export const Photo = (props) => {
                         </li>
                         <li>
                             <FaComment />
-                            <p></p>
+                            <p>{comments.length ?? 0} Comments</p>
                         </li>
+                        {
+                            photo.type === "licensed" && (<li>
+                                <FaLayerGroup />
+                                <p className={`badge text-capitalize rounded-pill d-flex align-items-center gap-1 p-2 ${photo.status === "approved" ? "bg-success-subtle text-success" : photo.status === "pending" ? "bg-warning-subtle text-warning" : "bg-danger-subtle text-danger"}`}>
+                                    {
+                                        photo.status === "pending" ? <FaClock /> : photo.status === "approved" ? <FaCheckCircle /> : <FaX />
+                                    }
+                                    {photo.status}
+                                </p>
+                            </li>)
+                        }
                         <li>
                             {
-                                photo.type === "licensed" ? (<><FaLock />
-                            <p>Licensed</p></>) : (<><FaLockOpen />
-                            <p>Free</p></>)
+                                photo.type === "free" ? (<><FaLockOpen /><p>Free</p></>) : (<><FaLock /><p>Licensed</p></>)
                             }
                         </li>
                         <li>
@@ -252,15 +277,30 @@ export const Photo = (props) => {
                         </li>
                         <li>
                             <FaLocationDot />
-                            {isEdit.location ? (<div><input name="location" type="text" className="form-control" value={fields.location} onChange={(e) => dispatch(updateField({ field: "location", value: e.target.value }))} /></div>) : (<p>{photo.location}</p>)}
+                            {isEdit.location ? (<div>
+                                {/* <input name="location" type="text" className="form-control" value={fields.location} onChange={(e) => dispatch(updateField({ field: "location", value: e.target.value }))} /> */}
+                                <AsyncSelect
+                                    cacheOptions
+                                    defaultOptions={cities.slice(0,20)}
+                                    loadOptions={loadCities}
+                                    value={cities.find(city => city.value === fields.location)}
+                                    // value={fields.location}
+                                    onChange={(option) => dispatch(updateField({ field: "location", value: option.value }))}
+                                    placeholder='Type a city ...'
+                                    noOptionsMessage={() => 'No city found'}
+                                />
+                            </div>) : (<p>{photo.location}</p>)}
                             <div className="d-flex justify-content-end">
-                                {user.username === photo.username && (<button className="btn" onClick={() => dispatch(toggleEdit("location"))}>{!isEdit.location ? (<FaPencil />) : (<FaCheck />)}</button>)}
+                                {user.username === photo.username && (<button className="btn p-0 pencil-item" onClick={() => dispatch(toggleEdit("location"))}>{!isEdit.location ? (<FaPencil />) : (<FaCheck />)}</button>)}
                             </div>
                             {/* <Select
                                 options={cities}
-                                value={selectedCity}
-                                onChange={setSelectedCity}
-                                placeholder={"Choose a city ..."}
+                                value={cities.find(city => city.value === fields.location)}
+                                onChange={(option) => {
+                                    setSelectedCity(option);
+                                    dispatch(updateField({ field: "location", value: option.value }));
+                                }}
+                                placeholder="Choose a city ..."
                                 isSearchable
                             /> */}
                         </li>
@@ -291,7 +331,7 @@ export const Photo = (props) => {
                         {
                             user.role === "admin" && (
                                 <>
-                                <button type="button" className="btn w-100" onClick={deletePhoto} id="deletePhoto">Delete</button>
+                                    <button type="button" className="btn w-100" onClick={deletePhoto} id="deletePhoto">Delete</button>
                                 </>
                             )
                         }

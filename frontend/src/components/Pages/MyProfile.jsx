@@ -555,7 +555,7 @@ export const MyProfile = () => {
                       accept=".png, .jpg"
                     />
                     <img
-                      src={user.photo_profile ? `/photo_pictures/${user.photo_profile}` : "/outils/pngs/useracc2.png"}
+                      src={user.photo_profile ? `/profile_pictures/${user.photo_profile}` : "/outils/pngs/useracc2.png"}
                       width="100px"
                       className="img_acc mt-2 mb-2"
                       id="imgAcc1"

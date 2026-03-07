@@ -129,7 +129,7 @@ export const MyPhotos = () => {
                   </h2>
                 </div>
                 <div className="container-fluid">
-                  <div className="myphotos mt-3 mb-3">
+                  <div>
                     {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos.length > 0 ? (
                       <PhotosTemplate photos={photos} />
                     ) : (
@@ -141,7 +141,7 @@ export const MyPhotos = () => {
               <div className="tab-pane fade show" id="licensing">
                 <div className="mt-2 mb-2">
                   <h2>
-                    Licensing <p className="d-inline text-primary">( photos)</p>
+                    Requests <p className="d-inline text-primary">( request)</p>
                   </h2>
                 </div>
                 <div className="container-fluid">
@@ -179,7 +179,7 @@ export const MyPhotos = () => {
                   </h2>
                 </div>
                 <div className="container-fluid">
-                  <div className="myphotos mt-3 mb-3">
+                  <div>
                     {photosLikes.length > 0 ? (
                       <PhotosTemplate photos={photosLikes} />
                     ) : (

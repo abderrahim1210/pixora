@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import {
   FaCheck,
+  FaCommentAlt,
+  FaCommentDollar,
+  FaComments,
   FaCopy,
   FaEllipsisV,
   FaFlag,
@@ -13,7 +16,7 @@ import { Dropdown } from "react-bootstrap";
 import axios from "axios";
 import Swal from 'sweetalert2';
 import copy from 'copy-to-clipboard';
-
+import {EmptyContent} from './EmptyContent'
 import { notyf } from "../../assets/js/notyf";
 import { useAuth } from "../context/AuthProvider";
 const Comments = (props) => {
@@ -39,22 +42,8 @@ const Comments = (props) => {
     try {
       const res = await axios.put('http://localhost/Pixora/backend/api/comments.php', { photo_id: props.photoId, content: newContent, comment_id: commentId }, { withCredentials: true });
       if (res.data.success) {
-        /* Swal.fire({
-          icon: "success",
-          title: "Updated!",
-          text: res.data.message,
-          timer: 2000,
-          showConfirmButton: false,
-        }); */
         notyf.success(res.data.message);
       } else {
-        /* Swal.fire({
-          icon: "error",
-          title: "Error!",
-          text: res.data.message,
-          timer: 2000,
-          showConfirmButton: false,
-        }); */
         notyf.error(res.data.message);
       }
     } catch (err) {
@@ -66,24 +55,8 @@ const Comments = (props) => {
     try {
       const res = await axios.delete('http://localhost/Pixora/backend/api/comments.php', { data: { comment_id: commentId, user_id: currUser, photo_id: props.photoId }, withCredentials: true });
       if (res.data.success) {
-        /* Swal.fire({
-          icon: "success",
-          title: "Deleted!",
-          text: res.data.message,
-          timer: 2000,
-          showConfirmButton: false,
-        }); */
-        console.log(res.data);
         notyf.success(res.data.message);
       } else {
-        /* Swal.fire({
-          icon: "error",
-          title: "Error!",
-          text: res.data.message,
-          timer: 2000,
-          showConfirmButton: false,
-        }); */
-        console.log(res.data);
         notyf.error(res.data.message);
       }
     } catch (err) {
@@ -184,17 +157,18 @@ const Comments = (props) => {
             </li>
           ))
         ) : (
-          <div className="mt-2 mb-2 text-center">
-            <i
-              style={{
-                opacity: "calc(0.8)",
-                color: "#444",
-                fontSize: "medium",
-              }}
-            >
-              No comments yet — be the first to comment!
-            </i>
-          </div>
+          <EmptyContent icon={<FaComments className="faIcon" />} text={"No comments yet — be the first to comment!"} />
+          // <div className="mt-2 mb-2 text-center">
+          //   <i
+          //     style={{
+          //       opacity: "calc(0.8)",
+          //       color: "#444",
+          //       fontSize: "medium",
+          //     }}
+          //   >
+          //     No comments yet — be the first to comment!
+          //   </i>
+          // </div>
         )}
       </ul>
     </div>
