@@ -44,6 +44,7 @@ export const SignUp = () => {
         username: user.username,
         email: user.email,
         password: user.password,
+        password_confirmation: user.password,
         display_name: user.display_name,
         country: user.country,
         phone_number: user.phone_number,
@@ -51,7 +52,7 @@ export const SignUp = () => {
         birth_date: user.birth_date,
         aggres_condition: user.aggres_condition
       }
-      const res = await axios.post('http://localhost/Pixora/backend/api/sign-up.php', payload, { withCredentials: true });
+      const res = await axios.post('http://localhost:8000/api/register', payload, { withCredentials: true });
       console.log(res.data)
       if (res.data.success) {
         Swal.fire({
@@ -66,7 +67,7 @@ export const SignUp = () => {
         notyf.error(res.data.message);
       }
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data);
     }
   }
   return (
@@ -357,7 +358,7 @@ function StepThree({ prev, next, step, user, setUser,countries }) {
 
 function StepFour({ prev, next, step, navigate, handleSubmit }) {
   return (
-    <section className={`step ${step === 1 ? "active" : ""}`} id="step1" data-step={1}>
+    <section className={`step ${step === 4 ? "active" : ""}`} id="step4" data-step={4}>
       <div className="text-start col">
         <div>
           <div className="actions mt-2 mb-2">

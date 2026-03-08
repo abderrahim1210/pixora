@@ -35,7 +35,7 @@ export const Home = () => {
   const [loading,setLoading] = useState(false);
   useEffect(() => {
     axios
-      .get("http://localhost/Pixora/backend/api/homepage.php", { withCredentials: true })
+      .get("http://localhost:8000/homepage", { withCredentials: true })
       .then((res) => {
         if (res.data.success) {
           setPhotos(res.data.photos);
@@ -47,33 +47,33 @@ export const Home = () => {
     setFavicon("/outils/favicons/favicon.jpg");
   }, []);
 
-  const followURL = "http://localhost/Pixora/backend/api/follows.php";
-  useEffect(() => {
-    axios.get(followURL, { withCredentials: true })
-      .then(res => {
-        const usersArray = res.data.users;
-        const ids = usersArray.map((f) => f.id);
-        setFollows(ids);
-      })
-  }, []);
+  // const followURL = "http://localhost/Pixora/backend/api/follows.php";
+  // useEffect(() => {
+  //   axios.get(followURL, { withCredentials: true })
+  //     .then(res => {
+  //       const usersArray = res.data.users;
+  //       const ids = usersArray.map((f) => f.id);
+  //       setFollows(ids);
+  //     })
+  // }, []);
 
-  useEffect(() => {
-    const updatedUsers = users.map((u) => ({
-      ...u,
-      followClasse: follows.includes(u.id) ? "active" : "",
-      followText: follows.includes(u.id) ? "Followed" : "Follow"
-    }));
-    if (search.trim() === "") {
-      setUsrSearched(updatedUsers);
-    } else {
-      setUsrSearched(
-        updatedUsers.filter((u) =>
-          u.username.toLowerCase().startsWith(search.toLowerCase())
+  // useEffect(() => {
+  //   const updatedUsers = users.map((u) => ({
+  //     ...u,
+  //     followClasse: follows.includes(u.id) ? "active" : "",
+  //     followText: follows.includes(u.id) ? "Followed" : "Follow"
+  //   }));
+  //   if (search.trim() === "") {
+  //     setUsrSearched(updatedUsers);
+  //   } else {
+  //     setUsrSearched(
+  //       updatedUsers.filter((u) =>
+  //         u.username.toLowerCase().startsWith(search.toLowerCase())
 
-        )
-      );
-    }
-  }, [search, users, follows]);
+  //       )
+  //     );
+  //   }
+  // }, [search, users, follows]);
 
   const { show, openModal, closeModal } = useModal();
   const { user } = useAuth();
@@ -82,45 +82,45 @@ export const Home = () => {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
   }
 
-  const addFollow = async (id) => {
-    try {
-      const res = await axios.post(followURL, { followerID: id }, { withCredentials: true });
-      if (res.data.status === "followed") {
-        setFollows(prev => [...prev, id]);
-        notyf.success("You are followed this user");
-      } else {
-        setFollows(prev => prev.filter(f => f !== id));
-        notyf.error("You are unfollowed this user");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  // const addFollow = async (id) => {
+  //   try {
+  //     const res = await axios.post(followURL, { followerID: id }, { withCredentials: true });
+  //     if (res.data.status === "followed") {
+  //       setFollows(prev => [...prev, id]);
+  //       notyf.success("You are followed this user");
+  //     } else {
+  //       setFollows(prev => prev.filter(f => f !== id));
+  //       notyf.error("You are unfollowed this user");
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
 
-  const handleComment = async (id) => {
-    try {
-      await axios.post('http://localhost/Pixora/backend/api/comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  // const handleComment = async (id) => {
+  //   try {
+  //     await axios.post('http://localhost/Pixora/backend/api/comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
 
-  const handleLike = async (photoid) => {
-    try {
-      const res = await axios.post("http://localhost/Pixora/backend/api/add_like.php", { photo_id: photoid }, { withCredentials: true });
-      if (res.data.success) {
-        setPhotos((prevPhotos) =>
-          prevPhotos.map((p) =>
-            p.id === photoid ? { ...p, isLiked: !p.isLiked, totalLikes: res.data.totalLikes } : p
-          )
-        );
-      } else {
-        navigate('/login', { state: { liked: true, message: "You have to logged first for add like" } });
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  // const handleLike = async (photoid) => {
+  //   try {
+  //     const res = await axios.post("http://localhost/Pixora/backend/api/add_like.php", { photo_id: photoid }, { withCredentials: true });
+  //     if (res.data.success) {
+  //       setPhotos((prevPhotos) =>
+  //         prevPhotos.map((p) =>
+  //           p.id === photoid ? { ...p, isLiked: !p.isLiked, totalLikes: res.data.totalLikes } : p
+  //         )
+  //       );
+  //     } else {
+  //       navigate('/login', { state: { liked: true, message: "You have to logged first for add like" } });
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
   const handleComments = (p) => {
     setActivePhoto(p);
     openModal("comments");
@@ -298,7 +298,7 @@ export const Home = () => {
                         />
                       </Link>
                       <a
-                        className={`likeButton ${(user.id && p.isLiked) ? 'active' : ''}`}
+                        className={`likeButton ${(user && user?.id && p.isLiked) ? 'active' : ''}`}
                         data-photo-id={p.id}
                         onClick={() => handleLike(p.id)}
                       >
@@ -462,11 +462,11 @@ export const Home = () => {
                         {u.username}
                       </a>
                     </div>
-                    {u.id !== user.id ? (
+                    {u.id !== user?.id ? (
                       <div className="mt-3 mb-3">
                         <button
                           type="button"
-                          className={`followButton ${u.followClasse} ${user.role === "admin" && "disabled"} btn`}
+                          className={`followButton ${u.followClasse} ${user && user?.role === "admin" && "disabled"} btn`}
                           id="followButton"
                           onClick={() => addFollow(u.id)}
                         >
@@ -479,7 +479,7 @@ export const Home = () => {
                           type="button"
                           className="followButton btn"
                           id="followButton"
-                          onClick={() => navigate(`${user.username}/myprofile`)}
+                          onClick={() => navigate(`${user && user?.username}/myprofile`)}
                         >
                           View profile
                         </button>
