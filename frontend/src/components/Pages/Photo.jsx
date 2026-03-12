@@ -33,15 +33,17 @@ export const Photo = (props) => {
     const [cities, setCities] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
     const { user } = useAuth();
-    const isUser = user.username === photo.username;
+    const [liked,setLiked] = useState(photo.isLiked);
+    const isUser = user?.username === photo.username;
     const { fields, isEdit, dirty } = useSelector(state => state.photo);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    const url = `http://localhost:8000/photo/${id}`;
     useEffect(() => {
-        axios.get("http://localhost/Pixora/backend/api/photoPreview.php", { params: { id }, withCredentials: true })
+        axios.get(url, { params: { id }, withCredentials: true})
             .then((res) => {
                 if (res.data.success) {
+                    console.log(res.data)
                     setPhoto(res.data.photo);
                     setCategory(res.data.category);
                     setLikes(res.data.likes);
@@ -50,25 +52,28 @@ export const Photo = (props) => {
                     setCategories(res.data.categories);
                 }
             }).catch(err => {
-                console.error(err);
+                console.log(err.response.data.message);
             });
     }, [id]);
     // console.log(category)
     const handleLike = async (photoid) => {
         try {
-            const res = await axios.post("http://localhost/Pixora/backend/api/add_like.php", { photo_id: photoid }, { withCredentials: true });
+            const oldLiked = liked;
+            setLiked(!liked);
+            const res = await axios.post("http://localhost:8000/add_like", { photo_id: photoid }, { withCredentials: true, withXSRFToken:true });
             if (res.data.success) {
                 setPhoto((prevPhoto) =>
                     ({ ...prevPhoto, isLiked: !prevPhoto.isLiked, totalLikes: res.data.totalLikes })
                 );
             }
         } catch (err) {
-            console.log(err);
+            console.log(err.response?.data);
+            setLiked(oldLiked);
         }
     }
     const handleComment = async () => {
         try {
-            const res = await axios.post('http://localhost/Pixora/backend/api/comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
+            const res = await axios.post('http://localhost:8000/comments/store', { photo_id: id, comment: comment }, { withCredentials: true, withXSRFToken:true });
             if (res.data.success) {
                 notyf.success(res.data.message);
             } else {
@@ -117,23 +122,22 @@ export const Photo = (props) => {
         })
     }
 
-    useEffect(() => {
-        try {
-            axios.get('/json/countries+cities.json')
-                .then(res => {
-                    // const allCities = res.data.flatMap(country => country.cities.map(city => ({value:city,label:city})));
-                    const allCities = [];
-                    res.data.forEach(country => {
-                        country.cities.forEach(city => {
-                            allCities.push({ value: city, label: city });
-                        });
-                    });
-                    setCities(allCities);
-                });
-        } catch (err) {
-            console.log(err);
-        }
-    }, []);
+    // useEffect(() => {
+    //     try {
+    //         axios.get('/json/countries+cities.json')
+    //             .then(res => {
+    //                 const allCities = [];
+    //                 res.data.forEach(country => {
+    //                     country.cities.forEach(city => {
+    //                         allCities.push({ value: city, label: city });
+    //                     });
+    //                 });
+    //                 setCities(allCities);
+    //             });
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // }, []);
     const loadCities = (inputValue, callback) => {
         if (!inputValue){
             callback([]);
@@ -174,7 +178,9 @@ export const Photo = (props) => {
                         }}
                     />
                     <img
-                        src={`/photos/${photo.filename}`}
+                        src={`/photos/${photo.filename}.webp`}
+                        loading="lazy"
+                        decoding="async" 
                         onContextMenu={(e) => e.preventDefault()}
                         width="100%"
                         className="img-fluid"
@@ -189,9 +195,9 @@ export const Photo = (props) => {
                 <div className="details-panel">
                     <div className="socialActions">
                         <div>
-                            <input type="hidden" name="photo_id" defaultValue={photo.id} />
-                            <a className={`likeButton ${photo.isLiked ? 'active' : ''}`} style={{ cursor: "pointer" }} onClick={() => handleLike(photo.photo_id)} data-photo-id={photo.id}>
-                                {photo.isLiked ? <FaHeart size={20} /> : <FiHeart size={20} />}
+                            {/* <input type="hidden" name="photo_id" defaultValue={photo.id} /> */}
+                            <a className={`likeButton ${liked || photo.isLiked ? 'active' : ''}`} style={{ cursor: "pointer" }} onClick={() => handleLike(photo.id)} data-photo-id={photo.id}>
+                                {liked || photo.isLiked ? <FaHeart size={20} /> : <FiHeart size={20} />}
                             </a>
                         </div>
                         <div>
@@ -228,11 +234,11 @@ export const Photo = (props) => {
                         </li>
                         <li>
                             <FaCalendar />
-                            <p>{photo.upload_date}</p>
+                            <p>{photo.created_at_human}</p>
                         </li>
                         <li>
                             <FaUser />
-                            <p>{photo.username}
+                            <p>{photo.user?.username}
                                 <a href="#" />
                             </p>
                         </li>
@@ -253,7 +259,7 @@ export const Photo = (props) => {
                         </li>
                         <li>
                             <FaComment />
-                            <p>{comments.length ?? 0} Comments</p>
+                            <p>{comments?.length ?? 0} Comments</p>
                         </li>
                         {
                             photo.type === "licensed" && (<li>
@@ -291,7 +297,7 @@ export const Photo = (props) => {
                                 />
                             </div>) : (<p>{photo.location}</p>)}
                             <div className="d-flex justify-content-end">
-                                {user.username === photo.username && (<button className="btn p-0 pencil-item" onClick={() => dispatch(toggleEdit("location"))}>{!isEdit.location ? (<FaPencil />) : (<FaCheck />)}</button>)}
+                                {user?.username === photo.username && (<button className="btn p-0 pencil-item" onClick={() => dispatch(toggleEdit("location"))}>{!isEdit.location ? (<FaPencil />) : (<FaCheck />)}</button>)}
                             </div>
                             {/* <Select
                                 options={cities}
@@ -308,7 +314,7 @@ export const Photo = (props) => {
                             <FaPhotoFilm />
                             <p>...</p>
                         </li>
-                        {user.username === photo.username && (<div className="d-flex justify-content-end align-items-center flex-column mb-2">
+                        {user?.username === photo.username && (<div className="d-flex justify-content-end align-items-center flex-column mb-2">
                             <button
                                 type="reset"
                                 className="btn tooltip-tab d-none"
@@ -329,7 +335,7 @@ export const Photo = (props) => {
                             <button type="button" className="btn w-100" onClick={deletePhoto} id="deletePhoto">Delete</button>
                         </div>)}
                         {
-                            user.role === "admin" && (
+                            user?.role === "admin" && (
                                 <>
                                     <button type="button" className="btn w-100" onClick={deletePhoto} id="deletePhoto">Delete</button>
                                 </>

@@ -6,16 +6,15 @@ import { notyf } from "../../assets/js/notyf";
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('')
-    ;
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.get('http://localhost:8000/sanctum/csrf-cookie', {
-  withCredentials: true
-});
-      const res = await axios.post('http://localhost:8000/login', { email, password }, {withCredentials: true,withXSRFToken: true});
+      // await axios.get('http://localhost:8000/sanctum/csrf-cookie', {
+      //   withCredentials: true
+      // });
+      const res = await axios.post('http://localhost:8000/login', { email, password }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         setError('');
         navigate('/');

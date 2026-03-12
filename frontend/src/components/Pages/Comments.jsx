@@ -66,22 +66,22 @@ const Comments = (props) => {
   return (
     <div data-bs-page="comments">
       <ul className="comments-list mt-4">
-        {comments.length > 0 ? (
+        {comments?.length > 0 ? (
           comments.map((c) => (
             <li className="comment-item" key={c.id}>
               <img
                 src={
-                  c.photo_profile
-                    ? `/profile_pictures/${c.photo_profile}`
+                  c.user.photo_profile
+                    ? `/profile_pictures/${c.user.photo_profile}`
                     : "/outils/pngs/useracc2.png"
                 }
-                alt={c.username}
+                alt={c.user.username}
                 className="comment-avatar"
               />
               <div className="comment-body d-flex justify-content-between align-items-start">
                 <div>
                   <h6 className="comment-author">
-                    {c.username}
+                    {c.user.username}
                     {c.updated_at && <small>{"Edited"}</small>}
                   </h6>
                   {isEditing !== c.id && (<div className="display-div">
@@ -102,7 +102,7 @@ const Comments = (props) => {
                       </div>
                     </div>
                   )}
-                  <span className="comment-date">{c.created_at}</span>
+                  <span className="comment-date">{c.created_at_human}</span>
                 </div>
                 <div className="postition-relative">
                   {isEditing === c.id && (<><button className="saveChange btn p-1" onClick={() => {
@@ -121,7 +121,7 @@ const Comments = (props) => {
                         <FaEllipsisV />
                       </Dropdown.Toggle>
                       <Dropdown.Menu className="drpMenu">
-                        {c.user_id === currUser ? (
+                        {c.user_id === currUser.id ? (
                           <>
                             <Dropdown.Item onClick={() => setIsEditing(c.id)}>
                               <FaPencil /> Edit
@@ -142,7 +142,7 @@ const Comments = (props) => {
                               <FaFlag /> Report
                             </Dropdown.Item>
                             {
-                              user.role === "admin" && (
+                              user?.role === "admin" && (
                                 <Dropdown.Item onClick={() => handleDelComment(c.id)}>
                                   <FaTrash /> Delete
                                 </Dropdown.Item>

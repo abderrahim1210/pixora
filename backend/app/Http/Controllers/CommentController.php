@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -28,7 +29,37 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'photo_id' => ['required','exists:photos,id'],
+            'comment' => ['required','string']
+        ]);
+
+        if ($request->comment === ""){
+            return response()->json([
+                'success' => false,
+                'message' => 'Comment can not be a empty'
+            ]);
+        }
+
+        $photo_id = $request->photo_id;
+        $content = $request->comment;
+        $user = Auth::user();
+        if (!$user){
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found'
+            ]);
+        }
+
+        $comment = new Comment();
+        $comment->photo_id = $photo_id;
+        $comment->content = $content;
+        $comment->user_id = $user->id;
+        $comment->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Comment added successfully'
+        ]);
     }
 
     /**

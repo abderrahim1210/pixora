@@ -23,4 +23,8 @@ class Photo extends Model
     public function likes(){
         return $this->hasMany(Like::class);
     }
+
+    public function getCreatedAtHumanAttribute(){
+        return $this->created_at->diffForHumans();
+    }
 }
