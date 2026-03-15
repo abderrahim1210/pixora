@@ -16,6 +16,7 @@ export const Login = () => {
       // });
       const res = await axios.post('http://localhost:8000/login', { email, password }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
+        localStorage.setItem('user',JSON.stringify());
         setError('');
         navigate('/');
       } else {

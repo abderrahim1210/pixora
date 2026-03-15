@@ -23,6 +23,8 @@ import { useModal } from "../context/ModalProvider";
 import { Truncate } from "./Truncate";
 import { notyf } from "../../assets/js/notyf";
 import PageSkeleton from './PageSkeleton';
+import { EmptyContent } from "./EmptyContent";
+import { FaPhotoFilm } from "react-icons/fa6";
 export const Home = () => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
@@ -32,7 +34,7 @@ export const Home = () => {
   const [activePhoto, setActivePhoto] = useState(null);
   const [comment, setComment] = useState("");
   const [follows, setFollows] = useState([]);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     axios
       .get("http://localhost:8000/homepage", { withCredentials: true })
@@ -57,23 +59,23 @@ export const Home = () => {
   //     })
   // }, []);
 
-  // useEffect(() => {
-  //   const updatedUsers = users.map((u) => ({
-  //     ...u,
-  //     followClasse: follows.includes(u.id) ? "active" : "",
-  //     followText: follows.includes(u.id) ? "Followed" : "Follow"
-  //   }));
-  //   if (search.trim() === "") {
-  //     setUsrSearched(updatedUsers);
-  //   } else {
-  //     setUsrSearched(
-  //       updatedUsers.filter((u) =>
-  //         u.username.toLowerCase().startsWith(search.toLowerCase())
+  useEffect(() => {
+    const updatedUsers = users.map((u) => ({
+      ...u,
+      followClasse: follows.includes(u.id) ? "active" : "",
+      followText: follows.includes(u.id) ? "Followed" : "Follow"
+    }));
+    if (search.trim() === "") {
+      setUsrSearched(updatedUsers);
+    } else {
+      setUsrSearched(
+        updatedUsers.filter((u) =>
+          u.username.toLowerCase().startsWith(search.toLowerCase())
 
-  //       )
-  //     );
-  //   }
-  // }, [search, users, follows]);
+        )
+      );
+    }
+  }, [search, users, follows]);
 
   const { show, openModal, closeModal } = useModal();
   const { user } = useAuth();
@@ -261,7 +263,7 @@ export const Home = () => {
                 </Modal.Body>
               </Modal>
             )}
-            {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos.map((p) => (
+            {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos.length > 0 ? photos.map((p) => (
               <div className="card" key={p.id}>
                 <Link
                   key={p.id}
@@ -274,7 +276,7 @@ export const Home = () => {
                     style={{ cursor: "pointer" }}
                     to={`/photo/${p.id}/${slugiFy(p.title)}`}
                   >
-                    <img src={`/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
+                    <img src={`http://localhost:8000/storage/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
                   </Link>
                   <div className="info">
                     <a
@@ -314,7 +316,7 @@ export const Home = () => {
                   </div>
                 </div>
               </div>
-            ))}
+            )) : <EmptyContent icon={<FaPhotoFilm className="faIcon" />} text={"No photos yet - try again later!"} />}
           </div>
         </div>
         <div
@@ -448,7 +450,7 @@ export const Home = () => {
                     <div className="mt-3 mb-3">
                       <img
                         src={`${u.photo_profile
-                          ? `profile_pictures/${u.photo_profile}`
+                          ? `/profile_pictures/${u.photo_profile}`
                           : "/outils/pngs/useracc2.png"
                           }`}
                         id="imgAcc"
@@ -458,9 +460,14 @@ export const Home = () => {
                       />
                     </div>
                     <div className="mt-3 mb-3">
-                      <a href="profil_preview.php?id=<?= $user['id']; ?>">
+                      {/* <a href="profil_preview.php?id=<?= $user['id']; ?>">
                         {u.username}
-                      </a>
+                      </a> */}
+                      <Truncate text={u.username} maxChars={20}>
+                        {({ text}) => (
+                          <a>{text}</a>
+                        )}
+                      </Truncate>
                     </div>
                     {u.id !== user?.id ? (
                       <div className="mt-3 mb-3">
@@ -470,7 +477,7 @@ export const Home = () => {
                           id="followButton"
                           onClick={() => addFollow(u.id)}
                         >
-                          {u.followText}
+                          Follow
                         </button>
                       </div>
                     ) : (

@@ -1,10 +1,12 @@
-http://127.0.0.1:8000<?php
+<?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\UploadController;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -27,5 +29,15 @@ Route::prefix('/comments')->group(function(){
 });
 
 Route::post('/add_like',[LikeController::class,'store']);
+
+Route::post('/upload',[UploadController::class,'uploadPhoto'])->middleware('auth:sanctum');
+
+Route::get('/get_categories',function(){
+    $categs = Category::all();
+    return response()->json([
+        'success' => true,
+        'categories' => $categs
+    ]);
+});
 
 require __DIR__.'/auth.php';

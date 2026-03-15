@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class PhotoController extends Controller
 {
-    public function show(Request $request)
+    public function show($id)
     {
-        $id = $request->id;
+        // $id = $request->id;
         $user = Auth::user();
         $photo = Photo::with(['user', 'category', 'comments.user'])->withCount('likes')->find($id);
         if (!$photo) {

@@ -171,14 +171,14 @@ export const Photo = (props) => {
                     <LightBox
                         open={open}
                         close={() => setOpen(false)}
-                        slides={[{ src: `/photos/${photo.filename}`, title: photo.title }]}
+                        slides={[{ src: `http://localhost:8000/storage/photos/${photo.filename}`, title: photo.title }]}
                         plugins={[Zoom]}
                         carousel={{
                             arrows: false
                         }}
                     />
                     <img
-                        src={`/photos/${photo.filename}.webp`}
+                        src={`http://localhost:8000/storage/photos/${photo.filename}`}
                         loading="lazy"
                         decoding="async" 
                         onContextMenu={(e) => e.preventDefault()}

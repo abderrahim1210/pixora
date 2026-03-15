@@ -13,7 +13,8 @@
     font-weight: bolder;
   }
 
-  .form-control {
+  .form-control,
+  .form-select {
     border: none;
     border-bottom: 3px solid black;
     background-color: #f0f0f0;
@@ -29,13 +30,29 @@
   //   border-bottom: 3px solid var(--special_color);
   // }
 
-  .form-control:focus {
+  .form-control:focus,
+  .form-select:focus {
     background-color: #f0f0f0;
     border-bottom: 3px solid var(--special_color);
   }
 
   .form-control::placeholder {
     opacity: calc(0.8);
+  }
+
+  .upload-box {
+    // color: black;
+    width: 100%;
+    flex: 1;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    align-content: center;
+    margin: auto;
+    text-transform: capitalize;
   }
 
   #upload {
@@ -76,31 +93,21 @@
   }
 
   .dv1 {
-    backdrop-filter: blur(30px);
+    // backdrop-filter: blur(30px);
     display: flex;
-    color: white;
+    // color: white;
     flex-direction: column;
     align-items: center;
   }
 
-  .upload-box {
-    color: black;
-    width: 100%;
-    flex: 1;
-    height: 80vh;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    margin: auto;
-    text-transform: capitalize;
-  }
 
   .upload_div {
     background-image: url("outils/jpg/photographer5.png");
   }
 
-  .form-control {
+
+  .form-control,
+  .form-select {
     border: none;
     border-radius: 0;
     border-bottom: 2px solid var(--special_dark-color);
@@ -157,7 +164,7 @@
     min-width: 280px;
   }
 
-  .card {
+  .cards .card {
     border-radius: 10px;
     display: flex;
     justify-content: center;
@@ -219,12 +226,16 @@
 
   .uploadCard {
     transition: all 0.3s ease;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
   }
 
   .uploadCard .card-body {
-    border: 2px solid black;
+    width: 100%;
+    border: 2px dashed black;
     border-radius: 10px;
-    width: 600px;
+    // padding: 40px;
   }
 
   .uploadCard i {
@@ -242,8 +253,25 @@
     height: auto;
   }
 
-  .photo_details .form-control {
+  .photo_details .form-control,
+  .photo_details .form-select {
     width: 600px;
+    max-width: 700px;
+  }
+
+  .progress {
+    width: 50%;
+    background: #eee;
+    border-radius: 10px;
+  }
+
+  .progress-bar {
+    height: 100%;
+    color: white;
+    font-weight: 600;
+    background: var(--special_color);
+    border-radius: 10px;
+    transition: width 0.3s ease;
   }
 
   @media only screen and (max-width: 768px) {
@@ -266,10 +294,228 @@
       font-size: 14px;
       padding: 10px;
     }
+
+    .progress {
+      width: 100%;
+    }
   }
 
   .next.disabled {
     background-color: #444 !important;
     transition: color 0.3s ease;
   }
+}
+
+.step-bar {
+  width: 100%;
+  max-width: 900px;
+  margin: 10px auto 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.step-content {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  white-space: nowrap;
+}
+
+.step-number,
+.stepDone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.step-number {
+  background: #e5e7eb;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.step-bar span {
+  color: gray;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.step-bar span:nth-child(n) {
+  margin-left: 4px;
+}
+
+.stepDone {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+  font-size: 12px;
+  padding: 5px;
+  border-radius: 50%;
+}
+
+.step-item.done .step-content {
+  background: rgba(34, 197, 94, 0.08);
+  color: #16a34a;
+}
+
+.step-item.active .step-content {
+  background: rgba(13, 110, 253, 0.1);
+  color: var(--special_color);
+}
+
+.step-item.active .step-number {
+  background: var(--special_color);
+  color: #fff;
+}
+
+.step-text {
+  line-height: 1;
+}
+
+.step-arrow {
+  color: #9ca3af;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .step-bar {
+    gap: 8px;
+  }
+
+  .step-item {
+    font-size: 13px;
+  }
+
+  .step-content {
+    padding: 6px 10px;
+  }
+
+  .step-number,
+  .stepDone {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
+
+  .step-arrow {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .step-bar {
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .step-item {
+    gap: 6px;
+  }
+
+  .step-content {
+    max-width: 100%;
+    padding: 6px 9px;
+  }
+
+  .step-text {
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .step-arrow {
+    display: none;
+  }
+}
+
+.welcome-card {
+  width: 420px;
+  margin-top: 50px;
+  text-align: center;
+  margin: auto;
+}
+
+.welcome-card .icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+}
+
+.welcome-card h2 {
+  font-size: 26px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #111;
+}
+
+.welcome-card p {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.publish-card {
+  max-width: 620px;
+  margin: 0 auto 24px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-color: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.publish-list {
+  margin: 0;
+  padding: 0;
+}
+
+.publish-list .list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 16px 20px;
+  border: none;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.publish-list .list-group-item:last-child {
+  border-bottom: none;
+}
+
+.publish-list .list-group-item span {
+  color: #6b7280;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.publish-list .list-group-item strong {
+  color: #111827;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: right;
+  max-width: 60%;
+  word-break: break-word;
 }

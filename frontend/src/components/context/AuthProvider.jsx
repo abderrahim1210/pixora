@@ -14,7 +14,13 @@ export const AuthProvider = ({ children }) => {
     const fetchUser = async () => {
       try {
         const user = await getUser();
-        setUser(user);
+        if (user){
+          setUser(user);
+          localStorage.getItem('user');
+        }else{
+          const savedUser = localStorage.getItem('user');
+          setUser(savedUser ? JSON.parse(savedUser) : null);
+        }
       } catch (err) {
         console.error(err);
         setUser(null);

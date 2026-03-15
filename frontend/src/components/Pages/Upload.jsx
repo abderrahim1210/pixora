@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthProvider";
@@ -7,12 +7,16 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
 
 import { notyf } from "../../assets/js/notyf";
+import { FaArrowRight, FaCheck, FaRocket } from "react-icons/fa";
+import { AiOutlineCamera } from "react-icons/ai";
+import { FiInfo } from "react-icons/fi";
 
 export const Upload = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const navigate = useNavigate();
-  const {user} = useAuth();
-  if (!user.id) return navigate('/login');
+  const { user } = useAuth();
+  // if (!user?.id) return navigate('/login');
+  const steps = ['Get started', 'License', 'Upload', 'Details', 'Publish'];
   const [photo, setPhoto] = useState({
     title: "",
     type: "",
@@ -26,10 +30,13 @@ export const Upload = () => {
     size: "",
     orientation: "",
     tags: "",
-    preview: null
+    preview: null,
+    visibility:""
   });
   const next = () => setStep((s) => s + 1);
   const prev = () => setStep((s) => s - 1);
+  const totalSteps = 4;
+  const progress = (step / totalSteps) * 100;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,26 +53,42 @@ export const Upload = () => {
         orientation: photo.orientation,
         tags: photo.tags,
         size: photo.size,
-        image: photo.preview
+        image: photo.preview,
+        visibility:photo.visibility
       }
       if (file) {
-        const res = await axios.post('http://localhost/Pixora/backend/api/photo_system.php', { photo_data: payload }, { withCredentials: true });
+        const res = await axios.post('http://localhost:8000/upload', { photo_data: payload }, { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
-          navigate(`/${user.username}/myphotos`,{state:{uploaded:true,message:res.data.message}});
+          navigate(`/${user.username}/myphotos`, { state: { uploaded: true, message: res.data.message } });
         } else {
           notyf.error(res.data.message);
         }
       }
     } catch (err) {
-      console.log(err);
+      console.log(err.response?.data);
+    }
+  }
+
+  function getColors(step) {
+    switch (step) {
+      case 1:
+        return "#ef4444";
+      case 2:
+        return "#f97316";
+      case 3:
+        return "#eab308";
+      case 4:
+        return "#22c55e";
+      default:
+        return "#ddd";
     }
   }
 
   return (
     <div data-bs-page="upload">
       <div className="dv1">
-        <div className="upload-box text-center">
-          <div className="mt-3 mb-3">
+        <div className="text-center">
+          <div className="mb-3">
             <img
               src="/outils/pngs/logo_styled.png"
               className="img-fluid mt-5"
@@ -74,15 +97,33 @@ export const Upload = () => {
               title="Welcome to Pixora."
             />
           </div>
+          <span className="mt-1 mb-1" style={{ fontWeight: '600' }}>Step {step} of 4</span>
+          <div className="container d-flex justify-content-center">
+            <div className="progress mb-3">
+              <div className="progress-bar" style={{ width: `${progress}%`, background: getColors(step) }}>
+                {progress} %
+              </div>
+            </div>
+          </div>
+          <div className="step-bar mt-2 mb-2">
+            {
+              steps.map((s, index) => (
+                <span key={index} className={`step-item ${index < step ? 'done' : ''} ${step === index ? 'active' : ''}`}>
+                  <span className="step-content">*{index < step ? (<FaCheck className="stepDone" />) : (<span className="step-number">{index + 1}</span>)} <span>{s}</span> {index < steps.length - 1 && (<FaArrowRight className="step-arrow" />)}</span>
+                </span>
+              ))
+            }
+          </div>
           <form
             onSubmit={handleSubmit}
             id="photosForm"
           >
             <div className="mb-3">
-              {step === 1 && <StepOne next={next} step={step} photo={photo} setPhoto={setPhoto} />}
+              {step === 0 && <StepZero next={next} step={step} />}
+              {step === 1 && <StepOne next={next} step={step} prev={prev} photo={photo} setPhoto={setPhoto} />}
               {step === 2 && <StepTwo next={next} prev={prev} step={step} photo={photo} setPhoto={setPhoto} />}
               {step === 3 && <StepThree next={next} prev={prev} step={step} photo={photo} setPhoto={setPhoto} />}
-              {step === 4 && <StepFour prev={prev} step={step} />}
+              {step === 4 && <StepFour prev={prev} step={step} photo={photo} user={user} />}
             </div>
           </form>
         </div>
@@ -90,7 +131,29 @@ export const Upload = () => {
     </div>
   );
 };
-function StepOne({ step, next, photo, setPhoto }) {
+function StepZero({ step, next }) {
+  return (
+    <section className={`step ${step === 0 ? "active" : ""}`} id="step0" data-step={0}>
+      <div className="welcome-card">
+        <div>
+          <AiOutlineCamera className="icon" />
+          <h2>Welcome to Pixora</h2>
+          <p>Upload your asset in minutes</p>
+        </div>
+      </div>
+      <div className="pagination">
+        <li className="page-item">
+          <button type="button" onClick={next} className={`page-link next`}>
+            Next
+          </button>
+        </li>
+      </div>
+    </section>
+  )
+}
+
+
+function StepOne({ step, next, prev, photo, setPhoto }) {
   return (
     <>
       <section className={`step ${step === 1 ? "active" : ""}`} id="step1" data-step={1}>
@@ -152,6 +215,11 @@ function StepOne({ step, next, photo, setPhoto }) {
         </div>
         <div className="pagination">
           <li className="page-item">
+            <button type="button" onClick={prev} className="page-link prev">
+              Prev
+            </button>
+          </li>
+          <li className="page-item">
             <button type="button" onClick={next} className={`page-link next ${photo.type === "" ? "disabled" : ""}`}>
               Next
             </button>
@@ -179,7 +247,7 @@ function StepTwo({ step, prev, next, photo, setPhoto }) {
 
           const info = {
             filename: file.name,
-            size: (file.size / 1024 / 1024).toFixed(2) + " MB",
+            size: (file.size / 1024 / 1024).toFixed(2),
             width: width,
             height: height,
             resolution: (width * height).toLocaleString(),
@@ -204,7 +272,7 @@ function StepTwo({ step, prev, next, photo, setPhoto }) {
   return (
     <>
       <section className={`step ${step === 2 ? "active" : ""}`} id="step2" data-step={2}>
-        <div className="container-fluid mt-2 mb-2">
+        <div className="container mt-2 mb-2">
           <div className="card uploadCard">
             <div className="card-body">
               <div>
@@ -286,43 +354,60 @@ function StepTwo({ step, prev, next, photo, setPhoto }) {
   );
 }
 function StepThree({ step, prev, next, photo, setPhoto }) {
+  const [categories, setCategories] = useState([]);
+  const url = 'http://localhost:8000/get_categories';
+  useEffect(() => {
+    try {
+      axios.get(url)
+        .then(res => {
+          if (res.data.success) {
+            setCategories(res.data.categories);
+          }
+        })
+    } catch (err) {
+      console.log(err.response?.data)
+    }
+  }, []);
   return (
     <>
       <section className={`step ${step === 3 ? "active" : ""}`} id="step3" data-step={3}>
-        <h2>Photo Details</h2>
-        <div className="photo_details">
-          <div className="form-floating">
-            <textarea
-              name="title"
-              id="titlePhoto"
-              className="form-control"
-              placeholder="Title of photo ..."
-              required
-              value={photo.title}
-              onChange={(e) => setPhoto({ ...photo, title: e.target.value })}
-            />
-            <label htmlFor="titlePhoto" className="form-label">
-              Title
-            </label>
-            <p id="titleErr" />
-          </div>
-          <div className="form-floating">
-            <textarea
-              name="description"
-              id="descriptionPhoto"
-              className="form-control"
-              placeholder="Description of photo ..."
-              required
-              value={photo.description}
-              onChange={(e) => setPhoto({ ...photo, description: e.target.value })}
-            />
-            <label htmlFor="descriptionPhoto" className="form-label">
-              Description
-            </label>
-            <p id="descriptionErr" />
-          </div>
-          <div className="form-floating">
-            <input
+        <h2 className="fw-semibold d-flex align-items-center justify-content-center text-dark gap-1"><FiInfo /> Photo Details</h2>
+        <div className="container">
+          <div className="photo_details d-flex flex-column align-items-center">
+            <div className="form-floating">
+              <input
+                name="title"
+                type="text"
+                id="titlePhoto"
+                className="form-control"
+                placeholder="Title of photo ..."
+                required
+                value={photo.title}
+                maxLength={100}
+                onChange={(e) => setPhoto({ ...photo, title: e.target.value })}
+              />
+              <label htmlFor="titlePhoto" className="form-label">
+                Title *
+              </label>
+              <p id="titleErr" />
+            </div>
+            <div className="form-floating">
+              <textarea
+                name="description"
+                id="descriptionPhoto"
+                className="form-control"
+                placeholder="Description of photo ..."
+                required
+                value={photo.description}
+                onChange={(e) => setPhoto({ ...photo, description: e.target.value })}
+              />
+              <label htmlFor="descriptionPhoto" className="form-label">
+                Description (optional)
+              </label>
+              <p id="descriptionErr" />
+            </div>
+            <div className="form-floating">
+              {/* <input
               name="categorie"
               type="text"
               className="form-control"
@@ -331,11 +416,58 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
               required
               value={photo.category}
               onChange={(e) => setPhoto({ ...photo, category: e.target.value })}
-            />
-            <label htmlFor="categoriePhoto" className="form-label">
-              Category
-            </label>
-            <p id="categorieErr" />
+            /> */}
+              <select name="categorie" value={photo.category} className="form-select" id="categoriePhoto" onChange={(e) => setPhoto({ ...photo, category: e.target.value })}>
+                <option>Select category</option>
+                {
+                  categories?.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))
+                }
+              </select>
+              <label htmlFor="categoriePhoto" className="form-label">
+                Category *
+              </label>
+              <p id="categorieErr" />
+            </div>
+            <div className="form-floating">
+              <textarea
+                name="tags"
+                id="tagsPhoto"
+                className="form-control"
+                placeholder="Tags of photo ..."
+                required
+                value={photo.tags}
+                onChange={(e) => setPhoto({ ...photo, tags: e.target.value })}
+              />
+              <label htmlFor="tagsPhoto" className="form-label">Tags (optional)</label>
+            </div>
+            <div className="form-floating">
+              <input
+                name="location"
+                id="locationPhoto"
+                className="form-control"
+                type="text"
+                placeholder="Location of photo ..."
+                required
+                value={photo.location}
+                onChange={(e) => setPhoto({ ...photo, location: e.target.value })}
+              />
+              <label htmlFor="locationPhoto" className="form-label">
+                Location (optional)
+              </label>
+              <p id="locationErr" />
+            </div>
+            <div className="form-floating">
+              <select name="visibility" value={photo.visibility} className="form-select" id="visibilityPhoto" onChange={(e) => setPhoto({ ...photo, visibility: e.target.value })}>
+                <option value="private">Private</option>
+                <option value="public">Public</option>
+              </select>
+              <label htmlFor="categoriePhoto" className="form-label">
+                Visibility
+              </label>
+              <p id="categorieErr" />
+            </div>
           </div>
         </div>
         <div className="pagination">
@@ -345,7 +477,7 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
             </button>
           </li>
           <li className="page-item">
-            <button type="button" onClick={next} className={`page-link next ${photo.title === "" || photo.description === "" || photo.category === "" ? "disabled" : ""}`}>
+            <button type="button" onClick={next} className={`page-link next ${photo.title === "" || photo.category === "" ? "disabled" : ""}`}>
               Next
             </button>
           </li>
@@ -354,20 +486,75 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
     </>
   );
 }
-function StepFour({ step, prev }) {
+function StepFour({ step, prev, photo, user }) {
   return (
     <>
       <section className={`step ${step === 4 ? "active" : ""}`} id="step4" data-step={4}>
+        <h3 className="fw-bold">Your file is ready to be published <FaRocket /></h3>
+        <p>Review the information below, then click Publish to make it available.</p>
+        <div className="publish-card">
+          <div className="details">
+            <ul className="list-group publish-list">
+              <li className="list-group-item">
+                <span>Name</span>
+                <strong>{photo.filename}</strong>
+              </li>
+              <li className="list-group-item">
+                <span>Size</span>
+                <strong>{photo.size} MB</strong>
+              </li>
+              {
+                photo.title && (<li className="list-group-item">
+                  <span>Title</span>
+                  <strong>{photo.title}</strong>
+                </li>)
+              }
+              {
+                photo.description && (<li className="list-group-item">
+                  <span>Description</span>
+                  <strong>{photo.description}</strong>
+                </li>)
+              }
+              {
+                photo.type && (<li className="list-group-item">
+                  <span>Type</span>
+                  <strong>{photo.type}</strong>
+                </li>)
+              }
+              {
+                photo.category && (<li className="list-group-item">
+                  <span>Category</span>
+                  <strong>{photo.category}</strong>
+                </li>)
+              }
+              {
+                photo.tags && (<li className="list-group-item">
+                  <span>Tags</span>
+                  <strong>{photo.tags}</strong>
+                </li>)
+              }
+              <li className="list-group-item">
+                <span>By</span>
+                <strong>{user.username}</strong>
+              </li>
+            </ul>
+          </div>
+        </div>
         <div className="pagination">
           <li className="page-item">
             <button type="button" onClick={prev} className="page-link prev">
               Prev
             </button>
           </li>
+          <li className="page-item">
+            <button type="submit" className="page-link prev">
+              Publish
+            </button>
+          </li>
         </div>
-        <button type="submit" className="btn" id="uploadButton">
+        {/* <button type="submit" className="btn" id="uploadButton">
           Upload
-        </button>
+        </button> */}
       </section>
     </>
   );

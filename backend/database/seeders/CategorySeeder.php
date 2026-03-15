@@ -13,6 +13,50 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::factory(10)->create();
+        // Category::factory(10)->create();
+        Category::insert([
+            [
+                'name' => 'Nature'
+            ],
+            [
+                'name' => 'Landscape'
+            ],
+            [
+                'name' => 'Portrait'
+            ],
+            [
+                'name' => 'Street photography'
+            ],
+            [
+                'name' => 'Architecture'
+            ],
+            [
+                'name' => 'Travel'
+            ],
+            [
+                'name' => 'Wildlife'
+            ],
+            [
+                'name' => 'Food'
+            ],
+            [
+                'name' => 'Fashion'
+            ],
+            [
+                'name' => 'Sports'
+            ],
+            [
+                'name' => 'Macro'
+            ],
+            [
+                'name' => 'Black & White'
+            ],
+            [
+                'name' => 'Urban'
+            ],
+            [
+                'name' => 'Abstract'
+            ],
+        ]);
     }
 }
