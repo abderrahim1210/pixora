@@ -263,7 +263,7 @@ export const Home = () => {
                 </Modal.Body>
               </Modal>
             )}
-            {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos.length > 0 ? photos.map((p) => (
+            {!loading ? Array(4).fill().map((_, i) => <PageSkeleton key={i} />) : photos.length > 0 ? photos.map((p) => (
               <div className="card" key={p.id}>
                 <Link
                   key={p.id}

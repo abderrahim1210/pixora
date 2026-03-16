@@ -8,9 +8,9 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 // import 'react-modal-sheet/dist/index.css'
 createRoot(document.getElementById("root")).render(
-  <>
+  <StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </>
+  </StrictMode>
 );

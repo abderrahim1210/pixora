@@ -233,7 +233,7 @@
   width: 300px;
 }
 
-.skeleton-image {
+.skeleton-image-second {
   width: 100%;
   height: 200px;
   background-color: #ddd;
@@ -243,7 +243,7 @@
   overflow: hidden;
 }
 
-.skeleton-text {
+.skeleton-text-second {
   width: 60%;
   height: 15px;
   background: #ddd;
@@ -252,8 +252,8 @@
   overflow: hidden;
 }
 
-.skeleton-image::after,
-.skeleton-text::after {
+.skeleton-image-second::after,
+.skeleton-text-second::after {
   content: "";
   position: absolute;
   top: 0;
@@ -355,4 +355,77 @@
 
 .badge{
   background-color: var(--special_color);
+}
+
+.spinner-container{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white;
+  width: 100%;
+  // height: 100%;
+  // z-index: 9999;
+  color: rgb(19, 94, 196);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+}
+
+.spinner{
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid var(--special_color);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+.camera-loader{
+  position: relative;
+  width: 55px;
+  height: 55px;
+  animation: rotateLens 1.8s linear infinite;
+}
+
+.camera-loader div{
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background: var(--special_color);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  transform-origin: bottom center;
+  left: 25%;
+  top: 0;
+  opacity: 0.9;
+}
+
+.camera-loader div:nth-child(1) { transform: rotate(0deg) translateY(2px); }
+.camera-loader div:nth-child(2) { transform: rotate(60deg) translateY(2px); }
+.camera-loader div:nth-child(3) { transform: rotate(120deg) translateY(2px); }
+.camera-loader div:nth-child(4) { transform: rotate(180deg) translateY(2px); }
+.camera-loader div:nth-child(5) { transform: rotate(240deg) translateY(2px); }
+.camera-loader div:nth-child(6) { transform: rotate(300deg) translateY(2px); }
+
+@keyframes rotateLens {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-text{
+  margin-top: 12px;
+  font-size: 14px;
+  color: #555;
+}
+
+@keyframes spin{
+  0%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
 }

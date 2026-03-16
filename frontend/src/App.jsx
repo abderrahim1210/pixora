@@ -5,6 +5,7 @@ import store from "./components/Store/store";
 import React, { Suspense, useEffect } from 'react';
 import FullScreenLoader from './components/Pages/FullScreenLoader';
 import axios from 'axios';
+import Spinner from './components/Pages/Spinner';
 const AppRoutes = React.lazy(() => import('./components/Pages/routes/AppRoutes'));
 function App() {
   useEffect(() => {
@@ -16,7 +17,7 @@ function App() {
     <Provider store={store}>
       <AuthProvider>
         <ModalProvider>
-          <Suspense fallback={<FullScreenLoader />}>
+          <Suspense fallback={<Spinner />}>
             <AppRoutes />
           </Suspense>
         </ModalProvider>
