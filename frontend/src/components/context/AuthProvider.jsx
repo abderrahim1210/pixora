@@ -16,10 +16,15 @@ export const AuthProvider = ({ children }) => {
         const user = await getUser();
         if (user){
           setUser(user);
-          localStorage.getItem('user');
+          localStorage.setItem('user',JSON.stringify(user));
+
         }else{
           const savedUser = localStorage.getItem('user');
-          setUser(savedUser ? JSON.parse(savedUser) : null);
+          if (savedUser && savedUser !== 'undefined' && savedUser !== 'null'){
+            setUser(JSON.parse(savedUser));
+          }else{
+            setUser(null);
+          }
         }
       } catch (err) {
         console.error(err);

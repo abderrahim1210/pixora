@@ -13,7 +13,7 @@ class PhotoController extends Controller
     {
         // $id = $request->id;
         $user = Auth::user();
-        $photo = Photo::with(['user', 'category', 'comments.user'])->withCount('likes')->find($id);
+        $photo = Photo::with(['user', 'category', 'comments.user','likes'])->withCount('likes')->find($id);
         if (!$photo) {
             return response()->json([
                 'success' => false,
@@ -23,7 +23,7 @@ class PhotoController extends Controller
 
         $photo->created_at_human = $photo->created_at->diffForHumans();
         // $photo->isLiked = $photo->likes->where('user_id',$user->id)->count() > 0;
-        $photo->isLiked = $photo->likes->contains('user_id', $user->id);
+        $photo->isLiked = $user ? $photo->likes->contains('user_id', $user->id) : false;
         return response()->json([
             'success' => true,
             'photo' => $photo,
