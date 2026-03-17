@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Navbar } from "./Navbar";
-import { FiCalendar, FiCommand, FiHeart, FiImage, FiTag, FiUser } from "react-icons/fi";
-import { FaCalendar, FaCheck, FaCheckCircle, FaCircle, FaClock, FaComment, FaCommentAlt, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaShare, FaSync, FaTag, FaUser } from "react-icons/fa";
-import { FaLocationDot, FaPencil, FaPhotoFilm, FaX } from "react-icons/fa6";
+import { FiCopy, FiFacebook, FiHeart, FiImage, FiInstagram, FiTwitter } from "react-icons/fi";
+import { FaCalendar, FaCheck, FaCheckCircle, FaClock, FaComment, FaEye, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaShare, FaSync, FaTag, FaUser, FaWhatsapp } from "react-icons/fa";
+import { FaLocationDot, FaPencil, FaX } from "react-icons/fa6";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { initEdit, toggleEdit, updateField } from "../Store/photoSlice";
@@ -17,11 +17,10 @@ import { Truncate } from "./Truncate";
 import { useAuth } from "../context/AuthProvider";
 import { notyf } from '../../assets/js/notyf';
 import Swal from "sweetalert2";
-// import {Select} from "@headlessui/react";
 import AsyncSelect from "react-select/async";
-// import { Spinner } from "react-bootstrap";
-import Spinner from "./Spinner";
 import PageSkeleton from "./PageSkeleton";
+import { useModal } from "../context/ModalProvider";
+import { Modal } from "react-bootstrap";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -30,18 +29,22 @@ export const Photo = (props) => {
     const [likes, setLikes] = useState("");
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
-    const [userId, setUserID] = useState();
+    // const [userId, setUserID] = useState();
     const [open, setOpen] = useState(false);
     const [cities, setCities] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
     const [loading, setLoading] = useState(true);
     const { user } = useAuth();
-    const [liked, setLiked] = useState(false);
-    const isUser = user?.username === photo.username;
+    const [liked, setLiked] = useState(photo?.isLiked);
+    const isUser = user?.id === photo?.user_id;
     const { fields, isEdit, dirty } = useSelector(state => state.photo);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const url = `http://localhost:8000/photo/${id}`;
+    const photoUrl = window.location.href;
+    const encodeUrl = encodeURIComponent(photoUrl);
+    const { show, openModal, closeModal } = useModal();
+    const addComment = useRef(null);
     useEffect(() => {
         axios.get(url, { params: { id }, withCredentials: true })
             .then((res) => {
@@ -51,8 +54,7 @@ export const Photo = (props) => {
                     setCategory(res.data.category);
                     setLikes(res.data.likes);
                     setComments(res.data.comments);
-                    setUserID(res.data.currUser);
-                    // setCategories(res.data.categories);
+                    // setUserID(res.data.currUser);
                     setLoading(false);
                 }
             }).catch(err => {
@@ -93,7 +95,8 @@ export const Photo = (props) => {
                 title: photo.title,
                 description: photo.description,
                 category_id: photo.category_id,
-                location: photo.location
+                location: photo.location,
+                visibility: photo.visibility
             }));
         }
     }, [photo, category]);
@@ -123,7 +126,7 @@ export const Photo = (props) => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await axios.delete('http://localhost/Pixora/backend/api/photo_system.php', { withCredentials: true, data: { photo_id: id } });
+                    const res = await axios.delete(url, { withCredentials: true, withXSRFToken: true });
                     console.log(res.data);
                     if (res.data.success) {
                         notyf.success(res.data.message);
@@ -131,30 +134,30 @@ export const Photo = (props) => {
                         notyf.error(res.data.message);
                     }
                 } catch (err) {
-                    console.log(err);
-                } finally {
-                    return navigate(`/${user.username}/myprofile`);
-                }
+                    console.log(err.response?.data);
+                }    // }finally {
+                //     return navigate(`/${user.username}/myprofile`);
+                // }
             }
         })
     }
 
-    // useEffect(() => {
-    //     try {
-    //         axios.get('/json/countries+cities.json')
-    //             .then(res => {
-    //                 const allCities = [];
-    //                 res.data.forEach(country => {
-    //                     country.cities.forEach(city => {
-    //                         allCities.push({ value: city, label: city });
-    //                     });
-    //                 });
-    //                 setCities(allCities);
-    //             });
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // }, []);
+    useEffect(() => {
+        try {
+            axios.get('/json/countries+cities.json')
+                .then(res => {
+                    const allCities = [];
+                    res.data.forEach(country => {
+                        country.cities.forEach(city => {
+                            allCities.push({ value: city, label: city });
+                        });
+                    });
+                    setCities(allCities);
+                });
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);
     const loadCities = (inputValue, callback) => {
         if (!inputValue) {
             callback([]);
@@ -167,7 +170,7 @@ export const Photo = (props) => {
     }
     const handleEdit = async (data) => {
         try {
-            const res = await axios.post('http://localhost/Pixora/backend/api/photoPreview.php', { photo_id: photo.photo_id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id }, { withCredentials: true });
+            const res = await axios.post(`http://localhost:8000/photo/${id}`, { photo_id: photo.photo_id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id, visibility: fields?.visibility }, { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 console.log(res.data);
                 dispatch(initEdit(data))
@@ -177,12 +180,60 @@ export const Photo = (props) => {
                 notyf.error(res.data.message);
             }
         } catch (err) {
-            console.error(err);
+            console.error(err.response?.data);
         }
+    }
+
+    const copyLink = () => {
+        navigator.clipboard.writeText(photoUrl).then(() => {
+            notyf.success('Link copied !');
+        })
+        .catch((err) => {
+            notyf.error('Failed to copy link');
+            console.error(err);
+        })
+    }
+
+    const handleAddComment = () => {
+        addComment.current?.scrollIntoView({behavior:'smooth',block:'center'});
+        addComment.current?.focus();
     }
     return (
         <div data-bs-page="photo">
             <Navbar data={props.data} />
+            {
+                show === "share" && (<Modal show={show} onHide={closeModal} className="bottom-sheet-wrapper" dialogClassName="bottom-sheet-modal">
+                    <Modal.Header>
+                        <Modal.Body className="p-1">
+                            <div>
+                                <h3 className="share-title">Share this photo with your friends !</h3>
+                                <div className="share-grid">
+                                    <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeUrl}`} className="share-btn facebook" target="_blank" rel="noopener noreferrer">
+                                        <FiFacebook className="icon" />
+                                        <span>Facebook</span>
+                                    </a>
+                                    <a href={`https://www.instagram.com`} className="share-btn instagram" target="_blank" rel="noopener noreferrer">
+                                        <FiInstagram className="icon" />
+                                        <span>Instagram</span>
+                                    </a>
+                                    <a href={`https://www.twitter.com/intent/tweet?url=${encodeUrl}&text=Check+this+photo`} className="share-btn twitter" target="_blank" rel="noopener noreferrer">
+                                        <FiTwitter className="icon" />
+                                        <span>Twitter</span>
+                                    </a>
+                                    <a href={`https://api.whatsapp.com/send?text=${encodeUrl}`} className="share-btn whatsapp" target="_blank" rel="noopener noreferrer">
+                                        <FaWhatsapp className="icon" />
+                                        <span>Whatsapp</span>
+                                    </a>
+                                    <a className="share-btn copy" onClick={() => copyLink()}>
+                                        <FiCopy className="icon" />
+                                        <span>Copy</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </Modal.Body>
+                    </Modal.Header>
+                </Modal>)
+            }
             {
                 loading ? <PageSkeleton page='photo' /> :
                     <div className="container-fluid photo-page mt-3 mb-3">
@@ -214,18 +265,17 @@ export const Photo = (props) => {
                         <div className="details-panel">
                             <div className="socialActions">
                                 <div>
-                                    {/* <input type="hidden" name="photo_id" defaultValue={photo.id} /> */}
                                     <a className={`likeButton ${liked || photo.isLiked ? 'active' : ''}`} style={{ cursor: "pointer" }} onClick={() => handleLike(photo.id)} data-photo-id={photo.id}>
                                         {liked || photo.isLiked ? <FaHeart size={20} /> : <FiHeart size={20} />}
                                     </a>
                                 </div>
                                 <div>
-                                    <a id="commentButton" style={{ cursor: "pointer" }}>
+                                    <a id="commentButton" onClick={handleAddComment} style={{ cursor: "pointer" }}>
                                         <FaComment size={20} />
                                     </a>
                                 </div>
                                 <div>
-                                    <a href="#" id="shareButton">
+                                    <a style={{cursor:"pointer"}} id="shareButton" onClick={() => openModal('share')}>
                                         <FaShare size={20} />
                                     </a>
                                 </div>
@@ -316,7 +366,7 @@ export const Photo = (props) => {
                                         />
                                     </div>) : (<p>{photo.location}</p>)}
                                     <div className="d-flex justify-content-end">
-                                        {user?.username === photo.username && (<button className="btn p-0 pencil-item" onClick={() => dispatch(toggleEdit("location"))}>{!isEdit.location ? (<FaPencil />) : (<FaCheck />)}</button>)}
+                                        {user?.id === photo.user_id && (<button className="btn p-0 pencil-item" onClick={() => dispatch(toggleEdit("location"))}>{!isEdit.location ? (<FaPencil />) : (<FaCheck />)}</button>)}
                                     </div>
                                     {/* <Select
                                 options={cities}
@@ -330,10 +380,13 @@ export const Photo = (props) => {
                             /> */}
                                 </li>
                                 <li>
-                                    <FaPhotoFilm />
-                                    <p>...</p>
+                                    <FaEye />
+                                    {
+                                        isEdit.visibility ? (<select className="form-select mb-2" value={fields.visibility} onChange={(e) => dispatch(updateField({ field: "visibility", value: e.target.value }))}><option value="private">Private</option><option value="public">Public</option></select>) : (<p>{photo.visibility ?? "..."}</p>)
+                                    }
+                                    {isUser && (<button className="btn p-0 pencil-item" onClick={() => dispatch(toggleEdit("visibility"))}>{!isEdit.visibility ? (<FaPencil />) : (<FaCheck />)}</button>)}
                                 </li>
-                                {user?.username === photo.username && (<div className="d-flex justify-content-end align-items-center flex-column mb-2">
+                                {user?.id === photo.user_id && (<div className="d-flex justify-content-end align-items-center flex-column mb-2">
                                     <button
                                         type="reset"
                                         className="btn tooltip-tab d-none"
@@ -369,6 +422,7 @@ export const Photo = (props) => {
                                     <div className="input-group">
                                         <textarea
                                             id="up_comment"
+                                            ref={addComment}
                                             name="comment_content"
                                             placeholder="Type your comment ..."
                                             className="form-control"
@@ -387,7 +441,7 @@ export const Photo = (props) => {
                                         </button>
                                     </div>
                                 </div>
-                                <Comments data={comments} photoId={photo.photo_id} currUser={userId} />
+                                <Comments data={comments} photoId={photo.photo_id} currUser={user} />
                             </div>
                         </div>
                     </div>

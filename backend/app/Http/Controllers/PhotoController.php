@@ -6,14 +6,14 @@ use App\Models\Category;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class PhotoController extends Controller
 {
     public function show($id)
     {
-        // $id = $request->id;
         $user = Auth::user();
-        $photo = Photo::with(['user', 'category', 'comments.user','likes'])->withCount('likes')->find($id);
+        $photo = Photo::with(['user', 'category', 'comments.user', 'likes'])->withCount('likes')->find($id);
         if (!$photo) {
             return response()->json([
                 'success' => false,
@@ -22,23 +22,26 @@ class PhotoController extends Controller
         }
 
         $photo->created_at_human = $photo->created_at->diffForHumans();
-        // $photo->isLiked = $photo->likes->where('user_id',$user->id)->count() > 0;
         $photo->isLiked = $user ? $photo->likes->contains('user_id', $user->id) : false;
         return response()->json([
             'success' => true,
             'photo' => $photo,
             'likes' => $photo->likes_count,
             'currUser' => $user,
-            // 'isLiked' => $isLiked,
             'category' => $photo->category,
             'categories' => [],
             'comments' => $photo->comments,
         ]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $id = $request->id;
+        $title = $request->title ?? null;
+        $description = $request->description ?? null;
+        $location = $request->location ?? null;
+        $category = $request->category_id ?? null;
+        $visibility = $request->visibility ?? null;
+
         $photo = Photo::find($id);
 
         if (!$photo) {
@@ -47,5 +50,80 @@ class PhotoController extends Controller
                 'message' => 'Photo not found'
             ]);
         }
+
+        if (($title !== null && $title === $photo->title) &&
+            ($description !== null && $description === $photo->description) &&
+            ($location !== null && $location === $photo->location) &&
+            ($category !== null && $category === $photo->category_id && $visibility === $photo->visibility)
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No changes made'
+            ]);
+        }
+
+        if ($category !== null){
+            $photo->category_id = $category;
+        }
+
+        if ($description !== null){
+            $photo->description = $description;
+        }
+
+        if ($title !== null){
+            $photo->title = $title;
+        }
+
+        if ($location !== null){
+            $photo->location = $location;
+        }
+
+        if ($visibility !== null){
+            $photo->visibility  = $visibility;
+        }
+
+        $photo->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Photo updated successfully'
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $photo = Photo::with(['likes','comments'])->find($id);
+
+        if (!$photo){
+            return response()->json([
+                'success' => false,
+                'message' => 'Photo not found'
+            ]);
+        }
+
+        // $check = Photo::with(['user'])->find($id);
+        $user = Auth::user();
+        if ($photo->user_id !== $user->id){
+            return response()->json([
+                'success' => false,
+                'message' => "You don't have a permission for delete this photo"
+            ]);
+        }
+
+        $photo_path = public_path('photos/' . $photo->filename);
+        if (File::exists($photo_path)){
+            File::delete($photo_path);
+        }
+
+        $photo->likes()->delete();
+
+        $photo->comments()->delete();
+
+        $photo->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Photo deleted successfully'
+        ]);
     }
 }

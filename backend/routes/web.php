@@ -19,6 +19,8 @@ Route::get('/user',function(){
 });
 
 Route::get('/photo/{id}',[PhotoController::class,'show'])->name('photo');
+Route::post('/photo/{id}',[PhotoController::class,'update'])->middleware('auth:sanctum');
+Route::delete('/photo/{id}',[PhotoController::class,'destroy'])->middleware('auth:sanctum');
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 

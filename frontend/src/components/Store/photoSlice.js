@@ -4,7 +4,8 @@ const initialState = {
         title: "",
         description: "",
         category_id: "",
-        location: ""
+        location: "",
+        visibility: "",
     },
     dirty: false,
     isEdit: {}
