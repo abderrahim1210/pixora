@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   FaCamera,
   FaCameraRetro,
+  FaCheck,
   FaCog,
   FaComment,
   FaHeart,
@@ -14,26 +15,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import axios from "axios";
-import { Modal } from "react-bootstrap";
 import { setFavicon } from "../utils/SetFavicon";
 import { MdCategory, MdRecommend } from "react-icons/md";
-import Comments from "./Comments";
 import { useAuth } from '../context/AuthProvider'
-import { useModal } from "../context/ModalProvider";
 import { Truncate } from "./Truncate";
 import { notyf } from "../../assets/js/notyf";
 import PageSkeleton from './PageSkeleton';
 import { EmptyContent } from "./EmptyContent";
 import { FaPhotoFilm } from "react-icons/fa6";
-import ModalTemplate from "./ModalTemplate";
 export const Home = () => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
   const [users, setUsers] = useState([]);
   const [usrSearched, setUsrSearched] = useState([]);
   const [search, setSearch] = useState("");
-  const [activePhoto, setActivePhoto] = useState(null);
-  const [comment, setComment] = useState("");
   const [follows, setFollows] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -50,15 +45,15 @@ export const Home = () => {
     setFavicon("/outils/favicons/favicon.jpg");
   }, []);
 
-  // const followURL = "http://localhost/Pixora/backend/api/follows.php";
-  // useEffect(() => {
-  //   axios.get(followURL, { withCredentials: true })
-  //     .then(res => {
-  //       const usersArray = res.data.users;
-  //       const ids = usersArray.map((f) => f.id);
-  //       setFollows(ids);
-  //     })
-  // }, []);
+  const followURL = "http://localhost:8000/follows";
+  useEffect(() => {
+    axios.get(followURL, { withCredentials: true })
+      .then(res => {
+        const usersArray = res.data.users;
+        const ids = usersArray.map((f) => f.id);
+        setFollows(ids);
+      })
+  }, []);
 
   useEffect(() => {
     const updatedUsers = users.map((u) => ({
@@ -78,7 +73,6 @@ export const Home = () => {
     }
   }, [search, users, follows]);
 
-  const { show, openModal, closeModal } = useModal();
   const { user } = useAuth();
 
   function slugiFy(text) {
@@ -86,8 +80,18 @@ export const Home = () => {
   }
 
   const addFollow = async (id) => {
+    let previousFollows;
+    setFollows((prev) => {
+      previousFollows = prev;
+
+      if (prev.includes(id)) {
+        return prev.filter(f => f !== id);
+      } else {
+        return [...prev, id];
+      }
+    })
     try {
-      const res = await axios.post(followURL, { followerID: id }, { withCredentials: true });
+      const res = await axios.post(followURL, { followerID: id }, { withCredentials: true, withXSRFToken: true });
       if (res.data.status === "followed") {
         setFollows(prev => [...prev, id]);
         notyf.success("You are followed this user");
@@ -96,37 +100,35 @@ export const Home = () => {
         notyf.error("You are unfollowed this user");
       }
     } catch (err) {
-      console.log(err);
+      setFollows(previousFollows);
+      console.log(err.response?.data);
     }
   }
 
-  const handleComment = async (id) => {
-    try {
-      await axios.post('http://localhost/Pixora/backend/api/comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   const handleLike = async (photoid) => {
+    let previousPhotos;
+    setPhotos((prevPhotos) => {
+      previousPhotos = prevPhotos
+      return prevPhotos.map((p) => p.id === photoid ? { ...p, isLiked: !p.isLiked, totalLikes: p.isLiked ? p.totalLikes - 1 : p.totalLikes + 1 } : p);
+    });
     try {
-      const res = await axios.post("http://localhost/Pixora/backend/api/add_like.php", { photo_id: photoid }, { withCredentials: true });
+      // setLiked(!liked);
+      const res = await axios.post("http://localhost:8000/add_like", { photo_id: photoid }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         setPhotos((prevPhotos) =>
           prevPhotos.map((p) =>
-            p.id === photoid ? { ...p, isLiked: !p.isLiked, totalLikes: res.data.totalLikes } : p
+            p.id === photoid ? { ...p, totalLikes: res.data.totalLikes } : p
           )
         );
       } else {
-        navigate('/login', { state: { liked: true, message: "You have to logged first for add like" } });
+        throw new Error('Not authorized');
       }
     } catch (err) {
-      console.log(err);
+      setPhotos(previousPhotos);
+      navigate('/login', { state: { liked: true, message: "You have to logged first for add like" } });
+      console.log(err.response?.data);
     }
-  }
-  const handleComments = (p) => {
-    setActivePhoto(p);
-    openModal("comments");
   }
   return (
     <div data-bs-page="pixora">
@@ -165,6 +167,11 @@ export const Home = () => {
             </div>
           </div>
         </div>
+        <figure>
+            <figcaption>
+              Photo By Eddaoudi Aya
+            </figcaption>
+          </figure>
         <br />
       </div>
       <div className="sticky-top">
@@ -222,51 +229,8 @@ export const Home = () => {
           className="container-fluid tab-pane fade show active mt-3 mb-3"
           id="foryou"
         >
-          <ModalTemplate show={show} closeModal={closeModal}>
-
-          </ModalTemplate>
           <h1 className="text-center fw-bold">For you</h1>
           <div className="photos">
-            {activePhoto && (
-              <Modal show={show === "comments"} onHide={closeModal} className="bottom-sheet-wrapper modal-comments" dialogClassName="bottom-sheet-modal">
-                {/* <Modal.Header closeButton>
-                  <Modal.Title>Comments</Modal.Title>
-                </Modal.Header> */}
-                <Modal.Body className="modalBody">
-                  <h3>Comments</h3>
-                  <div
-                    className="comment-form"
-                  >
-                    <div className="input-group">
-                      <textarea
-                        id="up_comment"
-                        name="comment_content"
-                        placeholder="Type your comment ..."
-                        className="form-control"
-                        rows={1}
-                        cols={1}
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                      />
-                      <input type="hidden" name="photo_id" defaultValue="" />
-                      <button
-                        className={`btn btn-primary ${comment === "" ? "disabled" : ""}`}
-                        onClick={() => handleComment(activePhoto.id)}
-                        id="postBtn"
-                      >
-                        Post
-                      </button>
-                    </div>
-                  </div>
-                  <hr />
-                  <div className="mt-3">
-                    <h4 className="fw-bold">All comments</h4>
-                    {/* <Comments data={comments} photoId={photo.photo_id} currUser={userId} /> */}
-                    <Comments data={activePhoto.comments} photoId={activePhoto.id} currUser={user} />
-                  </div>
-                </Modal.Body>
-              </Modal>
-            )}
             {!loading ? Array(4).fill().map((_, i) => <PageSkeleton key={i} />) : photos.length > 0 ? photos.map((p) => (
               <div className="card" key={p.id}>
                 <Link
@@ -287,7 +251,6 @@ export const Home = () => {
                       id="caption"
                     >
                       <div>
-                        {/* <h5>{p.title}</h5> */}
                         <Truncate text={p.title} maxChars={25}>
                           {({ text }) => (
                             <h5>{text}</h5>
@@ -303,19 +266,24 @@ export const Home = () => {
                           defaultValue={p.id}
                         />
                       </Link>
-                      <a
-                        className={`likeButton ${(user && user?.id && p.isLiked) ? 'active' : ''}`}
-                        data-photo-id={p.id}
-                        onClick={() => handleLike(p.id)}
-                      >
-                        <FaHeart />{" "}
-                        <span id={`likes_count-${p.id}`}>
-                          {p.totalLikes}
-                        </span>
-                      </a>
-                      <a style={{ cursor: "pointer" }} onClick={() => handleComments(p)}>
-                        <FaComment />
-                      </a>
+                      <div>
+                        <a
+                          className={`likeButton ${(user && p.isLiked) ? 'active' : ''}`}
+                          data-photo-id={p.id}
+                          onClick={() => handleLike(p.id)}
+                        >
+                          <FaHeart />{" "}
+                          <span id={`likes_count-${p.id}`}>
+                            {p.totalLikes}
+                          </span>
+                        </a>
+                        <a style={{ cursor: "pointer" }}>
+                          <FaComment />{" "}
+                          <span>
+                            {p.comments.length}
+                          </span>
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -468,7 +436,7 @@ export const Home = () => {
                         {u.username}
                       </a> */}
                       <Truncate text={u.username} maxChars={20}>
-                        {({ text}) => (
+                        {({ text }) => (
                           <a>{text}</a>
                         )}
                       </Truncate>
@@ -481,7 +449,7 @@ export const Home = () => {
                           id="followButton"
                           onClick={() => addFollow(u.id)}
                         >
-                          Follow
+                          {u.followText}
                         </button>
                       </div>
                     ) : (

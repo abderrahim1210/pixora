@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PhotoController;
@@ -35,6 +36,8 @@ Route::prefix('/comments')->group(function(){
 Route::post('/add_like',[LikeController::class,'store']);
 
 Route::post('/upload',[UploadController::class,'uploadPhoto'])->middleware('auth:sanctum');
+
+Route::resource('/follows',FollowController::class);
 
 Route::get('/get_categories',function(){
     $categs = Category::all();
