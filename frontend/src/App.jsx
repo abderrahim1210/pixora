@@ -13,15 +13,17 @@ function App() {
     });
   }, []);
   return (
-    <Provider store={store}>
-      <AuthProvider>
-        <ModalProvider>
-          <Suspense fallback={<Spinner />}>
-            <AppRoutes />
-          </Suspense>
-        </ModalProvider>
-      </AuthProvider>
-    </Provider>
+    <>
+      <Provider store={store}>
+        <AuthProvider>
+          <ModalProvider>
+            <Suspense fallback={<Spinner />}>
+              <AppRoutes />
+            </Suspense>
+          </ModalProvider>
+        </AuthProvider>
+      </Provider>
+    </>
   )
 }
 

@@ -22,6 +22,9 @@ class PhotoController extends Controller
         }
 
         $photo->created_at_human = $photo->created_at->diffForHumans();
+        $photo->comments->each(function($comment){
+            $comment->created_at_human = $comment->created_at->diffForHumans();
+        });
         $photo->isLiked = $user ? $photo->likes->contains('user_id', $user->id) : false;
         return response()->json([
             'success' => true,
@@ -41,6 +44,7 @@ class PhotoController extends Controller
         $location = $request->location ?? null;
         $category = $request->category_id ?? null;
         $visibility = $request->visibility ?? null;
+        $tags = $request->tags ?? null;
 
         $photo = Photo::find($id);
 
@@ -54,7 +58,7 @@ class PhotoController extends Controller
         if (($title !== null && $title === $photo->title) &&
             ($description !== null && $description === $photo->description) &&
             ($location !== null && $location === $photo->location) &&
-            ($category !== null && $category === $photo->category_id && $visibility === $photo->visibility)
+            ($category !== null && $category === $photo->category_id && $visibility === $photo->visibility && $tags === $photo->tags)
         ) {
             return response()->json([
                 'success' => false,
@@ -80,6 +84,10 @@ class PhotoController extends Controller
 
         if ($visibility !== null){
             $photo->visibility  = $visibility;
+        }
+
+        if ($tags !== null){
+            $photo->tags = $tags;
         }
 
         $photo->save();

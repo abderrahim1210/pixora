@@ -58,7 +58,8 @@ class CommentController extends Controller
         $comment->save();
         return response()->json([
             'success' => true,
-            'message' => 'Comment added successfully'
+            'message' => 'Comment added successfully',
+            'comment' => $comment->load('user')
         ]);
     }
 
@@ -81,16 +82,76 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, String $id)
     {
-        //
+        $request->validate([
+            'content' => ['required','string']
+        ]);
+
+        $user = Auth::user();
+
+        $content = $request->content;
+        $photo_id = $request->photo_id;
+
+        $comment = Comment::find($id);
+        if (!$comment){
+            return response()->json([
+                'success' => false,
+                'message' => 'You can not edit this comment'
+            ]);
+        }
+
+        if ($comment->user_id !== $user->id){
+            return response()->json([
+                'success' => false,
+                'message' => 'You can not edit this comment'
+            ]);
+        }
+
+        if (!$content === ''){
+            return response()->json([
+                'success' => false,
+                'message' => 'Comment updated failed'
+            ]);
+        }
+
+        $comment->content = $content;
+        $comment->edited = true;
+        $comment->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Comment updated successfully',
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy(Request $request,String $id)
     {
-        //
+        $photo_id = $request->photo_id;
+        $user = Auth::user();
+        $comment = Comment::find($id);
+        if (!$comment){
+            return response()->json([
+                'success' => false,
+                'message' => 'Comment not found'
+            ]);
+        }
+
+        if ($comment->user_id !== $user->id && $user->role !== "admin"){
+            return response()->json([
+                'success' => false,
+                'message' => 'You can not delete this comment'
+            ]);
+        }
+
+        $comment->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Comment deleted successfully'
+        ]);
     }
 }

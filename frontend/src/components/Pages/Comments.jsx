@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaCheck,
   FaCommentAlt,
@@ -12,19 +12,33 @@ import {
 } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6";
 import { FiCheck } from "react-icons/fi";
-import { Dropdown } from "react-bootstrap";
+import { Dropdown, Spinner } from "react-bootstrap";
 import axios from "axios";
-import Swal from 'sweetalert2';
 import copy from 'copy-to-clipboard';
-import {EmptyContent} from './EmptyContent'
+import { EmptyContent } from './EmptyContent'
 import { notyf } from "../../assets/js/notyf";
 import { useAuth } from "../context/AuthProvider";
-const Comments = (props) => {
-  const comments = props.data;
-  const currUser = props.currUser;
+import Swal from "sweetalert2";
+const Comments = ({photoId, data,commentRef}) => {
+  // const currUser = user;
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(null);
+  const [loadingId, setLoadingId] = useState(null);
   const [comment, setComment] = useState("");
+  const [editComment,setEditComment] = useState("");
+  // const [comments, setComments] = useState([]);
+  // useEffect(() => {
+  //   axios.get(`http://localhost:8000/photo/${photoId}`,{ params: { photoId }, withCredentials: true })
+  //   .then((res) => {
+  //     if (res.data.success) {
+  //       setComments(res.data.comments);
+  //     }
+  //   }).catch(err => {
+  //     console.log(err.response?.message);
+  //   })
+  // },[photoId]);
+  const [localComments, setLocalComments] = useState(data);
+  
   const handleEdit = () => {
     setIsEditing(true);
   }
@@ -35,142 +49,207 @@ const Comments = (props) => {
 
   const handleCopy = (text) => {
     copy(text);
-    notyf.success('Comment copied successfully');
+    notyf.open({
+      type: 'info',
+      message: 'Comment copied successfully'
+    });
+  }
+
+  useEffect(() => {
+    setLocalComments(data);
+  }, [data]);
+
+  const handleComment = async () => {
+    try {
+      const res = await axios.post('http://localhost:8000/comments/store', { photo_id: photoId, comment: comment }, { withCredentials: true, withXSRFToken: true });
+      if (res.data.success) {
+        notyf.success(res.data.message);
+        // setComments(prev => [res.data.comment, ...prev]);
+        setLocalComments(prev => [res.data.comment, ...prev]);
+        setComment('');
+      } else {
+        notyf.error(res.data.message);
+      }
+    } catch (err) {
+      console.log(err.response?.data);
+    }
   }
 
   const handleUpComment = async (commentId, newContent) => {
+    const url = `http://localhost:8000/comments/${commentId}`;
+    const oldComments = [...localComments];
+
+    setLocalComments(prev => prev.map(c => c.id === commentId ? { ...c, content: newContent, edited: true } : c));
+    setLoadingId(commentId);
     try {
-      const res = await axios.put('http://localhost/Pixora/backend/api/comments.php', { photo_id: props.photoId, content: newContent, comment_id: commentId }, { withCredentials: true });
+      const res = await axios.put(url, { photo_id: photoId, content: newContent, comment_id: commentId }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         notyf.success(res.data.message);
       } else {
         notyf.error(res.data.message);
       }
     } catch (err) {
-      console.log(err);
+      setLocalComments(oldComments);
+      console.log(err.response?.data);
+    } finally {
+      setLoadingId(null);
     }
   }
 
   const handleDelComment = async (commentId) => {
-    try {
-      const res = await axios.delete('http://localhost/Pixora/backend/api/comments.php', { data: { comment_id: commentId, user_id: currUser, photo_id: props.photoId }, withCredentials: true });
-      if (res.data.success) {
-        notyf.success(res.data.message);
-      } else {
-        notyf.error(res.data.message);
+    const url = `http://localhost:8000/comments/${commentId}`;
+    const oldComments = [...localComments];
+    Swal.fire({
+      title: 'Delete photo',
+      text: 'Are you sure for delete this photo ?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes , delete it',
+      confirmButtonColor: '#ed3d3d',
+      cancelButtonText: 'Cancel'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setLocalComments(prev => prev.filter(c => c.id !== commentId));
+        try {
+          const res = await axios.delete(url, { data: { comment_id: commentId, user_id: user, photo_id: photoId }, withCredentials: true, withXSRFToken: true });
+          if (res.data.success) {
+            notyf.success(res.data.message);
+          } else {
+            setLocalComments(oldComments);
+            notyf.error(res.data.message);
+          }
+        } catch (err) {
+          setLocalComments(oldComments);
+          console.log(err.response?.data);
+        }
       }
-    } catch (err) {
-      console.log(err);
-    }
+    })
   }
   return (
     <div data-bs-page="comments">
-      <ul className="comments-list mt-4">
-        {comments?.length > 0 ? (
-          comments.map((c) => (
-            <li className="comment-item" key={c.id}>
-              <img
-                src={
-                  c.user.photo_profile
-                    ? `/profile_pictures/${c.user.photo_profile}`
-                    : "/outils/pngs/useracc2.png"
-                }
-                alt={c.user.username}
-                className="comment-avatar"
-              />
-              <div className="comment-body d-flex justify-content-between align-items-start">
-                <div>
-                  <h6 className="comment-author">
-                    {c.user.username}
-                    {c.updated_at && <small>{"Edited"}</small>}
-                  </h6>
-                  {isEditing !== c.id && (<div className="display-div">
-                    <p className="comment-text">{c.content}</p>
-                  </div>)}
-                  {isEditing === c.id && (
-                    <div className="edit-div">
-                      <div
-                        className="upCommentForm"
-                      >
-                        <textarea
-                          name="comment_content"
-                          className="form-control mt-1"
-                          rows={1}
-                          onChange={(e) => setComment(e.target.value)}
-                          defaultValue={c.content}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  <span className="comment-date">{c.created_at_human}</span>
-                </div>
-                <div className="postition-relative">
-                  {isEditing === c.id && (<><button className="saveChange btn p-1" onClick={() => {
-                    handleUpComment(c.id, comment);
-                    setIsEditing(null)
+      <div className="comments">
+        <h5>Comments</h5>
+        <div
+          className="comment-form"
+        >
+          <div className="input-group">
+            <textarea
+              id="up_comment"
+              ref={commentRef}
+              name="comment_content"
+              placeholder="Type your comment ..."
+              className="form-control"
+              rows={1}
+              cols={1}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <input type="hidden" name="photo_id" defaultValue="" />
+            <button
+              className={`btn btn-primary ${comment === "" ? "disabled" : ""}`}
+              onClick={handleComment}
+              id="postBtn"
+            >
+              Post
+            </button>
+          </div>
+        </div>
+        <ul className="comments-list mt-4">
+          {localComments?.length > 0 ? (
+            localComments.map((c) => (
+              <li className="comment-item" key={c.id}>
+                <img
+                  src={
+                    c.user.photo_profile
+                      ? `/profile_pictures/${c.user.photo_profile}`
+                      : "/outils/pngs/useracc2.png"
                   }
-                  }>
-                    <FaCheck />
-                  </button>
-                    <button className="resetChange btn p-1 text-danger" onClick={() => setIsEditing(null)}>
-                      <FaTimes />
-                    </button></>)}
-                  {isEditing !== c.id && (
-                    <Dropdown className="drp">
-                      <Dropdown.Toggle as={"button"} variant="body" id={`dropdown-${c.id}`} className="drpToggle btn p-0">
-                        <FaEllipsisV />
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu className="drpMenu">
-                        {c.user_id === currUser.id ? (
-                          <>
-                            <Dropdown.Item onClick={() => setIsEditing(c.id)}>
-                              <FaPencil /> Edit
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleCopy(c.content)}>
-                              <FaCopy /> Copy
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleDelComment(c.id)}>
-                              <FaTrash /> Delete
-                            </Dropdown.Item>
-                          </>
-                        ) : (
-                          <>
-                            <Dropdown.Item onClick={() => handleCopy(c.content)}>
-                              <FaCopy /> Copy
-                            </Dropdown.Item>
-                            <Dropdown.Item>
-                              <FaFlag /> Report
-                            </Dropdown.Item>
-                            {
-                              user?.role === "admin" && (
-                                <Dropdown.Item onClick={() => handleDelComment(c.id)}>
-                                  <FaTrash /> Delete
-                                </Dropdown.Item>
-                              )
-                            }
-                          </>
-                        )}
-                      </Dropdown.Menu>
-                    </Dropdown>)}
+                  alt={c.user.username}
+                  className="comment-avatar"
+                />
+                <div className="comment-body d-flex justify-content-between align-items-start">
+                  <div>
+                    <h6 className="comment-author">
+                      {c.user.username}
+                      {c.edited && <small>{"Edited"}</small>}
+                    </h6>
+                    {isEditing !== c.id && (<div className="display-div">
+                      <p className="comment-text">{c.content}</p>
+                    </div>)}
+                    {isEditing === c.id && (
+                      <div className="edit-div">
+                        <div
+                          className="upCommentForm"
+                        >
+                          <textarea
+                            name="comment_content"
+                            className="form-control mt-1"
+                            rows={1}
+                            onChange={(e) => setEditComment(e.target.value)}
+                            defaultValue={c.content}
+                          />
+                        </div>
+                      </div>
+                    )}
+                    <span className="comment-date">{c.created_at_human}</span>
+                  </div>
+                  <div className="postition-relative">
+                    {isEditing === c.id && (<><button className="saveChange btn p-1" disabled={loadingId === c.id} onClick={async () => {
+                      handleUpComment(c.id, editComment);
+                      setIsEditing(null)
+                    }
+                    }>
+                      {loadingId === c.id ? (<Spinner />) : (<FaCheck />)}
+                    </button>
+                      <button className="resetChange btn p-1 text-danger" onClick={() => setIsEditing(null)}>
+                        <FaTimes />
+                      </button></>)}
+                    {isEditing !== c.id && (
+                      <Dropdown className="drp">
+                        <Dropdown.Toggle as={"button"} variant="body" id={`dropdown-${c.id}`} className="drpToggle btn p-0">
+                          <FaEllipsisV />
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu className="drpMenu">
+                          {c.user_id === user.id ? (
+                            <>
+                              <Dropdown.Item onClick={() => setIsEditing(c.id)}>
+                                <FaPencil /> Edit
+                              </Dropdown.Item>
+                              <Dropdown.Item onClick={() => handleCopy(c.content)}>
+                                <FaCopy /> Copy
+                              </Dropdown.Item>
+                              <Dropdown.Item onClick={() => handleDelComment(c.id)}>
+                                <FaTrash /> Delete
+                              </Dropdown.Item>
+                            </>
+                          ) : (
+                            <>
+                              <Dropdown.Item onClick={() => handleCopy(c.content)}>
+                                <FaCopy /> Copy
+                              </Dropdown.Item>
+                              <Dropdown.Item>
+                                <FaFlag /> Report
+                              </Dropdown.Item>
+                              {
+                                user?.role === "admin" && (
+                                  <Dropdown.Item onClick={() => handleDelComment(c.id)}>
+                                    <FaTrash /> Delete
+                                  </Dropdown.Item>
+                                )
+                              }
+                            </>
+                          )}
+                        </Dropdown.Menu>
+                      </Dropdown>)}
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))
-        ) : (
-          <EmptyContent icon={<FaComments className="faIcon" />} text={"No comments yet — be the first to comment!"} />
-          // <div className="mt-2 mb-2 text-center">
-          //   <i
-          //     style={{
-          //       opacity: "calc(0.8)",
-          //       color: "#444",
-          //       fontSize: "medium",
-          //     }}
-          //   >
-          //     No comments yet — be the first to comment!
-          //   </i>
-          // </div>
-        )}
-      </ul>
+              </li>
+            ))
+          ) : (
+            <EmptyContent icon={<FaComments className="faIcon" />} text={"No comments yet — be the first to comment!"} />
+          )}
+        </ul>
+      </div>
     </div>
   );
 };

@@ -27,7 +27,9 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::get('/homepage', [Home::class, 'getAllPhotos'])->name('home');
 
 Route::prefix('/comments')->group(function(){
-    Route::post('/store',[CommentController::class,'store']);
+    Route::post('/store',[CommentController::class,'store'])->middleware('auth:sanctum');
+    Route::put('/{id}',[CommentController::class,'update'])->middleware('auth:sanctum');
+    Route::delete('/{id}',[CommentController::class,'destroy'])->middleware('auth:sanctum');
 });
 
 Route::post('/add_like',[LikeController::class,'store']);

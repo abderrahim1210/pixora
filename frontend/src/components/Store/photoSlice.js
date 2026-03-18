@@ -6,6 +6,7 @@ const initialState = {
         category_id: "",
         location: "",
         visibility: "",
+        tags:""
     },
     dirty: false,
     isEdit: {}
