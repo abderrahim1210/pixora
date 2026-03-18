@@ -6,29 +6,6 @@
     border-radius: 5px;
   }
 
-  .drp .dropdown-toggle::after {
-    display: none;
-  }
-
-  .drp .drpMenu .dropdown-item:hover {
-    background-color: var(--special_color) !important;
-    color: white !important;
-  }
-
-  .drpToggle:hover {
-    color: var(--special_color);
-  }
-
-  .drpToggle {
-    border: none !important;
-    outline: none !important;
-  }
-
-  .drpToggle:focus {
-    box-shadow: none !important;
-    border: none !important;
-  }
-
   textarea {
     resize: none;
   }

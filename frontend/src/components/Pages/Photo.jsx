@@ -22,6 +22,7 @@ import PageSkeleton from "./PageSkeleton";
 import { useModal } from "../context/ModalProvider";
 import { Modal } from "react-bootstrap";
 import { MdCategory } from "react-icons/md";
+import ModalTemplate from "./ModalTemplate";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -205,37 +206,35 @@ export const Photo = (props) => {
         <div data-bs-page="photo">
             <Navbar data={props.data} />
             {
-                show === "share" && (<Modal show={show} onHide={closeModal} className="bottom-sheet-wrapper" dialogClassName="bottom-sheet-modal">
-                    <Modal.Header>
-                        <Modal.Body className="p-1">
-                            <div>
-                                <h3 className="share-title">Share this photo with your friends !</h3>
-                                <div className="share-grid">
-                                    <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeUrl}`} className="share-btn facebook" target="_blank" rel="noopener noreferrer">
-                                        <FiFacebook className="icon" />
-                                        <span>Facebook</span>
-                                    </a>
-                                    <a href={`https://www.instagram.com`} className="share-btn instagram" target="_blank" rel="noopener noreferrer">
-                                        <FiInstagram className="icon" />
-                                        <span>Instagram</span>
-                                    </a>
-                                    <a href={`https://www.twitter.com/intent/tweet?url=${encodeUrl}&text=Check+this+photo`} className="share-btn twitter" target="_blank" rel="noopener noreferrer">
-                                        <FiTwitter className="icon" />
-                                        <span>Twitter</span>
-                                    </a>
-                                    <a href={`https://api.whatsapp.com/send?text=${encodeUrl}`} className="share-btn whatsapp" target="_blank" rel="noopener noreferrer">
-                                        <FaWhatsapp className="icon" />
-                                        <span>Whatsapp</span>
-                                    </a>
-                                    <a className="share-btn copy" onClick={() => copyLink()}>
-                                        <FiCopy className="icon" />
-                                        <span>Copy</span>
-                                    </a>
-                                </div>
+                show === "share" && (
+                    <ModalTemplate show={show} closeModal={closeModal}>
+                        <div>
+                            <h3 className="share-title">Share this photo with your friends !</h3>
+                            <div className="share-grid">
+                                <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeUrl}`} className="share-btn facebook" target="_blank" rel="noopener noreferrer">
+                                    <FiFacebook className="icon" />
+                                    <span>Facebook</span>
+                                </a>
+                                <a href={`https://www.instagram.com`} className="share-btn instagram" target="_blank" rel="noopener noreferrer">
+                                    <FiInstagram className="icon" />
+                                    <span>Instagram</span>
+                                </a>
+                                <a href={`https://www.twitter.com/intent/tweet?url=${encodeUrl}&text=Check+this+photo`} className="share-btn twitter" target="_blank" rel="noopener noreferrer">
+                                    <FiTwitter className="icon" />
+                                    <span>Twitter</span>
+                                </a>
+                                <a href={`https://api.whatsapp.com/send?text=${encodeUrl}`} className="share-btn whatsapp" target="_blank" rel="noopener noreferrer">
+                                    <FaWhatsapp className="icon" />
+                                    <span>Whatsapp</span>
+                                </a>
+                                <a className="share-btn copy" onClick={() => copyLink()}>
+                                    <FiCopy className="icon" />
+                                    <span>Copy</span>
+                                </a>
                             </div>
-                        </Modal.Body>
-                    </Modal.Header>
-                </Modal>)
+                        </div>
+                    </ModalTemplate>
+                )
             }
             {
                 loading ? <PageSkeleton page='photo' /> :

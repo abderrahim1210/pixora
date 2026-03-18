@@ -25,6 +25,7 @@ import { notyf } from "../../assets/js/notyf";
 import PageSkeleton from './PageSkeleton';
 import { EmptyContent } from "./EmptyContent";
 import { FaPhotoFilm } from "react-icons/fa6";
+import ModalTemplate from "./ModalTemplate";
 export const Home = () => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
@@ -84,45 +85,45 @@ export const Home = () => {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
   }
 
-  // const addFollow = async (id) => {
-  //   try {
-  //     const res = await axios.post(followURL, { followerID: id }, { withCredentials: true });
-  //     if (res.data.status === "followed") {
-  //       setFollows(prev => [...prev, id]);
-  //       notyf.success("You are followed this user");
-  //     } else {
-  //       setFollows(prev => prev.filter(f => f !== id));
-  //       notyf.error("You are unfollowed this user");
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
+  const addFollow = async (id) => {
+    try {
+      const res = await axios.post(followURL, { followerID: id }, { withCredentials: true });
+      if (res.data.status === "followed") {
+        setFollows(prev => [...prev, id]);
+        notyf.success("You are followed this user");
+      } else {
+        setFollows(prev => prev.filter(f => f !== id));
+        notyf.error("You are unfollowed this user");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-  // const handleComment = async (id) => {
-  //   try {
-  //     await axios.post('http://localhost/Pixora/backend/api/comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
+  const handleComment = async (id) => {
+    try {
+      await axios.post('http://localhost/Pixora/backend/api/comments.php', { photo_id: id, comment: comment }, { withCredentials: true });
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-  // const handleLike = async (photoid) => {
-  //   try {
-  //     const res = await axios.post("http://localhost/Pixora/backend/api/add_like.php", { photo_id: photoid }, { withCredentials: true });
-  //     if (res.data.success) {
-  //       setPhotos((prevPhotos) =>
-  //         prevPhotos.map((p) =>
-  //           p.id === photoid ? { ...p, isLiked: !p.isLiked, totalLikes: res.data.totalLikes } : p
-  //         )
-  //       );
-  //     } else {
-  //       navigate('/login', { state: { liked: true, message: "You have to logged first for add like" } });
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
+  const handleLike = async (photoid) => {
+    try {
+      const res = await axios.post("http://localhost/Pixora/backend/api/add_like.php", { photo_id: photoid }, { withCredentials: true });
+      if (res.data.success) {
+        setPhotos((prevPhotos) =>
+          prevPhotos.map((p) =>
+            p.id === photoid ? { ...p, isLiked: !p.isLiked, totalLikes: res.data.totalLikes } : p
+          )
+        );
+      } else {
+        navigate('/login', { state: { liked: true, message: "You have to logged first for add like" } });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
   const handleComments = (p) => {
     setActivePhoto(p);
     openModal("comments");
@@ -221,6 +222,9 @@ export const Home = () => {
           className="container-fluid tab-pane fade show active mt-3 mb-3"
           id="foryou"
         >
+          <ModalTemplate show={show} closeModal={closeModal}>
+
+          </ModalTemplate>
           <h1 className="text-center fw-bold">For you</h1>
           <div className="photos">
             {activePhoto && (

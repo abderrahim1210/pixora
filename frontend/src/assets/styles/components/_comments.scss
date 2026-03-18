@@ -8,108 +8,27 @@
     box-shadow: var(--box_sahdow);
   }
 
-  .comments {
-    padding: 20px;
-    margin-top: 30px;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+   .drp .dropdown-toggle::after {
+    display: none;
   }
 
-  .comments h5 {
-    font-weight: 600;
-    margin-bottom: 15px;
+  .drp .drpMenu .dropdown-item:hover {
+    background-color: var(--special_color) !important;
+    color: white !important;
   }
 
-  .comment-form .form-control {
-    background-color: #efefef;
-    border-radius: 30px;
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    transition: border 0.3s ease, background 0.3s ease;
+  .drpToggle:hover {
+    color: var(--special_color);
   }
 
-  .comment-form textarea {
-    resize: none;
+  .drpToggle {
+    border: none !important;
+    outline: none !important;
   }
 
-  .comment-form .form-control:focus {
-    border-color: var(--special_color);
-    background: #fff;
-    outline: none;
+  .drpToggle:focus {
+    box-shadow: none !important;
+    border: none !important;
   }
 
-  .comment-form button {
-    border-radius: 30px;
-    padding: 10px 15px;
-    transition: width 0.5s ease-in;
-    font-weight: 600;
-  }
-
-  .comment-form button:hover {
-    width: 80px;
-  }
-
-  .comments-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .comment-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 15px;
-  }
-
-  .comment-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  .comment-body {
-    background-color: #F3F4F6;
-    border-radius: 10px;
-    padding: 10px 15px;
-    flex: 1;
-  }
-
-  .comment-author {
-    margin: 0;
-    font-weight: 600;
-    font-size: 14px;
-  }
-
-  .comment-text {
-    margin: 15px 0;
-    font-size: 14px;
-    color: #262626;
-  }
-
-  .comment-date {
-    color: #888;
-    font-size: 12px;
-  }
-
-  .comment-author small {
-    margin-left: 10px;
-    color: #444;
-    font-weight: lighter;
-  }
-
-  .deleteComment,
-  .reportComment,
-  .copyComment,
-  .editComment {
-    transition: none;
-  }
-
-  .deleteComment:hover,
-  .reportComment:hover {
-    background-color: #ed3d3d !important;
-    color: white;
-  }
 }

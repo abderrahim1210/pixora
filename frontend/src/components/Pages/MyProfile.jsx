@@ -52,6 +52,8 @@ import PageSkeleton from "./PageSkeleton";
 import AdminDashboard from "./AdminDashboard";
 import PhotosTemplate from "./PhotosTemplate";
 import { EmptyContent } from "./EmptyContent";
+import ModalTemplate from "./ModalTemplate";
+
 
 export const MyProfile = () => {
   const [user, setUser] = useState({});
@@ -235,97 +237,89 @@ export const MyProfile = () => {
       <Navbar data={userCurr} />
       {show === "profilePicture" && (
         <>
-          <Modal show={show} onHide={closeModal} className="bottom-sheet-wrapper" dialogClassName="bottom-sheet-modal">
-            <Modal.Header>
-              <Modal.Body className="p-1">
-                <div>
-                  <div className="profile_settings p-0">
-                    <div className="sheet-item">
-                      <input type="file" ref={profileRef} onChange={handleProfileSelect} accept="image/*" hidden />
-                      <div className="sheet-icon">
-                        <FiUpload size={25} />
-                      </div>
-                      <a style={{ cursor: "pointer" }} className="sheet-link" onClick={() => (profileRef.current.click())}>
-                        <span>Upload profile picture</span>
-                      </a>
-                    </div>
-                    <div className="sheet-item">
-                      <div className="sheet-icon">
-                        <FiEye size={25} />
-                      </div>
-                      <a href="#" className="sheet-link" onClick={(e) => {
-                        e.preventDefault();
-                        closeModal();
-                        setTimeout(() => {
-                          handleOpenSlide({ url: `/profile_pictures/${user.photo_profile}`, title: 'Profile Image' })
-                        }, 200);
-                      }}>
-                        <span>Preview profile picture</span>
-                      </a>
-                    </div>
-                    <div className="sheet-item deleteOption">
-                      <div className="sheet-icon">
-                        <FiTrash size={25} />
-                      </div>
-                      <a style={{ cursor: "pointer" }} className="sheet-link" onClick={handleDeleteAvatar}>
-                        <span>
-                          Delete profile picture
-                        </span>
-                      </a>
-                    </div>
+          <ModalTemplate show={show} closeModal={closeModal}>
+            <div>
+              <div className="profile_settings p-0">
+                <div className="sheet-item">
+                  <input type="file" ref={profileRef} onChange={handleProfileSelect} accept="image/*" hidden />
+                  <div className="sheet-icon">
+                    <FiUpload size={25} />
                   </div>
+                  <a style={{ cursor: "pointer" }} className="sheet-link" onClick={() => (profileRef.current.click())}>
+                    <span>Upload profile picture</span>
+                  </a>
                 </div>
-              </Modal.Body>
-            </Modal.Header>
-          </Modal>
+                <div className="sheet-item">
+                  <div className="sheet-icon">
+                    <FiEye size={25} />
+                  </div>
+                  <a href="#" className="sheet-link" onClick={(e) => {
+                    e.preventDefault();
+                    closeModal();
+                    setTimeout(() => {
+                      handleOpenSlide({ url: `/profile_pictures/${user.photo_profile}`, title: 'Profile Image' })
+                    }, 200);
+                  }}>
+                    <span>Preview profile picture</span>
+                  </a>
+                </div>
+                <div className="sheet-item deleteOption">
+                  <div className="sheet-icon">
+                    <FiTrash size={25} />
+                  </div>
+                  <a style={{ cursor: "pointer" }} className="sheet-link" onClick={handleDeleteAvatar}>
+                    <span>
+                      Delete profile picture
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </ModalTemplate>
         </>
       )}
       {show === "coverImage" && (
-        <Modal show={show} onHide={closeModal} className="bottom-sheet-wrapper" dialogClassName="bottom-sheet-modal">
-          <Modal.Header>
-            <Modal.Body className="p-1">
-              <div>
-                <div className="profile_settings p-0">
-                  <div className="sheet-item">
-                    <input type="file" ref={coverRef} onChange={handleCoverSelect} hidden />
-                    <div className="sheet-icon">
-                      <FiUpload size={25} />
-                    </div>
-                    <a
-                      className="sheet-link"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => coverRef.current.click()}
-                    >
-                      <span>Upload cover picture</span>
-                    </a>
-                  </div>
-                  <div className="sheet-item">
-                    <div className="sheet-icon">
-                      <FiEye size={25} />
-                    </div>
-                    <a href="#" className="sheet-link" onClick={(e) => {
-                      e.preventDefault();
-                      closeModal();
-                      setTimeout(() => {
-                        handleOpenSlide({ url: `/cover_images/${user.cover_image}`, title: 'Cover Image' })
-                      }, 200);
-                    }}>
-                      <span>Preview cover picture</span>
-                    </a>
-                  </div>
-                  <div className="sheet-item deleteOption">
-                    <div className="sheet-icon">
-                      <FiTrash size={25} />
-                    </div>
-                    <a style={{ cursor: "pointer" }} className="sheet-link" onClick={handleDeleteCover}>
-                      <span>Delete cover picture</span>
-                    </a>
-                  </div>
+        <ModalTemplate show={show} closeModal={closeModal}>
+          <div>
+            <div className="profile_settings p-0">
+              <div className="sheet-item">
+                <input type="file" ref={coverRef} onChange={handleCoverSelect} hidden />
+                <div className="sheet-icon">
+                  <FiUpload size={25} />
                 </div>
+                <a
+                  className="sheet-link"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => coverRef.current.click()}
+                >
+                  <span>Upload cover picture</span>
+                </a>
               </div>
-            </Modal.Body>
-          </Modal.Header>
-        </Modal>
+              <div className="sheet-item">
+                <div className="sheet-icon">
+                  <FiEye size={25} />
+                </div>
+                <a href="#" className="sheet-link" onClick={(e) => {
+                  e.preventDefault();
+                  closeModal();
+                  setTimeout(() => {
+                    handleOpenSlide({ url: `/cover_images/${user.cover_image}`, title: 'Cover Image' })
+                  }, 200);
+                }}>
+                  <span>Preview cover picture</span>
+                </a>
+              </div>
+              <div className="sheet-item deleteOption">
+                <div className="sheet-icon">
+                  <FiTrash size={25} />
+                </div>
+                <a style={{ cursor: "pointer" }} className="sheet-link" onClick={handleDeleteCover}>
+                  <span>Delete cover picture</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </ModalTemplate>
       )}
       <Lightbox
         open={open}
