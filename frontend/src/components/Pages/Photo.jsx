@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Navbar } from "./Navbar";
-import { FiCopy, FiFacebook, FiHeart, FiImage, FiInstagram, FiTwitter } from "react-icons/fi";
-import { FaCalendar, FaCheck, FaCheckCircle, FaClock, FaComment, FaEye, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaShare, FaSync, FaTag, FaTags, FaThLarge, FaUser, FaWhatsapp } from "react-icons/fa";
+import { FiCopy, FiFacebook, FiHeart, FiInstagram, FiTwitter } from "react-icons/fi";
+import { FaCalendar, FaCheck, FaCheckCircle, FaClock, FaComment, FaEye, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaShare, FaSync, FaTags, FaUser, FaWhatsapp } from "react-icons/fa";
 import { FaLocationDot, FaPencil, FaX } from "react-icons/fa6";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,9 +20,9 @@ import Swal from "sweetalert2";
 import AsyncSelect from "react-select/async";
 import PageSkeleton from "./PageSkeleton";
 import { useModal } from "../context/ModalProvider";
-import { Modal } from "react-bootstrap";
 import { MdCategory } from "react-icons/md";
 import ModalTemplate from "./ModalTemplate";
+import { Footer } from "./Footer";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -417,6 +417,7 @@ export const Photo = (props) => {
                         </div>
                     </div>
             }
+            <Footer type={"dash"} />
         </div>
     );
 }

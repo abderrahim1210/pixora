@@ -13,7 +13,7 @@
   }
 
   .drp .drpMenu .dropdown-item:hover {
-    background-color: var(--special_color) !important;
+    background-color: var(--special_color);
     color: white !important;
   }
 
@@ -31,4 +31,11 @@
     border: none !important;
   }
 
+  .del-comment{
+    color: #d93025;
+  }
+
+  .del-comment:hover{
+    background-color:#d93025 !important;
+  }
 }

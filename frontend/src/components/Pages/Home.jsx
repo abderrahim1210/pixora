@@ -572,7 +572,7 @@ export const Home = () => {
           </ul>
         </nav>
       </div>
-      <Footer />
+      <Footer type={'footer'} />
     </div >
   );
 };

@@ -75,7 +75,7 @@ const CommentItem = ({ c,
                                         <Dropdown.Item onClick={() => handleCopy(c.content)}>
                                             <FaCopy /> Copy
                                         </Dropdown.Item>
-                                        <Dropdown.Item onClick={() => handleDelComment(c.id)}>
+                                        <Dropdown.Item className='del-comment' onClick={() => handleDelComment(c.id)}>
                                             <FaTrash /> Delete
                                         </Dropdown.Item>
                                     </>
@@ -89,7 +89,7 @@ const CommentItem = ({ c,
                                         </Dropdown.Item>
                                         {
                                             user?.role === "admin" && (
-                                                <Dropdown.Item onClick={() => handleDelComment(c.id)}>
+                                                <Dropdown.Item className='del-comment' onClick={() => handleDelComment(c.id)}>
                                                     <FaTrash /> Delete
                                                 </Dropdown.Item>
                                             )

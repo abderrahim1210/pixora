@@ -1,51 +1,72 @@
 import React from "react";
 import { Copyright } from "./Copyright";
+import { FiFacebook, FiGithub, FiInstagram, FiTwitter } from "react-icons/fi";
 //import '../../assets/css/footer.css'
-export const Footer = () => {
+export const Footer = ({ type }) => {
   return (
-    <div data-bs-page="footer">
-      <footer>
-        <div className="container-fluid d-flex justify-content-center">
-          <h3 className="mt-2">Pixora</h3>
-        </div>
-        <div className="container-fluid navFot">
-          <ul className="nav">
-            <li className="nav-item">
-              <a href="#" className="nav-link">
-                EN
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="#" className="nav-link">
-                AR
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="#" className="nav-link">
-                FR
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="container-fluid d-flex justify-content-center">
-          <mark id="quote_1">Pixora — Where&nbsp;pixels&nbsp;speak.</mark>
-        </div>
-        <div className="container-fluid navFot">
-          <ul className="nav">
-            <li className="nav-item">
-              <a href="#" className="nav-link">
-                Privacy &amp; Policy
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="#" className="nav-link">
-                Terms Of Use
-              </a>
-            </li>
-          </ul>
-        </div>
-        <Copyright />
-      </footer>
-    </div>
+    <>
+      {
+        type === "footer" && (
+          <div data-bs-page="footer">
+            <footer className="footer">
+              <div className="container">
+                <div className="footer-grid">
+                  <div className="footer-col">
+                    <h2 className="logo">Pixora</h2>
+                    <p>Where pixels speak. Share and discover amazing visuals.</p>
+                  </div>
+                  <div className="footer-col">
+                    <h4>Explore</h4>
+                    <a href="#">Home</a>
+                    <a href="#">Explore</a>
+                    <a href="#">Upload</a>
+                    <a href="#">Profile</a>
+                  </div>
+                  <div className="footer-col">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms of use</a>
+                    <a href="#">Cookies</a>
+                  </div>
+
+                  <div className="footer-col">
+                    <h4>Follow us</h4>
+                    <div className="socials">
+                      <a href=""><FiFacebook /></a>
+                      <a href=""><FiInstagram /></a>
+                      <a href=""><FiTwitter /></a>
+                      <a href=""><FiGithub /></a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="footer-bottom">
+                  <Copyright />
+                </div>
+              </div>
+            </footer>
+          </div>
+        )
+      }
+      {
+        type === "dash" && (
+          <div data-bs-page="footer-dashboard">
+            <footer className="footer">
+              <div className="footer-container">
+                <div className="footer-links">
+                  <a href="#">Terms of use</a>
+                  <span className="divider">•</span>
+                  <a href="#">Privacy & Conditions</a>
+                </div>
+
+                <div className="footer-copy">
+                  <Copyright />
+                </div>
+              </div>
+            </footer>
+          </div>
+        )
+      }
+    </>
   );
 };

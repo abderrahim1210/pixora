@@ -53,6 +53,7 @@ import AdminDashboard from "./AdminDashboard";
 import PhotosTemplate from "./PhotosTemplate";
 import { EmptyContent } from "./EmptyContent";
 import ModalTemplate from "./ModalTemplate";
+import { Footer } from "./Footer";
 
 
 export const MyProfile = () => {
@@ -987,7 +988,7 @@ export const MyProfile = () => {
           </div>
         </div>
       </main>
-      <FooterDash />
+      <Footer type={"dash"} />
     </div>
   );
 };
