@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import {
+  FaArrowRight,
   FaCamera,
   FaCameraRetro,
   FaCheck,
   FaCog,
   FaComment,
+  FaGlobe,
   FaHeart,
   FaInfoCircle,
+  FaLink,
   FaSearch,
   FaStar,
   FaUser,
@@ -168,10 +171,10 @@ export const Home = () => {
           </div>
         </div>
         <figure>
-            <figcaption>
-              Photo By Eddaoudi Aya
-            </figcaption>
-          </figure>
+          <figcaption>
+            Photo By Eddaoudi Aya
+          </figcaption>
+        </figure>
         <br />
       </div>
       <div className="sticky-top">
@@ -483,40 +486,65 @@ export const Home = () => {
           className="container-fluid tab-pane fade show mt-3 mb-3"
           id="about"
         >
-          <h1 className="text-center mt-2 mb-2">About Pixora</h1>
-          <div className="container mt-2 mb-2">
+          <h1 className="text-center fw-bold">Inspiring Visual Excelllence</h1>
+          <div className="container-fluid mt-2 mb-2">
             <p>
-              At Pixora, we believe that every image has the power to inspire,
-              to tell a story, and to connect people beyond borders. Founded
-              with a passion for creativity and a vision to redefine the way
-              photography and digital art are shared online, Pixora offers a
-              premium platform where photographers, visual artists, and creative
-              enthusiasts can showcase their work in the best possible light.
-              Our mission is to create a space that combines elegance,
-              simplicity, and functionality. We provide artists with the tools
-              they need to present their portfolios professionally, while
-              offering audiences a seamless experience to explore, admire, and
-              engage with high-quality visual content. Unlike conventional
-              galleries, Pixora is designed to be a global hub — bringing
-              together diverse perspectives, styles, and artistic expressions
-              from every corner of the world. We are committed to building a
-              community where quality matters more than quantity. Every
-              photograph on Pixora is more than just an image — it is a
-              reflection of passion, dedication, and vision. By curating and
-              highlighting exceptional work, we aim to celebrate not only
-              photography as an art form, but also the people and stories behind
-              each frame. As Pixora continues to grow, we strive to remain a
-              trusted destination for both creators and admirers of visual art.
-              Whether you are here to showcase your portfolio, discover
-              inspiration, or simply enjoy the beauty of photography, we welcome
-              you to join us on this journey. Together, let’s make Deluxe
-              Gallery a place where art lives, stories are told, and creativity
-              knows&nbsp;no&nbsp;limits.
+              At Pixora, we believe that every image tells a story beyond words.
+              Our platform is built for photographers, visual artists, and creative minds who seek more than just sharing — they seek impact.
+              Pixora is a premium space where creativity meets recognition.
+              We curate high-quality visual content, empowering artists to showcase their work, gain visibility, and connect with a global community that appreciates true artistry.
+              Whether you're here to exhibit your portfolio, discover unique perspectives, or get inspired — Pixora is where creativity finds its voice.
             </p>
+          </div>
+          <div className="container-fluid about-features mt-3 mb-3">
+            <div className="about-feature">
+              <div>
+                <FaGlobe className="feature-icon" />
+              </div>
+              <div>
+                <h3>Global Community</h3>
+                <p>Connecting photographers and artists from all corners of the world.</p>
+              </div>
+            </div>
+            <div className="about-feature">
+              <div>
+                <FaStar className="feature-icon" />
+              </div>
+              <div>
+                <h3>Curated Excellence</h3>
+                <p>Showcasing the best in photgraphy and digital art.</p>
+              </div>
+            </div>
+            <div className="about-feature">
+              <div>
+                <FaCamera className="feature-icon" />
+              </div>
+              <div>
+                <h3>Premium Hub</h3>
+                <p>Offering a seamless experience for discovering and sharing visual art.</p>
+              </div>
+            </div>
+          </div>
+          <div className="owner-infos mt-3 mb-3">
+            <div className="owner-image">
+              <img src="/outils/jpg/owner.jpg" alt="owner" />
+            </div>
+            <div className="owner-texts">
+              <h3>Founder-Building Pixora</h3>
+              <p>I’m a passionate designer and developer focused on creating modern and user-friendly digital experiences.
+                I enjoy turning ideas into clean, visually appealing designs while paying attention to every detail.
+                Through my work, I aim to deliver high-quality visuals that help people express their ideas in a creative and impactful way. <a href="Consultez le profil de Abderrahim Khali Ali sur LinkedIn https://ma.linkedin.com/in/abderrahim-khali-ali-b5865734b" className="linkedin-link"><FaLink className="icon" /> LinkedIn</a></p>
+            </div>
+          </div>
+          <div className="join-community mt-3 mb-3">
+            <div className="join-community-texts">
+              <h2>join the pixora community</h2>
+              <p>Become part of a global hub for creative minds and visual artists.</p>
+              <button className="btn">Join now <FaArrowRight /></button>
+            </div>
           </div>
         </div>
       </div>
-      {/*?php include "footer.php"; ?*/}
       <div className="container-fluid">
         <nav
           className="navbar mx-auto navbar-expand fixed-bottom nav3"
@@ -526,7 +554,6 @@ export const Home = () => {
             <li className="nav-item">
               <a
                 href="#"
-                /*  onClick={window.open('dasheboard.php','_self')} */
                 className="nav-link"
               >
                 <FaUser size={15} color="454545" />
