@@ -3,26 +3,17 @@ import { Navbar } from "./Navbar";
 import axios from "axios";
 import { FaCamera, FaCertificate, FaChartLine, FaFileContract, FaHeart } from "react-icons/fa";
 import { Copyright } from "./Copyright";
-import { FooterDash } from "./FooterDash";
 import { GiPadlock } from "react-icons/gi";
 import { MdAnalytics, MdPhotoLibrary, MdVerified } from "react-icons/md";
 import { RiChat1Line } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import { Truncate } from "./Truncate";
-// import { Notyf } from 'notyf';
-// import 'notyf/notyf.min.css';
-// const notyf = new Notyf({
-//   duration: 4000,
-//   position: {
-//     x: "right",
-//     y: "top",
-//   }
-// });
 import { notyf } from "../../assets/js/notyf";
 import PageSkeleton from "./PageSkeleton";
 import PhotosTemplate from "./PhotosTemplate";
 import { EmptyContent } from "./EmptyContent";
+import { Footer } from "./Footer";
 
 export const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
@@ -262,7 +253,7 @@ export const MyPhotos = () => {
         </div>
       </main>
       <div>
-        <FooterDash />
+        <Footer type={"footer"} />
       </div>
     </div>
   );

@@ -35,9 +35,7 @@ import axios from "axios";
 import { Modal } from "react-bootstrap";
 import { MdAnalytics, MdUpload } from "react-icons/md";
 import { FiEye, FiTrash, FiUpload } from "react-icons/fi";
-import { FooterDash } from "./FooterDash";
 import { Link, useNavigate } from "react-router-dom";
-import { Login } from "./Login";
 import { useRef } from "react";
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
@@ -64,26 +62,68 @@ export const MyProfile = () => {
   const [edit, setEdit] = useState(false);
   const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
+  const [originalUser,setOriginalUser] = useState({});
+  const { register, handleSubmit, formState:{errors}, reset } = useForm({
+    defaultValues:originalUser
+  });
   const [open, setOpen] = useState(false);
   const [slides, setSlides] = useState([]);
   const profileRef = useRef();
   const coverRef = useRef();
   const [loading, setLoading] = useState(false);
+  
+  // let namereg = /^[a-z0-9]{10,}$/;
+  // let emailreg = /^[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|hotmail\.com|[a-zA-Z]\.(ma|org|com))$/;
+  // let dnamereg = /^[A-Za-zأ-ي]{1,}$/;
+  // let phonereg = /^\+[1-9]\d{7,14}$/;
+  // let instaReg = /^https?:\/\/(www\.)?instagram\.com\/.+$/;
+  // let faceReg = /^https?:\/\/(www\.)?facebook\.com\/.+$/;
+  // let xReg = /^https?:\/\/(www\.)?x\.com\/.+$/;
+  // let websiteReg = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}([\/?#].*)?$/;;
+  
   const handleOpenSlide = (image) => {
     setSlides([{ src: image.url, title: image.title }]);
     setOpen(true);
   }
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/myprofile", {
+        withCredentials: true,
+        withXSRFToken: true,
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      .then((res) => {
+        if (res.data.success) {
+          console.log(res.data.success)
+          setUser(res.data.user);
+          setPhotos(res.data.photos);
+          setLoading(true);
+          setStatistics(res.data.statistics);
+          setOriginalUser(res.data.user);
+          reset(res.data.user);
+        }
+      }
+      ).catch(err => console.log(err.response?.data));
+    axios.get("/json/countries.json").then((res) => res.data).then(data => setCountries(data));
+  }, []);
+
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post('http://localhost/Pixora/backend/api/edit_profile.php', data, { withCredentials: true });
+      const res = await axios.post('http://localhost:8000/edit_profile', data, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         Swal.fire({
           icon: "success",
           title: "Updated!",
           text: "Your profile has been updated successfully.",
           timer: 2000,
-          showConfirmButton: false,
+          confirmButtonColor: "rgb(0,120,255)",
+          confirmButtonText: "Okay, reload page",
+          showConfirmButton: true,
+        }).then(()=>{
+          window.location.reload();
         });
       } else {
         Swal.fire({
@@ -92,8 +132,10 @@ export const MyProfile = () => {
           confirmButtonColor: "rgb(0, 120, 255)",
           text: res.data.message || "No updates detected.",
         });
+        console.log(res.data);
       }
     } catch (err) {
+      console.log(err.response?.data);
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -101,47 +143,18 @@ export const MyProfile = () => {
       });
     }
   }
-  useEffect(() => {
-    axios
-      .get("http://localhost/Pixora/backend/api/myProfile.php", {
-        withCredentials: true,
-      })
 
-      .then((res) => {
-        if (res.data.success) {
-          setUser(res.data.user);
-          setPhotos(res.data.photos);
-          setLoading(true);
-        } else {
-          navigate('/login');
-        }
-      });
-    axios
-      .get("http://localhost/Pixora/backend/api/statistics_profile.php", {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        }
-      })
-      .then((res) => {
-        if (res.data.success) {
-          setStatistics(res.data.data);
-        }
-      });
-    axios.get("/json/countries.json").then((res) => res.data).then(data => setCountries(data));
-  }, []);
-
-  useEffect(() => {
-    axios.get('http://localhost/Pixora/backend/api/adminAnalytics.php', { withCredentials: true })
-      .then(res => {
-        if (res.data.success) {
-          setAnalytics(res.data);
-          console.log(res.data);
-        } else {
-          console.log(res.data);
-        }
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios.get('http://localhost/Pixora/backend/api/adminAnalytics.php', { withCredentials: true })
+  //     .then(res => {
+  //       if (res.data.success) {
+  //         setAnalytics(res.data);
+  //         console.log(res.data);
+  //       } else {
+  //         console.log(res.data);
+  //       }
+  //     });
+  // }, []);
 
   const handleLogOut = async () => {
     try {
@@ -227,6 +240,12 @@ export const MyProfile = () => {
       console.log(err);
     }
   }
+
+  useEffect(() => {
+  if(Object.keys(originalUser).length) {
+    reset(originalUser);
+  }
+}, [originalUser, reset]);
 
   const { show, openModal, closeModal } = useModal();
   const { userCurr } = useAuth();
@@ -457,7 +476,7 @@ export const MyProfile = () => {
                 <div className="photo-info-card w-100">
                   <div className="information">
                     <div>
-                      <h3 className="fw-semibold mb-1">{user?.displayname}</h3>
+                      <h3 className="fw-semibold mb-1">{user?.display_name}</h3>
                     </div>
                     <div>
                       {
@@ -487,10 +506,10 @@ export const MyProfile = () => {
                     </div>
                   </div>
                   <div className="container statistic_profile">
-                    <div>{statistics.followers ?? 0} Followers</div>
-                    <div>{statistics.followings ?? 0} Following</div>
-                    <div>{statistics.likes ?? 0} Likes</div>
-                    <div>{statistics.photosCount ?? 0} Photos</div>
+                    <div>{statistics?.followers ?? 0} Followers</div>
+                    <div>{statistics?.followings ?? 0} Following</div>
+                    <div>{statistics?.likes ?? 0} Likes</div>
+                    <div>{statistics?.photosCount ?? 0} Photos</div>
                   </div>
                   <div className="social_media mt-2 mb-2">
                     {user.facebook && (
@@ -596,13 +615,16 @@ export const MyProfile = () => {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  name="update_name"
                                   id="username"
-                                  {...register('username')}
-                                  /* onKeyUp="checkName()" */
+                                  {...register('username', {
+                                    validate:(value)=>{
+                                      if (value === originalUser.username) return true;
+                                      return /^[a-zA-Z0-9_]{6,}$/.test(value) || 'Invalid username'
+                                    },
+                                  })}
                                   defaultValue={user.username}
                                 />
-                                <span id="err_username" />
+                                {errors.username && <span className="errors">{errors.username.message}</span>}
                               </div>
                             </li>
                             <li className="list-group-item">
@@ -611,13 +633,10 @@ export const MyProfile = () => {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  name="update_dname"
-                                  /* onKeyUp="checkDname() */
                                   {...register('display_name')}
                                   id="userdname"
-                                  defaultValue={user.displayname}
+                                  defaultValue={user.display_name}
                                 />
-                                <span id="err_dname" />
                               </div>
                             </li>
                             <li className="list-group-item">
@@ -626,13 +645,16 @@ export const MyProfile = () => {
                                 <input
                                   type="email"
                                   className="form-control"
-                                  name="update_email"
                                   id="useremail"
-                                  /* onKeyUp="checkEmail() */
-                                  {...register('email')}
+                                  {...register('email',{
+                                    validate:(value)=>{
+                                      if (value === originalUser.email) return true;
+                                      return /^[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|hotmail\.com|[a-zA-Z]\.(ma|org|com))$/.test(value) || 'Invalid email'
+                                    },
+                                  })}
                                   defaultValue={user.email}
                                 />
-                                <span id="err_useremail" />
+                                {errors.email && <span className="errors">{errors.email.message}</span>}
                               </div>
                             </li>
                             <li className="list-group-item">
@@ -641,20 +663,22 @@ export const MyProfile = () => {
                                 <input
                                   type="tel"
                                   className="form-control"
-                                  name="update_phone"
-                                  /* onkeyup="checkPhone()" */
-                                  {...register('tel')}
+                                  {...register('phone',{
+                                    validate:(value)=>{
+                                      if (originalUser.phone_number && value === originalUser.phone_number) return true;
+                                      return /^\+[1-9]\d{7,14}$/.test(value) || 'Invalid phone number'
+                                    },
+                                  })}
                                   id="userphone"
                                   defaultValue={user.phone_number}
                                 />
-                                <span id="err_userphone" />
+                                {errors.phone && <span className="errors">{errors.phone.message}</span>}
                               </div>
                             </li>
                             <li className="list-group-item">
                               <strong>Bio</strong>
                               <div className="edit-div">
                                 <textarea
-                                  name="update_bio"
                                   id="bio"
                                   className="form-control"
                                   rows={1}
@@ -669,7 +693,6 @@ export const MyProfile = () => {
                                 <input
                                   type="date"
                                   className="form-control"
-                                  name="update_birth"
                                   id="userbirth"
                                   {...register('birth_date')}
                                   defaultValue={user.birth_date}
@@ -681,7 +704,6 @@ export const MyProfile = () => {
                               <div className="edit-div">
                                 <select
                                   className="form-control"
-                                  name="update_gender"
                                   id="usergender"
                                   {...register('gender')}
                                 >
@@ -703,7 +725,7 @@ export const MyProfile = () => {
                                     <option value={user?.country}>{user?.country}</option>
                                     {
                                       countries.map(c => (
-                                        <option key={c.id} value={c.id}>{c.name}</option>
+                                        <option key={c.id} value={c.name}>{c.name}</option>
                                       ))
                                     }
                                   </select>
@@ -720,60 +742,48 @@ export const MyProfile = () => {
                               <strong>Facebook</strong>
                               <div className="edit-div">
                                 <textarea
-                                  name="face_link"
                                   id="facebook"
                                   className="form-control"
                                   rows={1}
-                                  /* onKeyUp="checkFace()" */
                                   {...register('facebook')}
                                   defaultValue={user.facebook}
                                 />
-                                <span id="err_face" />
                               </div>
                             </li>
                             <li className="list-group-item">
                               <strong>Website</strong>
                               <div className="edit-div">
                                 <textarea
-                                  name="website_link"
                                   id="website"
                                   className="form-control"
                                   rows={1}
-                                  /* onKeyUp="checkWebsite */
                                   {...register('website')}
                                   defaultValue={user.website}
                                 />
-                                <span id="err_website" />
                               </div>
                             </li>
                             <li className="list-group-item">
                               <strong>X</strong>
                               <div className="edit-div">
                                 <textarea
-                                  name="x_link"
                                   id="x"
                                   className="form-control"
                                   rows={1}
-                                  /* onKeyUp="checkX()" */
                                   {...register('x')}
                                   defaultValue={user.x}
                                 />
-                                <span id="err_x" />
                               </div>
                             </li>
                             <li className="list-group-item">
                               <strong>Instagram</strong>
                               <div className="edit-div">
                                 <textarea
-                                  name="insta_link"
                                   id="instagram"
                                   className="form-control"
                                   rows={1}
-                                  /* onKeyUp="checkInsta() */
                                   {...register('instagram')}
                                   defaultValue={user.instagram}
                                 />
-                                <span id="err_insta" />
                               </div>
                             </li>
                           </div>
@@ -788,7 +798,7 @@ export const MyProfile = () => {
                             <li className="list-group-item">
                               <strong>Display name</strong>
                               <div className="display-div">
-                                <p>{user.displayname}</p>
+                                <p>{user.display_name}</p>
                               </div>
                             </li>
                             <li className="list-group-item">
@@ -960,22 +970,22 @@ export const MyProfile = () => {
                     <div className="stat-card">
                       <FaUserPlus size={25} className="stat-icon" />
                       <h3>Following</h3>
-                      <p>{statistics.followings ?? 0}</p>
+                      <p>{statistics?.followings ?? 0}</p>
                     </div>
                     <div className="stat-card">
                       <FaHeart size={25} className="stat-icon" />
                       <h3>Likes</h3>
-                      <p>{statistics.likes ?? 0}</p>
+                      <p>{statistics?.likes ?? 0}</p>
                     </div>
                     <div className="stat-card">
                       <FaUsers size={25} className="stat-icon" />
                       <h3>Followers</h3>
-                      <p>{statistics.followers ?? 0}</p>
+                      <p>{statistics?.followers ?? 0}</p>
                     </div>
                     <div className="stat-card">
                       <FaCamera size={25} className="stat-icon" />
                       <h3>Photos</h3>
-                      <p>{statistics.photosCount ?? 0}</p>
+                      <p>{statistics?.photosCount ?? 0}</p>
                     </div>
                   </div>
                   <div className="container statisticsGraph">
@@ -988,7 +998,7 @@ export const MyProfile = () => {
           </div>
         </div>
       </main>
-      <Footer type={"dash"} />
+      <Footer type={"footer"} />
     </div>
   );
 };

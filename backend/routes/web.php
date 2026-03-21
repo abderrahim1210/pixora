@@ -6,6 +6,7 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UploadController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,10 @@ Route::post('/add_like',[LikeController::class,'store']);
 Route::post('/upload',[UploadController::class,'uploadPhoto'])->middleware('auth:sanctum');
 
 Route::resource('/follows',FollowController::class);
+
+Route::get('/myprofile',[ProfileController::class, 'getInfos'])->middleware('auth:sanctum');
+
+Route::post('/edit_profile',[ProfileController::class, 'editProfile'])->middleware('auth:sanctum');
 
 Route::get('/get_categories',function(){
     $categs = Category::all();
