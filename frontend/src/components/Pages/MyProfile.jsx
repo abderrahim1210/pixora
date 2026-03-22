@@ -495,10 +495,7 @@ export const MyProfile = () => {
                           }
                           onClick={() => openModal("profilePicture")}
                           onContextMenu={(e) => e.preventDefault()}
-                          // width="100px"
-                          // className="avatar"
-                          // id="imgAcc"
-                          alt=""
+                          alt={user.username}
                           title="Your profile picture"
                         />
                       </div>
@@ -612,11 +609,11 @@ export const MyProfile = () => {
                     <div className="d-flex justify-content-center align-items-center gap-3 text-center profile_actions mx-auto">
                       <a
                         style={{ cursor: "pointer" }}
-                        onClick={() => handleOpen("profilePicture")}
+                        onClick={() => openModal("profilePicture")}
                       >
                         <FaPencil />
                       </a>
-                      <a href="#">
+                      <a style={{cursor:'pointer'}} onClick={handleDeleteAvatar}>
                         <FaTrash />
                       </a>
                     </div>
