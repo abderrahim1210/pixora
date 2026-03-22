@@ -7,6 +7,7 @@ use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class PhotoController extends Controller
 {
@@ -128,6 +129,8 @@ class PhotoController extends Controller
         $photo->comments()->delete();
 
         $photo->delete();
+
+        Storage::disk('public')->delete('photos/'.$photo->filename);
 
         return response()->json([
             'success' => true,

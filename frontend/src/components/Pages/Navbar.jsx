@@ -228,7 +228,7 @@ export const Navbar = () => {
               {user?.id ? (
                 <div>
                   <img
-                    src={user.profile_picture?`/profile_pictures/${user.profile_picture}`:`/outils/pngs/useracc2.png`}
+                    src={user.photo_profile ?`http://localhost:8000/storage/profile_pictures/${user.photo_profile}`:`/outils/pngs/useracc2.png`}
                     width="40px"
                     height="auto"
                     alt="Useraccount"

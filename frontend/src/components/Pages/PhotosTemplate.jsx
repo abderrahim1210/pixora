@@ -18,7 +18,7 @@ const PhotosTemplate = ({ photos }) => {
                                     style={{ cursor: "pointer" }}
                                     to={`/photo/${p.id}/${slugiFy(p.title)}`}
                                 >
-                                    <img src={`/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
+                                    <img src={`http://localhost:8000/storage/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
                                 </Link>
                             </div>
                             <div className="d-flex justify-content-between p-2">

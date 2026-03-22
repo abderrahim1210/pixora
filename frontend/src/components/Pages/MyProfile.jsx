@@ -62,16 +62,16 @@ export const MyProfile = () => {
   const [edit, setEdit] = useState(false);
   const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
-  const [originalUser,setOriginalUser] = useState({});
-  const { register, handleSubmit, formState:{errors}, reset } = useForm({
-    defaultValues:originalUser
+  const [originalUser, setOriginalUser] = useState({});
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+    defaultValues: originalUser
   });
   const [open, setOpen] = useState(false);
   const [slides, setSlides] = useState([]);
   const profileRef = useRef();
   const coverRef = useRef();
   const [loading, setLoading] = useState(false);
-  
+
   // let namereg = /^[a-z0-9]{10,}$/;
   // let emailreg = /^[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|hotmail\.com|[a-zA-Z]\.(ma|org|com))$/;
   // let dnamereg = /^[A-Za-zأ-ي]{1,}$/;
@@ -80,7 +80,7 @@ export const MyProfile = () => {
   // let faceReg = /^https?:\/\/(www\.)?facebook\.com\/.+$/;
   // let xReg = /^https?:\/\/(www\.)?x\.com\/.+$/;
   // let websiteReg = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}([\/?#].*)?$/;;
-  
+
   const handleOpenSlide = (image) => {
     setSlides([{ src: image.url, title: image.title }]);
     setOpen(true);
@@ -122,7 +122,7 @@ export const MyProfile = () => {
           confirmButtonColor: "rgb(0,120,255)",
           confirmButtonText: "Okay, reload page",
           showConfirmButton: true,
-        }).then(()=>{
+        }).then(() => {
           window.location.reload();
         });
       } else {
@@ -167,7 +167,10 @@ export const MyProfile = () => {
     }
   }
 
-  const profilePicturesURL = "http://localhost/Pixora/backend/api/profile_pictures.php";
+  const profilePicturesURL = "http://localhost:8000/edit_profile_pictures/avatar";
+  const coverPictureURL = "http://localhost:8000/edit_profile_pictures/cover";
+  const deleteProfilePictureURL = "http://localhost:8000/edit_profile_pictures/delete_avatar";
+  const deleteCoverPictureURL = "http://localhost:8000/edit_profile_pictures/delete_cover";
 
   const handleProfileSelect = async () => {
 
@@ -180,14 +183,14 @@ export const MyProfile = () => {
     reader.onload = async () => {
       const base64Image = reader.result;
       try {
-        const res = await axios.post(profilePicturesURL, { action_type: "profile_picture", profile_image: base64Image }, { withCredentials: true });
+        const res = await axios.post(profilePicturesURL, { profile_image: base64Image }, { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
           notyf.success(res.data.message);
         } else {
           notyf.error(res.data.message);
         }
       } catch (err) {
-        console.log(err);
+        console.log(err.response?.data);
       }
     }
   }
@@ -203,49 +206,76 @@ export const MyProfile = () => {
     reader.onload = async () => {
       const base64Image = reader.result;
       try {
-        const res = await axios.post(profilePicturesURL, { action_type: "cover_image", cover_image: base64Image }, { withCredentials: true });
+        const res = await axios.post(coverPictureURL, { cover_image: base64Image }, { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
           notyf.success(res.data.message);
         } else {
           notyf.error(res.data.message);
         }
       } catch (err) {
-        console.log(err);
+        console.log(err.response?.data);
       }
     }
   }
 
   const handleDeleteAvatar = async () => {
-    try {
-      const res = await axios.delete(profilePicturesURL, { withCredentials: true, data: { action_type: "delete_profile_picture" } });
-      if (res.success) {
-        notyf.success(res.message);
-      } else {
-        notyf.error(res.message);
+    Swal.fire({
+      title: 'Delete photo profile',
+      text: 'Are you sure for delete your profile picture ?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes , delete it',
+      confirmButtonColor: '#ed3d3d',
+      cancelButtonText: 'Cancel'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await axios.delete(deleteProfilePictureURL, { withCredentials: true, withXSRFToken: true });
+          if (res.data.success) {
+            notyf.success(res.data.message);
+          } else {
+            notyf.error(res.data.message);
+          }
+        } catch (err) {
+          console.log(err.response?.data);
+        }finally{
+          window.location.reload;
+        }
       }
-    } catch (err) {
-      console.log(err);
-    }
+    });
   }
 
   const handleDeleteCover = async () => {
-    try {
-      const res = await axios.delete(profilePicturesURL, { withCredentials: true, data: { action_type: "delete_cover_image" } });
-      if (res.data.success) {
-        notyf.success(res.data.message);
-      } else {
-        notyf.error(res.data.message);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    Swal.fire({
+      title: 'Delete photo profile',
+      text: 'Are you sure for delete your profile picture ?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes , delete it',
+      confirmButtonColor: '#ed3d3d',
+      cancelButtonText: 'Cancel'
+    }).then(async (result) => {
+      if (result.isConfirmed){
+        try {
+          const res = await axios.delete(deleteCoverPictureURL, { withCredentials: true, withXSRFToken:true});
+          if (res.data.success) {
+            notyf.success(res.data.message);
+          } else {
+            notyf.error(res.data.message);
+          }
+        } catch (err) {
+          console.log(err);
+        }finally{
+          window.location.reload;
+        }
+      }});
   }
 
   useEffect(() => {
-  if(Object.keys(originalUser).length) {
-    reset(originalUser);
-  }
-}, [originalUser, reset]);
+    if (Object.keys(originalUser).length) {
+      reset(originalUser);
+    }
+  }, [originalUser, reset]);
 
   const { show, openModal, closeModal } = useModal();
   const { userCurr } = useAuth();
@@ -277,7 +307,7 @@ export const MyProfile = () => {
                     e.preventDefault();
                     closeModal();
                     setTimeout(() => {
-                      handleOpenSlide({ url: `/profile_pictures/${user.photo_profile}`, title: 'Profile Image' })
+                      handleOpenSlide({ url: `http://localhost:8000/storage/profile_pictures/${user.photo_profile}`, title: 'Profile Image' })
                     }, 200);
                   }}>
                     <span>Preview profile picture</span>
@@ -323,7 +353,7 @@ export const MyProfile = () => {
                   e.preventDefault();
                   closeModal();
                   setTimeout(() => {
-                    handleOpenSlide({ url: `/cover_images/${user.cover_image}`, title: 'Cover Image' })
+                    handleOpenSlide({ url: `http://localhost:8000/storage/cover_images/${user.cover_image}`, title: 'Cover Image' })
                   }, 200);
                 }}>
                   <span>Preview cover picture</span>
@@ -415,7 +445,7 @@ export const MyProfile = () => {
                       onContextMenu={(e) => e.preventDefault()}
                       style={{
                         backgroundImage: user.cover_image
-                          ? `url("/cover_images/${user.cover_image}")`
+                          ? `url("http://localhost:8000/storage/cover_images/${user.cover_image}")`
                           : `linear-gradient(135deg, #454545 0%, #353535 100%)`,
                         backgroundAttachment: "fixed",
                         backgroundRepeat: "no-repeat",
@@ -456,20 +486,22 @@ export const MyProfile = () => {
                           accept=".png, .jpeg"
                         />
                       </form>
-                      <img
-                        src={
-                          user.photo_profile
-                            ? "/profile_pictures/" + user.photo_profile
-                            : "/outils/pngs/useracc2.png"
-                        }
-                        onClick={() => openModal("profilePicture")}
-                        onContextMenu={(e) => e.preventDefault()}
-                        width="100px"
-                        className="img_acc"
-                        id="imgAcc"
-                        alt=""
-                        title="Your profile picture"
-                      />
+                      <div className="avatar">
+                        <img
+                          src={
+                            user.photo_profile
+                              ? "http://localhost:8000/storage/profile_pictures/" + user.photo_profile
+                              : "/outils/pngs/useracc2.png"
+                          }
+                          onClick={() => openModal("profilePicture")}
+                          onContextMenu={(e) => e.preventDefault()}
+                          // width="100px"
+                          // className="avatar"
+                          // id="imgAcc"
+                          alt=""
+                          title="Your profile picture"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -569,7 +601,7 @@ export const MyProfile = () => {
                       accept=".png, .jpg"
                     />
                     <img
-                      src={user.photo_profile ? `/profile_pictures/${user.photo_profile}` : "/outils/pngs/useracc2.png"}
+                      src={user.photo_profile ? `http://localhost:8000/storage/profile_pictures/${user.photo_profile}` : "/outils/pngs/useracc2.png"}
                       width="100px"
                       className="img_acc mt-2 mb-2"
                       id="imgAcc1"
@@ -617,7 +649,7 @@ export const MyProfile = () => {
                                   className="form-control"
                                   id="username"
                                   {...register('username', {
-                                    validate:(value)=>{
+                                    validate: (value) => {
                                       if (value === originalUser.username) return true;
                                       return /^[a-zA-Z0-9_]{6,}$/.test(value) || 'Invalid username'
                                     },
@@ -646,8 +678,8 @@ export const MyProfile = () => {
                                   type="email"
                                   className="form-control"
                                   id="useremail"
-                                  {...register('email',{
-                                    validate:(value)=>{
+                                  {...register('email', {
+                                    validate: (value) => {
                                       if (value === originalUser.email) return true;
                                       return /^[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|hotmail\.com|[a-zA-Z]\.(ma|org|com))$/.test(value) || 'Invalid email'
                                     },
@@ -663,8 +695,8 @@ export const MyProfile = () => {
                                 <input
                                   type="tel"
                                   className="form-control"
-                                  {...register('phone',{
-                                    validate:(value)=>{
+                                  {...register('phone', {
+                                    validate: (value) => {
                                       if (originalUser.phone_number && value === originalUser.phone_number) return true;
                                       return /^\+[1-9]\d{7,14}$/.test(value) || 'Invalid phone number'
                                     },
