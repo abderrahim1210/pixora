@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\GetPhotos;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PhotoController;
@@ -52,6 +53,8 @@ Route::prefix('/edit_profile_pictures')->group(function(){
     Route::delete('/delete_avatar',[ProfilePictures::class, 'deleteAvatar'])->middleware('auth:sanctum');
     Route::delete('/delete_cover',[ProfilePictures::class, 'deleteCover'])->middleware('auth:sanctum');
 });
+
+Route::get('/get_photos',[GetPhotos::class, 'getPhotos'])->middleware('auth:sanctum');
 
 Route::get('/get_categories', function () {
     $categs = Category::all();

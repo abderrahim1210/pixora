@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "./Navbar";
 import axios from "axios";
-import { FaCamera, FaCertificate, FaChartLine, FaFileContract, FaHeart } from "react-icons/fa";
-import { Copyright } from "./Copyright";
-import { GiPadlock } from "react-icons/gi";
+import { FaCamera, FaCertificate, FaChartLine, FaEdit, FaFileContract, FaHeart } from "react-icons/fa";
 import { MdAnalytics, MdPhotoLibrary, MdVerified } from "react-icons/md";
-import { RiChat1Line } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
-import { Truncate } from "./Truncate";
 import { notyf } from "../../assets/js/notyf";
 import PageSkeleton from "./PageSkeleton";
 import PhotosTemplate from "./PhotosTemplate";
@@ -18,25 +14,22 @@ import { Footer } from "./Footer";
 export const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
   const [photosLikes, setPhotosLikes] = useState([]);
-  const [photosCount, setPhotosCount] = useState(0);
-  const [likesCountPhotos, setLikesCountPhotos] = useState(0);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const { user } = useAuth();
   const navigate = useNavigate();
-  if (!user.id) navigate('/login');
+  // if (!user?.id) navigate('/login');
   useEffect(() => {
     axios
-      .get("http://localhost/Pixora/backend/api/fetch_my_photos.php", {
+      .get("http://localhost:8000/get_photos", {
         withCredentials: true,
+        withXSRFToken:true
       })
 
       .then((res) => {
         if (res.data.success) {
           setPhotos(res.data.photos);
           setPhotosLikes(res.data.photosLikes);
-          setPhotosCount(res.data.photosCount);
-          setLikesCountPhotos(res.data.likesCountPhotos);
           setLoading(true);
         } else {
           navigate('/login');
@@ -76,7 +69,7 @@ export const MyPhotos = () => {
                       data-bs-toggle="tab"
                       className="nav-link"
                     >
-                      <MdVerified /> licsensing
+                      <FaEdit /> requests
                     </a>
                   </li>
                   <li className="nav-item">
@@ -97,15 +90,6 @@ export const MyPhotos = () => {
                       <MdPhotoLibrary /> galeries
                     </a>
                   </li>
-                  <li className="nav-item">
-                    <a
-                      data-bs-target="#statistics"
-                      data-bs-toggle="tab"
-                      className="nav-link"
-                    >
-                      <FaChartLine /> statistics
-                    </a>
-                  </li>
                 </ul>
               </div>
             </nav>
@@ -115,7 +99,7 @@ export const MyPhotos = () => {
                   <h2>
                     My photos{" "}
                     <p className="d-inline text-primary">
-                      ( {photosCount} photos)
+                      ( {photos?.length} photos)
                     </p>
                   </h2>
                 </div>
@@ -157,7 +141,7 @@ export const MyPhotos = () => {
                       </div>
                     </div> */}
                   </div>
-                  <EmptyContent icon={<MdVerified className="faIcon" />} text={"No licensing photos yet — start licensing your best shots!"} />
+                  <EmptyContent icon={<FaEdit className="faIcon" />} text={"No requests yet — start request with anyone"} />
                 </div>
               </div>
               <div className="tab-pane fade show" id="likes">
@@ -165,16 +149,16 @@ export const MyPhotos = () => {
                   <h2>
                     Likes{" "}
                     <p className="d-inline text-primary">
-                      ( {likesCountPhotos} Photos)
+                      ( {photosLikes?.length ?? 0} Photos)
                     </p>
                   </h2>
                 </div>
                 <div className="container-fluid">
                   <div>
-                    {photosLikes.length > 0 ? (
+                    {photosLikes?.length > 0 ? (
                       <PhotosTemplate photos={photosLikes} />
                     ) : (
-                      <EmptyContent icon={<FaHeart className="faIcon" />} />
+                      <EmptyContent icon={<FaHeart className="faIcon" />} text={"No photos liked yet - try again later"} />
                     )}
                   </div>
                 </div>
@@ -214,38 +198,6 @@ export const MyPhotos = () => {
                       <h4>No galleries yet — create your first one!</h4>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="tab-pane fade show" id="statistics">
-                <div className="mt-2 mb-2">
-                  <h2>
-                    Statistics{" "}
-                    <p className="d-inline text-primary">( )</p>
-                  </h2>
-                </div>
-                <div className="container-fluid">
-                  <div className="myphotos mt-3 mb-3">
-                    {/* <div className="card">
-                      <div className="card-body p-0">
-                        <div className="image">
-                          <a href="photo_preview.php?id=">
-                            <img src="photos/" className="img-fluid" />
-                          </a>
-                        </div>
-                        <div className="d-flex justify-content-between p-2">
-                          <div>
-                            <h5 />
-                          </div>
-                          <div className="d-flex justify-content-center align-items-center">
-                            <div>
-                              <p />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div> */}
-                  </div>
-                  <EmptyContent icon={<FaChartLine className="faIcon" />} text={"No statistics found for now - try later"} />
                 </div>
               </div>
             </div>
