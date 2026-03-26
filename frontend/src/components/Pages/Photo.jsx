@@ -139,9 +139,9 @@ export const Photo = (props) => {
                     }
                 } catch (err) {
                     console.log(err.response?.data);
-                }    // }finally {
-                //     return navigate(`/${user.username}/myprofile`);
-                // }
+                } finally {
+                    return navigate(`/${user.username}/myphotos`);
+                }
             }
         })
     }

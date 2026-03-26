@@ -17,6 +17,7 @@ export const Upload = () => {
   const { user } = useAuth();
   // if (!user?.id) return navigate('/login');
   const steps = ['Get started', 'License', 'Upload', 'Details', 'Publish'];
+  
   const [photo, setPhoto] = useState({
     title: "",
     type: "",
@@ -31,7 +32,8 @@ export const Upload = () => {
     orientation: "",
     tags: "",
     preview: null,
-    visibility:""
+    visibility:"",
+    gallery_id:""
   });
   const next = () => setStep((s) => s + 1);
   const prev = () => setStep((s) => s - 1);
@@ -54,7 +56,8 @@ export const Upload = () => {
         tags: photo.tags,
         size: photo.size,
         image: photo.preview,
-        visibility:photo.visibility
+        visibility:photo.visibility,
+        gallery_id:photo.gallery_id
       }
       if (file) {
         const res = await axios.post('http://localhost:8000/upload', { photo_data: payload }, { withCredentials: true, withXSRFToken: true });
@@ -355,6 +358,19 @@ function StepTwo({ step, prev, next, photo, setPhoto }) {
 }
 function StepThree({ step, prev, next, photo, setPhoto }) {
   const [categories, setCategories] = useState([]);
+  const [galleries,setGalleries] = useState([]);
+  useEffect(()=>{
+    try{
+      axios.get('http://localhost:8000/get_galleries',{withCredentials:true,withXSRFToken:true})
+      .then(res => {
+        if (res.data.success){
+          setGalleries(res.data.galleries);
+        }
+      });
+    }catch(err){
+      console.log(err.response?.data);
+    }
+  },[]);
   const url = 'http://localhost:8000/get_categories';
   useEffect(() => {
     try {
@@ -407,16 +423,6 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
               <p id="descriptionErr" />
             </div>
             <div className="form-floating">
-              {/* <input
-              name="categorie"
-              type="text"
-              className="form-control"
-              id="categoriePhoto"
-              placeholder="Categorie photo ..."
-              required
-              value={photo.category}
-              onChange={(e) => setPhoto({ ...photo, category: e.target.value })}
-            /> */}
               <select name="categorie" value={photo.category} className="form-select" id="categoriePhoto" onChange={(e) => setPhoto({ ...photo, category: e.target.value })}>
                 <option>Select category</option>
                 {
@@ -429,6 +435,20 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
                 Category *
               </label>
               <p id="categorieErr" />
+            </div>
+            <div className="form-floating">
+              <select name="gallery" value={photo.gallery_id} className="form-select" id="galleryPhoto" onChange={(e) => setPhoto({ ...photo, gallery_id: e.target.value })}>
+                <option>Select gallery</option>
+                {
+                  galleries?.map(g => (
+                    <option key={g.id} value={g.id}>{g.title}</option>
+                  ))
+                }
+              </select>
+              <label htmlFor="galleryPhoto" className="form-label">
+                Gallery
+              </label>
+              <p id="galleryErr" />
             </div>
             <div className="form-floating">
               <textarea

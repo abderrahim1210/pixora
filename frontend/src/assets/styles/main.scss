@@ -9,6 +9,8 @@
 @use './components/upload';
 @use './components/footer_dash';
 @use './components/comments';
+@use './components/gallery';
+// @import 'tailwindcss';
 
 :root {
     --special_color: rgb(0, 120, 255);
