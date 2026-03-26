@@ -28,4 +28,9 @@ class Photo extends Model
     public function getCreatedAtHumanAttribute(){
         return $this->created_at->diffForHumans();
     }
+
+    public function galleries()
+    {
+        return $this->belongsToMany(Gallery::class, 'gallery_photos');
+    }
 }

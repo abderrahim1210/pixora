@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class UploadController extends Controller
@@ -42,6 +43,7 @@ class UploadController extends Controller
         $size = $photo['size'] ?? "";
         $image = $photo['image'];
         $location = $photo['location'] ?? "";
+        $gallery_id = $photo['gallery_id'] ?? null;
 
         preg_match('/^data:image\/(\w+);base64,/', $image, $matches);
         $ext = strtolower($matches[1]);
@@ -72,7 +74,7 @@ class UploadController extends Controller
             'name' => $category
         ]);
 
-        Photo::create([
+        $photoModel = Photo::create([
             'user_id' => $user->id,
             'title' => $title,
             'description' => $description,
@@ -85,8 +87,17 @@ class UploadController extends Controller
             'ratio' => $ratio,
             'orientation' => $orientation,
             'tags' => $tags,
-            'location' => $location
+            'location' => $location,
+            'gallery_id' => $gallery_id
         ]);
+
+        if ($gallery_id){
+            DB::table('gallery_photos')->insert([
+                'photo_id' => $photoModel->id,
+                'gallery_id' => $gallery_id,
+                'created_at' => now()
+            ]);
+        }
 
         return response()->json([
             'success' => true,

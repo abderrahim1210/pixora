@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Follow;
+use App\Models\Gallery;
 use App\Models\Like;
 use App\Models\Photo;
 use Illuminate\Http\Request;
@@ -23,10 +24,16 @@ class GetPhotos extends Controller
         $followers = Follow::where('follower_id',$user->id)->get();
         $followings = Follow::where('following_id',$user->id)->get();
 
+        // $galleries = Gallery::where('user_id',$user->id)->get();
+        $galleries = Gallery::with(['photos' => function($q) {
+            $q->select('photos.id','filename');
+        }])->withCount('photos')->where('user_id',$user->id)->get();
+
         return response()->json([
             'success' => true,
             'photos' => $photos ?: [],
             'photosLikes' => $photosLikes,
+            'galleries' => $galleries,
             'statistics' => [
                 'followers' => $followers,
                 'followings' => $followings

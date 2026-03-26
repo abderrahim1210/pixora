@@ -19,7 +19,7 @@ import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import axios from "axios";
 import { setFavicon } from "../utils/SetFavicon";
-import { MdCategory, MdRecommend } from "react-icons/md";
+import { MdAlbum, MdCategory, MdPhotoAlbum, MdRecommend } from "react-icons/md";
 import { useAuth } from '../context/AuthProvider'
 import { Truncate } from "./Truncate";
 import { notyf } from "../../assets/js/notyf";
@@ -217,6 +217,17 @@ export const Home = () => {
               <a
                 href="#"
                 className="nav-link"
+                data-bs-target="#galleries"
+                data-bs-toggle="tab"
+                title="Galleries"
+              >
+                <MdPhotoAlbum /> Galleries
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                href="#"
+                className="nav-link"
                 data-bs-target="#about"
                 data-bs-toggle="tab"
                 title="About"
@@ -234,7 +245,7 @@ export const Home = () => {
         >
           <h1 className="text-center fw-bold">For you</h1>
           <div className="photos">
-            {!loading ? Array(4).fill().map((_, i) => <PageSkeleton key={i} />) : photos.length > 0 ? photos.map((p) => (
+            {!loading ? Array(4).fill().map((_, i) => <PageSkeleton key={i} page={'photos'} />) : photos.length > 0 ? photos.map((p) => (
               <div className="card" key={p.id}>
                 <Link
                   key={p.id}
@@ -482,6 +493,12 @@ export const Home = () => {
             )}
           </div>
         </div>
+        <div
+          className="container-fluid tab-pane fade show mt-3 mb-3"
+          id="galleries"
+        >
+          <h1 className="text-center fw-bold">Galleries</h1>
+          </div>
         <div
           className="container-fluid tab-pane fade show mt-3 mb-3"
           id="about"

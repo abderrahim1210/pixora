@@ -7,6 +7,7 @@ import { SignUp } from "../SignUp";
 import { MyProfile } from "../MyProfile";
 import { MyPhotos } from "../MyPhotos";
 import { Photo } from "../Photo";
+import GalleryPreview from "../GalleryPreview";
 const AppRoutes = () => {
   
   return (
@@ -19,6 +20,7 @@ const AppRoutes = () => {
       <Route path={`/:username/myphotos`} element={<MyPhotos />} />
       <Route path={`/:username/myprofile`} element={<MyProfile />} />
       <Route path="/photo/:id/:slug" element={<Photo />} />
+      <Route path="/gallery/:id" element={<GalleryPreview />} />
     </Routes>
     </>
   );

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -110,7 +111,6 @@ class PhotoController extends Controller
             ]);
         }
 
-        // $check = Photo::with(['user'])->find($id);
         $user = Auth::user();
         if ($photo->user_id !== $user->id){
             return response()->json([
@@ -119,10 +119,9 @@ class PhotoController extends Controller
             ]);
         }
 
-        $photo_path = public_path('photos/' . $photo->filename);
-        if (File::exists($photo_path)){
-            File::delete($photo_path);
-        }
+        DB::table('gallery_photos')
+        ->where('photo_id',$photo->id)
+        ->delete();
 
         $photo->likes()->delete();
 
