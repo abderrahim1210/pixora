@@ -27,6 +27,8 @@ import PageSkeleton from './PageSkeleton';
 import { EmptyContent } from "./EmptyContent";
 import { FaPhotoFilm } from "react-icons/fa6";
 import GalleriesTemplate from "./GalleriesTemplate";
+import { motion } from 'framer-motion';
+import Motion from "./Motion";
 export const Home = () => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
@@ -35,7 +37,7 @@ export const Home = () => {
   const [search, setSearch] = useState("");
   const [follows, setFollows] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [galleries,setGalleries] = useState([]);
+  const [galleries, setGalleries] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost:8000/homepage", { withCredentials: true })
@@ -136,26 +138,29 @@ export const Home = () => {
   }
 
   useEffect(() => {
-    try{
-      axios.get('http://localhost:8000/get_all_galleries',{withCredentials:true,withXSRFToken:true})
-      .then((res) => {
-        if (res.data.success){
-          setGalleries(res.data.galleries);
-        }
-      })
-    }catch(err){
+    try {
+      axios.get('http://localhost:8000/get_all_galleries', { withCredentials: true, withXSRFToken: true })
+        .then((res) => {
+          if (res.data.success) {
+            setGalleries(res.data.galleries);
+          }
+        })
+    } catch (err) {
       console.log(err.response?.data);
     }
-  },[])
+  }, [])
   return (
     <div data-bs-page="pixora">
       <Navbar data={user} />
+
       <div className="div2">
         <div className="container-fluid p-0">
-          <h1 style={{ fontWeight: "700" }}>discover amazing photos on Pixora</h1>
-          <p id="quote" className="mt-2 mb-2">
-            Every photo tells a story. What’s yours?
-          </p>
+          <Motion>
+            <h1 style={{ fontWeight: "700" }}>discover amazing photos on Pixora</h1>
+            <p id="quote" className="mt-2 mb-2">
+              Every photo tells a story. What’s yours?
+            </p>
+          </Motion>
           <div className="div2-1">
             <div>
               <input
@@ -513,7 +518,7 @@ export const Home = () => {
         >
           <h1 className="text-center fw-bold">Galleries</h1>
           <GalleriesTemplate galleries={galleries} />
-          </div>
+        </div>
         <div
           className="container-fluid tab-pane fade show mt-3 mb-3"
           id="about"
