@@ -6,7 +6,7 @@ import { Footer } from './Footer';
 import { EmptyContent } from './EmptyContent';
 import { MdPhotoAlbum } from 'react-icons/md';
 import PhotosTemplate from './PhotosTemplate';
-import { FaPencil } from 'react-icons/fa6';
+import { FaPencil, FaPhotoFilm } from 'react-icons/fa6';
 import PageSkeleton from './PageSkeleton';
 import { Truncate } from './Truncate';
 import { FaCheck } from 'react-icons/fa';
@@ -21,8 +21,8 @@ const GalleryPreview = () => {
     const [dirty, setDirty] = useState(false);
     const navigate = useNavigate();
     const [isEdit, setIsEdit] = useState({
-        title: false,
-        description: false
+        title: "",
+        description: ""
     });
     useEffect(() => {
         const fetchPhotos = async () => {
@@ -38,6 +38,8 @@ const GalleryPreview = () => {
             } catch (err) {
                 setLoading(true);
                 console.log(err.response?.data?.message);
+            }finally{
+                setLoading(false);
             }
         }
 
@@ -112,7 +114,7 @@ const GalleryPreview = () => {
 
                                 <div className='photos-grid'>
                                     {
-                                        gallery?.photos.length > 0 && (<PhotosTemplate photos={gallery.photos} />)
+                                        gallery?.photos.length > 0 ? (<PhotosTemplate photos={gallery.photos} />) : (<EmptyContent icon={<FaPhotoFilm className='faIcon' />} text={"Not photos yet - start add photo to gallery !"} />)
                                     }
                                 </div>
                             </>

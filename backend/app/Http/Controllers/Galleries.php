@@ -58,12 +58,6 @@ class Galleries extends Controller
                 'message' => 'Gallery not found'
             ]);
         }
-        if ($gallery->photos->isEmpty()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No photos yet for this gallery'
-            ]);
-        }
 
         return response()->json([
             'success' => true,

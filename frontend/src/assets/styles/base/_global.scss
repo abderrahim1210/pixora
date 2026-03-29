@@ -521,3 +521,106 @@
 .image:hover img {
     transform: scale(1.1);
 }
+
+.galleries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+
+  .gallery-card {
+    background-color: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: 0.3s ease;
+    border: 1px solid var(--special_color);
+    cursor: pointer;
+  }
+
+  .gallery-card:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  }
+
+  .gallery-cover{
+    height: 180px;
+    border-radius: 16px 16px 0 0;
+    overflow: hidden;
+  }
+
+  .gallery-preview{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: 100%;
+    gap: 2px;
+  }
+
+  .gallery-preview img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .no-image{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #3b82f6,#06b6d4);
+  }
+
+  .no-image:nth-child(1) { background: linear-gradient(135deg, #3b82f6, #06b6d4); }
+.no-image:nth-child(2) { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+.no-image:nth-child(3) { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+
+  .gallery-cover img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.4s;
+  }
+
+  .gallery-card:hover .gallery-cover img{
+    transform: scale(1.05);
+  }
+
+  .gallery-content{
+    padding: 15px;
+  }
+
+  .gallery-title{
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .gallery-desc{
+    font-size: 13px;
+    color: var(--special_color);
+    height: 35px;
+    overflow: hidden;
+  }
+
+  .gallery-footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .gallery-footer span{
+    font-size: 12px;
+    color: var(--special_color);
+  }
+
+  .view-btn{
+    border: none;
+    background: var(--special_color);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    transition: 0.3s;
+  }

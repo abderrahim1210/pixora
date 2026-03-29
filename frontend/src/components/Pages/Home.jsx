@@ -26,6 +26,7 @@ import { notyf } from "../../assets/js/notyf";
 import PageSkeleton from './PageSkeleton';
 import { EmptyContent } from "./EmptyContent";
 import { FaPhotoFilm } from "react-icons/fa6";
+import GalleriesTemplate from "./GalleriesTemplate";
 export const Home = () => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
@@ -34,6 +35,7 @@ export const Home = () => {
   const [search, setSearch] = useState("");
   const [follows, setFollows] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [galleries,setGalleries] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost:8000/homepage", { withCredentials: true })
@@ -116,7 +118,6 @@ export const Home = () => {
       return prevPhotos.map((p) => p.id === photoid ? { ...p, isLiked: !p.isLiked, totalLikes: p.isLiked ? p.totalLikes - 1 : p.totalLikes + 1 } : p);
     });
     try {
-      // setLiked(!liked);
       const res = await axios.post("http://localhost:8000/add_like", { photo_id: photoid }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         setPhotos((prevPhotos) =>
@@ -133,6 +134,19 @@ export const Home = () => {
       console.log(err.response?.data);
     }
   }
+
+  useEffect(() => {
+    try{
+      axios.get('http://localhost:8000/get_all_galleries',{withCredentials:true,withXSRFToken:true})
+      .then((res) => {
+        if (res.data.success){
+          setGalleries(res.data.galleries);
+        }
+      })
+    }catch(err){
+      console.log(err.response?.data);
+    }
+  },[])
   return (
     <div data-bs-page="pixora">
       <Navbar data={user} />
@@ -498,6 +512,7 @@ export const Home = () => {
           id="galleries"
         >
           <h1 className="text-center fw-bold">Galleries</h1>
+          <GalleriesTemplate galleries={galleries} />
           </div>
         <div
           className="container-fluid tab-pane fade show mt-3 mb-3"

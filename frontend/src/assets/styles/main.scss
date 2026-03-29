@@ -10,7 +10,6 @@
 @use './components/footer_dash';
 @use './components/comments';
 @use './components/gallery';
-// @import 'tailwindcss';
 
 :root {
     --special_color: rgb(0, 120, 255);
@@ -44,18 +43,6 @@
     box-shadow: none;
     outline: none;
 }
-
-// .form-select {
-//     border: none;
-//     border-radius: 0%;
-//     border-bottom: 2px solid var(--special_dark-color);
-//     background-color: #fcfcfc;
-//     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
-// }
-
-// .form-select:focus {
-//     border-bottom: 2px solid var(--special_color);
-// }
 
 body {
     margin: 0;

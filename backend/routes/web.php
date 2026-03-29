@@ -78,6 +78,14 @@ Route::get('/get_galleries', function(){
     ]);
 });
 
+Route::get('/get_all_galleries',function(){
+    $galleries = Gallery::all();
+    return response()->json([
+        'success' => true,
+        'galleries' => $galleries
+    ]);
+});
+
 Route::get('/get_gallery/{id}',[Galleries::class,'GetGallery'])->middleware('auth:sanctum');
 Route::delete('/delete_gallery/{id}',[Galleries::class, 'DeleteGallery'])->middleware('auth:sanctum');
 

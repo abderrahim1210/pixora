@@ -1,48 +1,4 @@
-[data-bs-page="gallery"] {
-    .gallery-container {
-        // max-width: 1200px;
-        margin: 20px auto;
-        padding: 0 20px;
-    }
-
-    .gallery-header {
-        text-align: center;
-        margin-bottom: 30px;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .gallery-header-icon {
-        transition: trasnform 1s ease;
-        color: #222;
-    }
-
-    .gallery-header-icon:hover {
-        transform: rotate(5deg);
-        color: var(--special_color);
-    }
-
-    .gallery-header>div {
-        display: flex;
-        gap: 10px;
-    }
-
-    .gallery-header h1 {
-        font-size: 2.5rem;
-        color: var(--special_color);
-    }
-
-    .gallery-header textarea {
-        resize: none;
-    }
-
-    .photos-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-    }
+[data-bs-page="galleries"] {
 
     .skeleton-container {
         margin: 40px auto;
@@ -95,51 +51,92 @@
         }
     }
 
-    .floating-actions {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
+}
+.floating-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 
-        margin: 15px auto 0;
-        width: fit-content;
+    margin: 15px auto 0;
+    width: fit-content;
 
-        background: white;
-        padding: 10px 15px;
-        border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
+    background: white;
+    padding: 10px 15px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
 
-    .floating-actions button {
-        padding: 8px 16px;
-        border-radius: 50px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: 0.2s ease;
-        border: 1px solid transparent;
-    }
+.floating-actions button {
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+    border: 1px solid transparent;
+}
 
-    .save-changes {
-        border-color: var(--special_color);
-        color: var(--special_color);
-        background: transparent;
-    }
+.save-changes {
+    border-color: var(--special_color);
+    color: var(--special_color);
+    background: transparent;
+}
 
-    .save-changes:hover {
-        background: var(--special_color);
-        color: white;
-    }
+.save-changes:hover {
+    background: var(--special_color);
+    color: white;
+}
 
-    .delete-gallery {
-        border-color: #dc3545;
-        color: #dc3545;
-        background: transparent;
-    }
+.delete-gallery {
+    border-color: #dc3545;
+    color: #dc3545;
+    background: transparent;
+}
 
-    .delete-gallery:hover {
-        background: #dc3545;
-        color: white;
-    }
+.delete-gallery:hover {
+    background: #dc3545;
+    color: white;
+}
+.gallery-container {
+    // max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
 
+.gallery-header {
+    text-align: center;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
 
+.gallery-header-icon {
+    transition: trasnform 1s ease;
+    color: #222;
+}
+
+.gallery-header-icon:hover {
+    transform: rotate(5deg);
+    color: var(--special_color);
+}
+
+.gallery-header>div {
+    display: flex;
+    gap: 10px;
+}
+
+.gallery-header h1 {
+    font-size: 2.5rem;
+    color: var(--special_color);
+}
+
+.gallery-header textarea {
+    resize: none;
+}
+.photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
 }

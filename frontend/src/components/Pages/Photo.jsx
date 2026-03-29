@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Navbar } from "./Navbar";
 import { FiCopy, FiFacebook, FiHeart, FiInstagram, FiTwitter } from "react-icons/fi";
-import { FaCalendar, FaCheck, FaCheckCircle, FaClock, FaComment, FaEye, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaShare, FaSync, FaTags, FaUser, FaWhatsapp } from "react-icons/fa";
+import { FaCalendar, FaCheck, FaCheckCircle, FaClock, FaComment, FaEye, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaPlus, FaShare, FaSync, FaTags, FaUser, FaWhatsapp } from "react-icons/fa";
 import { FaLocationDot, FaPencil, FaX } from "react-icons/fa6";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { initEdit, toggleEdit, updateField } from "../Store/photoSlice";
 import axios from "axios";
@@ -20,9 +20,10 @@ import Swal from "sweetalert2";
 import AsyncSelect from "react-select/async";
 import PageSkeleton from "./PageSkeleton";
 import { useModal } from "../context/ModalProvider";
-import { MdCategory } from "react-icons/md";
+import { MdCategory, MdPhotoLibrary } from "react-icons/md";
 import ModalTemplate from "./ModalTemplate";
 import { Footer } from "./Footer";
+import GalleriesTemplate from "./GalleriesTemplate";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -45,7 +46,9 @@ export const Photo = (props) => {
     const photoUrl = window.location.href;
     const encodeUrl = encodeURIComponent(photoUrl);
     const { show, openModal, closeModal } = useModal();
+    const [galleries, setGalleries] = useState([]);
     const commentRef = useRef(null);
+    const [selected, setSelected] = useState([]);
     useEffect(() => {
         axios.get(url, { params: { id }, withCredentials: true })
             .then((res) => {
@@ -78,6 +81,24 @@ export const Photo = (props) => {
             setLiked(oldLiked);
         }
     }
+    useEffect(() => {
+        try {
+            axios.get('http://localhost:8000/get_galleries', { withCredentials: true, withXSRFToken: true })
+                .then((res) => {
+                    if (res.data.success) {
+                        setGalleries(res.data.galleries);
+                    }
+                })
+        } catch (err) {
+            console.log(err.response?.data);
+        }
+    }, [])
+
+    useEffect(() => {
+        if (photo?.galleries) {
+            setSelected(photo.galleries.map(g => g.id));
+        }
+    }, [photo]);
     // const handleComment = async () => {
     //     try {
     //         const res = await axios.post('http://localhost:8000/comments/store', { photo_id: id, comment: comment }, { withCredentials: true, withXSRFToken: true });
@@ -100,7 +121,8 @@ export const Photo = (props) => {
                 category_id: photo.category_id,
                 location: photo.location,
                 visibility: photo.visibility,
-                tags: photo.tags
+                tags: photo.tags,
+                galleries: selected
             }));
         }
     }, [photo, category]);
@@ -174,7 +196,7 @@ export const Photo = (props) => {
     }
     const handleEdit = async (data) => {
         try {
-            const res = await axios.post(`http://localhost:8000/photo/${id}`, { photo_id: photo.photo_id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id, visibility: fields?.visibility, tags: fields?.tags }, { withCredentials: true, withXSRFToken: true });
+            const res = await axios.post(`http://localhost:8000/photo/${id}`, { photo_id: photo.photo_id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id, visibility: fields?.visibility, tags: fields?.tags, galleries: selected }, { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 console.log(res.data);
                 dispatch(initEdit(data))
@@ -202,6 +224,11 @@ export const Photo = (props) => {
         commentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         commentRef.current?.focus();
     }
+
+    const toggleGallery = (id) => {
+        setSelected((prev) => prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]);
+    }
+
     return (
         <div data-bs-page="photo">
             <Navbar data={props.data} />
@@ -231,6 +258,46 @@ export const Photo = (props) => {
                                     <FiCopy className="icon" />
                                     <span>Copy</span>
                                 </a>
+                            </div>
+                        </div>
+                    </ModalTemplate>
+                )
+            }
+            {
+                show === "addToGallery" && (
+                    <ModalTemplate show={show} closeModal={closeModal}>
+                        <div className="handle">
+                            <h2>Add to gallery</h2>
+                            <div className="gallery-item new">
+                                <div className="thumb new-thumb"><FaPlus /></div>
+                                <Link to={`/${user.username}/myphotos`}>New Gallery</Link>
+                            </div>
+                            <hr />
+                            <div className="gallery-list">
+                                {
+                                    galleries.map((g) => {
+                                        const isSelected = selected.includes(g.id);
+                                        return (
+                                            <div key={g.id} onClick={() => toggleGallery(g.id)} className={`gallery-item ${isSelected ? 'selected' : ''}`}>
+                                                <div className="left">
+                                                    {
+                                                        g.photos && g.photos?.length > 0 ? (
+                                                            <>
+                                                                <img src={g.cover ?? ""} alt="" />
+                                                            </>
+                                                        ) : (<div className="no-image">
+                                                            {g.title.charAt(0)}
+                                                        </div>)
+                                                    }
+                                                    <span>{g.title}</span>
+                                                </div>
+                                                <div className={`checkbox ${isSelected ? 'checked' : ''}`}>
+                                                    {isSelected && (<div className="inner"></div>)}
+                                                </div>
+                                            </div>
+                                        );
+                                    })
+                                }
                             </div>
                         </div>
                     </ModalTemplate>
@@ -359,6 +426,13 @@ export const Photo = (props) => {
                                     }
                                     <div className="d-flex justify-content-end">
                                         {isUser && (<button className="btn p-0 pencil-item" onClick={() => dispatch(toggleEdit("tags"))}>{!isEdit.tags ? (<FaPencil />) : (<FaCheck />)}</button>)}
+                                    </div>
+                                </li>
+                                <li>
+                                    <MdPhotoLibrary />
+                                    {photo.galleries.length > 0 ? (<p>{photo.galleries.map((g) => g.title).join(', ')}</p>) : (<p>Not galleries yet</p>)}
+                                    <div className="d-flex justify-content-end">
+                                        {isUser && (<button className="btn p-0 pencil-item" onClick={() => { openModal('addToGallery'); dispatch(toggleEdit('galleries')) }}>{!isEdit.galleries ? (<FaPencil />) : (<FaCheck />)}</button>)}
                                     </div>
                                 </li>
                                 <li>

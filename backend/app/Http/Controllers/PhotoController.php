@@ -15,7 +15,7 @@ class PhotoController extends Controller
     public function show($id)
     {
         $user = Auth::user();
-        $photo = Photo::with(['user', 'category', 'comments.user', 'likes'])->withCount('likes')->find($id);
+        $photo = Photo::with(['user', 'category', 'comments.user', 'likes', 'galleries'])->withCount('likes')->find($id);
         if (!$photo) {
             return response()->json([
                 'success' => false,
@@ -24,7 +24,7 @@ class PhotoController extends Controller
         }
 
         $photo->created_at_human = $photo->created_at->diffForHumans();
-        $photo->comments->each(function($comment){
+        $photo->comments->each(function ($comment) {
             $comment->created_at_human = $comment->created_at->diffForHumans();
         });
         $photo->isLiked = $user ? $photo->likes->contains('user_id', $user->id) : false;
@@ -36,6 +36,7 @@ class PhotoController extends Controller
             'category' => $photo->category,
             'categories' => [],
             'comments' => $photo->comments,
+            'galleries' => $photo->galleries
         ]);
     }
 
@@ -47,6 +48,7 @@ class PhotoController extends Controller
         $category = $request->category_id ?? null;
         $visibility = $request->visibility ?? null;
         $tags = $request->tags ?? null;
+        $galleries = $request->galleries ?? null;
 
         $photo = Photo::find($id);
 
@@ -68,28 +70,40 @@ class PhotoController extends Controller
             ]);
         }
 
-        if ($category !== null){
+        if ($category !== null) {
             $photo->category_id = $category;
         }
 
-        if ($description !== null){
+        if ($description !== null) {
             $photo->description = $description;
         }
 
-        if ($title !== null){
+        if ($title !== null) {
             $photo->title = $title;
         }
 
-        if ($location !== null){
+        if ($location !== null) {
             $photo->location = $location;
         }
 
-        if ($visibility !== null){
+        if ($visibility !== null) {
             $photo->visibility  = $visibility;
         }
 
-        if ($tags !== null){
+        if ($tags !== null) {
             $photo->tags = $tags;
+        }
+
+        if ($galleries !== null) {
+            // foreach ($galleries as $g) {
+            //     DB::table('gallery_photos')->insert([
+            //         'photo_id' => $photo->id,
+            //         'gallery_id' => $g,
+            //         'created_at' => now(),
+            //         'updated_at' => now()
+            //     ]);
+            // }
+            $photo->galleries()->sync($galleries);
         }
 
         $photo->save();
@@ -102,9 +116,9 @@ class PhotoController extends Controller
 
     public function destroy($id)
     {
-        $photo = Photo::with(['likes','comments'])->find($id);
+        $photo = Photo::with(['likes', 'comments'])->find($id);
 
-        if (!$photo){
+        if (!$photo) {
             return response()->json([
                 'success' => false,
                 'message' => 'Photo not found'
@@ -112,7 +126,7 @@ class PhotoController extends Controller
         }
 
         $user = Auth::user();
-        if ($photo->user_id !== $user->id){
+        if ($photo->user_id !== $user->id) {
             return response()->json([
                 'success' => false,
                 'message' => "You don't have a permission for delete this photo"
@@ -120,8 +134,8 @@ class PhotoController extends Controller
         }
 
         DB::table('gallery_photos')
-        ->where('photo_id',$photo->id)
-        ->delete();
+            ->where('photo_id', $photo->id)
+            ->delete();
 
         $photo->likes()->delete();
 
@@ -129,7 +143,7 @@ class PhotoController extends Controller
 
         $photo->delete();
 
-        Storage::disk('public')->delete('photos/'.$photo->filename);
+        Storage::disk('public')->delete('photos/' . $photo->filename);
 
         return response()->json([
             'success' => true,

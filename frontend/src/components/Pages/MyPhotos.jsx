@@ -12,6 +12,7 @@ import { EmptyContent } from "./EmptyContent";
 import { Footer } from "./Footer";
 import { useModal } from "../context/ModalProvider";
 import ModalTemplate from "./ModalTemplate";
+import GalleriesTemplate from "./GalleriesTemplate";
 
 export const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
@@ -203,66 +204,13 @@ export const MyPhotos = () => {
                 <div className="mt-2 mb-2">
                   <h2>
                     Galleries{" "}
-                    <p className="d-inline text-primary">( galleries)</p>
+                    <p className="d-inline text-primary">({galleries?.length ?? 0} galleries)</p>
                     <button className="btn btn-primary rounded-circle add-btn" onClick={() => openModal('create-gallery')}>
                       <FaPlus />
                     </button>
                   </h2>
                 </div>
-                <div className="container-fluid">
-                  {
-                    galleries.length > 0 ? (
-                      <div className="galleries-grid mt-3 mb-3">
-                        {
-                          galleries?.map((g) => (
-                            <div key={g.id} className="gallery-card">
-                              <div className="gallery-cover">
-                                {
-                                  g.photos && g.photos?.length > 0 ? (
-                                    <div className="gallery-preview">
-                                      {
-                                        g.photos.slice(0,4).map((p,index) => (
-                                          <img key={index} src={`http://localhost:8000/storage/photos/${p.filename}`} alt="" />
-                                        ))
-                                      }
-                                    </div>
-                                  ) : (
-                                    <div className="no-image">
-                                      {
-                                        g.title.charAt(0)
-                                      }
-                                    </div>
-                                  )
-                                }
-                              </div>
-                              <div className="gallery-content">
-                                <h5 className="gallery-title">
-                                  {g.title}
-                                </h5>
-                                <p className="gallery-desc">
-                                  {g.description || 'No description'}
-                                </p>
-
-                                <div className="gallery-footer">
-                                  <span>{g.photos_count ?? 0} Photos</span>
-                                  <Link to={`/gallery/${g.id}`} className="view-btn">View</Link>
-                                </div>
-                              </div>
-                            </div>
-
-                          ))
-                        }
-                      </div>
-                    ) : (
-                      <div className="empty-content text-center">
-                        <div className="mb-5">
-                          <MdPhotoLibrary size={50} />
-                          <h4>No galleries yet — create your first one!</h4>
-                        </div>
-                      </div>
-                    )
-                  }
-                </div>
+                <GalleriesTemplate galleries={galleries} />
               </div>
             </div>
           </div>
