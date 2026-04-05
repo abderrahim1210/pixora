@@ -29,6 +29,9 @@ import { FaPhotoFilm } from "react-icons/fa6";
 import GalleriesTemplate from "./GalleriesTemplate";
 import { motion } from 'framer-motion';
 import Motion from "./Motion";
+import Avatar from "./Avatar";
+import { fetchFollows, toggleFollowAction } from "../utils/getFollows";
+
 export const Home = () => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
@@ -52,14 +55,9 @@ export const Home = () => {
     setFavicon("/outils/favicons/favicon.jpg");
   }, []);
 
-  const followURL = "http://localhost:8000/follows";
+  // const followURL = "http://localhost:8000/follows";
   useEffect(() => {
-    axios.get(followURL, { withCredentials: true })
-      .then(res => {
-        const usersArray = res.data.users;
-        const ids = usersArray.map((f) => f.id);
-        setFollows(ids);
-      })
+    fetchFollows(setFollows);
   }, []);
 
   useEffect(() => {
@@ -87,29 +85,7 @@ export const Home = () => {
   }
 
   const addFollow = async (id) => {
-    let previousFollows;
-    setFollows((prev) => {
-      previousFollows = prev;
-
-      if (prev.includes(id)) {
-        return prev.filter(f => f !== id);
-      } else {
-        return [...prev, id];
-      }
-    })
-    try {
-      const res = await axios.post(followURL, { followerID: id }, { withCredentials: true, withXSRFToken: true });
-      if (res.data.status === "followed") {
-        setFollows(prev => [...prev, id]);
-        notyf.success("You are followed this user");
-      } else {
-        setFollows(prev => prev.filter(f => f !== id));
-        notyf.error("You are unfollowed this user");
-      }
-    } catch (err) {
-      setFollows(previousFollows);
-      console.log(err.response?.data);
-    }
+    toggleFollowAction(id,follows,setFollows);
   }
 
 
@@ -189,11 +165,11 @@ export const Home = () => {
             </div>
           </div>
         </div>
-        <figure>
+        {/* <figure>
           <figcaption>
             Photo By Eddaoudi Aya
           </figcaption>
-        </figure>
+        </figure> */}
         <br />
       </div>
       <div className="sticky-top">
@@ -453,16 +429,7 @@ export const Home = () => {
                 <div className="card photographers" key={u.id}>
                   <div className="card-body">
                     <div className="mt-3 mb-3">
-                      <img
-                        src={`${u.photo_profile
-                          ? `/profile_pictures/${u.photo_profile}`
-                          : "/outils/pngs/useracc2.png"
-                          }`}
-                        id="imgAcc"
-                        width="100px"
-                        height="auto"
-                        alt=""
-                      />
+                      <Avatar src={`http://localhost:8000/storage/profile_pictures/${u.photo_profile}`} size={80} />
                     </div>
                     <div className="mt-3 mb-3">
                       {/* <a href="profil_preview.php?id=<?= $user['id']; ?>">
@@ -470,7 +437,7 @@ export const Home = () => {
                       </a> */}
                       <Truncate text={u.username} maxChars={20}>
                         {({ text }) => (
-                          <a>{text}</a>
+                          <Link to={`/photographer/${u.id}`}>{text}</Link>
                         )}
                       </Truncate>
                     </div>
@@ -582,7 +549,7 @@ export const Home = () => {
           </div>
         </div>
       </div>
-      <div className="container-fluid">
+      {/* <div className="container-fluid">
         <nav
           className="navbar mx-auto navbar-expand fixed-bottom nav3"
           role="tablist"
@@ -608,7 +575,7 @@ export const Home = () => {
             </li>
           </ul>
         </nav>
-      </div>
+      </div> */}
       <Footer type={'footer'} />
     </div >
   );

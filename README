@@ -1,83 +1,71 @@
-# 📸 Pixora
+# 📸 Pixora - Modern Image Sharing Platform
 
-**Pixora** is a modern web platform designed for sharing, discovering, and licensing photos.  
-It connects **photographers** with **users**, offering a built-in **communication system** and a flexible **licensing model** to protect creators’ rights and enable legal photo usage.
+<p align="center">
+  <img src="/outils/pngs/logo_styled.png" alt="Pixora Logo" width="200" onerror="this.src='https://via.placeholder.com/200?text=Pixora+Logo'"/>
+</p>
 
----
+<p align="center">
+  <strong>Modern Image Sharing Platform: Developing a highly responsive and high-performance web interface.</strong>
+</p>
 
-## 🚀 Features
-
-### 👤 Users & Photographers
-- User authentication (Sign up / Login)
-- Photographer profiles and portfolios
-- Public photographer pages
-
-### 🖼️ Photo Management
-- Upload high-quality photos
-- Categories and tags
-- Location-based photos
-- Advanced search and filtering
-- Like and save photos ❤️
-
-### 💬 Communication System
-- Direct messaging between users and photographers
-- Collaboration and photo purchase requests
-- Conversation history tracking
-
-### 📜 Licensing System
-- Multiple license types:
-  - Personal Use License
-  - Commercial Use License
-  - Exclusive License
-- Clear usage terms for each photo
-- Photographer rights protection
-- Licensing linked to each uploaded photo
-
-### ✏️ Content Editing
-- Inline content editing
-- Update title, description, category, and location
+<p align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+  <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
+</p>
 
 ---
 
-## 🛠️ Technologies Used
+## 📝 About the Project
+**Pixora** is a full-stack application dedicated to sharing images and visual content. The goal is to provide users with a fluid and intuitive experience to upload, discover, and manage photos, while ensuring optimal security and execution speed.
 
-### Frontend
-- React.js
-- Redux Toolkit
-- React Icons
-- CSS / Tailwind / Bootstrap
-
-### Backend
-- PHP
-- MySQL
-- RESTful API
-- Authentication (Sessions / JWT)
-
-### Tools
-- Vite
-- Git & GitHub
-- VS Code
+### ✨ Key Features:
+* **Image Management:** Upload, delete, and organize photos with ease.
+* **Reactive Frontend:** Dynamic user interface developed using React.
+* **Security & Auth:** Secure user authentication via Laravel API.
+* **Responsive Design:** Full optimization for mobile, tablet, and desktop devices.
 
 ---
 
-## 📂 Project Structure
+## 🏗️ Technical Architecture
+- **Frontend:** React.js, Tailwind CSS, Axios.
+- **Backend:** Laravel 10+, RESTful API.
+- **Database:** MySQL.
+- **Authentication:** Laravel Sanctum.
 
-pixora/
-│
-├── frontend/
-│ ├── src/
-│ │ ├── components/
-│ │ ├── pages/
-│ │ ├── redux/
-│ │ ├── services/
-│ │ └── utils/
-│ └── package.json
-│
-├── backend/
-│ ├── api/
-│ ├── config/
-│ ├── controllers/
-│ ├── middleware/
-│ └── database.sql
-│
-└── README.md
+---
+
+## 🚀 Installation and Setup
+
+To clone and run this project locally, follow these steps:
+
+1. **Clone the repository:**
+    ```bash
+    git clone [https://github.com/abderrahim1210/pixora.git](https://github.com/abderrahim1210/pixora.git)
+    cd pixora
+    ```
+
+2. **Install dependencies (Backend):**
+    ```bash
+    composer install
+    cp .env.example .env
+    php artisan key:generate
+    php artisan migrate
+    ```
+
+3. **Install dependencies (Frontend):**
+    ```bash
+    npm install
+    npm run dev
+    ```
+
+---
+
+## 👨‍💻 Developer
+* **Name:** Abderrahim
+* **Role:** Full-stack Developer (React / Laravel)
+* **GitHub:** [@abderrahim1210](https://github.com/abderrahim1210)
+
+---
+<p align="center">Pixora Project - Sharing Visual Creativity</p>

@@ -8,11 +8,13 @@ use App\Http\Controllers\GetPhotos;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\Photographer;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePictures;
 use App\Http\Controllers\UploadController;
 use App\Models\Category;
 use App\Models\Gallery;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -42,7 +44,7 @@ Route::post('/add_like', [LikeController::class, 'store']);
 
 Route::post('/upload', [UploadController::class, 'uploadPhoto'])->middleware('auth:sanctum');
 
-Route::resource('/follows', FollowController::class);
+Route::resource('/follows', FollowController::class)->middleware('auth:sanctum');
 
 Route::get('/myprofile', [ProfileController::class, 'getInfos'])->middleware('auth:sanctum');
 
@@ -86,7 +88,17 @@ Route::get('/get_all_galleries',function(){
     ]);
 });
 
+Route::get('/get_users',function(){
+    $users = User::all();
+    return response()->json([
+        'success' => true,
+        'users' => $users
+    ]);
+});
+
 Route::get('/get_gallery/{id}',[Galleries::class,'GetGallery'])->middleware('auth:sanctum');
 Route::delete('/delete_gallery/{id}',[Galleries::class, 'DeleteGallery'])->middleware('auth:sanctum');
+
+Route::get('/get_infos_photographers/{id}',[Photographer::class, 'getInformations']);
 
 require __DIR__ . '/auth.php';

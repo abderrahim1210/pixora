@@ -4,6 +4,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { FiBell, FiGlobe, FiSend, FiUpload } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
+import Avatar from "./Avatar";
 export const Navbar = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -126,7 +127,7 @@ export const Navbar = () => {
                   </a>
                   <ul className="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a onClick={() => navigate(`/${user.username}/myphotos`)} style={{cursor:"pointer"}} className={`dropdown-item ${user && user?.role === "admin" && "disabled"}`}>
+                      <a onClick={() => navigate(`/user/${user.username}/myphotos`)} style={{cursor:"pointer"}} className={`dropdown-item ${user && user?.role === "admin" && "disabled"}`}>
                         my photos
                       </a>
                     </li>
@@ -227,15 +228,7 @@ export const Navbar = () => {
               </li>
               {user?.id ? (
                 <div>
-                  <img
-                    src={user.photo_profile ?`http://localhost:8000/storage/profile_pictures/${user.photo_profile}`:`/outils/pngs/useracc2.png`}
-                    width="40px"
-                    height="auto"
-                    alt="Useraccount"
-                    id="imgAcc"
-                    title="My profil"
-                    onClick={() => navigate(`/${user.username}/myprofile`)}
-                  />
+                  <Avatar src={`http://localhost:8000/storage/profile_pictures/${user.photo_profile}`} size={40} />
                 </div>
               ) : (
                 <>

@@ -16,7 +16,7 @@ class FollowController extends Controller
     {
         $user = Auth::user();
         $id = $user->id;
-        $follows = User::find($id)->following;
+        $follows = User::find($id)->followings;
 
         return response()->json([
             'users' => $follows
@@ -37,7 +37,7 @@ class FollowController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        $user_id = $request->followerID;
+        $user_id = $request->followingID;
 
         $f = Follow::where('follower_id',$user->id)->where('following_id',$user_id)->first();
 

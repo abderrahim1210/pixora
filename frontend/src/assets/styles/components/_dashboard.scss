@@ -771,11 +771,11 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    padding: 3px;
-    background: linear-gradient(270deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+    // padding: 3px;
+    // background: linear-gradient(270deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
     background-size: 200% 200%;
     animation: gradientMove 4s ease infinite;
-    // border: 1px solid black;
+    border: 1px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -789,19 +789,19 @@
     // background: #000;
   }
 
-  @keyframes gradientMove {
-    0% {
-      background-position: 0%;
-    }
+  // @keyframes gradientMove {
+  //   0% {
+  //     background-position: 0%;
+  //   }
 
-    50% {
-      background-position: 100%;
-    }
+  //   50% {
+  //     background-position: 100%;
+  //   }
 
-    100% {
-      background-position: 0%;
-    }
-  }
+  //   100% {
+  //     background-position: 0%;
+  //   }
+  // }
 
   // .view-btn:hover{
   //   background: #2563eb;

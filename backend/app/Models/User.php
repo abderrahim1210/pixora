@@ -51,7 +51,7 @@ class User extends Authenticatable
         return $this->hasMany(Photo::class);
     }
 
-    public function following(){
+    public function followings(){
         return $this->belongsToMany(User::class,'follows','follower_id','following_id');
     }
 
