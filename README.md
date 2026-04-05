@@ -1,11 +1,11 @@
-# 📸 PIXORA - Plateforme Web pour Photographes
+# 📸 PIXORA - Professional Photography Platform
 
 <p align="center">
-  <img src="./frontend/public/outils/favicons/favicon.jpg" alt="Pixora Logo" width="300"/>
+  <img src="./frontend/public/outils/backgrounds/background_pixora_4.png" alt="Pixora Logo" width="300"/>
 </p>
 
 <p align="center">
-  <strong>Projet Full-stack : Système de gestion et de partage pour photographes professionnels.</strong>
+  <strong>Full-stack Project: A modern management and sharing system for professional photographers.</strong>
 </p>
 
 <p align="center">
@@ -18,27 +18,27 @@
 
 ---
 
-## 📝 À propos du projet
-**Pixora** est une solution web moderne conçue pour permettre aux photographes de créer un portfolio professionnel. Le projet repose sur une architecture découplée avec un **Frontend (React)** réactif et un **Backend (API Laravel)** robuste, offrant une expérience utilisateur fluide et sécurisée.
+## 📝 About the Project
+**Pixora** is a modern web solution designed for photographers to showcase professional portfolios. The project is built on a decoupled architecture separating the **Client (React)** from the **Server (Laravel API)**, ensuring high performance, scalability, and security.
 
-### ✨ Fonctionnalités clés :
-* **Profils Dynamiques :** Gestion complète des informations des photographes (Bio, Portfolio, Stats).
-- **Système de Follow :** Interaction sociale en temps réel avec **Optimistic UI updates**.
-* **Galerie Intelligente :** Filtrage dynamique des photos par catégorie sans rechargement.
-* **Architecture Propre :** Séparation de la logique API (Service Layer) des composants UI.
-
----
-
-## 🏗️ Architecture Technique
-- **Frontend :** React.js, SCSS (Pattern 7-1), Axios, Vite.
-- **Backend :** Laravel 11, REST API, Laravel Sanctum (Auth).
-- **Base de données :** MySQL (Eloquent ORM).
+### ✨ Key Features:
+* **Dynamic Profiles:** Comprehensive management of photographer data (Bio, Portfolio, Stats).
+* **Follow System:** Real-time social interaction using **Optimistic UI updates**.
+* **Smart Gallery:** Instant photo filtering by category without page reloads.
+* **Clean Architecture:** API logic decoupled from UI components (Service Layer).
 
 ---
 
-## 🚀 Installation et Lancement
+## 🏗️ Technical Architecture
+- **Frontend:** React.js, SCSS (7-1 Pattern), Axios, Vite.
+- **Backend:** Laravel 11, RESTful API, Laravel Sanctum (Auth).
+- **Database:** MySQL (Eloquent ORM).
 
-Pour cloner et lancer ce projet localement, suivez ces étapes :
+---
+
+## 🚀 Installation and Launch
+
+To clone and run this project locally, follow these steps:
 
 ### 1. Backend Setup (Laravel)
 ~~~bash
@@ -59,15 +59,15 @@ npm run dev
 
 ---
 
-## 🌐 Sécurité & CORS
-Le projet est configuré pour gérer le **Cross-Origin Resource Sharing (CORS)** de manière sécurisée, permettant une communication fluide entre le client et l'API via des tokens XSRF.
+## 🌐 Security & CORS
+The project is configured to handle **Cross-Origin Resource Sharing (CORS)** securely, allowing seamless communication between the client and the API using XSRF tokens and credentials.
 
 ---
 
-## 👨‍💻 Développeur
-* **Nom :** Abderrahim
-* **Rôle :** Développeur Full Stack
-* **GitHub :** [abderrahim1210](https://github.com/abderrahim1210)
+## 👨‍💻 Developer
+* **Name:** Abderrahim
+* **Role:** Full Stack Developer
+* **GitHub:** [abderrahim1210](https://github.com/abderrahim1210)
 
 ---
-<p align="center">Project Pixora réalisé par Abderrahim.</p>
+<p align="center">Pixora project developed by Abderrahim.</p>
