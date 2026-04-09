@@ -160,6 +160,7 @@ const Comments = ({ photoId, data, commentRef }) => {
               className={`btn btn-primary ${comment === "" ? "disabled" : ""}`}
               onClick={handleComment}
               id="postBtn"
+              style={comment === "" && {cursor:'not-allowed'}}
             >
               Post
             </button>

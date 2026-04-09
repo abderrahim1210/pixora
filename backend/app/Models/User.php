@@ -58,4 +58,12 @@ class User extends Authenticatable
     public function likes(){
         return $this->hasMany(Like::class);
     }
+
+    public function images(){
+        return $this->hasMany(Image::class);
+    }
+
+    public function editionRequests(){
+        return $this->hasMany(EditionRequest::class, 'requester_id');
+    }
 }

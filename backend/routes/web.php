@@ -11,6 +11,7 @@ use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\Photographer;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePictures;
+use App\Http\Controllers\RequestEdit;
 use App\Http\Controllers\UploadController;
 use App\Models\Category;
 use App\Models\Gallery;
@@ -31,6 +32,8 @@ Route::post('/photo/{id}', [PhotoController::class, 'update'])->middleware('auth
 Route::delete('/photo/{id}', [PhotoController::class, 'destroy'])->middleware('auth:sanctum');
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+
+Route::delete('/logout',[AuthenticatedSessionController::class, 'destroy']);
 
 Route::get('/homepage', [Home::class, 'getAllPhotos'])->name('home');
 
@@ -100,5 +103,11 @@ Route::get('/get_gallery/{id}',[Galleries::class,'GetGallery'])->middleware('aut
 Route::delete('/delete_gallery/{id}',[Galleries::class, 'DeleteGallery'])->middleware('auth:sanctum');
 
 Route::get('/get_infos_photographers/{id}',[Photographer::class, 'getInformations']);
+
+Route::post('/send_request',[RequestEdit::class,'requestEdit'])->middleware('auth:sanctum');
+
+Route::get('/get_requests', [RequestEdit::class, 'getRequests'])->middleware('auth:sanctum');
+
+Route::post('/change_status_req',[RequestEdit::class, 'changeStatusRequest'])->middleware('auth:sanctum');
 
 require __DIR__ . '/auth.php';

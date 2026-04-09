@@ -17,7 +17,6 @@ export const Upload = () => {
   const { user } = useAuth();
   // if (!user?.id) return navigate('/login');
   const steps = ['Get started', 'License', 'Upload', 'Details', 'Publish'];
-  
   const [photo, setPhoto] = useState({
     title: "",
     type: "",

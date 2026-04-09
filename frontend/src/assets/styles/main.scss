@@ -11,6 +11,9 @@
 @use './components/footer_dash';
 @use './components/comments';
 @use './components/gallery';
+@use './components/button_edit';
+@use './components/request_edit_form';
+@use './components/request_card';
 
 :root {
     --special_color: rgb(0, 120, 255);

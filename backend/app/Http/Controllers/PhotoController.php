@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\EditionRequest;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +23,7 @@ class PhotoController extends Controller
                 'message' => 'Photo not found'
             ]);
         }
+        $request = EditionRequest::where('image_id', $photo->id)->where('requester_id', $user->id)->first();
 
         $photo->created_at_human = $photo->created_at->diffForHumans();
         $photo->comments->each(function ($comment) {
@@ -36,7 +38,8 @@ class PhotoController extends Controller
             'category' => $photo->category,
             'categories' => [],
             'comments' => $photo->comments,
-            'galleries' => $photo->galleries
+            'galleries' => $photo->galleries,
+            'request' => $request
         ]);
     }
 

@@ -13,6 +13,7 @@ import { Footer } from "./Footer";
 import { useModal } from "../context/ModalProvider";
 import ModalTemplate from "./ModalTemplate";
 import GalleriesTemplate from "./GalleriesTemplate";
+import RequestCard from "./RequestCard";
 
 export const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
@@ -23,6 +24,7 @@ export const MyPhotos = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { show, openModal, closeModal } = useModal();
+  const [requests, setRequests] = useState([]);
   const [gallery, setGallery] = useState({
     title: "",
     description: ""
@@ -55,6 +57,20 @@ export const MyPhotos = () => {
   function slugiFy(text) {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
   }
+
+  useEffect(() => {
+    try {
+      const fetchRequests = async () => {
+        const res = await axios.get('http://localhost:8000/get_requests', { withCredentials: true, withXSRFToken: true });
+        if (res.data.success) {
+          setRequests(res.data.requests);
+        }
+      }
+      fetchRequests();
+    } catch (err) {
+      console.log(err?.response?.data);
+    }
+  }, []);
 
   const createGallery = async () => {
     const payload = {
@@ -160,7 +176,7 @@ export const MyPhotos = () => {
                     </p>
                   </h2>
                 </div>
-                <div className="container-fluid">
+                <div>
                   {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} page={'photos'} />) : photos.length > 0 ? (
                     <PhotosTemplate photos={photos} />
                   ) : (
@@ -171,14 +187,23 @@ export const MyPhotos = () => {
               <div className="tab-pane fade show" id="licensing">
                 <div className="mt-2 mb-2">
                   <h2>
-                    Requests <p className="d-inline text-primary">( request)</p>
+                    Requests <p className="d-inline text-primary">( {requests?.length ?? 0} request)</p>
                   </h2>
                 </div>
                 <div className="container-fluid">
                   <div className="mt-3 mb-3">
-                    
+                    {requests && Object.entries(requests).length > 0 ? (
+                      Object.entries(requests).map(([imageId, group]) => (
+                        <RequestCard key={imageId} group={group} />
+                      ))
+                    ) : (
+                      <EmptyContent
+                        icon={<FaEdit className="faIcon" />}
+                        text={"No requests yet — start request with anyone"}
+                      />
+                    )}
                   </div>
-                  <EmptyContent icon={<FaEdit className="faIcon" />} text={"No requests yet — start request with anyone"} />
+
                 </div>
               </div>
               <div className="tab-pane fade show" id="likes">

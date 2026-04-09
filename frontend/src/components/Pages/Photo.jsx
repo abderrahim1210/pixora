@@ -24,6 +24,7 @@ import { MdCategory, MdPhotoLibrary } from "react-icons/md";
 import ModalTemplate from "./ModalTemplate";
 import { Footer } from "./Footer";
 import GalleriesTemplate from "./GalleriesTemplate";
+import EditButton from "./EditButton";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -49,6 +50,8 @@ export const Photo = (props) => {
     const [galleries, setGalleries] = useState([]);
     const commentRef = useRef(null);
     const [selected, setSelected] = useState([]);
+    const [requestMessage, setRequestMessage] = useState('');
+    const [request, setRequest] = useState("");
     useEffect(() => {
         axios.get(url, { params: { id }, withCredentials: true })
             .then((res) => {
@@ -58,6 +61,7 @@ export const Photo = (props) => {
                     setCategory(res.data.category);
                     setLikes(res.data.likes);
                     setComments(res.data.comments);
+                    setRequest(res.data.request);
                     // setUserID(res.data.currUser);
                     setLoading(false);
                 }
@@ -168,35 +172,35 @@ export const Photo = (props) => {
         })
     }
 
-    useEffect(() => {
-        try {
-            axios.get('/json/countries+cities.json')
-                .then(res => {
-                    const allCities = [];
-                    res.data.forEach(country => {
-                        country.cities.forEach(city => {
-                            allCities.push({ value: city, label: city });
-                        });
-                    });
-                    setCities(allCities);
-                });
-        } catch (err) {
-            console.log(err);
-        }
-    }, []);
-    const loadCities = (inputValue, callback) => {
-        if (!inputValue) {
-            callback([]);
-            return;
-        }
-        const results = cities
-            .filter(city => city.label.toLowerCase().includes(inputValue.toLowerCase()))
-            .slice(0, 20);
-        callback(results);
-    }
+    // useEffect(() => {
+    //     try {
+    //         axios.get('/json/countries+cities.json')
+    //             .then(res => {
+    //                 const allCities = [];
+    //                 res.data.forEach(country => {
+    //                     country.cities.forEach(city => {
+    //                         allCities.push({ value: city, label: city });
+    //                     });
+    //                 });
+    //                 setCities(allCities);
+    //             });
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // }, []);
+    // const loadCities = (inputValue, callback) => {
+    //     if (!inputValue) {
+    //         callback([]);
+    //         return;
+    //     }
+    //     const results = cities
+    //         .filter(city => city.label.toLowerCase().includes(inputValue.toLowerCase()))
+    //         .slice(0, 20);
+    //     callback(results);
+    // }
     const handleEdit = async (data) => {
         try {
-            const res = await axios.post(`http://localhost:8000/photo/${id}`, { photo_id: photo.photo_id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id, visibility: fields?.visibility, tags: fields?.tags, galleries: selected }, { withCredentials: true, withXSRFToken: true });
+            const res = await axios.post(`http://localhost:8000/photo/${id}`, { photo_id: photo.id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id, visibility: fields?.visibility, tags: fields?.tags, galleries: selected }, { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 console.log(res.data);
                 dispatch(initEdit(data))
@@ -227,6 +231,24 @@ export const Photo = (props) => {
 
     const toggleGallery = (id) => {
         setSelected((prev) => prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]);
+    }
+
+    const requestEditForm = async () => {
+        try {
+            const sendRequestEdit = async () => {
+                const res = await axios.post('http://localhost:8000/send_request', { message: requestMessage, owner_id: photo?.user?.id, image_id: photo?.id }, { withCredentials: true, withXSRFToken: true });
+                if (res.data.success) {
+                    notyf.success(res.data.message);
+                    return;
+                } else {
+                    console.log(res.data.message);
+                }
+            }
+
+            sendRequestEdit();
+        } catch (err) {
+            console.log(err?.response?.data);
+        }
     }
 
     return (
@@ -303,6 +325,30 @@ export const Photo = (props) => {
                     </ModalTemplate>
                 )
             }
+
+            {
+                show === "request_edit" && (
+                    <ModalTemplate show={show} closeModal={closeModal}>
+                        <div className="modal-body-content">
+                            <div className="context">
+                                <p>Target Image :</p>
+                                <strong>{photo.title}</strong>
+                            </div>
+                            <textarea name="request_message" className="pixora-text-area" value={requestMessage} onChange={(e) => setRequestMessage(e.target.value)} placeholder="Write your message here ..." />
+                            <button className="btn-send-request" onClick={requestEditForm}>Confirm Request</button>
+                        </div>
+                    </ModalTemplate>
+                )
+            }
+
+            {
+                show === "uploadEditPhoto" && (
+                    <ModalTemplate show={show} closeModal={closeModal}>
+
+                    </ModalTemplate>
+                )
+            }
+
             {
                 loading ? <PageSkeleton page='photo' /> :
                     <div className="container-fluid photo-page mt-3 mb-3">
@@ -485,6 +531,9 @@ export const Photo = (props) => {
                                             <button type="button" className="btn w-100" onClick={deletePhoto} id="deletePhoto">Delete</button>
                                         </>
                                     )
+                                }
+                                {
+                                    user?.id !== photo?.user_id && (<EditButton requestStatus={request.status === "approved" ? "approved" : request.status === "pending" ? "pending" : request.status === "pending" ? "pending" : "none"} openModal={openModal} />)
                                 }
                             </ul>
                             <Comments data={comments} commentRef={commentRef} photoId={photo.id} user={user} />

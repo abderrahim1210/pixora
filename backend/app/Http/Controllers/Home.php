@@ -13,7 +13,7 @@ class Home extends Controller
 {
     public function getAllPhotos() : JsonResponse
     {
-        $photos = Photo::with(['likes','comments'])->get();
+        $photos = Photo::with(['likes','comments'])->where('visibility','public')->get();
         $users = User::all();
 
         $current_user = Auth::user();

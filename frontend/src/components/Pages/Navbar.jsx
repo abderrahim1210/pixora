@@ -2,7 +2,7 @@ import React from "react";
 import { FaChevronDown } from "react-icons/fa";
 //import '../../assets/css/navbar.css'
 import { FiBell, FiGlobe, FiSend, FiUpload } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import Avatar from "./Avatar";
 export const Navbar = () => {
@@ -133,26 +133,6 @@ export const Navbar = () => {
                     </li>
                     <li>
                       <a
-                        href="#"
-                        className="dropdown-item"
-                        data-bs-target="#language"
-                        data-bs-toggle="modal"
-                      >
-                        site language
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="dropdown-item"
-                        data-bs-target="#cookies"
-                        data-bs-toggle="modal"
-                      >
-                        cookies
-                      </a>
-                    </li>
-                    <li>
-                      <a
                         href="#about"
                         data-bs-target="#about"
                         data-bs-toggle="tab"
@@ -227,9 +207,9 @@ export const Navbar = () => {
                 </button>
               </li>
               {user?.id ? (
-                <div>
+                <Link to={`/user/${user?.username}/myprofile`}>
                   <Avatar src={`http://localhost:8000/storage/profile_pictures/${user.photo_profile}`} size={40} />
-                </div>
+                </Link>
               ) : (
                 <>
                   <li className="nav-item">

@@ -158,12 +158,12 @@ export const MyProfile = () => {
 
   const handleLogOut = async () => {
     try {
-      const res = await axios.post('http://localhost/Pixora/backend/api/logout.php', { done: true }, { withCredentials: true });
+      const res = await axios.delete('http://localhost:8000/logout',{ withCredentials: true, withXSRFToken:true });
       if (res.data.success) {
         navigate('/login');
       }
     } catch (err) {
-      console.log(err);
+      console.log(err?.response?.data);
     }
   }
 
@@ -571,7 +571,7 @@ export const MyProfile = () => {
                     )}
                   </div>
                   <div className="container-fluid pm-button mt-3">
-                    <Link to={`/${user.username}/myphotos`} className={`btn ${user.role === "admin" ? "disabled" : ""}`} id="managePhotos">
+                    <Link to={`/user/${user.username}/myphotos`} className={`btn ${user.role === "admin" ? "disabled" : ""}`} id="managePhotos">
                       manage my photos
                     </Link>
                   </div>

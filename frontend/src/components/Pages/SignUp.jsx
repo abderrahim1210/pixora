@@ -10,8 +10,6 @@ import Swal from "sweetalert2";
 
 export const SignUp = () => {
   const [step, setStep] = useState(1);
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
   const [error,setError] = useState("");
   const [user, setUser] = useState({
     username: "",
@@ -52,7 +50,7 @@ export const SignUp = () => {
         birth_date: user.birth_date,
         aggres_condition: user.aggres_condition
       }
-      const res = await axios.post('http://localhost:8000/api/register', payload, { withCredentials: true });
+      const res = await axios.post('http://localhost:8000/register', payload, { withCredentials: true,withXSRFToken:true });
       console.log(res.data)
       if (res.data.success) {
         Swal.fire({

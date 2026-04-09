@@ -33,4 +33,8 @@ class Photo extends Model
     {
         return $this->belongsToMany(Gallery::class, 'gallery_photos');
     }
+
+    public function requests(){
+        return $this->hasMany(EditionRequest::class,'image_id');
+    }
 }
