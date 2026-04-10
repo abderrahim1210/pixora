@@ -266,6 +266,11 @@
 
 .badge {
   background-color: var(--special_color);
+  text-transform: capitalize;
+
+  &-editor{
+    background-color: #8b5cf6;
+  }
 }
 
 .spinner-container {

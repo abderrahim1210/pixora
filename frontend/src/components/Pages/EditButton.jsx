@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaClock, FaCloudUploadAlt, FaMagic } from 'react-icons/fa'
+import { FaCheck, FaClock, FaCloudUploadAlt, FaMagic } from 'react-icons/fa'
 
 const EditButton = ({requestStatus, openModal}) => {
   return (
@@ -17,9 +17,9 @@ const EditButton = ({requestStatus, openModal}) => {
             </button>
         )}
         {requestStatus === "approved" && (
-            <button className='btn-pixora text-success border-success bg-success-subtle btn-pixora--upload' onClick={() => openModal('uploadEditPhoto')}>
-                <FaCloudUploadAlt />
-                <span>Upload your edit</span>
+            <button className='btn-pixora text-success border-success bg-success-subtle btn-pixora--upload'>
+                <FaCheck />
+                <span>Approved</span>
             </button>
         )}
     </div>

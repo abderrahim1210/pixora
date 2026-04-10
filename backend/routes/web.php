@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FetchRequests;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\Galleries;
 use App\Http\Controllers\GetPhotos;
@@ -109,5 +110,9 @@ Route::post('/send_request',[RequestEdit::class,'requestEdit'])->middleware('aut
 Route::get('/get_requests', [RequestEdit::class, 'getRequests'])->middleware('auth:sanctum');
 
 Route::post('/change_status_req',[RequestEdit::class, 'changeStatusRequest'])->middleware('auth:sanctum');
+
+Route::get('/get_requests_for_editors',[FetchRequests::class, 'getRequests'])->middleware('auth:sanctum');
+
+Route::get('/get_my_requests',[FetchRequests::class, 'getMyRequests'])->middleware('auth:sanctum');
 
 require __DIR__ . '/auth.php';

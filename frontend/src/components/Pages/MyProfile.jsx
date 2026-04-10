@@ -4,6 +4,7 @@ import {
   FaBan,
   FaCamera,
   FaChartLine,
+  FaEdit,
   FaFacebook,
   FaGlobe,
   FaHeart,
@@ -52,6 +53,8 @@ import PhotosTemplate from "./PhotosTemplate";
 import { EmptyContent } from "./EmptyContent";
 import ModalTemplate from "./ModalTemplate";
 import { Footer } from "./Footer";
+import EditorDashboard from "./EditorDashboard";
+import RequestCard from "./RequestCard";
 
 
 export const MyProfile = () => {
@@ -71,6 +74,7 @@ export const MyProfile = () => {
   const profileRef = useRef();
   const coverRef = useRef();
   const [loading, setLoading] = useState(false);
+  const [requests, setRequests] = useState([]);
 
   // let namereg = /^[a-z0-9]{10,}$/;
   // let emailreg = /^[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|hotmail\.com|[a-zA-Z]\.(ma|org|com))$/;
@@ -108,6 +112,23 @@ export const MyProfile = () => {
       }
       ).catch(err => console.log(err.response?.data));
     axios.get("/json/countries.json").then((res) => res.data).then(data => setCountries(data));
+  }, []);
+
+  useEffect(() => {
+    try {
+      const fetchMyReqs = async () => {
+        const res = await axios.get('http://localhost:8000/get_my_requests', { withCredentials: true, withXSRFToken: true });
+        if (res.data.success) {
+          setRequests(res.data.requests);
+        } else {
+          console.log(res.data.message);
+        }
+      }
+
+      fetchMyReqs();
+    } catch (err) {
+      console.log(err?.response?.data);
+    }
   }, []);
 
   const onSubmit = async (data) => {
@@ -158,7 +179,7 @@ export const MyProfile = () => {
 
   const handleLogOut = async () => {
     try {
-      const res = await axios.delete('http://localhost:8000/logout',{ withCredentials: true, withXSRFToken:true });
+      const res = await axios.delete('http://localhost:8000/logout', { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         navigate('/login');
       }
@@ -238,7 +259,7 @@ export const MyProfile = () => {
           }
         } catch (err) {
           console.log(err.response?.data);
-        }finally{
+        } finally {
           window.location.reload;
         }
       }
@@ -255,9 +276,9 @@ export const MyProfile = () => {
       confirmButtonColor: '#ed3d3d',
       cancelButtonText: 'Cancel'
     }).then(async (result) => {
-      if (result.isConfirmed){
+      if (result.isConfirmed) {
         try {
-          const res = await axios.delete(deleteCoverPictureURL, { withCredentials: true, withXSRFToken:true});
+          const res = await axios.delete(deleteCoverPictureURL, { withCredentials: true, withXSRFToken: true });
           if (res.data.success) {
             notyf.success(res.data.message);
           } else {
@@ -265,10 +286,11 @@ export const MyProfile = () => {
           }
         } catch (err) {
           console.log(err);
-        }finally{
+        } finally {
           window.location.reload;
         }
-      }});
+      }
+    });
   }
 
   useEffect(() => {
@@ -420,7 +442,16 @@ export const MyProfile = () => {
                       >
                         <FaChartLine /> statistics
                       </a>
-                    </li>) : (<li className="nav-item">
+                    </li>) : user.role === "editor" ? ((<li className="nav-item">
+                      <a
+                        data-bs-target="#requests"
+                        data-bs-toggle="tab"
+                        className="nav-link"
+                      >
+                        <FaEdit /> Requests
+                      </a>
+                    </li>
+                    )) : (<li className="nav-item">
                       <a
                         data-bs-target="#admin"
                         data-bs-toggle="tab"
@@ -509,8 +540,8 @@ export const MyProfile = () => {
                     </div>
                     <div>
                       {
-                        user.role === "admin" && (
-                          <span className="badge">Admin</span>
+                        user.role === "admin" || user.role === "editor" && (
+                          <span className={`badge badge-${user?.role}`}>{user?.role}</span>
                         )
                       }
                       <p
@@ -579,7 +610,7 @@ export const MyProfile = () => {
                     <div className="mb-3">
                       {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos.length > 0 ? (
                         <PhotosTemplate photos={photos} />
-                      ) : user.role === "user" ? (<EmptyContent icon={<FaCamera className="faIcon" />} text={"No photos yet — start sharing your moments!"} />) : (<EmptyContent icon={<FaBan className="faIcon" />} text={"Upload is not availabe for adminstrators"} />)}
+                      ) : user.role === "user" ? (<EmptyContent icon={<FaCamera className="faIcon" />} text={"No photos yet — start sharing your moments!"} />) : (<EmptyContent icon={<FaBan className="faIcon" />} text={"Upload is not availabe for adminstrators or editors"} />)}
                     </div>
                     {user.role === "user" && (<a href="#" style={{ textDecoration: "underline" }}>
                       Show more
@@ -613,7 +644,7 @@ export const MyProfile = () => {
                       >
                         <FaPencil />
                       </a>
-                      <a style={{cursor:'pointer'}} onClick={handleDeleteAvatar}>
+                      <a style={{ cursor: 'pointer' }} onClick={handleDeleteAvatar}>
                         <FaTrash />
                       </a>
                     </div>
@@ -1021,8 +1052,14 @@ export const MyProfile = () => {
                     <canvas id="statisticsChart" height="auto" />
                   </div>
                 </div>
+
+                <div className="container-fluid mt-3">
+                  <h2>My requests <span className="text-primary">({requests?.length ?? 0} Requests)</span></h2>
+                  <RequestCard group={requests} />
+                </div>
               </div>
               <AdminDashboard analytics={analytics} />
+              <EditorDashboard />
             </div>
           </div>
         </div>

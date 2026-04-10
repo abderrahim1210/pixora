@@ -1,9 +1,11 @@
 import axios from 'axios';
 import React from 'react'
 import { notyf } from '../../assets/js/notyf';
+import { useAuth } from '../context/AuthProvider';
 
 const RequestCard = ({ group }) => {
-    const photo = group[0].image;
+    const photo = group[0]?.photo;
+    const {user} = useAuth();
     const rejectRequest = (id) => {
         try{
             const reject = async() => {
@@ -20,10 +22,10 @@ const RequestCard = ({ group }) => {
         }
     }
 
-    const acceptRequest = (id) => {
+    const acceptRequest = (request_id,id) => {
         try{
             const accept = async () => {
-                const res = await axios.post('http://localhost:8000/change_status_req',{req_id:id,type:'accept'},{withCredentials:true,withXSRFToken:true});
+                const res = await axios.post('http://localhost:8000/change_status_req',{id:request_id,req_id:id,type:'accept'},{withCredentials:true,withXSRFToken:true});
                 if (res.data.success){
                     notyf.success(res.data.message);
                 }else{
@@ -38,9 +40,9 @@ const RequestCard = ({ group }) => {
     return (
         <div className="photo-requests-group">
             <div className="group-header">
-                <img src={`http://localhost:8000/storage/photos/${photo?.filename}`} alt={photo.title} className='mini-preview' />
+                <img src={`http://localhost:8000/storage/photos/${photo?.filename}`} alt={photo?.title} className='mini-preview' />
                 <div className="photo-meta">
-                    <h4>{photo.title}</h4>
+                    <h4>{photo?.title}</h4>
                     <span className="request-count">{group?.length} Requests</span>
                 </div>
             </div>
@@ -58,8 +60,8 @@ const RequestCard = ({ group }) => {
                             </div>
                             <div className="item-actions">
                                 {
-                                    req?.status === "approved" ? (<button className='btn-sm bg-success-subtle text-success' style={{cursor:'not-allowed'}} disabled>Approved</button>) : (<><button className='btn-sm btn btn-reject' onClick={() => rejectRequest(req.id)}>Reject</button>
-                                <button className='btn-sm btn-approve' onClick={() => acceptRequest(req.id)}>Approve</button></>)
+                                    req?.status === "approved" ? (<button className='btn-sm bg-success-subtle text-success' style={{cursor:'not-allowed'}} disabled>Approved</button>) : req?.requester?.id !== user?.id ? (<><button className='btn-sm btn btn-reject' onClick={() => rejectRequest(req.id,req.requester_id)}>Reject</button>
+                                <button className='btn-sm btn-approve' onClick={() => acceptRequest(req.id,req.requester_id)}>Approve</button></>) : (<button className='btn-sm bg-primary-subtle text-primary' style={{cursor:'not-allowed'}} disabled>Your request is sent</button>)
                                 }
                             </div>
                         </div>

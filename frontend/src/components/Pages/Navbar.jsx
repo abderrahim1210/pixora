@@ -127,7 +127,7 @@ export const Navbar = () => {
                   </a>
                   <ul className="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a onClick={() => navigate(`/user/${user.username}/myphotos`)} style={{cursor:"pointer"}} className={`dropdown-item ${user && user?.role === "admin" && "disabled"}`}>
+                      <a onClick={() => navigate(`/user/${user.username}/myphotos`)} style={{cursor:"pointer"}} className={`dropdown-item ${user && user?.role === "admin" || user?.role === "editor" && "disabled"}`}>
                         my photos
                       </a>
                     </li>
@@ -200,7 +200,7 @@ export const Navbar = () => {
               <li className="nav-item" id="upload_button">
                 <button
                   onClick={() => navigate("/upload")}
-                  className={`nav-link ${user && user?.role === "admin" && "disabled"}`}
+                  className={`nav-link ${user && user?.role === "admin" || user?.role === "editor" && "disabled"}`}
                   title="Upload your photo"
                 >
                   <FiUpload /> Upload

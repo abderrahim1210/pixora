@@ -58,6 +58,7 @@ class RequestEdit extends Controller
     public function changeStatusRequest(Request $request)
     {
         $req_id = $request->req_id;
+        $request_id = $request->id;
         $type = $request->type;
         try {
             if ($type === 'reject') {
@@ -72,8 +73,14 @@ class RequestEdit extends Controller
                     'message' => 'You are rejected this request'
                 ]);
             } else {
-                DB::table('edition_requests')->where('id', $req_id)->update([
+                DB::table('edition_requests')->where('requester_id', $req_id)->update([
                     'status' => 'approved'
+                ]);
+
+                DB::table('editing_tasks')->insert([
+                    'requester_id' => $req_id,
+                    'request_id' => $request_id,
+                    'created_at' => now()
                 ]);
 
                 return response()->json([
