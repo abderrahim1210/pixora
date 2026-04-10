@@ -342,14 +342,6 @@ export const Photo = (props) => {
             }
 
             {
-                show === "uploadEditPhoto" && (
-                    <ModalTemplate show={show} closeModal={closeModal}>
-
-                    </ModalTemplate>
-                )
-            }
-
-            {
                 loading ? <PageSkeleton page='photo' /> :
                     <div className="container-fluid photo-page mt-3 mb-3">
                         <div className="photo-viewer">
@@ -533,7 +525,7 @@ export const Photo = (props) => {
                                     )
                                 }
                                 {
-                                    user?.id !== photo?.user_id && (<EditButton requestStatus={request.status === "approved" ? "approved" : request.status === "pending" ? "pending" : request.status === "pending" ? "pending" : "none"} openModal={openModal} />)
+                                    user?.id !== photo?.user_id && user?.status !== "editor" && user?.status !== "admin" && (<EditButton requestStatus={request?.status === "approved" ? "approved" : request?.status === "pending" ? "pending" : request?.status === "pending" ? "pending" : "none"} openModal={openModal} />)
                                 }
                             </ul>
                             <Comments data={comments} commentRef={commentRef} photoId={photo.id} user={user} />

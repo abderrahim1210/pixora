@@ -187,7 +187,7 @@ export const MyPhotos = () => {
               <div className="tab-pane fade show" id="licensing">
                 <div className="mt-2 mb-2">
                   <h2>
-                    Requests <p className="d-inline text-primary">( {requests?.length ?? 0} request)</p>
+                    Requests <p className="d-inline text-primary">( {requests?.length} request)</p>
                   </h2>
                 </div>
                 <div className="container-fluid">

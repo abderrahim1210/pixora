@@ -393,6 +393,13 @@ export const MyProfile = () => {
           </div>
         </ModalTemplate>
       )}
+      {
+        show === "uploadEditPhoto" && (
+          <ModalTemplate show={show} closeModal={closeModal}>
+            test
+          </ModalTemplate>
+        )
+      }
       <Lightbox
         open={open}
         close={() => setOpen(false)}
@@ -1055,11 +1062,20 @@ export const MyProfile = () => {
 
                 <div className="container-fluid mt-3">
                   <h2>My requests <span className="text-primary">({requests?.length ?? 0} Requests)</span></h2>
-                  <RequestCard group={requests} />
+                  {requests && Object.entries(requests).length > 0 ? (
+                    Object.entries(requests).map(([imageId, group]) => (
+                      <RequestCard key={imageId} group={group} />
+                    ))
+                  ) : (
+                    <EmptyContent
+                      icon={<FaEdit className="faIcon" />}
+                      text={"No requests yet — start request with anyone"}
+                    />
+                  )}
                 </div>
               </div>
               <AdminDashboard analytics={analytics} />
-              <EditorDashboard />
+              <EditorDashboard openModal={openModal} />
             </div>
           </div>
         </div>

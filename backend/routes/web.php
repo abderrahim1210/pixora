@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AcceptEdit;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DonwloadImageOriginal;
 use App\Http\Controllers\FetchRequests;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\Galleries;
@@ -114,5 +116,9 @@ Route::post('/change_status_req',[RequestEdit::class, 'changeStatusRequest'])->m
 Route::get('/get_requests_for_editors',[FetchRequests::class, 'getRequests'])->middleware('auth:sanctum');
 
 Route::get('/get_my_requests',[FetchRequests::class, 'getMyRequests'])->middleware('auth:sanctum');
+
+Route::post('/accept_req_edit',[AcceptEdit::class, 'accept'])->middleware('auth:sanctum');
+
+Route::get('/download_photo/{photoId}',[DonwloadImageOriginal::class, 'downloadImage'])->middleware('auth:sanctum');
 
 require __DIR__ . '/auth.php';
