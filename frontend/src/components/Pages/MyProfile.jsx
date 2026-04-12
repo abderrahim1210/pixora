@@ -4,16 +4,19 @@ import {
   FaBan,
   FaCamera,
   FaChartLine,
+  FaCloudUploadAlt,
   FaEdit,
   FaFacebook,
   FaGlobe,
   FaHeart,
+  FaIdBadge,
   FaIdCard,
   FaInstagram,
   FaLock,
   FaMapMarked,
   FaMoon,
   FaPaintBrush,
+  FaRedo,
   FaTrash,
   FaTwitter,
   FaUpload,
@@ -75,19 +78,41 @@ export const MyProfile = () => {
   const coverRef = useRef();
   const [loading, setLoading] = useState(false);
   const [requests, setRequests] = useState([]);
-
-  // let namereg = /^[a-z0-9]{10,}$/;
-  // let emailreg = /^[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|hotmail\.com|[a-zA-Z]\.(ma|org|com))$/;
-  // let dnamereg = /^[A-Za-zأ-ي]{1,}$/;
-  // let phonereg = /^\+[1-9]\d{7,14}$/;
-  // let instaReg = /^https?:\/\/(www\.)?instagram\.com\/.+$/;
-  // let faceReg = /^https?:\/\/(www\.)?facebook\.com\/.+$/;
-  // let xReg = /^https?:\/\/(www\.)?x\.com\/.+$/;
-  // let websiteReg = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}([\/?#].*)?$/;;
-
+  const [preview, setPreview] = useState(null);
+  const [taskId, setTaskId] = useState(null);
+  const [ownerId, setOwnerId] = useState(null);
+  const [imageId, setImageId] = useState(null);
+  const [requester_id,setRequester_id] = useState(null);
+  const [req_id,setReqId] = useState(null);
   const handleOpenSlide = (image) => {
     setSlides([{ src: image.url, title: image.title }]);
     setOpen(true);
+  }
+
+  const handleFile = (e, id) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setPreview(reader.result);
+      // setTaskId(id);
+    };
+
+    reader.readAsDataURL(file);
+
+    e.target.value = "";
+  }
+
+  const uploadResAction = (id, photoId, ownerId, requester_id,req_id) => {
+    openModal('uploadEditPhoto');
+    setTaskId(id);
+    setImageId(photoId);
+    setOwnerId(ownerId);
+    setRequester_id(requester_id);
+    setReqId(req_id);
+    return;
   }
 
   useEffect(() => {
@@ -299,6 +324,19 @@ export const MyProfile = () => {
     }
   }, [originalUser, reset]);
 
+  const uploadResult = async () => {
+    try {
+      const res = await axios.post('http://localhost:8000/upload_photo', { image: preview, photo_id: imageId, ownerId: ownerId,requester_id:requester_id, req_id:req_id, task_id:taskId }, { withCredentials: true, withXSRFToken: true });
+      if (res.data.success) {
+        notyf.success(res.data.message);
+      } else {
+        console.log(res.data.message);
+      }
+    } catch (err) {
+      console.log(err?.response?.data);
+    }
+  }
+
   const { show, openModal, closeModal } = useModal();
   const { userCurr } = useAuth();
   function slugiFy(text) {
@@ -396,10 +434,37 @@ export const MyProfile = () => {
       {
         show === "uploadEditPhoto" && (
           <ModalTemplate show={show} closeModal={closeModal}>
-            test
+            <h2 className="fw-bold">Upload Final Result</h2>
+            <div className="upload-result-container">
+              {
+                !preview ? (
+                  <label htmlFor="upload-input" className="upload-dropzone">
+                    <div className="icon-wrapper">
+                      <FaCloudUploadAlt />
+                    </div>
+                    <p>Upload the final result here</p>
+                    <span>Choose the image</span>
+                  </label>
+                ) : (
+                  <>
+                    <div className="result-preview-box">
+                      <img src={preview} alt="Result" />
+                      <button className="change-btn" onClick={() => setPreview(null)}>
+                        <FaRedo />
+                      </button>
+                    </div>
+                    <div className="d-flex justify-content-center">
+                      <button className="btn-upload-result" onClick={() => uploadResult()}>Submit</button>
+                    </div>
+
+                  </>
+                )
+              }
+            </div>
           </ModalTemplate>
         )
       }
+      <input type="file" id="upload-input" hidden onChange={handleFile} accept="image/*" />
       <Lightbox
         open={open}
         close={() => setOpen(false)}
@@ -548,7 +613,7 @@ export const MyProfile = () => {
                     <div>
                       {
                         user.role === "admin" || user.role === "editor" && (
-                          <span className={`badge badge-${user?.role}`}>{user?.role}</span>
+                          <span className={`badge badge-${user?.role}`}><FaIdBadge /> {user?.role}</span>
                         )
                       }
                       <p
@@ -1075,7 +1140,7 @@ export const MyProfile = () => {
                 </div>
               </div>
               <AdminDashboard analytics={analytics} />
-              <EditorDashboard openModal={openModal} />
+              <EditorDashboard uploadResAction={uploadResAction} />
             </div>
           </div>
         </div>

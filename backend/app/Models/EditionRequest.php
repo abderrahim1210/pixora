@@ -11,7 +11,7 @@ class EditionRequest extends Model
         return $this->belongsTo(Photo::class,'image_id');
     }
     public function image(){
-        return $this->belongsTo(Photo::class, 'image_id');
+        return $this->hasOne(Image::class, 'request_id');
     }
 
     public function owner(){

@@ -25,6 +25,8 @@ import ModalTemplate from "./ModalTemplate";
 import { Footer } from "./Footer";
 import GalleriesTemplate from "./GalleriesTemplate";
 import EditButton from "./EditButton";
+import PhotosTemplate from "./PhotosTemplate";
+import PhotosEdited from "./PhotosEdited";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -52,6 +54,7 @@ export const Photo = (props) => {
     const [selected, setSelected] = useState([]);
     const [requestMessage, setRequestMessage] = useState('');
     const [request, setRequest] = useState("");
+    const [photosEdits,setPhotosEdits] = useState([]);
     useEffect(() => {
         axios.get(url, { params: { id }, withCredentials: true })
             .then((res) => {
@@ -64,6 +67,7 @@ export const Photo = (props) => {
                     setRequest(res.data.request);
                     // setUserID(res.data.currUser);
                     setLoading(false);
+                    setPhotosEdits(res.data.photos_edits);
                 }
             }).catch(err => {
                 console.log(err.response.data.message);
@@ -368,6 +372,18 @@ export const Photo = (props) => {
                                 }
                                 }
                             />
+
+                            <div>
+                                {
+                                    photosEdits?.length > 0 && (
+                                        <div className="mt-3">
+                                            <hr />
+                                            <h2 className="section-title fw-semibold text-capitalize">Edited by Other Users</h2>
+                                            <PhotosEdited photos={photosEdits} />
+                                        </div>
+                                    )
+                                }
+                            </div>
                         </div>
                         <div className="details-panel">
                             <div className="socialActions">
@@ -530,6 +546,7 @@ export const Photo = (props) => {
                             </ul>
                             <Comments data={comments} commentRef={commentRef} photoId={photo.id} user={user} />
                         </div>
+                        
                     </div>
             }
             <Footer type={"dash"} />

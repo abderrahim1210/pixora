@@ -90,6 +90,7 @@ export const MyPhotos = () => {
       console.log(err.response?.data?.message)
     }
   }
+  if (user?.role === "editor" || user?.role === "admin") return navigate(`/user/${user?.username}/myphotos`);
   return (
     <div data-bs-page="myphotos">
       <Navbar data={user} />

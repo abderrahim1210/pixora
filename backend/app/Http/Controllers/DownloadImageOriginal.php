@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 
-class DonwloadImageOriginal extends Controller
+class DownloadImageOriginal extends Controller
 {
     public function downloadImage($photoId){
         $photo = Photo::findOrFail($photoId);

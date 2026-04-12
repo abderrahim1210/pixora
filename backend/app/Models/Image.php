@@ -11,14 +11,19 @@ class Image extends Model
     }
 
     public function parent(){
-        return $this->belongsTo(Image::class, 'image_id');
+        return $this->belongsTo(Photo::class, 'parent_id');
     }
 
     public function edits(){
         return $this->hasMany(Image::class, 'image_id');
     }
 
-    public function requests(){
-        return $this->hasMany(EditionRequest::class);
+    public function request(){
+        return $this->belongsTo(EditionRequest::class, 'request_id');
     }
+
+
+    // public function requests(){
+    //     return $this->hasMany(EditionRequest::class);
+    // }
 }

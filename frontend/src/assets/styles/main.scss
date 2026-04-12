@@ -15,6 +15,7 @@
 @use './components/request_edit_form';
 @use './components/request_card';
 @use './components/editor_dashboard';
+@use './components/upload_zone';
 
 :root {
     --special_color: rgb(0, 120, 255);

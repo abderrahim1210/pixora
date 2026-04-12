@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\EditionRequest;
+use App\Models\Image;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,8 @@ class PhotoController extends Controller
             $comment->created_at_human = $comment->created_at->diffForHumans();
         });
         $photo->isLiked = $user ? $photo->likes->contains('user_id', $user->id) : false;
+
+        $photos_edits = Image::with(['parent','request'])->where('parent_id', $photo->id)->get();
         return response()->json([
             'success' => true,
             'photo' => $photo,
@@ -39,7 +42,8 @@ class PhotoController extends Controller
             'categories' => [],
             'comments' => $photo->comments,
             'galleries' => $photo->galleries,
-            'request' => $request
+            'request' => $request,
+            'photos_edits' => $photos_edits
         ]);
     }
 
