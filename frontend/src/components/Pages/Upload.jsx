@@ -437,7 +437,7 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
             </div>
             <div className="form-floating">
               <select name="gallery" value={photo.gallery_id} className="form-select" id="galleryPhoto" onChange={(e) => setPhoto({ ...photo, gallery_id: e.target.value })}>
-                <option>Select gallery</option>
+                <option value={null}>Select gallery</option>
                 {
                   galleries?.map(g => (
                     <option key={g.id} value={g.id}>{g.title}</option>

@@ -10,6 +10,10 @@ class EditingTasks extends Model
         return $this->belongsTo(User::class, 'requester_id');
     }
 
+    public function editor(){
+        return $this->belongsTo(User::class, 'editor_id');
+    }
+
     public function photo (){
         return $this->belongsTo(Photo::class,'image_id');
     }

@@ -32,7 +32,7 @@ class PhotoController extends Controller
         });
         $photo->isLiked = $user ? $photo->likes->contains('user_id', $user->id) : false;
 
-        $photos_edits = Image::with(['parent','request'])->where('parent_id', $photo->id)->get();
+        $photos_edits = Image::with(['parent:filename','request.requester:id,username','editor:id,username'])->where('parent_id', $photo->id)->whereNotNull('request_id')->get();
         return response()->json([
             'success' => true,
             'photo' => $photo,
