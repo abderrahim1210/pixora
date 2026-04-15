@@ -548,9 +548,9 @@ export const MyProfile = () => {
                       onContextMenu={(e) => e.preventDefault()}
                       style={{
                         backgroundImage: user.cover_image
-                          ? `url("http://localhost:8000/storage/cover_images/${user.cover_image}")`
+                          ? `url("http://127.0.0.1:8000/storage/cover_images/${user?.cover_image}")`
                           : `linear-gradient(135deg, #454545 0%, #353535 100%)`,
-                        backgroundAttachment: "fixed",
+                        backgroundAttachment:"fixed",
                         backgroundRepeat: "no-repeat",
                         cursor: "pointer"
                       }}

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class ProfilePictures extends Controller
 {
@@ -26,8 +27,8 @@ class ProfilePictures extends Controller
 
         $user = User::find($user_id);
 
-        if ($user->photo_profile && Storage::disk('public')->exists('profile_pictures/' . $user->photo_profile)){
-            Storage::disk('public')->delete('profile_pictures/'.$user->photo_profile);
+        if ($user->photo_profile && Storage::disk('public')->exists('profile_pictures/' . $user->photo_profile)) {
+            Storage::disk('public')->delete('profile_pictures/' . $user->photo_profile);
         }
 
         $profile_image = $request->profile_image;
@@ -38,16 +39,6 @@ class ProfilePictures extends Controller
             ]);
         }
         $ext = strtolower($type[1]);
-
-        $profile_image = substr($profile_image, strpos($profile_image, ',') + 1);
-        $profile_image = base64_decode($profile_image);
-
-        if ($profile_image === false) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Image decode failed'
-            ]);
-        }
 
         $allowed = ['png', 'jpg', 'jpeg', 'webp'];
         if (!in_array($ext, $allowed)) {
@@ -64,10 +55,22 @@ class ProfilePictures extends Controller
             ]);
         }
 
-        $filename = uniqid() . "." . $ext;
+        $filename = time() . '_' . uniqid() . ".webp";
+        $path = storage_path('/app/public/profile_pictures/' . $filename);
 
+        try {
+            $img = Image::make($profile_image);
+            $img->resize(1200, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
 
-        Storage::disk('public')->put('profile_pictures/' . $filename, $profile_image);
+            $img->encode('webp', 75)->save($path);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => "Error processing" . $e
+            ]);
+        }
 
         $user->photo_profile = $filename;
         $user->save();
@@ -82,7 +85,7 @@ class ProfilePictures extends Controller
     {
         $user_id = Auth::id();
 
-        if (!$user_id){
+        if (!$user_id) {
             return response()->json([
                 'success' => false,
                 'message' => 'User not found'
@@ -91,12 +94,12 @@ class ProfilePictures extends Controller
 
         $user = User::find($user_id);
 
-        if ($user->cover_image && Storage::disk('public')->exists('/cover_images/' . $user->cover_image)){
-            Storage::disk('public')->delete('cover_image/'.$user->cover_image);
+        if ($user->cover_image && Storage::disk('public')->exists('/cover_images/' . $user->cover_image)) {
+            Storage::disk('public')->delete('cover_image/' . $user->cover_image);
         }
 
         $cover_image = $request->cover_image;
-        if (!preg_match('/^data:image\/(\w+);base64,/', $cover_image, $type)){
+        if (!preg_match('/^data:image\/(\w+);base64,/', $cover_image, $type)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid image format'
@@ -105,12 +108,9 @@ class ProfilePictures extends Controller
 
         $ext = strtolower($type[1]);
 
-        $cover_image = substr($cover_image, strpos($cover_image, ',') + 1);
-        $cover_image = base64_decode($cover_image);
+        $allowed = ['jpeg', 'jpg', 'webp'];
 
-        $allowed = ['jpeg','jpg','webp'];
-
-        if (!in_array($ext,$allowed)){
+        if (!in_array($ext, $allowed)) {
             return response()->json([
                 'success' => false,
                 'message' => 'We are not allow this files'
@@ -124,10 +124,21 @@ class ProfilePictures extends Controller
             ]);
         }
 
-        $filename = uniqid() . "." . $ext;
+        $filename = time() . '_' . uniqid() . ".webp";
+        $path = storage_path('/app/public/cover_images/'.$filename);
+        try {
+            $img = Image::make($cover_image);
+            $img->resize(1200, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
 
-
-        Storage::disk('public')->put('cover_images/' . $filename, $cover_image);
+            $img->encode('webp', 75)->save($path);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => "Error processing" . $e
+            ]);
+        }
 
         $user->cover_image = $filename;
         $user->save();
@@ -142,7 +153,7 @@ class ProfilePictures extends Controller
     {
         $user_id = Auth::id();
 
-        if (!$user_id){
+        if (!$user_id) {
             return response()->json([
                 'success' => false,
                 'message' => 'User not found'
@@ -151,8 +162,8 @@ class ProfilePictures extends Controller
 
         $user = User::find($user_id);
 
-        if ($user->photo_profile && Storage::disk('public')->exists('profile_pictures/' . $user->photo_profile)){
-            Storage::disk('public')->delete('profile_pictures/'.$user->photo_profile);
+        if ($user->photo_profile && Storage::disk('public')->exists('profile_pictures/' . $user->photo_profile)) {
+            Storage::disk('public')->delete('profile_pictures/' . $user->photo_profile);
         }
 
         $user->photo_profile = null;
@@ -168,7 +179,7 @@ class ProfilePictures extends Controller
     {
         $user_id = Auth::id();
 
-        if (!$user_id){
+        if (!$user_id) {
             return response()->json([
                 'success' => false,
                 'message' => 'User not found'
@@ -177,8 +188,8 @@ class ProfilePictures extends Controller
 
         $user = User::find($user_id);
 
-        if ($user->cover_image && Storage::disk('public')->exists('cover_images/'.$user->cover_image)){
-            Storage::disk('public')->delete('cover_images/'.$user->cover_image);
+        if ($user->cover_image && Storage::disk('public')->exists('cover_images/' . $user->cover_image)) {
+            Storage::disk('public')->delete('cover_images/' . $user->cover_image);
         }
 
         $user->cover_image = null;

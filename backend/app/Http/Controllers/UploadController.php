@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class UploadController extends Controller
 {
@@ -21,13 +20,6 @@ class UploadController extends Controller
         }
 
         $user = Auth::user();
-
-        // $request->validate([
-        //     'title' => ['required','string','min:3'],
-        //     'description' => ['string'],
-        //     'category' => ['required'],
-        //     'type' => ['in:free,licensed'],
-        // ]);
 
         $photo = $request->photo_data;
 
@@ -45,11 +37,9 @@ class UploadController extends Controller
         $location = $photo['location'] ?? "";
         $gallery_id = $photo['gallery_id'] ?? null;
 
+        
         preg_match('/^data:image\/(\w+);base64,/', $image, $matches);
         $ext = strtolower($matches[1]);
-
-        $image = substr($image, strpos($image, ',') + 1);
-        $image = base64_decode($image);
 
         $allowed = ['png', 'jpg', 'jpeg'];
         if (!in_array($ext, $allowed)) {
@@ -66,13 +56,23 @@ class UploadController extends Controller
             ]);
         }
 
-        $filename = uniqid() . "." . $ext;
+        $filename = time() .'_' . uniqid() . ".webp";
+        $path = storage_path('/app/public/photos/'.$filename);
 
-        Storage::disk('public')->put('photos/'.$filename,$image);
-        
-        $cat = Category::firstOrCreate([
-            'name' => $category
-        ]);
+        try{
+            $img = Image::make($image);
+            $img->resize(1200,null,function($constraint){
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            $img->encode('webp',75)->save($path);
+
+            $newSize = filesize($path);
+
+        }catch(\Exception $e){
+            return response()->json(['success' => false,'message' => 'Error processign']);
+        }
 
         $photoModel = Photo::create([
             'user_id' => $user->id,
@@ -80,14 +80,13 @@ class UploadController extends Controller
             'description' => $description,
             'type' => $type,
             'filename' => $filename,
-            'category_id' => $cat->id,
-            'size' => $size,
-            'width' => $width,
-            'height' => $height,
+            'category_id' => $category,
+            'size' => $newSize ?? ($photo['size']),
+            'width' => $img->width(),
+            'height' => $img->height(),
             'ratio' => $ratio,
             'orientation' => $orientation,
             'tags' => $tags,
-            'location' => $location,
             'gallery_id' => $gallery_id
         ]);
 
