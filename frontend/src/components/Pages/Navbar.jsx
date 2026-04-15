@@ -5,7 +5,7 @@ import { FiBell, FiGlobe, FiSend, FiUpload } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import Avatar from "./Avatar";
-export const Navbar = () => {
+export const Navbar = ({type='all'}) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   return (
@@ -61,16 +61,7 @@ export const Navbar = () => {
                         new &amp; trending
                       </a>
                     </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="dropdown-item"
-                        data-bs-target="#cookies"
-                        data-bs-toggle="modal"
-                      >
-                        collections
-                      </a>
-                    </li>
+                    
                     <li>
                       <a
                         href="#about"
@@ -97,19 +88,22 @@ export const Navbar = () => {
                   </a>
                   <ul className="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a href="dashboard.php" className="dropdown-item">
-                        featured artists
-                      </a>
+                      <Link to={'/photographers'} className={`dropdown-item ${type === 'all' ? 'active' : ''}`}>
+                        all photographers
+                      </Link>
                     </li>
                     <li>
-                      <a
-                        href="#"
-                        className="dropdown-item"
-                        data-bs-target="#language"
-                        data-bs-toggle="modal"
+                      <Link to={'/photographers?type=featured_artists'} className={`dropdown-item ${type === 'featured_artists' ? 'active' : ''}`}>
+                        featured artists
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to={'/photographers?type=top_photographers'}
+                        className={`dropdown-item ${type === 'top_photographers' ? 'active' : ''}`}
                       >
                         top photographers
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -133,12 +127,12 @@ export const Navbar = () => {
                     </li>
                     <li>
                       <a
-                        href="#about"
+                        href="#galleries"
                         data-bs-target="#about"
                         data-bs-toggle="tab"
                         className="dropdown-item"
                       >
-                        contact us
+                        galleries
                       </a>
                     </li>
                     <li>

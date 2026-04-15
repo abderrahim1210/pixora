@@ -29,16 +29,20 @@ export const fetchFollows = async (setFollows) => {
     }
 }
 
-export const toggleFollowAction = async (id,follows,setFollows,setStatistics,statistics) => {
+export const toggleFollowAction = async (id,follows,setFollows,type='all',setStatistics,statistics) => {
     let previousFollows = [...follows];
     setFollows((prev) => {
         previousFollows = prev;
 
         if (prev.includes(id)) {
-            setStatistics(prev => ({ ...prev, followers: statistics.followings - 1 }));
+            if (type === 'profile'){
+                setStatistics(prev => ({ ...prev, followers: statistics.followings - 1 }));
+            }
             return prev.filter(f => f !== id);
         } else {
-            setStatistics(prev => ({ ...prev, followers: statistics.followings + 1 }));
+            if (type === 'profile'){
+                setStatistics(prev => ({ ...prev, followers: statistics.followings + 1 }));
+            }
             return [...prev, id];
         }
     })

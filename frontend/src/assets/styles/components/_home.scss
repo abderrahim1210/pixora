@@ -319,7 +319,17 @@
 
   .div3 .card {
     width: 250px;
+    // height: 100%;
+    // min-height: 260px;
     text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    // border: 1px solid #eef0f2;
+  }
+
+  .div3 .card:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    border-color: var(--special_color);
   }
 
   .div3 .card .card-body a {

@@ -23,15 +23,17 @@
     color: var(--special_color);
   }
 
-  header {
-    background-color: #fff;
-  }
+  // header {
+    
+  // }
 
   .nav1 {
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
     font-weight: bold;
   }
 
-  .dropdown .dropdown-menu a:hover {
+  .dropdown .dropdown-menu a:hover,.dropdown .dropdown-menu .dropdown-item a.active {
     background-color: var(--special_color) !important;
     color: white !important;
   }

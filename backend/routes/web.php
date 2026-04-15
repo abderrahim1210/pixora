@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcceptEdit;
+use App\Http\Controllers\AddFollow;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DownloadImageOriginal;
@@ -104,7 +105,9 @@ Route::get('/get_all_galleries',function(){
 //     ]);
 // });
 
-Route::get('/get_users',[FetchUsers::class, 'getUsers']);
+Route::get('/get_users/{type}',[FetchUsers::class, 'getUsers']);
+
+Route::post('/addFollow',[AddFollow::class, 'addFollow'])->middleware('auth:sanctum');
 
 Route::get('/get_gallery/{id}',[Galleries::class,'GetGallery'])->middleware('auth:sanctum');
 Route::delete('/delete_gallery/{id}',[Galleries::class, 'DeleteGallery'])->middleware('auth:sanctum');
