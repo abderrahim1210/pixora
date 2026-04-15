@@ -459,42 +459,6 @@
     margin-right: 10px;
   }
 
-  #followButton {
-    border-radius: 30px;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    background-color: var(--special_color);
-    color: white;
-  }
-
-  #followButton:hover {
-    background-color: rgb(0, 54, 115);
-  }
-
-  #followButton.active {
-    background-color: rgba(255, 255, 255, 0.25);
-    color: black;
-    border: 1px solid black;
-  }
-
-  #searchAtPhotographer {
-    width: 400px;
-    border: none;
-    border: 1px solid black;
-    border-radius: 20px;
-  }
-
-  #searchAtPhotographer:focus {
-    border-color: var(--special_color);
-  }
-
-  #searchAtPhotographer::placeholder {
-    font-style: italic;
-    color: #454545;
-  }
-
   .categories {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

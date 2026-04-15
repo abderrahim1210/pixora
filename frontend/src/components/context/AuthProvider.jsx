@@ -7,8 +7,11 @@ import { getUser } from '../utils/getUser';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+  const [loading, setLoading] = useState(!user);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -30,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user, setUser, loading }}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 }

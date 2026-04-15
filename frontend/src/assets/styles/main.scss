@@ -17,6 +17,8 @@
 @use './components/editor_dashboard';
 @use './components/upload_zone';
 @use './components/photos_edited';
+@use './components/photographers';
+@use './components/spinner';
 
 :root {
     --special_color: rgb(0, 120, 255);

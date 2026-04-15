@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DownloadImageOriginal;
 use App\Http\Controllers\FetchRequests;
+use App\Http\Controllers\FetchUsers;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\Galleries;
 use App\Http\Controllers\GetPhotos;
@@ -95,13 +96,15 @@ Route::get('/get_all_galleries',function(){
     ]);
 });
 
-Route::get('/get_users',function(){
-    $users = User::all();
-    return response()->json([
-        'success' => true,
-        'users' => $users
-    ]);
-});
+// Route::get('/get_users',function(){
+//     $users = User::all();
+//     return response()->json([
+//         'success' => true,
+//         'users' => $users
+//     ]);
+// });
+
+Route::get('/get_users',[FetchUsers::class, 'getUsers']);
 
 Route::get('/get_gallery/{id}',[Galleries::class,'GetGallery'])->middleware('auth:sanctum');
 Route::delete('/delete_gallery/{id}',[Galleries::class, 'DeleteGallery'])->middleware('auth:sanctum');

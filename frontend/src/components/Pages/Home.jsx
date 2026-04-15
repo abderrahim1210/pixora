@@ -35,7 +35,7 @@ import { fetchFollows, toggleFollowAction } from "../utils/getFollows";
 export const Home = () => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
   const [usrSearched, setUsrSearched] = useState([]);
   const [search, setSearch] = useState("");
   const [follows, setFollows] = useState([]);
@@ -47,45 +47,18 @@ export const Home = () => {
       .then((res) => {
         if (res.data.success) {
           setPhotos(res.data.photos);
-          setUsers(res.data.users);
+          // setUsers(res.data.users);
           setUsrSearched(res.data.users);
           setLoading(true);
         }
       });
-    setFavicon("/outils/favicons/favicon.jpg");
+    // setFavicon("/outils/favicons/favicon.jpg");
   }, []);
-
-  // const followURL = "http://localhost:8000/follows";
-  useEffect(() => {
-    fetchFollows(setFollows);
-  }, []);
-
-  useEffect(() => {
-    const updatedUsers = users.map((u) => ({
-      ...u,
-      followClasse: follows.includes(u.id) ? "active" : "",
-      followText: follows.includes(u.id) ? "Followed" : "Follow"
-    }));
-    if (search.trim() === "") {
-      setUsrSearched(updatedUsers);
-    } else {
-      setUsrSearched(
-        updatedUsers.filter((u) =>
-          u.username.toLowerCase().startsWith(search.toLowerCase())
-
-        )
-      );
-    }
-  }, [search, users, follows]);
 
   const { user } = useAuth();
 
   function slugiFy(text) {
     return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
-  }
-
-  const addFollow = async (id) => {
-    toggleFollowAction(id,follows,setFollows);
   }
 
 
@@ -172,7 +145,7 @@ export const Home = () => {
         </figure> */}
         <br />
       </div>
-      <div className="sticky-top">
+      {/* <div className="sticky-top">
         <nav className="navbar navbar-expand nav2">
           <ul className="nav mx-auto">
             <li className="nav-item">
@@ -232,7 +205,7 @@ export const Home = () => {
             </li>
           </ul>
         </nav>
-      </div>
+      </div> */}
       <div className="tab-content">
         <div
           className="container-fluid tab-pane fade show active mt-3 mb-3"
@@ -289,7 +262,6 @@ export const Home = () => {
                         <a style={{ cursor: "pointer" }}>
                           <FaComment />{" "}
                           <span>
-                            {p.comments.length}
                           </span>
                         </a>
                       </div>

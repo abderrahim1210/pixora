@@ -9,7 +9,7 @@ export const Navbar = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   return (
-    <div data-bs-page="navbar">
+    <div data-bs-page="navbar" className="sticky-top">
       <header className="d-flex d-sm-flex d-md-block">
         <nav className="navbar navbar-expand p-2 nav1">
           <div className="container-fluid d-flex">
@@ -187,7 +187,7 @@ export const Navbar = () => {
               </li>
             </ul>
             <ul className="navbar-nav d-none d-md-flex" id="ul2-1">
-              <li className="nav-item send-bell">
+              {/* <li className="nav-item send-bell">
                 <a href="#" className="nav-link" title="Messages">
                   <FiSend />
                 </a>
@@ -196,7 +196,7 @@ export const Navbar = () => {
                 <a href="#" className="nav-link" title="Notifications">
                   <FiBell />
                 </a>
-              </li>
+              </li> */}
               <li className="nav-item" id="upload_button">
                 <button
                   onClick={() => navigate("/upload")}
