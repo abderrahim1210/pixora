@@ -10,7 +10,7 @@ import { fetchFollows, toggleFollowAction } from '../utils/getFollows';
 import { Navbar } from './Navbar';
 import { EmptyContent } from './EmptyContent';
 import Spinner from './Spinner';
-import { BiChevronDown } from 'react-icons/bi';
+import { BiChevronDown, BiSearchAlt } from 'react-icons/bi';
 import { Footer } from './Footer';
 import PhotographersList from './PhotographersList';
 const Photographers = () => {
@@ -20,7 +20,7 @@ const Photographers = () => {
     const [visible, setVisible] = useState(5);
     const [searchParams] = useSearchParams();
     const type = searchParams.get('type') || 'all';
-    const [localFollows,setLocalFollows] = useState([]);
+    const [localFollows, setLocalFollows] = useState([]);
     const fetchUsers = async () => {
         try {
             const res = await axios.get(`http://localhost:8000/get_users/${type}`, { withCredentials: true, withXSRFToken: true });
@@ -30,14 +30,14 @@ const Photographers = () => {
         }
     }
     const { data: users = [], isLoading, error } = useQuery({
-        queryKey: ['users',type],
+        queryKey: ['users', type],
         queryFn: fetchUsers
     });
 
     const { data: follows = [] } = useQuery({
         queryKey: ['follows'],
         queryFn: async () => {
-            const res = await axios.get('http://localhost:8000/follows', { withCredentials: true, withXSRFToken:true });
+            const res = await axios.get('http://localhost:8000/follows', { withCredentials: true, withXSRFToken: true });
             return res.data?.users?.map(f => f.id) || [];
         },
         onSuccess: (data) => setLocalFollows(data)
@@ -53,18 +53,21 @@ const Photographers = () => {
 
     const queryClient = useQueryClient();
     const addFollow = async (id) => {
-        // const type = 'all';
-        // toggleFollowAction(id, follows, setLocalFollows, type);
-        const previousFollows = [...follows];
-        const newFollows = follows.includes(id) ? follows.filter(fid => fid !== id) : [...follows,id];
+        const newFollows = follows.includes(id) ? follows.filter(fid => fid !== id) : [...follows, id];
         queryClient.setQueryData(['follows'], newFollows);
 
-        try{
-            await axios.post('http://localhost:8000/follows', { followingID: id }, { withCredentials: true, withXSRFToken:true });
-        }catch(err){
+        try {
+            await axios.post('http://localhost:8000/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
+        } catch (err) {
             queryClient.setQueryData(['follows'], previousFollows);
             console.log(err?.response?.data);
         }
+    }
+
+    const handleSearch = (e) => {
+        setSearch(e.target.value);
+        setVisible(5);
+        return;
     }
     return (
         <div data-bs-page="pixora">
@@ -74,18 +77,27 @@ const Photographers = () => {
                 id="photographers"
             >
                 <h1 className="fw-bold text-center">Photographers <span className='text-primary'>({filtredUsers?.length ?? 0})</span></h1>
-                <div className="mt-3 mb-3 d-flex justify-content-center">
-                    <input
-                        type="search"
-                        id="searchAtPhotographer"
-                        className="form-control"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Type name of photographer ..."
-                    />
+                <div className="search-container mb-5">
+                    <div className="search-box">
+                        <BiSearchAlt className='search-icon' />
+                        <input
+                            type="text"
+                            className='search-input'
+                            placeholder='Search Galleries ...'
+                            value={search}
+                            onChange={handleSearch}
+                        />
+                        {
+                            search && (
+                                <button className='clear-btn' onClick={() => setSearch('')}>
+                                    &times;
+                                </button>
+                            )
+                        }
+                    </div>
                 </div>
                 <hr />
-                <PhotographersList user={user} filtredUsers={filtredUsers} isLoading={isLoading} visible={visible} addFollow={addFollow}  />
+                <PhotographersList user={user} filtredUsers={filtredUsers} isLoading={isLoading} visible={visible} addFollow={addFollow} />
                 {
                     visible < filtredUsers.length && (
                         <div className='show-more-wrapper'>

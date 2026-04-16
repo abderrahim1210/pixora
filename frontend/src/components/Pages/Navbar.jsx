@@ -126,14 +126,12 @@ export const Navbar = ({type='all'}) => {
                       </a>
                     </li>
                     <li>
-                      <a
-                        href="#galleries"
-                        data-bs-target="#about"
-                        data-bs-toggle="tab"
+                      <Link
+                        to={'/galleries'}
                         className="dropdown-item"
                       >
                         galleries
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <a

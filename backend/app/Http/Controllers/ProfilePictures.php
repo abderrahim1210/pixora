@@ -6,7 +6,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
+// use Intervention\Image\Image;
+// use Intervention\Image\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver; // Awla Imagick ila knti m-installih
 
 class ProfilePictures extends Controller
 {

@@ -19,6 +19,7 @@
 @use './components/photos_edited';
 @use './components/photographers';
 @use './components/spinner';
+@use './components/search_bar';
 
 :root {
     --special_color: rgb(0, 120, 255);

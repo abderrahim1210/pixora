@@ -6,13 +6,16 @@ use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
 
 class UploadController extends Controller
 {
-    public function uploadPhoto(Request $request){
+    public function uploadPhoto(Request $request)
+    {
 
-        if(!Auth::check()){
+        if (!Auth::check()) {
             return response()->json([
                 'success' => false,
                 'message' => 'You need to login first for upload a photo'
@@ -37,7 +40,7 @@ class UploadController extends Controller
         $location = $photo['location'] ?? "";
         $gallery_id = $photo['gallery_id'] ?? null;
 
-        
+
         preg_match('/^data:image\/(\w+);base64,/', $image, $matches);
         $ext = strtolower($matches[1]);
 
@@ -56,22 +59,26 @@ class UploadController extends Controller
             ]);
         }
 
-        $filename = time() .'_' . uniqid() . ".webp";
-        $path = storage_path('/app/public/photos/'.$filename);
+        $filename = time() . '_' . uniqid() . ".webp";
+        $path = storage_path('/app/public/photos/' . $filename);
 
-        try{
-            $img = Image::make($image);
-            $img->resize(1200,null,function($constraint){
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
+        try {
+            // $img = Image::make($image);
+            $manager = new ImageManager(new Driver());
 
-            $img->encode('webp',75)->save($path);
+            // 2. Read image men base64
+            $img = $manager->read($image);
+            // $img->resize(1200, null, function ($constraint) {
+            //     $constraint->aspectRatio();
+            //     $constraint->upsize();
+            // });
+            $img->scale(width:1200);
+
+            $img->toWebp(75)->save($path);
 
             $newSize = filesize($path);
-
-        }catch(\Exception $e){
-            return response()->json(['success' => false,'message' => 'Error processign']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error processign']);
         }
 
         $photoModel = Photo::create([
@@ -90,7 +97,7 @@ class UploadController extends Controller
             'gallery_id' => $gallery_id
         ]);
 
-        if ($gallery_id){
+        if ($gallery_id) {
             DB::table('gallery_photos')->insert([
                 'photo_id' => $photoModel->id,
                 'gallery_id' => $gallery_id,

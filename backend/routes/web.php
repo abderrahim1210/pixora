@@ -69,11 +69,8 @@ Route::prefix('/edit_profile_pictures')->group(function () {
 
 Route::get('/get_photos', [GetPhotos::class, 'getPhotos'])->middleware('auth:sanctum');
 
-// Route::middleware('auth:sanctum')->group(function(){
-// });
-
 Route::get('/get_categories', function () {
-    $categs = Category::all();
+    $categs = Category::select('id','name')->get();
     return response()->json([
         'success' => true,
         'categories' => $categs
@@ -82,7 +79,7 @@ Route::get('/get_categories', function () {
 Route::post('/create_gallery', [Galleries::class, 'AddGallery'])->middleware('auth:sanctum');
 
 Route::get('/get_galleries', function(){
-    $galleries = Gallery::where('user_id',Auth::id())->get();
+    $galleries = Gallery::select('id','title','description')->with(['photos:id,filename','user:id,username'])->where('user_id',Auth::id())->get();
     return response()->json([
         'success' => true,
         'galleries' => $galleries
@@ -90,7 +87,7 @@ Route::get('/get_galleries', function(){
 });
 
 Route::get('/get_all_galleries',function(){
-    $galleries = Gallery::all();
+    $galleries = Gallery::with(['photos:id,filename','user:id,username'])->select('id','title','description','user_id')->get();
     return response()->json([
         'success' => true,
         'galleries' => $galleries
