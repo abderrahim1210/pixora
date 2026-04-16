@@ -20,6 +20,7 @@
 @use './components/photographers';
 @use './components/spinner';
 @use './components/search_bar';
+@use './components/skeleton_myprofile';
 
 :root {
     --special_color: rgb(0, 120, 255);

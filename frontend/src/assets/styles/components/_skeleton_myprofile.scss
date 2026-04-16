@@ -1,0 +1,78 @@
+.profile-skeleton-container {
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+  }
+
+  .sk-btn, .sk-cover, .sk-avatar-circle, .sk-line, .sk-stat, .sk-btn-manage, .sk-camera-icon {
+    background: #e0e0e0;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+
+  .sk-btn {
+    width: 150px;
+    height: 40px;
+    border-radius: 50px;
+    &.active { background: #007bff; opacity: 0.6; } // Blue-ish for active tab
+  }
+
+  .sk-cover-wrapper {
+    .sk-cover {
+      width: 100%;
+      height: 280px;
+      background: #333;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .sk-camera-icon {
+        width: 40px;
+        height: 30px;
+        border-radius: 5px;
+        background: #555;
+    }
+  }
+
+  .sk-avatar-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ccc;
+    z-index: 2;
+  }
+
+  .sk-info-card {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    padding-top: 60px !important;
+  }
+
+  .sk-line {
+    border-radius: 10px;
+    &.sm { width: 100px; height: 15px; }
+    &.md { width: 220px; height: 18px; }
+  }
+
+  .sk-stat {
+    width: 80px;
+    height: 25px;
+    border-radius: 5px;
+  }
+
+  .sk-btn-manage {
+    width: 140px;
+    height: 40px;
+    border-radius: 20px;
+    border: 2px solid #e0e0e0;
+    background: transparent;
+  }
+}

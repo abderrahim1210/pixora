@@ -68,10 +68,7 @@ const PageSkeleton = ({ page }) => {
               </div>
             </div>
           </div>
-        ) /* : (<div className='skeleton-card'>
-        <div className='skeleton-image-second'></div>
-        <div className='skeleton-text-second'></div>
-    </div>)*/
+        )
       }
 
       {
@@ -92,6 +89,43 @@ const PageSkeleton = ({ page }) => {
           <div className='skeleton-image-second'></div>
           <div className='skeleton-text-second'></div>
         </div>)
+      }
+
+      {
+        page === "myprofile" && (
+          <div className="profile-skeleton-container container mt-3">
+            <div className="d-flex justify-content-center gap-2 mb-4">
+              <div className="sk-btn active"></div> 
+              <div className="sk-btn"></div>
+              <div className="sk-btn"></div>
+              <div className="sk-btn"></div>
+            </div>
+
+            <div className="sk-cover-wrapper position-relative">
+              <div className="sk-cover">
+                <div className="sk-camera-icon"></div>
+              </div>
+
+              <div className="sk-avatar-circle"></div>
+            </div>
+
+            <div className="sk-info-card mt-5 p-4 text-center">
+              <div className="sk-line sm mx-auto mt-2"></div>
+              <div className="sk-line md mx-auto my-3"></div>
+
+              <div className="d-flex justify-content-center gap-4 mt-2">
+                <div className="sk-stat"></div>
+                <div className="sk-stat"></div>
+                <div className="sk-stat"></div>
+                <div className="sk-stat"></div>
+              </div>
+
+              <div className="d-flex justify-content-end mt-4">
+                <div className="sk-btn-manage"></div>
+              </div>
+            </div>
+          </div>
+        )
       }
     </>
   )
