@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 // use Intervention\Image\Image;
 // use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver; // Awla Imagick ila knti m-installih
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ProfilePictures extends Controller
 {
@@ -62,13 +62,17 @@ class ProfilePictures extends Controller
         $path = storage_path('/app/public/profile_pictures/' . $filename);
 
         try {
-            $img = Image::make($profile_image);
-            $img->resize(1200, null, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
+            $manager = new ImageManager(new Driver());
 
-            $img->encode('webp', 75)->save($path);
+            // 2. Read image men base64
+            $img = $manager->read($profile_image);
+            // $img->resize(1200, null, function ($constraint) {
+            //     $constraint->aspectRatio();
+            //     $constraint->upsize();
+            // });
+            $img->scale(width: 1200);
+
+            $img->toWebp(75)->save($path);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => "Error processing" . $e
@@ -128,15 +132,19 @@ class ProfilePictures extends Controller
         }
 
         $filename = time() . '_' . uniqid() . ".webp";
-        $path = storage_path('/app/public/cover_images/'.$filename);
+        $path = storage_path('/app/public/cover_images/' . $filename);
         try {
-            $img = Image::make($cover_image);
-            $img->resize(1200, null, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
+            $manager = new ImageManager(new Driver());
 
-            $img->encode('webp', 75)->save($path);
+            // 2. Read image men base64
+            $img = $manager->read($cover_image);
+            // $img->resize(1200, null, function ($constraint) {
+            //     $constraint->aspectRatio();
+            //     $constraint->upsize();
+            // });
+            $img->scale(width: 1200);
+
+            $img->toWebp(75)->save($path);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => "Error processing" . $e

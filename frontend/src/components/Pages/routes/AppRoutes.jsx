@@ -11,6 +11,7 @@ import GalleryPreview from "../GalleryPreview";
 import Photograher from "../Photograher";
 import Photographers from "../Photographers";
 import GalleriesSection from "../GalleriesSection";
+import SearchPhotos from "../SearchPhotos";
 const AppRoutes = () => {
   
   return (
@@ -27,6 +28,7 @@ const AppRoutes = () => {
       <Route path="/photographer/:id" element={<Photograher />} />
       <Route path="/photographers" element={<Photographers />} />
       <Route path="/galleries" element={<GalleriesSection />} />
+      <Route path="/search" element={<SearchPhotos />} />
     </Routes>
     </>
   );

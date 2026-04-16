@@ -17,6 +17,7 @@ use App\Http\Controllers\Photographer;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePictures;
 use App\Http\Controllers\RequestEdit;
+use App\Http\Controllers\SearchAtPhotos;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UploadResult;
 use App\Models\Category;
@@ -126,5 +127,7 @@ Route::post('/accept_req_edit',[AcceptEdit::class, 'accept'])->middleware('auth:
 Route::get('/download_photo/{photoId}',[DownloadImageOriginal::class, 'downloadImage'])->middleware('auth:sanctum');
 
 Route::post('/upload_photo',[UploadResult::class, 'uploadResult'])->middleware('auth:sanctum');
+
+Route::get('/search',[SearchAtPhotos::class, 'getResult']);
 
 require __DIR__ . '/auth.php';

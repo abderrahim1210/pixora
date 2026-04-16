@@ -41,6 +41,7 @@ export const Home = () => {
   const [follows, setFollows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [galleries, setGalleries] = useState([]);
+  const [term,setTerm] = useState('');
   useEffect(() => {
     axios
       .get("http://localhost:8000/homepage", { withCredentials: true })
@@ -98,6 +99,7 @@ export const Home = () => {
       console.log(err.response?.data);
     }
   }, [])
+
   return (
     <div data-bs-page="pixora">
       <Navbar data={user} />
@@ -118,12 +120,15 @@ export const Home = () => {
                 id="search"
                 placeholder="Search for anything ..."
                 title="Search"
+                value={term}
+                onChange={(e) => setTerm(e.target.value)}
               />
               <button
                 type="button"
                 className="btn"
                 id="searchButton"
                 title="Click for search"
+                onClick={() => navigate(`/search?searchTerme=${term}`)}
               >
                 <FaSearch />
               </button>
@@ -404,9 +409,6 @@ export const Home = () => {
                       <Avatar src={`http://localhost:8000/storage/profile_pictures/${u.photo_profile}`} size={80} />
                     </div>
                     <div className="mt-3 mb-3">
-                      {/* <a href="profil_preview.php?id=<?= $user['id']; ?>">
-                        {u.username}
-                      </a> */}
                       <Truncate text={u.username} maxChars={20}>
                         {({ text }) => (
                           <Link to={`/photographer/${u.id}`}>{text}</Link>
