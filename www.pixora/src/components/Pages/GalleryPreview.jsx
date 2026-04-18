@@ -27,7 +27,7 @@ const GalleryPreview = () => {
     useEffect(() => {
         const fetchPhotos = async () => {
             try {
-                const url = `http://localhost:8000/get_gallery/${id}`;
+                const url = `https://api.pixora.test/get_gallery/${id}`;
                 const res = await axios.get(url, { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
                     setGallery(res.data.gallery);
@@ -62,7 +62,7 @@ const GalleryPreview = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await axios.delete(`http://localhost:8000/delete_gallery/${gallery?.id}`, { withCredentials: true, withXSRFToken: true });
+                    const res = await axios.delete(`https://api.pixora.test/delete_gallery/${gallery?.id}`, { withCredentials: true, withXSRFToken: true });
                     console.log(res.data);
                     if (res.data.success) {
                         notyf.success(res.data.message);

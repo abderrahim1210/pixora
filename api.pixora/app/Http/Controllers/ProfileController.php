@@ -12,29 +12,30 @@ class ProfileController extends Controller
 {
     public function getInfos()
     {
-        $user = Auth::user();
-        $photos = $user->photos;
-        $likes = $user->likes->count();
-        $followers = Follow::where('following_id', $user->id)->count();
-        $followings = Follow::where('follower_id', $user->id)->count();
-        if ($user) {
-            return response()->json([
-                'success' => true,
-                'user' => $user,
-                'photos' => $photos ?: [],
-                'photosCount' => $photos->count(),
-                'statistics' => [
-                    'likes' => $likes,
-                    'followers' => $followers,
-                    'followings' => $followings
-                ]
-            ]);
-        } else {
+
+        $user = User::with([
+            'photos' => function($query){
+                $query->select('id','title','filename','user_id')->latest()->limit(4);
+            }
+        ])->withCount(['likes','followers','followings'])->find(Auth::id());
+
+        if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'User not found'
-            ]);
+            ], 401);
         }
+
+        return response()->json([
+            'success' => true,
+            'user' => $user,
+            'photos' => $user->photos,
+            'photosCount' => $user->photos_count,
+            'statistics' => [
+                'likes' => $user->likes_count,
+                'followers' => $user->followers_count,
+                'followings' => $user->followings_count
+            ]
+        ]);
     }
 
     public function editProfile(Request $request)
@@ -74,14 +75,14 @@ class ProfileController extends Controller
         $user->instagram = $request->insta;
         $user->birth_date = $birh_date;
 
-        if ($user->isDirty()){
+        if ($user->isDirty()) {
             $user->save();
 
             return response()->json([
                 'success' => true,
                 'message' => 'Updated profile successfully'
-            ]);            
-        }else{
+            ]);
+        } else {
             return response()->json([
                 'success' => false,
                 'message' => 'No updated detected'

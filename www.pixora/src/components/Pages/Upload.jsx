@@ -59,9 +59,9 @@ export const Upload = () => {
         gallery_id:photo.gallery_id
       }
       if (file) {
-        const res = await axios.post('http://localhost:8000/upload', { photo_data: payload }, { withCredentials: true, withXSRFToken: true });
+        const res = await axios.post('https://api.pixora.test/upload', { photo_data: payload }, { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
-          navigate(`/${user.username}/myphotos`, { state: { uploaded: true, message: res.data.message } });
+          navigate(`/user/${user.username}/myphotos`, { state: { uploaded: true, message: res.data.message } });
         } else {
           notyf.error(res.data.message);
         }
@@ -360,7 +360,7 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
   const [galleries,setGalleries] = useState([]);
   useEffect(()=>{
     try{
-      axios.get('http://localhost:8000/get_galleries',{withCredentials:true,withXSRFToken:true})
+      axios.get('https://api.pixora.test/get_galleries',{withCredentials:true,withXSRFToken:true})
       .then(res => {
         if (res.data.success){
           setGalleries(res.data.galleries);
@@ -370,7 +370,7 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
       console.log(err.response?.data);
     }
   },[]);
-  const url = 'http://localhost:8000/get_categories';
+  const url = 'https://api.pixora.test/get_categories';
   useEffect(() => {
     try {
       axios.get(url)

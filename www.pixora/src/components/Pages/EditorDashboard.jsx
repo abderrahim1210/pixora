@@ -11,7 +11,7 @@ const EditorDashboard = ({ uploadResAction }) => {
     useEffect(() => {
         try {
             const fetchRequests = async () => {
-                const res = await axios.get('http://localhost:8000/get_requests_for_editors', { withCredentials: true, withXSRFToken: true });
+                const res = await axios.get('https://api.pixora.test/get_requests_for_editors', { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
                     setRequests(res.data.requests);
                 }

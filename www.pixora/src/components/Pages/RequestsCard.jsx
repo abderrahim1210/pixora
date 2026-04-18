@@ -5,13 +5,13 @@ const RequestsCard = ({ r, handleAccept,downloadImage,uploadResAction }) => {
     return (
         <div className="editor-task-card" key={r?.id}>
             <div className="image-container">
-                <img src={`http://localhost:8000/storage/photos/${r?.edition_requests?.photo?.filename}`} alt="Original" />
+                <img src={`https://api.pixora.test/storage/photos/${r?.edition_requests?.photo?.filename}`} alt="Original" />
                 <span className='badge'>New Request</span>
             </div>
 
             <div className="card-content">
                 <div className="user-info">
-                    <img src={r?.user?.photo_profile ? `http://localhost:8000/storage/profile_pictures/${r?.user?.photo_profile}` : '/outils/pngs/useracc2.png'} className='avatar' alt="Avatar" />
+                    <img src={r?.user?.photo_profile ? `https://api.pixora.test/storage/profile_pictures/${r?.user?.photo_profile}` : '/outils/pngs/useracc2.png'} className='avatar' alt="Avatar" />
                     <span>{r?.user?.username}</span>
                 </div>
                 <p className='message'>{r?.edition_requests?.message}</p>

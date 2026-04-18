@@ -23,7 +23,7 @@ const Photographers = () => {
     const [localFollows, setLocalFollows] = useState([]);
     const fetchUsers = async () => {
         try {
-            const res = await axios.get(`http://localhost:8000/get_users/${type}`, { withCredentials: true, withXSRFToken: true });
+            const res = await axios.get(`https://api.pixora.test/get_users/${type}`, { withCredentials: true, withXSRFToken: true });
             return res.data.users;
         } catch (err) {
             console.log(err?.response?.data);
@@ -37,7 +37,7 @@ const Photographers = () => {
     const { data: follows = [] } = useQuery({
         queryKey: ['follows'],
         queryFn: async () => {
-            const res = await axios.get('http://localhost:8000/follows', { withCredentials: true, withXSRFToken: true });
+            const res = await axios.get('https://api.pixora.test/follows', { withCredentials: true, withXSRFToken: true });
             return res.data?.users?.map(f => f.id) || [];
         },
         onSuccess: (data) => setLocalFollows(data)
@@ -57,7 +57,7 @@ const Photographers = () => {
         queryClient.setQueryData(['follows'], newFollows);
 
         try {
-            await axios.post('http://localhost:8000/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
+            await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
         } catch (err) {
             queryClient.setQueryData(['follows'], previousFollows);
             console.log(err?.response?.data);

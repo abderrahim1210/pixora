@@ -77,7 +77,7 @@ export const MyProfile = () => {
   const profileRef = useRef();
   const coverRef = useRef();
   const [loading, setLoading] = useState(true);
-  const [requests, setRequests] = useState([]);
+  // const [requests, setRequests] = useState([]);
   const [preview, setPreview] = useState(null);
   const [taskId, setTaskId] = useState(null);
   const [ownerId, setOwnerId] = useState(null);
@@ -97,7 +97,6 @@ export const MyProfile = () => {
 
     reader.onloadend = () => {
       setPreview(reader.result);
-      // setTaskId(id);
     };
 
     reader.readAsDataURL(file);
@@ -117,7 +116,7 @@ export const MyProfile = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/myprofile", {
+      .get("https://api.pixora.test/myprofile", {
         withCredentials: true,
         withXSRFToken: true,
         headers: {
@@ -126,7 +125,6 @@ export const MyProfile = () => {
       })
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.success)
           setUser(res.data.user);
           setPhotos(res.data.photos);
           setLoading(false);
@@ -142,26 +140,9 @@ export const MyProfile = () => {
       });
   }, []);
 
-  useEffect(() => {
-    try {
-      const fetchMyReqs = async () => {
-        const res = await axios.get('http://localhost:8000/get_my_requests', { withCredentials: true, withXSRFToken: true });
-        if (res.data.success) {
-          setRequests(res.data.requests);
-        } else {
-          console.log(res.data.message);
-        }
-      }
-
-      fetchMyReqs();
-    } catch (err) {
-      console.log(err?.response?.data);
-    }
-  }, []);
-
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post('http://localhost:8000/edit_profile', data, { withCredentials: true, withXSRFToken: true });
+      const res = await axios.post('https://api.pixora.test/edit_profile', data, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         Swal.fire({
           icon: "success",
@@ -207,7 +188,7 @@ export const MyProfile = () => {
 
   const handleLogOut = async () => {
     try {
-      const res = await axios.delete('http://localhost:8000/logout', { withCredentials: true, withXSRFToken: true });
+      const res = await axios.delete('https://api.pixora.test/logout', { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         navigate('/login');
       }
@@ -216,10 +197,10 @@ export const MyProfile = () => {
     }
   }
 
-  const profilePicturesURL = "http://localhost:8000/edit_profile_pictures/avatar";
-  const coverPictureURL = "http://localhost:8000/edit_profile_pictures/cover";
-  const deleteProfilePictureURL = "http://localhost:8000/edit_profile_pictures/delete_avatar";
-  const deleteCoverPictureURL = "http://localhost:8000/edit_profile_pictures/delete_cover";
+  const profilePicturesURL = "https://api.pixora.test/edit_profile_pictures/avatar";
+  const coverPictureURL = "https://api.pixora.test/edit_profile_pictures/cover";
+  const deleteProfilePictureURL = "https://api.pixora.test/edit_profile_pictures/delete_avatar";
+  const deleteCoverPictureURL = "https://api.pixora.test/edit_profile_pictures/delete_cover";
 
   const handleProfileSelect = async () => {
 
@@ -235,6 +216,7 @@ export const MyProfile = () => {
         const res = await axios.post(profilePicturesURL, { profile_image: base64Image }, { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
           notyf.success(res.data.message);
+          return window.location.reload();
         } else {
           notyf.error(res.data.message);
         }
@@ -258,6 +240,7 @@ export const MyProfile = () => {
         const res = await axios.post(coverPictureURL, { cover_image: base64Image }, { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
           notyf.success(res.data.message);
+          return window.location.reload();
         } else {
           notyf.error(res.data.message);
         }
@@ -282,13 +265,14 @@ export const MyProfile = () => {
           const res = await axios.delete(deleteProfilePictureURL, { withCredentials: true, withXSRFToken: true });
           if (res.data.success) {
             notyf.success(res.data.message);
+            return window.location.reload();
           } else {
             notyf.error(res.data.message);
           }
         } catch (err) {
           console.log(err.response?.data);
         } finally {
-          window.location.reload;
+          window.location.reload();
         }
       }
     });
@@ -309,13 +293,12 @@ export const MyProfile = () => {
           const res = await axios.delete(deleteCoverPictureURL, { withCredentials: true, withXSRFToken: true });
           if (res.data.success) {
             notyf.success(res.data.message);
+            return window.location.reload();
           } else {
             notyf.error(res.data.message);
           }
         } catch (err) {
           console.log(err);
-        } finally {
-          window.location.reload;
         }
       }
     });
@@ -329,7 +312,7 @@ export const MyProfile = () => {
 
   const uploadResult = async () => {
     try {
-      const res = await axios.post('http://localhost:8000/upload_photo', { image: preview, photo_id: imageId, ownerId: ownerId, requester_id: requester_id, req_id: req_id, task_id: taskId }, { withCredentials: true, withXSRFToken: true });
+      const res = await axios.post('https://api.pixora.test/upload_photo', { image: preview, photo_id: imageId, ownerId: ownerId, requester_id: requester_id, req_id: req_id, task_id: taskId }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         notyf.success(res.data.message);
       } else {
@@ -373,7 +356,7 @@ export const MyProfile = () => {
                           e.preventDefault();
                           closeModal();
                           setTimeout(() => {
-                            handleOpenSlide({ url: `http://localhost:8000/storage/profile_pictures/${user.photo_profile}`, title: 'Profile Image' })
+                            handleOpenSlide({ url: `https://api.pixora.test/storage/profile_pictures/${user.photo_profile}`, title: 'Profile Image' })
                           }, 200);
                         }}>
                           <span>Preview profile picture</span>
@@ -419,7 +402,7 @@ export const MyProfile = () => {
                         e.preventDefault();
                         closeModal();
                         setTimeout(() => {
-                          handleOpenSlide({ url: `http://localhost:8000/storage/cover_images/${user.cover_image}`, title: 'Cover Image' })
+                          handleOpenSlide({ url: `http://api.pixora.test/storage/cover_images/${user.cover_image}`, title: 'Cover Image' })
                         }, 200);
                       }}>
                         <span>Preview cover picture</span>
@@ -554,7 +537,7 @@ export const MyProfile = () => {
                             onContextMenu={(e) => e.preventDefault()}
                             style={{
                               backgroundImage: user.cover_image
-                                ? `url("http://127.0.0.1:8000/storage/cover_images/${user?.cover_image}")`
+                                ? `url("https://api.pixora.test/storage/cover_images/${user?.cover_image}")`
                                 : `linear-gradient(135deg, #454545 0%, #353535 100%)`,
                               backgroundAttachment: "fixed",
                               backgroundRepeat: "no-repeat",
@@ -599,7 +582,7 @@ export const MyProfile = () => {
                               <img
                                 src={
                                   user.photo_profile
-                                    ? "http://localhost:8000/storage/profile_pictures/" + user.photo_profile
+                                    ? "https://api.pixora.test/storage/profile_pictures/" + user.photo_profile
                                     : "/outils/pngs/useracc2.png"
                                 }
                                 onClick={() => openModal("profilePicture")}
@@ -686,13 +669,10 @@ export const MyProfile = () => {
                         </div>
                         <div className="container-fluid">
                           <div className="mb-3">
-                            {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos.length > 0 ? (
+                            {loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos.length > 0 ? (
                               <PhotosTemplate photos={photos} />
                             ) : user.role === "user" ? (<EmptyContent icon={<FaCamera className="faIcon" />} text={"No photos yet — start sharing your moments!"} />) : (<EmptyContent icon={<FaBan className="faIcon" />} text={"Upload is not availabe for adminstrators or editors"} />)}
                           </div>
-                          {/* {user.role === "user" && (<a href="#" style={{ textDecoration: "underline" }}>
-                            Show more
-                          </a>)} */}
                         </div>
                       </div>
                     </div>
@@ -707,7 +687,7 @@ export const MyProfile = () => {
                             accept=".png, .jpg"
                           />
                           <img
-                            src={user.photo_profile ? `http://localhost:8000/storage/profile_pictures/${user.photo_profile}` : "/outils/pngs/useracc2.png"}
+                            src={user.photo_profile ? `https://api.pixora.test/storage/profile_pictures/${user.photo_profile}` : "/outils/pngs/useracc2.png"}
                             width="100px"
                             className="img_acc mt-2 mb-2"
                             id="imgAcc1"
@@ -1130,23 +1110,11 @@ export const MyProfile = () => {
                           <canvas id="statisticsChart" height="auto" />
                         </div>
                       </div>
-
-                      <div className="container-fluid mt-3">
-                        <h2>My requests <span className="text-primary">({requests?.length ?? 0} Requests)</span></h2>
-                        {requests && Object.entries(requests).length > 0 ? (
-                          Object.entries(requests).map(([imageId, group]) => (
-                            <RequestCard key={imageId} group={group} />
-                          ))
-                        ) : (
-                          <EmptyContent
-                            icon={<FaEdit className="faIcon" />}
-                            text={"No requests yet — start request with anyone"}
-                          />
-                        )}
-                      </div>
                     </div>
                     <AdminDashboard analytics={analytics} />
-                    <EditorDashboard uploadResAction={uploadResAction} />
+                    {
+                      user?.role === 'editor' && (<EditorDashboard uploadResAction={uploadResAction} />)
+                    }
                   </div>
                 </div>
               </div>

@@ -6,6 +6,7 @@ use App\Models\Follow;
 use App\Models\Gallery;
 use App\Models\Like;
 use App\Models\Photo;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,19 +14,15 @@ class GetPhotos extends Controller
 {
     public function getPhotos()
     {
-        $user = Auth::user();
-        $photos = Photo::with(['user'])->where('user_id',$user->id)->get();
+        $user = User::find(Auth::id());
+        $photos = Photo::with(['user'])->select('id','title','filename','user_id')->where('user_id',$user->id)->get();
         $id = $user->id;
         
         $photosLikes = Photo::whereHas('likes',function($q) use ($id){
             $q->where('user_id',$id);
         })->get();
-        
-        $followers = Follow::where('follower_id',$user->id)->get();
-        $followings = Follow::where('following_id',$user->id)->get();
-
-        // $galleries = Gallery::where('user_id',$user->id)->get();
-        $galleries = Gallery::with(['photos' => function($q) {
+    
+        $galleries = Gallery::select('id','title','description','user_id')->with(['user:id,username','photos' => function($q) {
             $q->select('photos.id','filename');
         }])->withCount('photos')->where('user_id',$user->id)->get();
 
@@ -33,11 +30,7 @@ class GetPhotos extends Controller
             'success' => true,
             'photos' => $photos ?: [],
             'photosLikes' => $photosLikes,
-            'galleries' => $galleries,
-            'statistics' => [
-                'followers' => $followers,
-                'followings' => $followings
-            ]
+            'galleries' => $galleries
         ]);
     }
 }

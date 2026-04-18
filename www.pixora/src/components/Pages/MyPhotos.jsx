@@ -25,6 +25,7 @@ export const MyPhotos = () => {
   const navigate = useNavigate();
   const { show, openModal, closeModal } = useModal();
   const [requests, setRequests] = useState([]);
+  const [myRequests, setMyRequests] = useState([]);
   const [gallery, setGallery] = useState({
     title: "",
     description: ""
@@ -32,7 +33,7 @@ export const MyPhotos = () => {
   // if (!user?.id) navigate('/login');
   useEffect(() => {
     axios
-      .get("http://localhost:8000/get_photos", {
+      .get("https://api.pixora.test/get_photos", {
         withCredentials: true,
         withXSRFToken: true
       })
@@ -61,7 +62,7 @@ export const MyPhotos = () => {
   useEffect(() => {
     try {
       const fetchRequests = async () => {
-        const res = await axios.get('http://localhost:8000/get_requests', { withCredentials: true, withXSRFToken: true });
+        const res = await axios.get('https://api.pixora.test/get_requests', { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
           setRequests(res.data.requests);
         }
@@ -72,6 +73,24 @@ export const MyPhotos = () => {
     }
   }, []);
 
+  useEffect(() => {
+    try {
+      const fetchMyReqs = async () => {
+        const res = await axios.get('https://api.pixora.test/get_my_requests', { withCredentials: true, withXSRFToken: true });
+        if (res.data.success) {
+          setMyRequests(res.data.requests);
+        } else {
+          console.log(res.data.message);
+        }
+      }
+
+      fetchMyReqs();
+    } catch (err) {
+      console.log(err?.response?.data);
+    }
+  }, []);
+
+
   const createGallery = async () => {
     const payload = {
       title: gallery.title,
@@ -80,7 +99,7 @@ export const MyPhotos = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:8000/create_gallery', { title: gallery.title, description: gallery.description }, { withCredentials: true, withXSRFToken: true });
+      const res = await axios.post('https://api.pixora.test/create_gallery', { title: gallery.title, description: gallery.description }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         notyf.success(res.data.message);
       } else {
@@ -201,6 +220,22 @@ export const MyPhotos = () => {
                       <EmptyContent
                         icon={<FaEdit className="faIcon" />}
                         text={"No requests yet — start request with anyone"}
+                      />
+                    )}
+                  </div>
+                  <hr />
+                  <div className="mt-3 mb-3">
+                    <h2>
+                      Your Requests
+                    </h2>
+                    {requests && Object.entries(myRequests).length > 0 ? (
+                      Object.entries(myRequests).map(([imageId, group]) => (
+                        <RequestCard key={imageId} group={group} />
+                      ))
+                    ) : (
+                      <EmptyContent
+                        icon={<FaEdit className="faIcon" />}
+                        text={"No requests for you — try again later"}
                       />
                     )}
                   </div>

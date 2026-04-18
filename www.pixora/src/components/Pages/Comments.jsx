@@ -54,7 +54,7 @@ const Comments = ({ photoId, data, commentRef }) => {
 
   const handleComment = async () => {
     try {
-      const res = await axios.post('http://localhost:8000/comments/store', { photo_id: photoId, comment: comment }, { withCredentials: true, withXSRFToken: true });
+      const res = await axios.post('https://api.pixora.test/comments/store', { photo_id: photoId, comment: comment }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         notyf.success(res.data.message);
         // setComments(prev => [res.data.comment, ...prev]);
@@ -69,7 +69,7 @@ const Comments = ({ photoId, data, commentRef }) => {
   }
 
   const handleUpComment = async (commentId, newContent) => {
-    const url = `http://localhost:8000/comments/${commentId}`;
+    const url = `https://api.pixora.test/comments/${commentId}`;
     const oldComments = [...localComments];
 
     setLocalComments(prev => prev.map(c => c.id === commentId ? { ...c, content: newContent, edited: true } : c));
@@ -90,7 +90,7 @@ const Comments = ({ photoId, data, commentRef }) => {
   }
 
   const handleDelComment = async (commentId) => {
-    const url = `http://localhost:8000/comments/${commentId}`;
+    const url = `https://api.pixora.test/comments/${commentId}`;
     const oldComments = [...localComments];
     Swal.fire({
       title: 'Delete photo',
@@ -160,7 +160,7 @@ const Comments = ({ photoId, data, commentRef }) => {
               className={`btn btn-primary ${comment === "" ? "disabled" : ""}`}
               onClick={handleComment}
               id="postBtn"
-              style={comment === "" && {cursor:'not-allowed'}}
+              // style={comment === "" && {cursor:'not-allowed'}}
             >
               Post
             </button>

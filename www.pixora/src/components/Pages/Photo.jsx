@@ -45,7 +45,7 @@ export const Photo = (props) => {
     const { fields, isEdit, dirty } = useSelector(state => state.photo);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const url = `http://localhost:8000/photo/${id}`;
+    const url = `https://api.pixora.test/photo/${id}`;
     const photoUrl = window.location.href;
     const encodeUrl = encodeURIComponent(photoUrl);
     const { show, openModal, closeModal } = useModal();
@@ -78,7 +78,7 @@ export const Photo = (props) => {
         try {
             const oldLiked = liked;
             setLiked(!liked);
-            const res = await axios.post("http://localhost:8000/add_like", { photo_id: photoid }, { withCredentials: true, withXSRFToken: true });
+            const res = await axios.post("https://api.pixora.test/add_like", { photo_id: photoid }, { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 setPhoto((prevPhoto) =>
                     ({ ...prevPhoto, isLiked: !prevPhoto.isLiked, totalLikes: res.data.totalLikes })
@@ -91,7 +91,7 @@ export const Photo = (props) => {
     }
     useEffect(() => {
         try {
-            axios.get('http://localhost:8000/get_galleries', { withCredentials: true, withXSRFToken: true })
+            axios.get('https://api.pixora.test/get_galleries', { withCredentials: true, withXSRFToken: true })
                 .then((res) => {
                     if (res.data.success) {
                         setGalleries(res.data.galleries);
@@ -137,7 +137,7 @@ export const Photo = (props) => {
 
     useEffect(() => {
         try {
-            axios.get('http://localhost:8000/get_categories')
+            axios.get('https://api.pixora.test/get_categories')
                 .then(res => {
                     if (res.data.success) {
                         setCategories(res.data.categories);
@@ -176,39 +176,14 @@ export const Photo = (props) => {
         })
     }
 
-    // useEffect(() => {
-    //     try {
-    //         axios.get('/json/countries+cities.json')
-    //             .then(res => {
-    //                 const allCities = [];
-    //                 res.data.forEach(country => {
-    //                     country.cities.forEach(city => {
-    //                         allCities.push({ value: city, label: city });
-    //                     });
-    //                 });
-    //                 setCities(allCities);
-    //             });
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // }, []);
-    // const loadCities = (inputValue, callback) => {
-    //     if (!inputValue) {
-    //         callback([]);
-    //         return;
-    //     }
-    //     const results = cities
-    //         .filter(city => city.label.toLowerCase().includes(inputValue.toLowerCase()))
-    //         .slice(0, 20);
-    //     callback(results);
-    // }
     const handleEdit = async (data) => {
         try {
-            const res = await axios.post(`http://localhost:8000/photo/${id}`, { photo_id: photo.id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id, visibility: fields?.visibility, tags: fields?.tags, galleries: selected }, { withCredentials: true, withXSRFToken: true });
+            const res = await axios.post(`https://api.pixora.test/photo/${id}`, { photo_id: photo.id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id, visibility: fields?.visibility, tags: fields?.tags, galleries: selected }, { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 console.log(res.data);
                 dispatch(initEdit(data))
                 notyf.success(res.data.message);
+                window.location.reload();
             } else {
                 console.log(res.data)
                 notyf.error(res.data.message);
@@ -240,7 +215,7 @@ export const Photo = (props) => {
     const requestEditForm = async () => {
         try {
             const sendRequestEdit = async () => {
-                const res = await axios.post('http://localhost:8000/send_request', { message: requestMessage, owner_id: photo?.user?.id, image_id: photo?.id }, { withCredentials: true, withXSRFToken: true });
+                const res = await axios.post('https://api.pixora.test/send_request', { message: requestMessage, owner_id: photo?.user?.id, image_id: photo?.id }, { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
                     notyf.success(res.data.message);
                     return;
@@ -352,14 +327,14 @@ export const Photo = (props) => {
                             <LightBox
                                 open={open}
                                 close={() => setOpen(false)}
-                                slides={[{ src: `http://localhost:8000/storage/photos/${photo.filename}`, title: photo.title }]}
+                                slides={[{ src: `https://api.pixora.test/storage/photos/${photo.filename}`, title: photo.title }]}
                                 plugins={[Zoom]}
                                 carousel={{
                                     arrows: false
                                 }}
                             />
                             <img
-                                src={`http://localhost:8000/storage/photos/${photo.filename}`}
+                                src={`https://api.pixora.test/storage/photos/${photo.filename}`}
                                 loading="lazy"
                                 decoding="async"
                                 onContextMenu={(e) => e.preventDefault()}
@@ -487,23 +462,6 @@ export const Photo = (props) => {
                                     {photo.galleries.length > 0 ? (<p>{photo.galleries.map((g) => g.title).join(', ')}</p>) : (<p>Not galleries yet</p>)}
                                     <div className="d-flex justify-content-end">
                                         {isUser && (<button className="btn p-0 pencil-item" onClick={() => { openModal('addToGallery'); dispatch(toggleEdit('galleries')) }}>{!isEdit.galleries ? (<FaPencil />) : (<FaCheck />)}</button>)}
-                                    </div>
-                                </li>
-                                <li>
-                                    <FaLocationDot />
-                                    {isEdit.location ? (<div>
-                                        <AsyncSelect
-                                            cacheOptions
-                                            defaultOptions={cities.slice(0, 20)}
-                                            loadOptions={loadCities}
-                                            value={cities.find(city => city.value === fields.location)}
-                                            onChange={(option) => dispatch(updateField({ field: "location", value: option.value }))}
-                                            placeholder='Type a city ...'
-                                            noOptionsMessage={() => 'No city found'}
-                                        />
-                                    </div>) : (<p>{photo.location}</p>)}
-                                    <div className="d-flex justify-content-end">
-                                        {user?.id === photo.user_id && (<button className="btn p-0 pencil-item" onClick={() => dispatch(toggleEdit("location"))}>{!isEdit.location ? (<FaPencil />) : (<FaCheck />)}</button>)}
                                     </div>
                                 </li>
                                 <li>

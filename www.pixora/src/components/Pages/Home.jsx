@@ -53,7 +53,6 @@ export const Home = () => {
           setLoading(true);
         }
       });
-    // setFavicon("/outils/favicons/favicon.jpg");
   }, []);
 
   const { user } = useAuth();
@@ -70,7 +69,7 @@ export const Home = () => {
       return prevPhotos.map((p) => p.id === photoid ? { ...p, isLiked: !p.isLiked, totalLikes: p.isLiked ? p.totalLikes - 1 : p.totalLikes + 1 } : p);
     });
     try {
-      const res = await axios.post("http://backend.test/add_like", { photo_id: photoid }, { withCredentials: true, withXSRFToken: true });
+      const res = await axios.post("https://api.pixora.test/add_like", { photo_id: photoid }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         setPhotos((prevPhotos) =>
           prevPhotos.map((p) =>
@@ -138,7 +137,7 @@ export const Home = () => {
         </figure> */}
         <br />
       </div>
-      {/* <div className="sticky-top">
+      <div className="sticky-top">
         <nav className="navbar navbar-expand nav2">
           <ul className="nav mx-auto">
             <li className="nav-item">
@@ -167,28 +166,6 @@ export const Home = () => {
               <a
                 href="#"
                 className="nav-link"
-                data-bs-target="#photographers"
-                data-bs-toggle="tab"
-                title="Photographers"
-              >
-                <FaCamera /> Photographers
-              </a>
-            </li>
-            <li className="nav-item">
-              <a
-                href="#"
-                className="nav-link"
-                data-bs-target="#galleries"
-                data-bs-toggle="tab"
-                title="Galleries"
-              >
-                <MdPhotoAlbum /> Galleries
-              </a>
-            </li>
-            <li className="nav-item">
-              <a
-                href="#"
-                className="nav-link"
                 data-bs-target="#about"
                 data-bs-toggle="tab"
                 title="About"
@@ -198,7 +175,7 @@ export const Home = () => {
             </li>
           </ul>
         </nav>
-      </div> */}
+      </div>
       <div className="tab-content">
         <div
           className="container-fluid tab-pane fade show active mt-3 mb-3"
@@ -388,65 +365,6 @@ export const Home = () => {
               placeholder="Type name of photographer ..."
             />
           </div>
-          <div className="container-fluid div3">
-            {usrSearched.length > 0 ? (
-              usrSearched.map((u) => (
-                <div className="card photographers" key={u.id}>
-                  <div className="card-body">
-                    <div className="mt-3 mb-3">
-                      <Avatar src={`http://localhost:8000/storage/profile_pictures/${u.photo_profile}`} size={80} />
-                    </div>
-                    <div className="mt-3 mb-3">
-                      <Truncate text={u.username} maxChars={20}>
-                        {({ text }) => (
-                          <Link to={`/photographer/${u.id}`}>{text}</Link>
-                        )}
-                      </Truncate>
-                    </div>
-                    {u.id !== user?.id ? (
-                      <div className="mt-3 mb-3">
-                        <button
-                          type="button"
-                          className={`followButton ${u.followClasse} ${user && user?.role === "admin" && "disabled"} btn`}
-                          id="followButton"
-                          onClick={() => addFollow(u.id)}
-                        >
-                          {u.followText}
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="mt-3 mb-3">
-                        <button
-                          type="button"
-                          className="followButton btn"
-                          id="followButton"
-                          onClick={() => navigate(`${user && user?.username}/myprofile`)}
-                        >
-                          View profile
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="empty-content text-center">
-                <div className="mb-5 d-flex justify-content-center align-items-center">
-                  <FaCameraRetro size={40} style={{ cursor: "pointer" }} />
-                  <h4>
-                    No photographers found - Try searching with another name
-                  </h4>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-        <div
-          className="container-fluid tab-pane fade show mt-3 mb-3"
-          id="galleries"
-        >
-          <h1 className="text-center fw-bold">Galleries</h1>
-          <GalleriesTemplate galleries={galleries} />
         </div>
         <div
           className="container-fluid tab-pane fade show mt-3 mb-3"

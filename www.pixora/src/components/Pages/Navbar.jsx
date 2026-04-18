@@ -5,11 +5,11 @@ import { FiBell, FiGlobe, FiSend, FiUpload } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import Avatar from "./Avatar";
-export const Navbar = ({type='all'}) => {
+export const Navbar = ({type}) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   return (
-    <div data-bs-page="navbar" className="sticky-top">
+    <div data-bs-page="navbar">
       <header className="d-flex d-sm-flex d-md-block">
         <nav className="navbar navbar-expand p-2 nav1">
           <div className="container-fluid d-flex">
@@ -17,7 +17,6 @@ export const Navbar = ({type='all'}) => {
               <li className="nav-item" title="Welcome to Pixora">
                 <a
                   style={{ cursor: "pointer" }}
-                  /* onClick={location.reload()} */
                   className="nav-link nav-brand p-0 m-0"
                 >
                   <img
@@ -179,16 +178,6 @@ export const Navbar = ({type='all'}) => {
               </li>
             </ul>
             <ul className="navbar-nav d-none d-md-flex" id="ul2-1">
-              {/* <li className="nav-item send-bell">
-                <a href="#" className="nav-link" title="Messages">
-                  <FiSend />
-                </a>
-              </li>
-              <li className="nav-item send-bell">
-                <a href="#" className="nav-link" title="Notifications">
-                  <FiBell />
-                </a>
-              </li> */}
               <li className="nav-item" id="upload_button">
                 <button
                   onClick={() => navigate("/upload")}
@@ -231,36 +220,6 @@ export const Navbar = ({type='all'}) => {
             </ul>
           </div>
         </nav>
-        <div
-          className="modal fade"
-          id="cookies"
-          aria-hidden="true"
-          tabIndex={-1}
-        >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h1>Cookies</h1>
-              </div>
-              <div className="modal-body">
-                <div>
-                  <p>
-                    We use cookies to enhance your experience on <u>Pixora</u>,
-                    provide personalized content, and ensure the best
-                    performance of our website. By continuing to browse, you
-                    agree to our&nbsp;use&nbsp;of&nbsp;cookies.
-                  </p>
-                  <a href="cookies.php" className="btn" id="acceptButton">
-                    Accept
-                  </a>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button className="btn-close" data-bs-dismiss="modal" />
-              </div>
-            </div>
-          </div>
-        </div>
         <button
           type="button"
           className="btn d-md-none ms-auto"

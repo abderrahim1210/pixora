@@ -17,7 +17,7 @@ const PhotographersList = ({ user,filtredUsers, isLoading, visible,addFollow }) 
                         <div className="card photographers" key={u.id}>
                             <div className="card-body">
                                 <div className="mt-3 mb-3">
-                                    <Avatar src={`http://localhost:8000/storage/profile_pictures/${u.photo_profile}`} size={80} />
+                                    <Avatar src={`https://api.pixora.test/storage/profile_pictures/${u.photo_profile}`} size={80} />
                                 </div>
                                 <div className="mt-3 mb-3">
                                     <Truncate text={u.username} maxChars={20}>

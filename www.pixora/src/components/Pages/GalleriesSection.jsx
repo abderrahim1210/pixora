@@ -11,7 +11,7 @@ const GalleriesSection = () => {
     const [searchTerme,setSearchTerme] = useState('');
     const fetchGalleries = async () => {
         try {
-            const res = await axios.get('http://localhost:8000/get_all_galleries', { withCredentials: true, withXSRFToken: true });
+            const res = await axios.get('https://api.pixora.test/get_all_galleries', { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 return res.data.galleries;
             }

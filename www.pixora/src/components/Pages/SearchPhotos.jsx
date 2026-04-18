@@ -19,7 +19,7 @@ const SearchPhotos = () => {
         const [_, term] = queryKey;
         if (!term) return [];
         try {
-            const res = await axios.get(`http://localhost:8000/search`, { params: { terme: term } }, { withCredentials: true });
+            const res = await axios.get(`https://api.pixora.test/search`, { params: { terme: term } }, { withCredentials: true });
             if (res.data.success) {
                 return res.data.result;
             }

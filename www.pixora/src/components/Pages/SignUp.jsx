@@ -50,12 +50,7 @@ export const SignUp = () => {
         birth_date: user.birth_date,
         aggres_condition: user.aggres_condition
       }
-      const res = await axios.post('http://backend.test/register', payload, { withCredentials: true, withXSRFToken: true }, {
-        headers: {
-          'X-XSRF-TOKEN': xsrfToken,
-          'Accept': 'application/json'
-        }
-      });
+      const res = await axios.post('https://api.pixora.test/register', payload, { withCredentials: true, withXSRFToken: true });
       console.log(res.data)
       if (res.data.success) {
         Swal.fire({
@@ -310,8 +305,8 @@ function StepThree({ prev, next, step, user, setUser, countries }) {
               required
             >
               <option value="">Choose your gender</option>
-              <option value="Male">Male</option>
-              <option value="Femal">Female</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
             </select>
             <label htmlFor="gender" className="form-label">
               Gender

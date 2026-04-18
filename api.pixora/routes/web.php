@@ -32,7 +32,6 @@ Route::get('/', function () {
 
 Route::get('/user', function () {
     $user = Auth::user();
-    // $data = User::select('id','email')->where('id',$user)->first();
     if (!$user) {
         return response()->json(['success' => false], 401);
     }
@@ -40,14 +39,9 @@ Route::get('/user', function () {
         'id' => $user->id,
         'email' => $user->email,
         'username' => $user->username,
-        'photo_profile' => $user->photo_profile
+        'photo_profile' => $user->photo_profile,
     ]]);
 });
-
-
-// Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-//     ->middleware('guest')
-//     ->name('login');
 
 Route::get('/photo/{id}', [PhotoController::class, 'show'])->name('photo');
 Route::post('/photo/{id}', [PhotoController::class, 'update'])->middleware('auth:sanctum');
@@ -109,14 +103,6 @@ Route::get('/get_all_galleries', function () {
         'galleries' => $galleries
     ]);
 });
-
-// Route::get('/get_users',function(){
-//     $users = User::all();
-//     return response()->json([
-//         'success' => true,
-//         'users' => $users
-//     ]);
-// });
 
 Route::get('/get_users/{type}', [FetchUsers::class, 'getUsers']);
 

@@ -1,22 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 
-const API_URL = "http://localhost:8000";
-// useEffect(() => {
-//     try {
-//         axios.get('http://localhost:8000/follows', { withCredentials: true, withXSRFToken: true })
-//             .then(res => {
-//                 const ids = res.data.users.map((f) => f.id);
-//                 setFollows(ids);
-//             })
-//     } catch (err) {
-//         console.log(err.response?.data);
-//     }
-// }, []);
-
-// const isFollowed = follows.includes(Number(id));
-// const followClasse = isFollowed ? 'active' : '';
-// const followText = isFollowed ? 'Followed' : 'Follow';
+const API_URL = "https://api.pixora.test";
 
 
 export const fetchFollows = async (setFollows) => {
@@ -47,7 +32,7 @@ export const toggleFollowAction = async (id,follows,setFollows,type='all',setSta
         }
     })
     try {
-        const res = await axios.post('http://localhost:8000/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
+        const res = await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
         if (res.data.status === "followed") {
             setFollows(prev => [...prev, id]);
             // setStatistics(prev => ({...prev,followings:statistics.followings+1}));
