@@ -134,10 +134,10 @@ export const MyProfile = () => {
         }
       }
       ).catch(err => console.log(err.response?.data));
-      axios.get("/json/countries.json").then((res) => res.data).then(data => {
-        const filterdCountries = data.map(c => ({id:c.id,name:c.name}));
-        setCountries(filterdCountries);
-      });
+    axios.get("/json/countries.json").then((res) => res.data).then(data => {
+      const filterdCountries = data.map(c => ({ id: c.id, name: c.name }));
+      setCountries(filterdCountries);
+    });
   }, []);
 
   const onSubmit = async (data) => {
@@ -173,6 +173,25 @@ export const MyProfile = () => {
       });
     }
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get('https://api.pixora.test/admin_analytics', { withCredentials: true, withXSRFToken: true });
+        if (res.data.success) {
+          setAnalytics(res.data.data);
+          console.log(res.data.message)
+        } else {
+          console.error(res.data.message);
+        }
+      }catch(err){
+        console.log(err?.response?.data || err?.message);
+      }
+    }
+    fetchData();
+
+  }, []);
+
 
   // useEffect(() => {
   //   axios.get('http://localhost/Pixora/backend/api/adminAnalytics.php', { withCredentials: true })

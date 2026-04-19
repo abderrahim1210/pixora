@@ -1,12 +1,14 @@
 import React from 'react'
-import { FaCamera, FaCameraRetro, FaChartArea, FaChartLine, FaCheckCircle, FaClock, FaComment, FaComments, FaFlag, FaMedal, FaTimesCircle, FaTrophy, FaUserPlus, FaUsers } from 'react-icons/fa'
-import { MdComment, MdPending } from 'react-icons/md'
+import { FaCamera, FaCameraRetro, FaChartArea, FaChartLine, FaCheckCircle, FaClock, FaComment, FaComments, FaFlag, FaMedal, FaTimesCircle, FaTrophy, FaUserPlus, FaUsers, FaUserShield } from 'react-icons/fa'
+import { MdComment, MdEdit, MdPending } from 'react-icons/md'
 import { Truncate } from './Truncate'
 import { Link } from 'react-router-dom'
 import PhotosTemplate from './PhotosTemplate'
 import PhotographersTemplate from './PhotographersTemplate'
 import { EmptyContent } from './EmptyContent'
 import { FiUserPlus, FiUsers } from 'react-icons/fi'
+import LatestRequests from './LatestRequests'
+import StaffUserCard from '../../../../api.pixora/app/Http/Controllers/StaffUserCard'
 
 const AdminDashboard = ({ analytics }) => {
     return (
@@ -24,17 +26,17 @@ const AdminDashboard = ({ analytics }) => {
                                     <div className="stat-card">
                                         <FaCamera size={25} className='stat-icon' />
                                         <h3>Photos</h3>
-                                        <p>{analytics.photos_count ?? 0}</p>
+                                        <p>{analytics?.counters?.total_photos ?? 0}</p>
                                     </div>
                                     <div className="stat-card">
-                                        <MdPending size={25} className='stat-icon' />
-                                        <h3>Photos under review</h3>
-                                        <p>{analytics?.photos_under_review?.length ?? 0}</p>
+                                        <MdEdit size={25} className='stat-icon' />
+                                        <h3>Requests</h3>
+                                        <p>{analytics?.counters?.total_requests ?? 0}</p>
                                     </div>
                                     <div className="stat-card">
                                         <FaUsers size={25} className='stat-icon' />
                                         <h3>All Users</h3>
-                                        <p>{analytics.users_count ?? 0}</p>
+                                        <p>{analytics.counters?.total_users ?? 0}</p>
                                     </div>
                                     <div className="stat-card">
                                         <FaComments size={25} className='stat-icon' />
@@ -45,33 +47,18 @@ const AdminDashboard = ({ analytics }) => {
                                 <hr />
                                 <div className='dashboard-links nav2'>
                                     <nav className='nav'>
-                                        <li className='nav-item'><a href="" data-bs-target="#photos_under_review"
-                                            data-bs-toggle="tab" className='nav-link active'><FaClock /> Under review ({analytics?.photos_under_review?.length ?? 0})</a></li>
                                         <li className='nav-item'><a href="" data-bs-target="#top_photographers"
-                                            data-bs-toggle="tab" className='nav-link'><FaTrophy /> Top photographers ({analytics?.top_photographers?.length ?? 0})</a></li>
-                                        <li className='nav-item'><a href="" data-bs-target="#approved"
-                                            data-bs-toggle="tab" className='nav-link'><FaCheckCircle /> Approved ({analytics?.photos_approveds?.length ?? 0})</a></li>
-                                        <li className='nav-item'><a href="" data-bs-target="#rejected"
-                                            data-bs-toggle="tab" className='nav-link'><FaTimesCircle /> Rejected ({analytics?.photos_rejected?.length ?? 0})</a></li>
+                                            data-bs-toggle="tab" className='nav-link active'><FaTrophy /> Top photographers ({analytics?.top_photographers?.length ?? 0})</a></li>
+                                        <li className='nav-item'><a href="" data-bs-target="#requests"
+                                            data-bs-toggle="tab" className='nav-link'><MdEdit /> Requests ({analytics?.requests?.length ?? 0})</a></li>
+                                        <li className='nav-item'><a href="" data-bs-target="#staff"
+                                            data-bs-toggle="tab" className='nav-link'><FaUserShield /> Staff ({analytics?.staff?.length ?? 0})</a></li>
                                         <li className='nav-item'><a href="" data-bs-target="#reports"
                                             data-bs-toggle="tab" className='nav-link'><FaFlag /> Reports ({analytics?.reports?.length ?? 0})</a></li>
                                     </nav>
                                 </div>
                                 <div className="tab-content">
-                                    <div className="tab-pane fade show active" id="photos_under_review">
-                                        <div className="container-fluid">
-                                            <div>
-                                                {
-                                                    analytics.photos_under_review ? (
-                                                        <PhotosTemplate photos={analytics.photos_under_review} />
-                                                    ) : (
-                                                        <EmptyContent icon={<FaCamera size={40} style={{ cursor: "pointer" }} />} text={"No photos yet — start sharing your moments!"} />
-                                                    )
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="tab-pane fade show" id="top_photographers">
+                                    <div className="tab-pane fade show active" id="top_photographers">
                                         <div className='container-fluid div3'>
                                             {
                                                 analytics.top_photographers?.length > 0 ? (
@@ -82,15 +69,33 @@ const AdminDashboard = ({ analytics }) => {
                                             }
                                         </div>
                                     </div>
-                                    <div className="tab-pane fade show" id="approved">
-                                        <div className='container-fluid'>
-                                            {
-                                                analytics.photos_approveds?.length > 0 ? (
-                                                    <PhotosTemplate photos={analytics.photos_approveds} />
-                                                ) : (
-                                                    <EmptyContent icon={<FaCheckCircle />} text={"No photos approved — try again later !"} />
-                                                )
-                                            }
+                                    <div className="tab-pane fade show" id="requests">
+                                        <div>
+                                            <h2 className='d-flex align-items-center gap-2'><MdEdit /> Requests <span className='text-primary'>({analytics.requests?.length ?? 0})</span></h2>
+                                            <div className='container-fluid div3'>
+                                                {
+                                                    analytics.requests?.length > 0 ? (
+                                                        <LatestRequests requests={analytics.requests} />
+                                                    ) : (
+                                                        <EmptyContent icon={<MdEdit className='faIcon' />} text={"No top requests found it - try again later"} />
+                                                    )
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="tab-pane fade show" id="staff">
+                                        <div>
+                                            <h2 className='d-flex align-items-center gap-2'><FaUserShield /> User <span className='text-primary'>({analytics.staff?.length ?? 0})</span></h2>
+                                            <div className='container-fluid div3'>
+                                                {
+                                                    analytics.staff?.length > 0 ? analytics.staff.map((user, index) => (
+                                                        <StaffUserCard user={user} key={index} />
+                                                    ))
+                                                        : (
+                                                            <EmptyContent icon={<FaUserShield className='faIcon' />} text={"No staff found it - try again later"} />
+                                                        )
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="tab-pane fade show" id="rejected">
@@ -102,11 +107,11 @@ const AdminDashboard = ({ analytics }) => {
                                 </div>
                                 <hr />
                                 <div>
-                                    <h2 className='d-flex align-items-center gap-2'><FaUserPlus /> New users this month<span className='text-primary'>({analytics.users_this_month?.length ?? 0})</span></h2>
+                                    <h2 className='d-flex align-items-center gap-2'><FaUserPlus /> New users this month<span className='text-primary'>({analytics.recent_users?.length ?? 0})</span></h2>
                                     <div className='container-fluid div3'>
                                         {
-                                            analytics.users_this_month?.length > 0 ? (
-                                                <PhotographersTemplate photographers={analytics.users_this_month} />
+                                            analytics.recent_users?.length > 0 ? (
+                                                <PhotographersTemplate photographers={analytics.recent_users} />
                                             ) : (
                                                 <EmptyContent icon={<FaUsers className='faIcon' />} text={"No new users this month !"} />
                                             )
@@ -128,11 +133,11 @@ const AdminDashboard = ({ analytics }) => {
                                 </div>
                                 <hr />
                                 <div>
-                                    <h2 className='d-flex align-items-center gap-2'><FaMedal /> Top uploaders <span className='text-primary'>({analytics.top_uploads?.length ?? 0})</span></h2>
+                                    <h2 className='d-flex align-items-center gap-2'><FaMedal /> Top uploaders <span className='text-primary'>({analytics.top_uploaders?.length ?? 0})</span></h2>
                                     <div className='container-fluid div3'>
                                         {
-                                            analytics.top_uploads?.length > 0 ? (
-                                                <PhotographersTemplate photographers={analytics.top_uploads} />
+                                            analytics.top_uploaders?.length > 0 ? (
+                                                <PhotographersTemplate photographers={analytics.top_uploaders} />
                                             ) : (
                                                 <EmptyContent icon={<FaMedal className='faIcon' />} text={"No top uploaders - try again later"} />
                                             )
@@ -143,8 +148,8 @@ const AdminDashboard = ({ analytics }) => {
                                 <div>
                                     <h2 className='d-flex align-items-center gap-2'><FaComments />Most photos comments <span className='text-primary'>({analytics.most_comments?.length ?? 0})</span></h2>
                                     {
-                                        analytics.most_comments?.length > 0 ? (
-                                            <PhotosTemplate photos={analytics.most_comments} />
+                                        analytics.most_commentsPhotos?.length > 0 ? (
+                                            <PhotosTemplate photos={analytics.most_commentsPhotos} />
                                         ) : (
                                             <EmptyContent icon={<FaComment className='faIcon' />} text={"No most comments photos !"} />
                                         )

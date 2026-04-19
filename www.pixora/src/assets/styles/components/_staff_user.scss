@@ -1,0 +1,124 @@
+.staff-member-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: #f8fafc;
+    border-radius: 14px;
+    border: 1px solid #f1f5f9;
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+
+    &:hover {
+        background: #ffffff;
+        border-color: var(--special_color);
+        transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .avatar-box {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: white;
+
+        &.admin {
+            background: linear-gradient(135deg, var(--special_color), #4f46e5);
+        }
+
+        &.editor {
+            background: #94a3b8;
+        }
+    }
+
+    .user-details {
+        flex: 1;
+        min-width: 0;
+
+        .name {
+            margin: 0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1e293b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .role-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+
+            &.admin {
+                color: var(--special_color);
+            }
+
+            &.editor {
+                color: #64748b;
+            }
+        }
+    }
+
+    .online-status {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #10b981; // Green for online
+        box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 8px;
+        opacity: 0;
+        transition: 0.3s ease;
+        transform: translateX(10px);
+    }
+
+    &:hover {
+        .card-actions {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .action-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: 0.2s;
+
+        &.remove {
+            background: #eff6ff;
+            color: var(--special_color);
+
+            &:hover {
+                background: var(--special_color);
+                color: white;
+            }
+        }
+
+        &.delete {
+            background: #fef2f2;
+            color: #ef4444;
+
+            &:hover {
+                background: #ef4444;
+                color: white;
+            }
+        }
+    }
+}

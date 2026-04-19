@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AcceptEdit;
 use App\Http\Controllers\AddFollow;
+use App\Http\Controllers\AdminAnlytics;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DownloadImageOriginal;
@@ -131,5 +132,7 @@ Route::get('/download_photo/{photoId}', [DownloadImageOriginal::class, 'download
 Route::post('/upload_photo', [UploadResult::class, 'uploadResult'])->middleware('auth:sanctum');
 
 Route::get('/search', [SearchAtPhotos::class, 'getResult']);
+
+Route::get('/admin_analytics', [AdminAnlytics::class, 'getStatistics'])->middleware('auth:sanctum');
 
 require __DIR__ . '/auth.php';
