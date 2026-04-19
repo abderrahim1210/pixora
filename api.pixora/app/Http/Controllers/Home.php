@@ -15,7 +15,7 @@ class Home extends Controller
     {
         $current_user = Auth::user();
 
-        $photos = Photo::select('id', 'filename', 'title', 'user_id')->withCount('likes')->where('visibility', 'public')->latest()->get()
+        $photos = Photo::select('id', 'filename', 'title', 'user_id','is_featured')->withCount('likes')->where('visibility', 'public')->latest()->get()
             ->map(function ($photo) use ($current_user) {
                 $photo->isLiked = $current_user
                     ? $photo->likes()->where('user_id', $current_user->id)->exists()

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Truncate } from './Truncate'
+import { FaCrown } from 'react-icons/fa';
 
 const PhotosTemplate = ({ photos }) => {
     function slugiFy(text) {
@@ -13,6 +14,7 @@ const PhotosTemplate = ({ photos }) => {
                     <div className="card" key={p.id}>
                         <div className="card-body p-0">
                             <div className="image">
+                                
                                 <Link
                                     id="caption"
                                     style={{ cursor: "pointer" }}

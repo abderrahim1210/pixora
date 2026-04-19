@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class AdminAnlytics extends Controller
+class AdminAnalytics extends Controller
 {
     public function getStatistics()
     {

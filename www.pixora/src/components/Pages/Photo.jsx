@@ -505,7 +505,7 @@ export const Photo = (props) => {
                                     )
                                 }
                                 {
-                                    user?.id !== photo?.user_id && user?.status !== "editor" && user?.status !== "admin" && (<EditButton requestStatus={request?.status === "approved" ? "approved" : request?.status === "pending" ? "pending" : request?.status === "pending" ? "pending" : "none"} openModal={openModal} />)
+                                    (user?.id !== photo?.user_id && user?.role !== "editor" && user?.role !== "admin") && (<EditButton requestStatus={request?.status === "approved" ? "approved" : request?.status === "pending" ? "pending" : request?.status === "pending" ? "pending" : "none"} openModal={openModal} />)
                                 }
                             </ul>
                             <Comments data={comments} commentRef={commentRef} photoId={photo.id} user={user} />

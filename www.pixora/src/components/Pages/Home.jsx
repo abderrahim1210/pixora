@@ -6,6 +6,7 @@ import {
   FaCheck,
   FaCog,
   FaComment,
+  FaCrown,
   FaGlobe,
   FaHeart,
   FaInfoCircle,
@@ -31,6 +32,7 @@ import { motion } from 'framer-motion';
 import Motion from "./Motion";
 import Avatar from "./Avatar";
 import { fetchFollows, toggleFollowAction } from "../utils/getFollows";
+import { FiCompass } from "react-icons/fi";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -41,7 +43,8 @@ export const Home = () => {
   const [follows, setFollows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [galleries, setGalleries] = useState([]);
-  const [term,setTerm] = useState('');
+  const [term, setTerm] = useState('');
+  const [heroImage, setHeroImage] = useState([]);
   useEffect(() => {
     axios
       .get("https://api.pixora.test/homepage", { withCredentials: true })
@@ -53,6 +56,24 @@ export const Home = () => {
           setLoading(true);
         }
       });
+  }, []);
+
+
+  useEffect(() => {
+    try {
+      const fetchHeroImage = async () => {
+        const res = await axios.get('https://api.pixora.test/get_hero_images', { withCredentials: true });
+        if (res.data.success) {
+          setHeroImage(res.data.photo);
+        } else {
+          console.log(res.data.message);
+        }
+      }
+
+      fetchHeroImage();
+    } catch (err) {
+      console.log(err?.response?.data);
+    }
   }, []);
 
   const { user } = useAuth();
@@ -91,11 +112,64 @@ export const Home = () => {
     <div data-bs-page="pixora">
       <Navbar data={user} />
 
-      <div className="div2">
+      <div className="sticky-top">
+        <nav className="navbar navbar-expand nav2">
+          <ul className="nav mx-auto">
+            <li className="nav-item">
+              <a
+                href="#"
+                className="nav-link active"
+                data-bs-target="#foryou"
+                data-bs-toggle="tab"
+                title="For you"
+              >
+                <MdRecommend /> For you
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                href="#"
+                className="nav-link"
+                data-bs-target="#foryou"
+                data-bs-toggle="tab"
+                title="For you"
+              >
+                <FiCompass /> Explore
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                href="#"
+                className="nav-link"
+                data-bs-target="#categories"
+                data-bs-toggle="tab"
+                title="Categories"
+              >
+                <MdCategory /> Categories
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                href="#"
+                className="nav-link"
+                data-bs-target="#about"
+                data-bs-toggle="tab"
+                title="About"
+              >
+                <FaInfoCircle /> About
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div className="div2" style={
+        { backgroundImage: `url('https://api.pixora.test/storage/photos/${heroImage.filename}')` }
+      }>
         <div className="container-fluid p-0">
           <Motion>
-            <h1 style={{ fontWeight: "700" }}>discover amazing photos on Pixora</h1>
-            <p id="quote" className="mt-2 mb-2">
+            <h1>discover amazing photos on Pixora</h1>
+            <p id="quote" className="mb-2">
               Every photo tells a story. What’s yours?
             </p>
           </Motion>
@@ -130,52 +204,15 @@ export const Home = () => {
             </div>
           </div>
         </div>
-        {/* <figure>
+        <figure>
           <figcaption>
-            Photo By Eddaoudi Aya
+            Photo By {heroImage.username}
           </figcaption>
-        </figure> */}
+        </figure>
         <br />
       </div>
-      <div className="sticky-top">
-        <nav className="navbar navbar-expand nav2">
-          <ul className="nav mx-auto">
-            <li className="nav-item">
-              <a
-                href="#"
-                className="nav-link active"
-                data-bs-target="#foryou"
-                data-bs-toggle="tab"
-                title="For you"
-              >
-                <MdRecommend /> For you
-              </a>
-            </li>
-            <li className="nav-item">
-              <a
-                href="#"
-                className="nav-link"
-                data-bs-target="#categories"
-                data-bs-toggle="tab"
-                title="Categories"
-              >
-                <MdCategory /> Categories
-              </a>
-            </li>
-            <li className="nav-item">
-              <a
-                href="#"
-                className="nav-link"
-                data-bs-target="#about"
-                data-bs-toggle="tab"
-                title="About"
-              >
-                <FaInfoCircle /> About
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
+      {/* nav 2 l9dema */}
+
       <div className="tab-content">
         <div
           className="container-fluid tab-pane fade show active mt-3 mb-3"
@@ -191,6 +228,13 @@ export const Home = () => {
                   style={{ cursor: "pointer" }}
                 ></Link>
                 <div className="photo">
+                  {
+                    !!p.is_featured && (
+                      <div className="featured-badge">
+                        <FaCrown />
+                      </div>
+                    )
+                  }
                   <Link
                     id="caption"
                     style={{ cursor: "pointer" }}
@@ -364,11 +408,24 @@ export const Home = () => {
           </div>
         </div>
         <div
-          className="container-fluid tab-pane fade show mt-3 mb-3"
+          className="tab-pane fade show mt-3 mb-3"
           id="about"
         >
+          <div className="about-container">
+            <div className="about-content">
+              <h1>About Pixora</h1>
+            </div>
+            <div className="wave-wrapper">
+              <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+                <path
+                  fill="#ffffff"  /* نفس لون الخلفية ديال الـ Body */
+                  d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,218.7C960,235,1056,213,1152,186.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+                </path>
+              </svg>
+            </div>
+          </div>
           <h1 className="text-center fw-bold">Inspiring Visual Excelllence</h1>
-          <div className="container-fluid mt-2 mb-2">
+          <div className="container mt-2 mb-2">
             <p>
               At Pixora, we believe that every image tells a story beyond words.
               Our platform is built for photographers, visual artists, and creative minds who seek more than just sharing — they seek impact.

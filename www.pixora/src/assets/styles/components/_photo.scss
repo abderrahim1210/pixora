@@ -101,6 +101,10 @@
     color: var(--like_button);
   }
 
+  .likeButton.disabled{
+    cursor: not-allowed !important;
+  }
+
   .socialActions i:hover {
     transform: scale(1.15);
   }

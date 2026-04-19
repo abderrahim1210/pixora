@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AcceptEdit;
 use App\Http\Controllers\AddFollow;
-use App\Http\Controllers\AdminAnlytics;
+use App\Http\Controllers\AdminAnalytics;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DownloadImageOriginal;
@@ -10,6 +10,7 @@ use App\Http\Controllers\FetchRequests;
 use App\Http\Controllers\FetchUsers;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\Galleries;
+use App\Http\Controllers\GetHeroImages;
 use App\Http\Controllers\GetPhotos;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\LikeController;
@@ -133,6 +134,8 @@ Route::post('/upload_photo', [UploadResult::class, 'uploadResult'])->middleware(
 
 Route::get('/search', [SearchAtPhotos::class, 'getResult']);
 
-Route::get('/admin_analytics', [AdminAnlytics::class, 'getStatistics'])->middleware('auth:sanctum');
+Route::get('/admin_analytics', [AdminAnalytics::class, 'getStatistics'])->middleware('auth:sanctum');
+
+Route::get('/get_hero_images',[GetHeroImages::class, 'getHeroImages']);
 
 require __DIR__ . '/auth.php';

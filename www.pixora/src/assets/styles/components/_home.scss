@@ -1,14 +1,15 @@
 [data-bs-page="pixora"] {
 
   .div2 {
-    background-image: url("../outils/backgrounds/background_pixora_5.png");
-    padding: 160px;
+    // background-image: url("../outils/backgrounds/background_pixora_4.jpg");
+    padding: 100px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     text-transform: capitalize;
     position: relative;
     border-radius: 10px;
+    margin: 10px 30px 10px 30px;
   }
 
   .div2::after {
@@ -29,13 +30,14 @@
   }
 
   .div2>div h1 {
+    font-family: 'Playfair', 'sans-serif';
     font-weight: bold;
-    font-size: 50px;
+    font-size: 70px;
   }
 
   .div2 p {
     font-weight: 600;
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .div2 h1,
@@ -323,7 +325,7 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .div3 .card:hover{
+  .div3 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     border-color: var(--special_color);
@@ -603,7 +605,7 @@
     margin-right: 6px;
   }
 
-  .join-community{
+  .join-community {
     background-image: url("../outils/backgrounds/community-back.png");
     padding: 100px;
     background-position: center;
@@ -611,7 +613,7 @@
     background-size: cover;
     text-transform: capitalize;
     position: relative;
-    border-radius: 10px;
+    // border-radius: 10px;
   }
 
   .join-community::after {
@@ -646,7 +648,7 @@
     text-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
   }
 
-  .join-community-texts .btn{
+  .join-community-texts .btn {
     // background-color: var(--special_color);
     background: linear-gradient(to top, var(--special_color) 50%, #ffffff 50%);
     background-size: 100% 200%;
@@ -662,17 +664,70 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   }
 
-  .join-community-texts .btn:hover{
+  .join-community-texts .btn:hover {
     transform: translateY(-4px);
     background-position: top;
     color: var(--special_color);
   }
 
-  .linkedin-link .icon{
+  .linkedin-link .icon {
     transition: all 0.3s ease;
   }
 
-  .linkedin-link:hover .icon{
+  .linkedin-link:hover .icon {
     transform: scale(1.06) rotate(-10deg);
   }
+
+  .about-container {
+    position: relative; // ضروري باش الموجة تحبس لتحت
+    height: 80vh;
+    display: flex;
+    align-items: center; // Kiy-khlli l-content i-ji f l-wasst 3amoudiyan
+    justify-content: flex-start; // Kiy-khlli l-ktaba t-welli f l-issar
+    padding-left: 5%;
+    background: url('/outils/backgrounds/bg-about.png') center/cover no-repeat;
+    overflow: hidden;
+
+    .about-content {
+      z-index: 2; // Bach i-koun foq l-mouja
+
+      h1 {
+        // 1. Ekhtar 'Inter' wala 'Plus Jakarta Sans' bach t-jib dik l-vibe
+        font-family: 'Inter', sans-serif;
+
+        // 2. Font size kbir b7al 500px
+        font-size: clamp(3.5rem, 10vw, 3.5rem);
+
+        // 3. Extra Bold
+        font-weight: 800;
+
+        // 4. S-serr: Ziyer l-7rouf chwia (Negative Spacing)
+        letter-spacing: -0.04em;
+
+        // 5. Line height mziyer bach klamat i-jiw m9arbin
+        line-height: 1;
+
+        color: #ffffff;
+        margin: 0;
+
+        // Le-msa dyal l-fakhama
+        text-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        -webkit-font-smoothing: antialiased;
+      }
+    }
+
+    .wave-wrapper {
+      position: absolute;
+      bottom: 0; // لصقها لتحت كاع
+      left: 0;
+      width: 100%;
+      line-height: 0; // باش مايبقاش فراغ ديال 1px
+
+      svg {
+        width: 100%;
+        height: 100px; // تقدر تحكم فـ "القوة" ديال الموجة من هنا
+      }
+    }
+  }
+
 }
