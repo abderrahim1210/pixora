@@ -83,7 +83,13 @@ export const Photo = (props) => {
                 setPhoto((prevPhoto) =>
                     ({ ...prevPhoto, isLiked: !prevPhoto.isLiked, totalLikes: res.data.totalLikes })
                 );
+                
             }
+
+            if (liked) {
+                setLikes(prev => prev - 1)
+            }
+            else{setLikes(prev => prev + 1);}
         } catch (err) {
             console.log(err.response?.data);
             setLiked(oldLiked);
@@ -170,7 +176,7 @@ export const Photo = (props) => {
                 } catch (err) {
                     console.log(err.response?.data);
                 } finally {
-                    return navigate(`/${user.username}/myphotos`);
+                    return navigate(`/user/${user.username}/myphotos`);
                 }
             }
         })

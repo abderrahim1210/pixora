@@ -601,7 +601,7 @@ export const MyProfile = () => {
                           </div>
                           <div>
                             {
-                              user.role === "admin" || user.role === "editor" && (
+                              (user.role === "admin" || user.role === "editor") && (
                                 <span className={`badge badge-${user?.role}`}><FaIdBadge /> {user?.role}</span>
                               )
                             }

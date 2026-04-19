@@ -225,9 +225,6 @@ export const Home = () => {
                           onClick={() => handleLike(p.id)}
                         >
                           <FaHeart />{" "}
-                          <span id={`likes_count-${p.id}`}>
-                            {p.totalLikes}
-                          </span>
                         </a>
                         <a style={{ cursor: "pointer" }}>
                           <FaComment />{" "}

@@ -63,22 +63,18 @@ class UploadController extends Controller
         $path = storage_path('/app/public/photos/' . $filename);
 
         try {
-            // $img = Image::make($image);
+            
             $manager = new ImageManager(new Driver());
 
-            // 2. Read image men base64
             $img = $manager->read($image);
-            // $img->resize(1200, null, function ($constraint) {
-            //     $constraint->aspectRatio();
-            //     $constraint->upsize();
-            // });
+            
             $img->scale(width:1200);
 
             $img->toWebp(75)->save($path);
 
             $newSize = filesize($path);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Error processign']);
+            return response()->json(['success' => false, 'message' => 'Error processing']);
         }
 
         $photoModel = Photo::create([

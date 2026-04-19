@@ -56,7 +56,7 @@ export const MyPhotos = () => {
     }
   }, [location.state]);
   function slugiFy(text) {
-    return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+    return text.toString().toLowerCase().trim().replace(/\s+/g, "-").replace(/[^\u0600-\u06FF\u0750-\u077F\w\-]+/g, "").replace(/\-\-+/g, "-").replace(/^-+|-+$/g, "");
   }
 
   useEffect(() => {

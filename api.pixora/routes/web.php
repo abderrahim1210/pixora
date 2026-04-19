@@ -40,6 +40,7 @@ Route::get('/user', function () {
         'email' => $user->email,
         'username' => $user->username,
         'photo_profile' => $user->photo_profile,
+        'role' => $user->role
     ]]);
 });
 
