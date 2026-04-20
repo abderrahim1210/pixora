@@ -1,0 +1,62 @@
+.tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+
+  .tooltip-trigger {
+    cursor: help;
+  }
+
+  .tooltip-box {
+    position: absolute;
+    bottom: 115%; // Tkon fo9 l-trigger
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    width: 200px;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    pointer-events: none;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+
+    .tooltip-content {
+      h6 {
+        margin: 0 0 4px 0;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #111;
+      }
+      p {
+        margin: 0;
+        font-size: 0.75rem;
+        line-height: 1.4;
+        color: #555;
+        white-space: normal;
+      }
+    }
+
+    .tooltip-arrow {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 7px solid #ffffff;
+    }
+  }
+
+  // Hover Effect
+  &:hover {
+    .tooltip-box {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+}

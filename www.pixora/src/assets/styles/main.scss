@@ -23,6 +23,7 @@
 @use './components/skeleton_myprofile';
 @use './components/latest_requests';
 @use './components/staff_user';
+@use './overlays/tooltip';
 
 :root {
     --special_color: rgb(0, 120, 255);

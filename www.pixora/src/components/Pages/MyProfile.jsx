@@ -649,7 +649,7 @@ export const MyProfile = () => {
                           <div>{statistics?.followers ?? 0} Followers</div>
                           <div>{statistics?.followings ?? 0} Following</div>
                           <div>{statistics?.likes ?? 0} Likes</div>
-                          <div>{statistics?.photosCount ?? 0} Photos</div>
+                          <div>{statistics?.photos_count ?? 0} Photos</div>
                         </div>
                         <div className="social_media mt-2 mb-2">
                           {user.facebook && (

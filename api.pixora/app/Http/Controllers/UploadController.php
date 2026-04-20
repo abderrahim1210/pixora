@@ -39,6 +39,7 @@ class UploadController extends Controller
         $image = $photo['image'];
         $location = $photo['location'] ?? "";
         $gallery_id = $photo['gallery_id'] ?? null;
+        $visibilty = $photo['visibility'];
 
 
         preg_match('/^data:image\/(\w+);base64,/', $image, $matches);
@@ -90,7 +91,8 @@ class UploadController extends Controller
             'ratio' => $ratio,
             'orientation' => $orientation,
             'tags' => $tags,
-            'gallery_id' => $gallery_id
+            'gallery_id' => $gallery_id,
+            'visibility' => $visibilty
         ]);
 
         if ($gallery_id) {

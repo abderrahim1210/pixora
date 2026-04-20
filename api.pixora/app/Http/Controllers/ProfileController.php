@@ -33,7 +33,8 @@ class ProfileController extends Controller
             'statistics' => [
                 'likes' => $user->likes_count,
                 'followers' => $user->followers_count,
-                'followings' => $user->followings_count
+                'followings' => $user->followings_count,
+                'photos_count' => $user->photos->count()
             ]
         ]);
     }

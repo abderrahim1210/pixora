@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Navbar } from "./Navbar";
 import { FiCopy, FiFacebook, FiHeart, FiInstagram, FiTwitter } from "react-icons/fi";
-import { FaCalendar, FaCheck, FaCheckCircle, FaClock, FaComment, FaEye, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaPlus, FaShare, FaSync, FaTags, FaUser, FaWhatsapp } from "react-icons/fa";
+import { FaCalendar, FaCheck, FaCheckCircle, FaClock, FaComment, FaCrown, FaEye, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaPlus, FaShare, FaSync, FaTags, FaUser, FaWhatsapp } from "react-icons/fa";
 import { FaLocationDot, FaPencil, FaX } from "react-icons/fa6";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +27,7 @@ import GalleriesTemplate from "./GalleriesTemplate";
 import EditButton from "./EditButton";
 import PhotosTemplate from "./PhotosTemplate";
 import PhotosEdited from "./PhotosEdited";
+import Tooltip from "../Overlays/Tooltip";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -54,7 +55,7 @@ export const Photo = (props) => {
     const [selected, setSelected] = useState([]);
     const [requestMessage, setRequestMessage] = useState('');
     const [request, setRequest] = useState("");
-    const [photosEdits,setPhotosEdits] = useState([]);
+    const [photosEdits, setPhotosEdits] = useState([]);
     useEffect(() => {
         axios.get(url, { params: { id }, withCredentials: true })
             .then((res) => {
@@ -83,13 +84,13 @@ export const Photo = (props) => {
                 setPhoto((prevPhoto) =>
                     ({ ...prevPhoto, isLiked: !prevPhoto.isLiked, totalLikes: res.data.totalLikes })
                 );
-                
+
             }
 
             if (liked) {
                 setLikes(prev => prev - 1)
             }
-            else{setLikes(prev => prev + 1);}
+            else { setLikes(prev => prev + 1); }
         } catch (err) {
             console.log(err.response?.data);
             setLiked(oldLiked);
@@ -477,6 +478,16 @@ export const Photo = (props) => {
                                     }
                                     {isUser && (<button className="btn p-0 pencil-item" onClick={() => dispatch(toggleEdit("visibility"))}>{!isEdit.visibility ? (<FaPencil />) : (<FaCheck />)}</button>)}
                                 </li>
+                                <li>
+                                    {!!photo.is_featured && (
+                                        <Tooltip text={'This photo was handpicked by our curators for its outstanding composition, creativity, and technical excellence.'}>
+                                            <div className="featured-pill mb-2">
+                                                <FaCrown className="crown-icon" />
+                                                <span>Featured Content</span>
+                                            </div>
+                                        </Tooltip>
+                                    )}
+                                </li>
                                 {user?.id === photo.user_id && (<div className="d-flex justify-content-end align-items-center flex-column mb-2">
                                     <button
                                         type="reset"
@@ -510,7 +521,7 @@ export const Photo = (props) => {
                             </ul>
                             <Comments data={comments} commentRef={commentRef} photoId={photo.id} user={user} />
                         </div>
-                        
+
                     </div>
             }
             <Footer type={"dash"} />

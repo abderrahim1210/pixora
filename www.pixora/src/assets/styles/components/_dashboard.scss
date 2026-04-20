@@ -883,25 +883,90 @@
   position: relative;
   overflow: hidden;
 
+  // .featured-badge {
+  //   position: absolute;
+  //   top: 10px;
+  //   right: 10px;
+  //   background-color: rgba(0, 0, 0, 0.85);
+  //   color: #ff9d00;
+  //   backdrop-filter: blur(5px);
+  //   padding: 9px 8px;
+  //   border-radius: 5px;
+  //   z-index: 10;
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: center;
+  //   font-size: 0.8rem;
+  //   overflow: hidden;
+  //   white-space: nowrap;
+
+  //   svg {
+  //     color: #ff9d00;
+  //   }
+
+  //   .featured-text {
+  //     opacity: 0;
+  //     margin-left: 0;
+  //     font-size: 0.75rem;
+  //     font-weight: 600;
+  //     color: white; // Kitaba bayda bach tji m3a l-gold icon
+  //     transition: all 0.3s ease;
+  //   }
+
+  //   &:hover {
+  //     .featured-text {
+  //       opacity: 1;
+  //       margin-left: 8px;
+  //     }
+  //   }
+
   .featured-badge {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.85);
     color: #ff9d00;
-    backdrop-filter: blur(5px);
-    padding: 9px 8px;
-    border-radius: 5px;
-    z-index: 10;
+    padding: 8px;
+    border-radius: 20px; // Runded f l-jnab bach t-expand-a mzyan
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); // Animation professional
+    cursor: default;
+    z-index: 10;
+    overflow: hidden; // Darori bach l-kitaba t-khba
+    white-space: nowrap; // Bach l-kitaba mat-hbatch l-teht
+    max-width: 35px; // Initialement kiban ghir l-icon
+  
     svg {
-      color: #ff9d00;
+      min-width: 18px; // Bach l-icon mat-sgharch f l-animation
     }
-
+  
+    .featured-text {
+      opacity: 0;
+      margin-left: 0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: white; // Kitaba bayda bach tji m3a l-gold icon
+      transition: all 0.3s ease;
+    }
+  
+    // Fach l-user y-hover-i 3la l-badge
+    &:hover {
+      max-width: 250px; // Kat-expand-a bach t-byen l-jomla
+      padding-right: 15px;
+      background: var(--special_color); // Kat-welli blue (Pixora brand) f l-hover
+      color: white;
+  
+      .featured-text {
+        opacity: 1;
+        margin-left: 8px;
+      }
+  
+      svg {
+        color: #ff9d00; // Gold icon dima tabta
+      }
+    }
+  
     img {
       width: 100%;
       display: block;

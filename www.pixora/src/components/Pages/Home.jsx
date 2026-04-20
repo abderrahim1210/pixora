@@ -232,6 +232,7 @@ export const Home = () => {
                     !!p.is_featured && (
                       <div className="featured-badge">
                         <FaCrown />
+                        <span className="featured-text">Choose from Pixora</span>
                       </div>
                     )
                   }

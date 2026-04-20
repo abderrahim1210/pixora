@@ -8,7 +8,7 @@ import PhotographersTemplate from './PhotographersTemplate'
 import { EmptyContent } from './EmptyContent'
 import { FiUserPlus, FiUsers } from 'react-icons/fi'
 import LatestRequests from './LatestRequests'
-import StaffUserCard from '../../../../api.pixora/app/Http/Controllers/StaffUserCard'
+import StaffUserCard from './StaffUserCard'
 
 const AdminDashboard = ({ analytics }) => {
     return (
