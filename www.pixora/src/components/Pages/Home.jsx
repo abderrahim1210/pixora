@@ -111,18 +111,33 @@ export const Home = () => {
 
   const handleLike = async (photoid) => {
     let previousPhotos;
-    setPhotos((prevPhotos) => {
-      previousPhotos = prevPhotos
-      return prevPhotos.map((p) => p.id === photoid ? { ...p, isLiked: !p.isLiked, totalLikes: p.isLiked ? p.totalLikes - 1 : p.totalLikes + 1 } : p);
+    queryClient.setQueryData(['data'], (oldData) => {
+      if (!oldData) return oldData;
+      return {
+        ...oldData,
+        photos: oldData.photos.map((p) =>
+          p.id === photoid
+            ? {
+              ...p,
+              isLiked: !p.isLiked,
+              totalLikes: p.isLiked ? p.totalLikes - 1 : p.totalLikes + 1
+            }
+            : p
+        ),
+      };
     });
     try {
       const res = await axios.post("https://api.pixora.test/add_like", { photo_id: photoid }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
-        setPhotos((prevPhotos) =>
-          prevPhotos.map((p) =>
-            p.id === photoid ? { ...p, totalLikes: res.data.totalLikes } : p
-          )
-        );
+        queryClient.setQueryData(['data'], (oldData) => {
+          if (!oldData) return oldData;
+          return {
+            ...oldData,
+            photos: oldData.photos.map((p) =>
+              p.id === photoid ? { ...p, totalLikes: res.data.totalLikes } : p
+            ),
+          };
+        });
       } else {
         throw new Error('Not authorized');
       }
