@@ -53,7 +53,7 @@ const SearchPhotos = () => {
                             <input
                                 type="text"
                                 className='search-input'
-                                placeholder='Search Galleries ...'
+                                placeholder='Search photos ...'
                                 value={search}
                                 onChange={handleSearch}
                             />

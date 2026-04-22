@@ -22,7 +22,7 @@ class Home extends Controller
                     : false;
                 return $photo;
             });
-        $users = User::select('id', 'username')->get();
+        $users = User::select('id', 'username','photo_profile')->where('role','user')->get();
         
         return response()->json(['success' => true, 'photos' => $photos, 'current_user' => $current_user, 'users' => $users]);
     }

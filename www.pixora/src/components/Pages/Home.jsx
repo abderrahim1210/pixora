@@ -33,31 +33,57 @@ import Motion from "./Motion";
 import Avatar from "./Avatar";
 import { fetchFollows, toggleFollowAction } from "../utils/getFollows";
 import { FiCompass } from "react-icons/fi";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const Home = () => {
   const navigate = useNavigate();
-  const [photos, setPhotos] = useState([]);
-  // const [users, setUsers] = useState([]);
   const [usrSearched, setUsrSearched] = useState([]);
   const [search, setSearch] = useState("");
-  const [follows, setFollows] = useState([]);
+  // const [follows, setFollows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [galleries, setGalleries] = useState([]);
   const [term, setTerm] = useState('');
   const [heroImage, setHeroImage] = useState([]);
-  useEffect(() => {
-    axios
-      .get("https://api.pixora.test/homepage", { withCredentials: true })
-      .then((res) => {
-        if (res.data.success) {
-          setPhotos(res.data.photos);
-          // setUsers(res.data.users);
-          setUsrSearched(res.data.users);
-          setLoading(true);
-        }
-      });
-  }, []);
 
+  const fetchData = async () => {
+    try {
+      const res = await axios.get("https://api.pixora.test/homepage", { withCredentials: true });
+      return res.data;
+    } catch (err) {
+      console.log(err?.response?.data);
+    }
+  }
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['data'],
+    queryFn: fetchData,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const users = data?.users || [];
+  const photos = data?.photos || [];
+
+  const { data: follows = [] } = useQuery({
+    queryKey: ['follows'],
+    queryFn: async () => {
+      const res = await axios.get('https://api.pixora.test/follows', { withCredentials: true, withXSRFToken: true });
+      return res.data?.users?.map(f => f.id) || [];
+    },
+    onSuccess: (data) => setLocalFollows(data)
+  });
+
+  const queryClient = useQueryClient();
+  const addFollow = async (id) => {
+    const newFollows = follows.includes(id) ? follows.filter(fid => fid !== id) : [...follows, id];
+    queryClient.setQueryData(['follows'], newFollows);
+
+    try {
+      await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
+    } catch (err) {
+      queryClient.setQueryData(['follows'], previousFollows);
+      console.log(err?.response?.data);
+    }
+  }
 
   useEffect(() => {
     try {
@@ -220,67 +246,87 @@ export const Home = () => {
         >
           <h1 className="text-center fw-bold">For you</h1>
           <div className="photos">
-            {!loading ? Array(4).fill().map((_, i) => <PageSkeleton key={i} page={'photos'} />) : photos.length > 0 ? photos.map((p) => (
-              <div className="card" key={p.id}>
-                <Link
-                  key={p.id}
-                  id="caption"
-                  style={{ cursor: "pointer" }}
-                ></Link>
-                <div className="photo">
-                  {
-                    !!p.is_featured && (
-                      <div className="featured-badge">
-                        <FaCrown />
-                        <span className="featured-text">Choose from Pixora</span>
-                      </div>
-                    )
-                  }
+            {isLoading ? Array(4).fill().map((_, i) => <PageSkeleton key={i} page={'photos'} />) : photos.length > 0 ? photos.map((p, index) => (
+              <React.Fragment key={index}>
+                {(index + 1) % 4 === 0 && (
+                  <div className="feed-break-section">
+                    <div className="section-header">
+                      <h4>Photographers you might like</h4>
+                      <Link to="/photographers">See all</Link>
+                    </div>
+                    <div className="photographers-horizontal-scroll">
+                      {/* Hna t9der t-map-i 3la list d recommended photographers */}
+                      {users.slice(0, 6).map(u => (
+                        <div className="mini-user-card" key={u.id}>
+                          <Avatar src={`https://api.pixora.test/storage/profile_pictures/${u.photo_profile}`} size={60} />
+                          <h6>{u.username}</h6>
+                          <button className="btn-follow-sm">{follows.includes(u.id) ? 'Following' : 'Follow'}</button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div className="card" key={p.id}>
                   <Link
+                    key={p.id}
                     id="caption"
                     style={{ cursor: "pointer" }}
-                    to={`/photo/${p.id}/${slugiFy(p.title)}`}
-                  >
-                    <img src={`https://api.pixora.test/storage/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
-                  </Link>
-                  <div className="info">
-                    <a
+                  ></Link>
+                  <div className="photo">
+                    {
+                      !!p.is_featured && (
+                        <div className="featured-badge">
+                          <FaCrown />
+                          <span className="featured-text">Choose from Pixora</span>
+                        </div>
+                      )
+                    }
+                    <Link
                       id="caption"
+                      style={{ cursor: "pointer" }}
+                      to={`/photo/${p.id}/${slugiFy(p.title)}`}
                     >
+                      <img src={`https://api.pixora.test/storage/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
+                    </Link>
+                    <div className="info">
+                      <a
+                        id="caption"
+                      >
+                        <div>
+                          <Truncate text={p.title} maxChars={25}>
+                            {({ text }) => (
+                              <h5>{text}</h5>
+                            )}
+                          </Truncate>
+                        </div>
+                      </a>
                       <div>
-                        <Truncate text={p.title} maxChars={25}>
-                          {({ text }) => (
-                            <h5>{text}</h5>
-                          )}
-                        </Truncate>
-                      </div>
-                    </a>
-                    <div>
-                      <Link id="caption">
-                        <input
-                          type="hidden"
-                          name="photo_id"
-                          defaultValue={p.id}
-                        />
-                      </Link>
-                      <div>
-                        <a
-                          className={`likeButton ${(user && p.isLiked) ? 'active' : ''}`}
-                          data-photo-id={p.id}
-                          onClick={() => handleLike(p.id)}
-                        >
-                          <FaHeart />{" "}
-                        </a>
-                        <a style={{ cursor: "pointer" }}>
-                          <FaComment />{" "}
-                          <span>
-                          </span>
-                        </a>
+                        <Link id="caption">
+                          <input
+                            type="hidden"
+                            name="photo_id"
+                            defaultValue={p.id}
+                          />
+                        </Link>
+                        <div>
+                          <a
+                            className={`likeButton ${(user && p.isLiked) ? 'active' : ''}`}
+                            data-photo-id={p.id}
+                            onClick={() => handleLike(p.id)}
+                          >
+                            <FaHeart />{" "}
+                          </a>
+                          <a style={{ cursor: "pointer" }}>
+                            <FaComment />{" "}
+                            <span>
+                            </span>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </React.Fragment>
             )) : <EmptyContent icon={<FaPhotoFilm className="faIcon" />} text={"No photos yet - try again later!"} />}
           </div>
         </div>
@@ -419,7 +465,7 @@ export const Home = () => {
             <div className="wave-wrapper">
               <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
                 <path
-                  fill="#ffffff"  /* نفس لون الخلفية ديال الـ Body */
+                  fill="#ffffff"
                   d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,218.7C960,235,1056,213,1152,186.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
                 </path>
               </svg>

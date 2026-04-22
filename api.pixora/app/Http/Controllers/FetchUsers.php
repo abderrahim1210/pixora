@@ -19,7 +19,7 @@ class FetchUsers extends Controller
             ->limit(3)
             ->get();
 
-            $featured_artists = DB::table('users as u')->join('photos as p','u.id','=','p.user_id')->select('u.id','u.username','u.photo_profile')->where('is_featured','=',true)->limit(5)->get();
+            $featured_artists = DB::table('users as u')->join('photos as p','u.id','=','p.user_id')->select('u.id','u.username','u.photo_profile')->where('p.is_featured','=',true)->limit(5)->get();
             if ($type === "top_photographers"){
                 return response()->json(['success' => true,'users' => $top_users]);
             }else if($type === "featured_artists"){

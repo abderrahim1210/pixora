@@ -15,9 +15,10 @@ export const Navbar = ({type}) => {
           <div className="container-fluid d-flex">
             <ul className="navbar-nav me-auto" id="ul1">
               <li className="nav-item" title="Welcome to Pixora">
-                <a
+                <Link
                   style={{ cursor: "pointer" }}
                   className="nav-link nav-brand p-0 m-0"
+                  to={'/'}
                 >
                   <img
                     src="/outils/pngs/logo_styled.png"
@@ -29,7 +30,7 @@ export const Navbar = ({type}) => {
                     }}
                     id="logo"
                   />
-                </a>
+                </Link>
               </li>
             </ul>
             <ul className="navbar-nav d-none d-md-flex me-auto" id="ul2">

@@ -14,6 +14,7 @@ import { BiChevronDown, BiSearchAlt } from 'react-icons/bi';
 import { Footer } from './Footer';
 import PhotographersList from './PhotographersList';
 const Photographers = () => {
+    document.body.title = 'Pixora | Photographers'
     const [search, setSearch] = useState("");
     const navigate = useNavigate();
     const { user } = useAuth();
@@ -24,7 +25,8 @@ const Photographers = () => {
     const fetchUsers = async () => {
         try {
             const res = await axios.get(`https://api.pixora.test/get_users/${type}`, { withCredentials: true, withXSRFToken: true });
-            return res.data.users;
+            const uniqueUsers = res.data.users.filter((user, index, self) => index === self.findIndex(u => u.id === user.id));
+            return uniqueUsers;
         } catch (err) {
             console.log(err?.response?.data);
         }
@@ -38,13 +40,26 @@ const Photographers = () => {
         queryKey: ['follows'],
         queryFn: async () => {
             const res = await axios.get('https://api.pixora.test/follows', { withCredentials: true, withXSRFToken: true });
-            return res.data?.users?.map(f => f.id) || [];
+            console.log(res.data.users);
+            return res.data?.users?.map(f => f.following_id) || [];
         },
-        onSuccess: (data) => setLocalFollows(data)
+        // onSuccess: (data) => setLocalFollows(data),
+        staleTime: 1000 * 60 * 5,
     });
 
     const filtredUsers = useMemo(() => {
-        return users.map(u => ({ ...u, isFollowed: follows.includes(u.id), followClasse: follows.includes(u.id) ? 'active' : '', followText: follows.includes(u.id) ? 'Followed' : 'Follow' })).filter(u => u.username.toLowerCase().startsWith(search.toLowerCase()))
+        return users
+            .filter(u => u.username.toLowerCase().startsWith(search.toLowerCase()))
+            .map(u => {
+                // const isFollowed = follows.some(fId => Number(fId) === Number(u.id));
+                const isFollowed = follows.includes(u.id);
+                return {
+                    ...u,
+                    isFollowed: isFollowed,
+                    followClasse: isFollowed ? 'active' : '',
+                    followText: isFollowed ? 'Followed' : 'Follow'
+                };
+            });
     }, [search, users, follows]);
 
     const showMoreProducts = () => {
@@ -53,11 +68,14 @@ const Photographers = () => {
 
     const queryClient = useQueryClient();
     const addFollow = async (id) => {
+        await queryClient.cancelQueries({ queryKey: ['follows'] });
         const newFollows = follows.includes(id) ? follows.filter(fid => fid !== id) : [...follows, id];
+        const previousFollows = queryClient.getQueryData(['follows']) || [];
         queryClient.setQueryData(['follows'], newFollows);
 
         try {
             await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
+            // await queryClient.invalidateQueries({ queryKey: ['follows'] });
         } catch (err) {
             queryClient.setQueryData(['follows'], previousFollows);
             console.log(err?.response?.data);
@@ -83,7 +101,7 @@ const Photographers = () => {
                         <input
                             type="text"
                             className='search-input'
-                            placeholder='Search Galleries ...'
+                            placeholder='Search photographer ...'
                             value={search}
                             onChange={handleSearch}
                         />

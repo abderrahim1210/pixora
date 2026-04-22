@@ -43,7 +43,7 @@ const PhotographersList = ({ user,filtredUsers, isLoading, visible,addFollow }) 
                                             type="button"
                                             className="followButton btn"
                                             id="followButton"
-                                            onClick={() => navigate(`${user && user?.username}/myprofile`)}
+                                            onClick={() => navigate(`/user/${user && user?.username}/myprofile`)}
                                         >
                                             View profile
                                         </button>
