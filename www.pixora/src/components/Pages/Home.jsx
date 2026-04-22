@@ -67,7 +67,7 @@ export const Home = () => {
     queryKey: ['follows'],
     queryFn: async () => {
       const res = await axios.get('https://api.pixora.test/follows', { withCredentials: true, withXSRFToken: true });
-      return res.data?.users?.map(f => f.id) || [];
+      return res.data?.users?.map(f => f.following_id) || [];
     },
     onSuccess: (data) => setLocalFollows(data)
   });
@@ -256,11 +256,11 @@ export const Home = () => {
                     </div>
                     <div className="photographers-horizontal-scroll">
                       {/* Hna t9der t-map-i 3la list d recommended photographers */}
-                      {users.slice(0, 6).map(u => (
+                      {users.filter(u => u.id !== user?.id).slice(0, 6).map(u => (
                         <div className="mini-user-card" key={u.id}>
                           <Avatar src={`https://api.pixora.test/storage/profile_pictures/${u.photo_profile}`} size={60} />
                           <h6>{u.username}</h6>
-                          <button className="btn-follow-sm">{follows.includes(u.id) ? 'Following' : 'Follow'}</button>
+                          <button className={`btn-follow-sm ${follows.includes(u.id) ? 'followed' : ''}`} onClick={() => addFollow(u.id)}>{follows.includes(u.id) ? 'Followed' : 'Follow'}</button>
                         </div>
                       ))}
                     </div>
