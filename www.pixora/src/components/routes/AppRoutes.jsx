@@ -1,17 +1,17 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { Home } from "../Home";
-import { Upload } from "../Upload";
-import { Login } from "../Login";
-import { SignUp } from "../SignUp";
-import { MyProfile } from "../MyProfile";
-import { MyPhotos } from "../MyPhotos";
-import { Photo } from "../Photo";
-import GalleryPreview from "../GalleryPreview";
-import Photograher from "../Photograher";
-import Photographers from "../Photographers";
-import GalleriesSection from "../GalleriesSection";
-import SearchPhotos from "../SearchPhotos";
+import { Home } from "../Pages/Home";
+import { Upload } from "../Pages/Upload";
+import { Login } from "../Pages/Login";
+import { SignUp } from "../Pages/SignUp";
+import { MyProfile } from "../Pages/MyProfile";
+import { MyPhotos } from "../Pages/MyPhotos";
+import { Photo } from "../Pages/Photo";
+import GalleryPreview from "../Pages/GalleryPreview";
+import Photograher from "../Pages/Photograher";
+import Photographers from "../Pages/Photographers";
+import GalleriesSection from "../Pages/GalleriesSection";
+import SearchPhotos from "../Pages/SearchPhotos";
 const AppRoutes = () => {
   
   return (

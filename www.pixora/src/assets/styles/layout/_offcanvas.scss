@@ -1,0 +1,94 @@
+.custom-offcanvas {
+    width: 300px !important;
+    border-right: none !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(15px);
+    border-radius: 0 25px 25px 0;
+    z-index: 15000 !important;
+
+    .btn-close-custom {
+        background: none;
+        border: none;
+        color: #666;
+        padding: 5px;
+        transition: transform 0.3s ease;
+        &:hover {
+            transform: rotate(90deg);
+            color: #000;
+        }
+    }
+
+    .user-profile-section {
+        .avatar-wrapper {
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+            overflow: hidden;
+            border: 2px solid #eef2f7;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+        .user-info {
+            h6 { font-size: 0.95rem; }
+            small { font-size: 0.8rem; }
+        }
+    }
+
+    .nav-link-custom {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px 20px;
+        color: #555;
+        text-decoration: none;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        margin-bottom: 5px;
+
+        .icon {
+            color: #888;
+            transition: color 0.3s ease;
+        }
+
+        &:hover {
+            background: #f0f7ff;
+            color: #007bff;
+            .icon { color: var(--special_color); }
+        }
+
+        &.active {
+            background: var(--special_color);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+            .icon { color: white; }
+        }
+    }
+
+    .separator {
+        height: 1px;
+        background: #eee;
+        margin: 10px 20px;
+    }
+
+    .offcanvas-footer {
+        border-radius: 0 0 25px 0;
+    }
+}
+
+// L-icon SVG dyalk li derti
+.custom-menu-icon {
+    transition: all 0.3s ease;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #333;
+    
+    &.open {
+        transform: rotate(90deg);
+        color: var(--special_color);
+    }
+}

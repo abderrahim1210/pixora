@@ -7,11 +7,11 @@ import { useAuth } from '../context/AuthProvider';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { FaCameraRetro } from 'react-icons/fa';
 import { fetchFollows, toggleFollowAction } from '../utils/getFollows';
-import { Navbar } from './Navbar';
+import { Navbar } from './Layouts/Navbar';
 import { EmptyContent } from './EmptyContent';
 import Spinner from './Spinner';
 import { BiChevronDown, BiSearchAlt } from 'react-icons/bi';
-import { Footer } from './Footer';
+import { Footer } from './Layouts/Footer';
 import PhotographersList from './PhotographersList';
 const Photographers = () => {
     document.body.title = 'Pixora | Photographers'

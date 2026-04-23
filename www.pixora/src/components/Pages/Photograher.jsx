@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Navbar } from './Navbar'
-import { Footer } from './Footer'
+import { Navbar } from './Layouts/Navbar'
+import { Footer } from './Layouts/Footer'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { FaBan, FaCamera, FaFacebook, FaGlobe, FaInstagram, FaMapPin, FaTwitter } from 'react-icons/fa'

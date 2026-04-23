@@ -1,12 +1,12 @@
-// src/utils/setFavicon.js
-export const setFavicon = (iconPath) => {
-  let link = document.querySelector("link[rel='icon']");
+// // src/utils/setFavicon.js
+// export const setFavicon = (iconPath) => {
+//   let link = document.querySelector("link[rel='icon']");
 
-  if (!link) {
-    link = document.createElement("link");
-    link.rel = "icon";
-    document.head.appendChild(link);
-  }
+//   if (!link) {
+//     link = document.createElement("link");
+//     link.rel = "icon";
+//     document.head.appendChild(link);
+//   }
 
-  link.href = iconPath + "?v=" + Date.now(); // كسر الكاش
-};
+//   link.href = iconPath + "?v=" + Date.now(); // كسر الكاش
+// };

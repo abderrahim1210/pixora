@@ -164,79 +164,11 @@
     border-radius: 50px;
   }
 
-
-  .nav3 {
-    background-color: rgba(218, 218, 218, 0.629);
-    backdrop-filter: blur(20px);
-    display: none;
-    position: fixed;
-  }
-
-  #ul3 .nav-item .nav-link {
-    text-align: center;
-    text-decoration: none;
-    color: black;
-    text-transform: capitalize;
-    font-size: 15px;
-    font-weight: 600;
-  }
-
-  #ul3 .nav-item .nav-link:hover {
-    color: var(--special_color);
-  }
-
   .photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: 0.25s;
-  }
-
-  .nav3 {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 500px;
-    background: #fff;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 8px 0;
-    z-index: 999;
-  }
-
-  #ul3 .nav-item .nav-link {
-    cursor: pointer;
-    color: #888;
-    font-size: 1.4rem;
-    transition: all 0.2s ease-in-out;
-    text-decoration: none;
-  }
-
-  #ul3 .nav-item i {
-    font-weight: 800;
-  }
-
-  #ul3 .nav-item .nav-link:hover {
-    color: var(--special_color);
-  }
-
-  #ul3 .nav-item .nav-link.active {
-    color: var(--special_color);
-  }
-
-  .nav3 {
-    margin-top: 60px;
-    display: none;
-  }
-
-  footer {
-    height: auto;
   }
 
   @media only screen and (max-width: 768px) {
@@ -267,24 +199,6 @@
 
     .nav2 .nav-item .nav-link {
       font-size: 15px;
-    }
-
-    .nav3 {
-      display: block;
-      display: flex;
-      justify-content: center;
-    }
-
-    footer {
-      font-size: 15px;
-    }
-
-    .div3 {
-      justify-content: center;
-    }
-
-    footer {
-      margin-bottom: 55px;
     }
   }
 
@@ -416,6 +330,12 @@
     color: var(--special_color);
   }
 
+  @media (max-width:768px) {
+    .nav2 {
+      display: none;
+    }
+  }
+
   @media only screen and (max-width: 576px) {
     .nav2 .nav-item .nav-link {
       font-size: 13px;
@@ -442,6 +362,8 @@
     .div2 .btn {
       font-size: 15px;
     }
+
+
   }
 
   @media only screen and (max-width: 480px) {
@@ -794,14 +716,14 @@
 
     .wave-wrapper {
       position: absolute;
-      bottom: 0; // لصقها لتحت كاع
+      bottom: 0;
       left: 0;
       width: 100%;
-      line-height: 0; // باش مايبقاش فراغ ديال 1px
+      line-height: 0;
 
       svg {
         width: 100%;
-        height: 100px; // تقدر تحكم فـ "القوة" ديال الموجة من هنا
+        height: 100px;
       }
     }
   }

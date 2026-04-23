@@ -25,8 +25,8 @@
 
   .nav1 {
     background-color: rgba(255, 255, 255, 0.7);
-    // backdrop-filter: blur(10px);
     font-weight: bold;
+    z-index: 1050 !important;
   }
 
   .dropdown .dropdown-menu a:hover,.dropdown .dropdown-menu .dropdown-item a.active {

@@ -16,10 +16,9 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { Navbar } from "./Navbar";
-import { Footer } from "./Footer";
+import { Navbar } from "./Layouts/Navbar";
+import { Footer } from "./Layouts/Footer";
 import axios from "axios";
-import { setFavicon } from "../utils/SetFavicon";
 import { MdAlbum, MdCategory, MdPhotoAlbum, MdRecommend } from "react-icons/md";
 import { useAuth } from '../context/AuthProvider'
 import { Truncate } from "./Truncate";
@@ -34,12 +33,12 @@ import Avatar from "./Avatar";
 import { fetchFollows, toggleFollowAction } from "../utils/getFollows";
 import { FiCompass } from "react-icons/fi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import BottomNav from "./Layouts/BottomNav";
 
 export const Home = () => {
   const navigate = useNavigate();
   const [usrSearched, setUsrSearched] = useState([]);
   const [search, setSearch] = useState("");
-  // const [follows, setFollows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [galleries, setGalleries] = useState([]);
   const [term, setTerm] = useState('');
@@ -151,7 +150,7 @@ export const Home = () => {
 
   return (
     <div data-bs-page="pixora">
-      <Navbar data={user} />
+      <Navbar data={user} className='sticky-top' />
 
       <div className="sticky-top">
         <nav className="navbar navbar-expand nav2">
@@ -270,7 +269,6 @@ export const Home = () => {
                       <Link to="/photographers">See all</Link>
                     </div>
                     <div className="photographers-horizontal-scroll">
-                      {/* Hna t9der t-map-i 3la list d recommended photographers */}
                       {users.filter(u => u.id !== user?.id).slice(0, 6).map(u => (
                         <div className="mini-user-card" key={u.id}>
                           <Avatar src={`https://api.pixora.test/storage/profile_pictures/${u.photo_profile}`} size={60} />
@@ -545,34 +543,8 @@ export const Home = () => {
           </div>
         </div>
       </div>
-      {/* <div className="container-fluid">
-        <nav
-          className="navbar mx-auto navbar-expand fixed-bottom nav3"
-          role="tablist"
-        >
-          <ul className="navbar-nav" id="ul3">
-            <li className="nav-item">
-              <a
-                href="#"
-                className="nav-link"
-              >
-                <FaUser size={15} color="454545" />
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="#" className="nav-link">
-                <FaCamera size={15} color="#454545" />
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="#" className="nav-link">
-                <FaCog size={15} color="#454545" />
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div> */}
+      <BottomNav page={'home'} />
       <Footer type={'footer'} />
-    </div >
+    </div>
   );
 };

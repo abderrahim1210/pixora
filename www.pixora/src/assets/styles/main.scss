@@ -4,6 +4,7 @@
 @use './components/dashboard';
 @use './components/auth_common';
 @use './layout/navbar';
+@use './layout/bottom_nav';
 @use './layout/footer';
 @use './components/photo';
 @use './components/avatar';
@@ -24,6 +25,7 @@
 @use './components/latest_requests';
 @use './components/staff_user';
 @use './overlays/tooltip';
+@use './layout/offcanvas';
 
 :root {
     --special_color: rgb(0, 120, 255);

@@ -1,5 +1,5 @@
 import React from "react";
-import { Copyright } from "./Copyright";
+import { Copyright } from "../Copyright";
 import { FiFacebook, FiGithub, FiInstagram, FiTwitter } from "react-icons/fi";
 //import '../../assets/css/footer.css'
 export const Footer = ({ type }) => {

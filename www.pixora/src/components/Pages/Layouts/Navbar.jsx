@@ -3,8 +3,9 @@ import { FaChevronDown } from "react-icons/fa";
 //import '../../assets/css/navbar.css'
 import { FiBell, FiGlobe, FiSend, FiUpload } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
-import Avatar from "./Avatar";
+import { useAuth } from "../../context/AuthProvider";
+import Avatar from "../Avatar";
+import OffcanvasTemplate from "../OffcanvasTemplate";
 export const Navbar = ({type}) => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -221,156 +222,7 @@ export const Navbar = ({type}) => {
             </ul>
           </div>
         </nav>
-        <button
-          type="button"
-          className="btn d-md-none ms-auto"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasDg"
-          aria-controls="offcanvasDg"
-          id="offcanvasButton"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 64 64"
-            width={40}
-            height={40}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={3}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle
-              cx={32}
-              cy={32}
-              r={29}
-              stroke="currentColor"
-              opacity="0.2"
-            />
-            <path d="M20 24h24" />
-            <path d="M20 32h24" />
-            <path d="M20 40h24" />
-            <circle cx={48} cy={32} r={3} fill="currentColor" />
-          </svg>
-        </button>
-        <div
-          className="offcanvas offcanvas-end d-md-flex"
-          tabIndex={-1}
-          id="offcanvasDg"
-          aria-labelledby="offcanvasDg"
-        >
-          <div className="offcanvas-header d-flex justify-content-between">
-            <img
-              src="outils/pngs/logo_styled.png"
-              alt="logo"
-              width="100px"
-              height="auto"
-              title="Welcome to DeluxeUpload"
-              id="logo"
-            />
-            <img
-              src="outils/pngs/useracc.png"
-              alt="logo"
-              width="40px"
-              height="auto"
-              id="imgAcc"
-              title="My Account"
-              /* onclick="window.open('dasheboard.php','_self')" */
-            />
-          </div>
-          <div className="container-fluid">
-            <button
-              id="btnClose"
-              type="button"
-              className="btn mt-2 mb-2 w-100 text-reset"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            >
-              Hide Bar
-            </button>
-          </div>
-          <div className="offcanvas-body p-0">
-            <div className="list-group">
-              <a
-                href="#"
-                className="list-group-item list-group-item-action"
-                title="For you"
-              >
-                <i className="fas fa-heart" /> for you
-              </a>
-              <a
-                href="myprofil.php"
-                className="list-group-item list-group-item-action"
-                title="My profile"
-              >
-                <i className="fas fa-user" /> my profile
-              </a>
-              <a
-                href="#"
-                className="list-group-item list-group-item-action"
-                title="Site Language"
-                data-bs-target="#language"
-                data-bs-toggle="modal"
-              >
-                <i className="fas fa-language" /> Language
-              </a>
-              <a
-                href="#"
-                className="list-group-item list-group-item-action"
-                title="About"
-              >
-                <i className="fas fa-info-circle" /> about
-              </a>
-              <a
-                href="#"
-                className="list-group-item list-group-item-action"
-                title="Setting"
-              >
-                <i className="fas fa-palette" /> theme
-              </a>
-              <a
-                href="#"
-                className="list-group-item list-group-item-action"
-                title="Setting"
-              >
-                <i className="fas fa-language" /> site language
-              </a>
-              <a
-                href="#"
-                className="list-group-item list-group-item-action"
-                style={{ color: "red" }}
-                title="For you"
-              >
-                <i className="fas fa-right-from-bracket" /> logout
-              </a>
-              <a
-                href="#"
-                className="list-group-item list-group-item-action"
-                title="For you"
-              >
-                <i className="fas fa-user-plus" /> create new account
-              </a>
-              <button
-                type="button"
-                className="btn"
-                role="button"
-                id="login"
-                /* onclick="switchTo('login')" */
-              >
-                login
-              </button>
-              <button
-                type="button"
-                className="btn"
-                role="button"
-                id="signupButton"
-                /* onclick="switchTo('signup')" */
-              >
-                signup
-              </button>
-            </div>
-          </div>
-        </div>
+        <OffcanvasTemplate user={user} />
       </header>
       <div
         className="modal fade"

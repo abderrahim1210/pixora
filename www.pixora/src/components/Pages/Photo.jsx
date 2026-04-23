@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Navbar } from "./Navbar";
+import { Navbar } from "./Layouts/Navbar";
 import { FiCopy, FiFacebook, FiHeart, FiInstagram, FiTwitter } from "react-icons/fi";
 import { FaCalendar, FaCheck, FaCheckCircle, FaClock, FaComment, FaCrown, FaEye, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaPlus, FaShare, FaSync, FaTags, FaUser, FaWhatsapp } from "react-icons/fa";
 import { FaLocationDot, FaPencil, FaX } from "react-icons/fa6";
@@ -22,7 +22,7 @@ import PageSkeleton from "./PageSkeleton";
 import { useModal } from "../context/ModalProvider";
 import { MdCategory, MdPhotoLibrary } from "react-icons/md";
 import ModalTemplate from "./ModalTemplate";
-import { Footer } from "./Footer";
+import { Footer } from "./Layouts/Footer";
 import GalleriesTemplate from "./GalleriesTemplate";
 import EditButton from "./EditButton";
 import PhotosTemplate from "./PhotosTemplate";

@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React, { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Footer } from './Footer';
+import { Footer } from './Layouts/Footer';
 import PhotosTemplate from './PhotosTemplate';
-import { Navbar } from './Navbar';
+import { Navbar } from './Layouts/Navbar';
 import { BiSearchAlt } from 'react-icons/bi';
 import Spinner from './Spinner';
 import { EmptyContent } from './EmptyContent';

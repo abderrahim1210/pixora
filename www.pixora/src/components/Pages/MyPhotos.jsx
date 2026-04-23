@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navbar } from "./Navbar";
+import { Navbar } from "./Layouts/Navbar";
 import axios from "axios";
 import { FaCamera, FaEdit, FaHeart, FaPlus } from "react-icons/fa";
 import { MdPhotoLibrary } from "react-icons/md";
@@ -9,11 +9,17 @@ import { notyf } from "../../assets/js/notyf";
 import PageSkeleton from "./PageSkeleton";
 import PhotosTemplate from "./PhotosTemplate";
 import { EmptyContent } from "./EmptyContent";
-import { Footer } from "./Footer";
+import { Footer } from "./Layouts/Footer";
 import { useModal } from "../context/ModalProvider";
 import ModalTemplate from "./ModalTemplate";
 import GalleriesTemplate from "./GalleriesTemplate";
 import RequestCard from "./RequestCard";
+import TopBarPhotos from "./Photos/TopBarPhotos";
+import ListePhotos from "./Photos/ListePhotos";
+import Requests from "./Photos/Requests";
+import Likes from "./Photos/Likes";
+import Galleries from "./Photos/Galleries";
+import BottomNav from "./Layouts/BottomNav";
 
 export const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
@@ -144,141 +150,19 @@ export const MyPhotos = () => {
       <main className="main-content">
         <div className="container-fluid">
           <div className="row div">
-            <nav className="navbar navbar-expand nav2 sticky-top" id="demo">
-              <div className="mx-auto">
-                <ul className="nav">
-                  <li className="nav-item">
-                    <a
-                      data-bs-target="#photos"
-                      data-bs-toggle="tab"
-                      className="nav-link active"
-                    >
-                      <FaCamera /> my photos
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      data-bs-target="#licensing"
-                      data-bs-toggle="tab"
-                      className="nav-link"
-                    >
-                      <FaEdit /> requests
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      data-bs-target="#likes"
-                      data-bs-toggle="tab"
-                      className="nav-link"
-                    >
-                      <FaHeart /> likes
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      data-bs-target="#galleries"
-                      data-bs-toggle="tab"
-                      className="nav-link"
-                    >
-                      <MdPhotoLibrary /> galleries
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </nav>
+            <TopBarPhotos />
             <div className="tab-content">
-              <div className="tab-pane fade show active" id="photos">
-                <div className="mt-2 mb-2">
-                  <h2>
-                    My photos{" "}
-                    <p className="d-inline text-primary">
-                      ( {photos?.length} photos)
-                    </p>
-                  </h2>
-                </div>
-                <div>
-                  {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} page={'photos'} />) : photos.length > 0 ? (
-                    <PhotosTemplate photos={photos} />
-                  ) : (
-                    <EmptyContent icon={<FaCamera className="faIcon" />} text={"No photos yet — start sharing your moments!"} />
-                  )}
-                </div>
-              </div>
-              <div className="tab-pane fade show" id="licensing">
-                <div className="mt-2 mb-2">
-                  <h2>
-                    Requests <p className="d-inline text-primary">( {requests?.length} request)</p>
-                  </h2>
-                </div>
-                <div className="container-fluid">
-                  <div className="mt-3 mb-3">
-                    {requests && Object.entries(requests).length > 0 ? (
-                      Object.entries(requests).map(([imageId, group]) => (
-                        <RequestCard key={imageId} group={group} />
-                      ))
-                    ) : (
-                      <EmptyContent
-                        icon={<FaEdit className="faIcon" />}
-                        text={"No requests yet — start request with anyone"}
-                      />
-                    )}
-                  </div>
-                  <hr />
-                  <div className="mt-3 mb-3">
-                    <h2>
-                      Your Requests
-                    </h2>
-                    {requests && Object.entries(myRequests).length > 0 ? (
-                      Object.entries(myRequests).map(([imageId, group]) => (
-                        <RequestCard key={imageId} group={group} />
-                      ))
-                    ) : (
-                      <EmptyContent
-                        icon={<FaEdit className="faIcon" />}
-                        text={"No requests for you — try again later"}
-                      />
-                    )}
-                  </div>
-
-                </div>
-              </div>
-              <div className="tab-pane fade show" id="likes">
-                <div className="mt-2 mb-2">
-                  <h2>
-                    Likes{" "}
-                    <p className="d-inline text-primary">
-                      ( {photosLikes?.length ?? 0} Photos)
-                    </p>
-                  </h2>
-                </div>
-                <div className="container-fluid">
-                  <div>
-                    {photosLikes?.length > 0 ? (
-                      <PhotosTemplate photos={photosLikes} />
-                    ) : (
-                      <EmptyContent icon={<FaHeart className="faIcon" />} text={"No photos liked yet - try again later"} />
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="tab-pane fade show" id="galleries">
-                <div className="mt-2 mb-2">
-                  <h2>
-                    Galleries{" "}
-                    <p className="d-inline text-primary">({galleries?.length ?? 0} galleries)</p>
-                    <button className="btn btn-primary rounded-circle add-btn" onClick={() => openModal('create-gallery')}>
-                      <FaPlus />
-                    </button>
-                  </h2>
-                </div>
-                <GalleriesTemplate galleries={galleries} />
-              </div>
+              <ListePhotos loading={loading} photos={photos} />
+              <Requests requests={requests} myRequests={myRequests} />
+              <Likes photosLikes={photosLikes} />
+              <Galleries galleries={galleries} openModal={openModal} />
             </div>
           </div>
         </div>
       </main>
+      <BottomNav page={'photos'} user={user} />  
       <div>
-        <Footer type={"footer"} />
+        <Footer type={"dash"} />
       </div>
     </div>
   );

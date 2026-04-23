@@ -3,8 +3,8 @@ import GalleriesTemplate from './GalleriesTemplate'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
-import { Footer } from './Footer'
-import { Navbar } from './Navbar'
+import { Footer } from './Layouts/Footer'
+import { Navbar } from './Layouts/Navbar'
 import { BiChevronDown, BiSearchAlt } from 'react-icons/bi'
 const GalleriesSection = () => {
     const [visible, setVisible] = useState(5);

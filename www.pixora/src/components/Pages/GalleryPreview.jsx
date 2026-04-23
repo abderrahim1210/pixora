@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Navbar } from './Navbar';
-import { Footer } from './Footer';
+import { Navbar } from './Layouts/Navbar';
+import { Footer } from './Layouts/Footer';
 import { EmptyContent } from './EmptyContent';
 import { MdPhotoAlbum } from 'react-icons/md';
 import PhotosTemplate from './PhotosTemplate';
