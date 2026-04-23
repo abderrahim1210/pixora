@@ -387,7 +387,7 @@ export const Photo = (props) => {
                             </div>
                             <ul className="list-group mt-3">
                                 <li>
-                                    {isEdit.title ? (<div><textarea rows={1} name="title" value={fields.title} onChange={(e) => dispatch(updateField({ field: "title", value: e.target.value }))} className="form-control" /></div>) : <Truncate text={photo.title} maxChars={50}>
+                                    {isEdit.title ? (<div><textarea rows={1} name="title" value={fields.title} placeholder="Title ..." onChange={(e) => dispatch(updateField({ field: "title", value: e.target.value }))} className="form-control" /></div>) : <Truncate text={photo.title} maxChars={50}>
                                         {({ text, toggle, open, showMore }) => (
                                             <h4>{text}{showMore && (<span className="showmore" onClick={toggle}>{open ? "Less" : "Show more"}</span>)}</h4>
                                         )}
@@ -397,7 +397,7 @@ export const Photo = (props) => {
                                     </div>
                                 </li>
                                 <li>
-                                    {isEdit.description ? (<div><textarea name="description" className="form-control" rows={1} value={fields.description} onChange={(e) => dispatch(updateField({ field: "description", value: e.target.value }))} /></div>) : <Truncate text={photo.description} maxLines={3}>
+                                    {isEdit?.description ? (<div><textarea name="description" placeholder="description ..." className="form-control" rows={1} value={fields.description} onChange={(e) => dispatch(updateField({ field: "description", value: e.target.value }))} /></div>) : <Truncate text={photo?.description ?? "..."} maxLines={3}>
                                         {({ text, open, toggle, showMore, className, style }) => (
                                             <div><p className={className} style={style}>{text}</p>{showMore && (<span className="showmore" onClick={toggle}>{open ? "Less" : "Show more"}</span>)}</div>
                                         )}
@@ -454,7 +454,7 @@ export const Photo = (props) => {
                                 <li>
                                     <FaTags />
                                     {
-                                        isEdit.tags ? (<div><textarea name="tags" className="form-control" rows={1} value={fields.tags} onChange={(e) => dispatch(updateField({ field: "tags", value: e.target.value }))} /></div>) : (<Truncate text={photo.tags} maxChars={30}>
+                                        isEdit.tags ? (<div><textarea name="tags" className="form-control" placeholder="Tags ..." rows={1} value={fields.tags} onChange={(e) => dispatch(updateField({ field: "tags", value: e.target.value }))} /></div>) : (<Truncate text={photo.tags} maxChars={30}>
                                             {({ text }) => (
                                                 <p>{text}</p>
                                             )}

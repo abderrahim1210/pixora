@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminAnalytics;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DownloadImageOriginal;
+use App\Http\Controllers\ExplorePhotos;
 use App\Http\Controllers\FetchRequests;
 use App\Http\Controllers\FetchUsers;
 use App\Http\Controllers\FollowController;

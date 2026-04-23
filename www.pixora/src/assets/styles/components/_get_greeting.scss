@@ -1,0 +1,17 @@
+.greeting-text {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  letter-spacing: 0.5px;
+  animation: fadeIn 1s ease-in;
+  text-align: center !important;
+  justify-content: center;
+
+//   @media (max-width: 768px) {
+//     display: none; // F mobile 7eyedha bach mat-tzahamsch l-header
+//   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 0.8; transform: translateX(0); }
+}

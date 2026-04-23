@@ -26,6 +26,7 @@
 @use './components/staff_user';
 @use './overlays/tooltip';
 @use './layout/offcanvas';
+@use './components/get_greeting';
 
 :root {
     --special_color: rgb(0, 120, 255);
