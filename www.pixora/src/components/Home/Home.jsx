@@ -118,17 +118,20 @@ export const Home = () => {
     let previousPhotos;
     queryClient.setQueryData(['data'], (oldData) => {
       if (!oldData) return oldData;
+      const updateMap = (list) => list.map((p) =>
+        p.id === photoid
+          ? {
+            ...p,
+            isLiked: !p.isLiked,
+            totalLikes: p.isLiked ? (p.totalLikes - 1) : (p.totalLikes + 1)
+          }
+          : p
+      );
+
       return {
         ...oldData,
-        photos: oldData.photos.map((p) =>
-          p.id === photoid
-            ? {
-              ...p,
-              isLiked: !p.isLiked,
-              totalLikes: p.isLiked ? p.totalLikes - 1 : p.totalLikes + 1
-            }
-            : p
-        ),
+        photos: updateMap(oldData.photos || []),
+        explore_photos: updateMap(oldData.explore_photos || [])
       };
     });
     try {

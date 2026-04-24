@@ -23,8 +23,10 @@ const SearchPhotos = () => {
             if (res.data.success) {
                 return res.data.result;
             }
+            return [];
         } catch (err) {
             console.log(err?.response?.data);
+            return [];
         }
     }
     const { data: photos = [], isLoading, error } = useQuery({

@@ -45,7 +45,7 @@ const ForYou = ({ photos, user, isLoading, users, follows, addFollow, getGreetin
                                 </div>
                             </div>
                         )}
-                        <Photos key={p.id} p={p} user={user} slugiFy={slugiFy} handleLike={handleLike} />
+                        <Photos key={index} p={p} user={user} slugiFy={slugiFy} handleLike={handleLike} />
                     </React.Fragment>
                 )) : <EmptyContent icon={<FaPhotoFilm className="faIcon" />} text={"No photos yet - try again later!"} />}
             </div>

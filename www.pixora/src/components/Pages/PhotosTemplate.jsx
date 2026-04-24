@@ -14,7 +14,15 @@ const PhotosTemplate = ({ photos }) => {
                     <div className="card" key={p.id}>
                         <div className="card-body p-0">
                             <div className="image">
-                                
+                                {
+                                    !!p.is_featured && (
+                                        <div className="featured-badge">
+                                            <FaCrown />
+                                            <span className="featured-text">Choose from Pixora</span>
+                                        </div>
+                                    )
+                                }
+
                                 <Link
                                     id="caption"
                                     style={{ cursor: "pointer" }}
