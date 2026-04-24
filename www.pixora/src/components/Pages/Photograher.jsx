@@ -9,50 +9,73 @@ import PageSkeleton from './PageSkeleton'
 import PhotosTemplate from './PhotosTemplate'
 import Spinner from './Spinner'
 import { useAuth } from '../context/AuthProvider'
-import {fetchFollows,toggleFollowAction} from '../utils/getFollows'
+import { fetchFollows, toggleFollowAction } from '../utils/getFollows'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 const Photograher = () => {
     const { id } = useParams();
-    const [photographer, setPhotographer] = useState(null);
-    const [statistics, setStatistics] = useState([]);
-    const [photos, setPhotos] = useState([]);
-    const [loading, setLoading] = useState(true);
+    // const [photographer, setPhotographer] = useState(null);
+    // const [statistics, setStatistics] = useState([]);
+    // const [photos, setPhotos] = useState([]);
+    // const [loading, setLoading] = useState(true);
+    const [visible, setVisible] = useState(8);
     const { user } = useAuth();
-    const [follows, setFollows] = useState([]);
-    useEffect(() => {
-        fetchFollows(setFollows);
-    }, []);
+
+    const { data: follows = [] } = useQuery({
+        queryKey: ['follows'],
+        queryFn: async () => {
+            const res = await axios.get('https://api.pixora.test/follows', { withCredentials: true, withXSRFToken: true });
+            console.log(res.data.users);
+            return res.data?.users?.map(f => f.following_id) || [];
+        },
+        // onSuccess: (data) => setLocalFollows(data),
+        staleTime: 1000 * 60 * 5,
+    });
+
+    const showMoreItems = () => {
+        setVisible((prev) => prev + 8);
+    }
+
+    const queryClient = useQueryClient();
+    const addFollow = async (id) => {
+        await queryClient.cancelQueries({ queryKey: ['follows'] });
+        const newFollows = follows.includes(id) ? follows.filter(fid => fid !== id) : [...follows, id];
+        const previousFollows = queryClient.getQueryData(['follows']) || [];
+        queryClient.setQueryData(['follows'], newFollows);
+
+        try {
+            await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
+            // await queryClient.invalidateQueries({ queryKey: ['follows'] });
+        } catch (err) {
+            queryClient.setQueryData(['follows'], previousFollows);
+            console.log(err?.response?.data);
+        }
+    }
+
+    const fetchInfos = async () => {
+        try {
+            const res = await axios.get(`https://api.pixora.test/get_infos_photographers/${id}`, { withCredentials: true, withXSRFToken: true });
+            return res.data;
+
+        } catch (err) {
+            console.log(err.response?.data);
+        }
+    }
+    const { data, isLoading, errors } = useQuery({
+        queryKey: ['photographer', id],
+        queryFn: fetchInfos
+    });
+
+    const photographer = data?.photographer || [];
+    const statistics = data?.statistics || [];
+    const photos = data?.photos || [];
 
     const isFollowed = follows.includes(Number(id));
     const followClasse = isFollowed ? 'active' : '';
     const followText = isFollowed ? 'Followed' : 'Follow';
-
-    const addFollow = async (id) => {
-        toggleFollowAction(id,follows,setFollows,setStatistics,statistics);
-    }
-
-    useEffect(() => {
-        const fetchInfos = async () => {
-            try {
-                const res = await axios.get(`http://localhost:8000/get_infos_photographers/${id}`, { withCredentials: true, withXSRFToken: true });
-                if (res.data.success) {
-                    setPhotographer(res.data.photographer);
-                    setStatistics(res.data.statistics);
-                    setPhotos(res.data.photos);
-                    setLoading(false);
-                }
-
-            } catch (err) {
-                console.log(err.response?.data);
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchInfos();
-    }, [id]);
     return (
         <div data-bs-page='myprofile'>
             {
-                loading ? (<Spinner text='Photogrpaher page prepared for you ...' />) : (
+                isLoading ? (<Spinner text='Photogrpaher page prepared for you ...' />) : (
                     <>
                         <Navbar />
                         <div
@@ -65,7 +88,7 @@ const Photograher = () => {
                                     onContextMenu={(e) => e.preventDefault()}
                                     style={{
                                         backgroundImage: user?.cover_image
-                                            ? `url("http://localhost:8000/storage/cover_images/${photographer.cover_image}")`
+                                            ? `url("https://api.pixora.test/storage/cover_images/${photographer.cover_image}")`
                                             : `linear-gradient(135deg, #454545 0%, #353535 100%)`,
                                         backgroundAttachment: "fixed",
                                         backgroundRepeat: "no-repeat",
@@ -108,7 +131,7 @@ const Photograher = () => {
                                         <img
                                             src={
                                                 photographer?.photo_profile
-                                                    ? "http://localhost:8000/storage/profile_pictures/" + photographer.photo_profile
+                                                    ? "https://api.pixora.test/storage/profile_pictures/" + photographer.photo_profile
                                                     : "/outils/pngs/useracc2.png"
                                             }
                                             onContextMenu={(e) => e.preventDefault()}
@@ -216,13 +239,13 @@ const Photograher = () => {
 
                             <div className="container-fluid">
                                 <div className="mb-3">
-                                    {loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos?.length > 0 ? (
-                                        <PhotosTemplate photos={photos} />
+                                    {isLoading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos?.length > 0 ? (
+                                        <PhotosTemplate photos={photos.slice(0, visible)} />
                                     ) : user?.role === "user" ? (<EmptyContent icon={<FaCamera className="faIcon" />} text={"No photos yet — start sharing your moments!"} />) : (<EmptyContent icon={<FaBan className="faIcon" />} text={"Upload is not availabe for adminstrators"} />)}
                                 </div>
-                                {user?.role === "user" && (<a href="#" style={{ textDecoration: "underline" }}>
+                                {user?.role === "user" && photos?.length > visible && (<button className='btn btn-link' onClick={showMoreItems} style={{ textDecoration: "underline" }}>
                                     Show more
-                                </a>)}
+                                </button>)}
                             </div>
                         </div>
                         <Footer type={'footer'} />

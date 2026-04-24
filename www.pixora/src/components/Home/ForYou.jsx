@@ -6,7 +6,7 @@ import { FaPhotoFilm } from 'react-icons/fa6'
 import Photos from './Photos'
 import { Link } from 'react-router-dom'
 
-const ForYou = ({photos,user,isLoading,users,follows,addFollow,getGreeting, slugiFy, handleLike}) => {
+const ForYou = ({ photos, user, isLoading, users, follows, addFollow, getGreeting, slugiFy, handleLike }) => {
     return (
         <div
             className="container-fluid tab-pane fade show active mt-3 mb-3"
@@ -32,11 +32,13 @@ const ForYou = ({photos,user,isLoading,users,follows,addFollow,getGreeting, slug
                                     {users.filter(u => u.id !== user?.id).slice(0, 6).map(u => (
                                         <div className="mini-user-card" key={u.id}>
                                             <Avatar src={`https://api.pixora.test/storage/profile_pictures/${u.photo_profile}`} size={60} />
-                                            <Truncate text={u.username} maxChars={25}>
-                                                {({ text }) => (
-                                                    <h6>{text.split('_')[0]}</h6>
-                                                )}
-                                            </Truncate>
+                                            <Link to={`/photographer/${u.id}`} style={{textDecoration:'none',color:'#454545'}}>
+                                                <Truncate text={u.username} maxChars={25}>
+                                                    {({ text }) => (
+                                                        <h6>{text.split('_')[0]}</h6>
+                                                    )}
+                                                </Truncate>
+                                            </Link>
                                             <button className={`btn-follow-sm ${follows.includes(u.id) ? 'followed' : ''}`} onClick={() => addFollow(u.id)}>{follows.includes(u.id) ? 'Followed' : 'Follow'}</button>
                                         </div>
                                     ))}
