@@ -39,7 +39,7 @@ const ForYou = ({ photos, user, isLoading, users, follows, addFollow, getGreetin
                                                     )}
                                                 </Truncate>
                                             </Link>
-                                            <button className={`btn-follow-sm ${follows.includes(u.id) ? 'followed' : ''}`} onClick={() => addFollow(u.id)}>{follows.includes(u.id) ? 'Followed' : 'Follow'}</button>
+                                            <button className={`btn-follow-sm ${follows.includes(u.id) ? 'followed' : ''} ${user?.role === 'admin' && 'disabled'}`} disabled={user?.role === 'admin'} onClick={() => addFollow(u.id)}>{follows.includes(u.id) ? 'Followed' : 'Follow'}</button>
                                         </div>
                                     ))}
                                 </div>

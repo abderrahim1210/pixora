@@ -428,9 +428,11 @@ export const Photo = (props) => {
                                 </li>
                                 <li>
                                     <FaUser />
-                                    <p>{photo.user?.username}
-                                        <a href="#" />
-                                    </p>
+                                    <Link to={`/photographer/${photo?.user?.id}`} style={{textDecoration:'none'}}>
+                                        <p>{photo.user?.username}</p>
+                                    </Link>
+                                    {/* <p> 
+                                    </p> */}
                                 </li>
                                 <li>
                                     <MdCategory />

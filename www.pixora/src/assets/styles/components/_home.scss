@@ -279,6 +279,11 @@
               color: black;
               border: 1px solid black;
             }
+
+            &.disabled{
+              background-color: #777;
+              cursor: not-allowed;
+            }
           }
         }
       }
@@ -677,11 +682,11 @@
   }
 
   .about-container {
-    position: relative; // ضروري باش الموجة تحبس لتحت
+    position: relative;
     height: 80vh;
     display: flex;
-    align-items: center; // Kiy-khlli l-content i-ji f l-wasst 3amoudiyan
-    justify-content: flex-start; // Kiy-khlli l-ktaba t-welli f l-issar
+    align-items: center;
+    justify-content: flex-start;
     padding-left: 5%;
     background: url('/outils/backgrounds/bg-about.png') center/cover no-repeat;
     overflow: hidden;
