@@ -7,16 +7,17 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
 
 import { notyf } from "../../assets/js/notyf";
-import { FaArrowRight, FaCheck, FaRocket } from "react-icons/fa";
+import { FaArrowRight, FaCamera, FaCheck, FaRocket } from "react-icons/fa";
 import { AiOutlineCamera } from "react-icons/ai";
 import { FiInfo } from "react-icons/fi";
+import { Truncate } from "./Truncate";
 
 export const Upload = () => {
   const [step, setStep] = useState(0);
   const navigate = useNavigate();
   const { user } = useAuth();
   // if (!user?.id) return navigate('/login');
-  const steps = ['Get started', 'License', 'Upload', 'Details', 'Publish'];
+  const steps = ['Get started', 'Upload', 'Details', 'Publish'];
   const [photo, setPhoto] = useState({
     title: "",
     type: "",
@@ -31,8 +32,8 @@ export const Upload = () => {
     orientation: "",
     tags: "",
     preview: null,
-    visibility:"",
-    gallery_id:""
+    visibility: "",
+    gallery_id: ""
   });
   const next = () => setStep((s) => s + 1);
   const prev = () => setStep((s) => s - 1);
@@ -55,8 +56,8 @@ export const Upload = () => {
         tags: photo.tags,
         size: photo.size,
         image: photo.preview,
-        visibility:photo.visibility,
-        gallery_id:photo.gallery_id
+        visibility: photo.visibility,
+        gallery_id: photo.gallery_id
       }
       if (file) {
         const res = await axios.post('https://api.pixora.test/upload', { photo_data: payload }, { withCredentials: true, withXSRFToken: true });
@@ -90,16 +91,6 @@ export const Upload = () => {
     <div data-bs-page="upload">
       <div className="dv1">
         <div className="text-center">
-          <div className="mb-3">
-            <img
-              src="/outils/pngs/logo_styled.png"
-              className="img-fluid mt-5"
-              width="150px"
-              alt="logo"
-              title="Welcome to Pixora."
-            />
-          </div>
-          <span className="mt-1 mb-1" style={{ fontWeight: '600' }}>Step {step} of 4</span>
           <div className="container d-flex justify-content-center">
             <div className="progress mb-3">
               <div className="progress-bar" style={{ width: `${progress}%`, background: getColors(step) }}>
@@ -122,10 +113,10 @@ export const Upload = () => {
           >
             <div className="mb-3">
               {step === 0 && <StepZero next={next} step={step} />}
-              {step === 1 && <StepOne next={next} step={step} prev={prev} photo={photo} setPhoto={setPhoto} />}
-              {step === 2 && <StepTwo next={next} prev={prev} step={step} photo={photo} setPhoto={setPhoto} />}
-              {step === 3 && <StepThree next={next} prev={prev} step={step} photo={photo} setPhoto={setPhoto} />}
-              {step === 4 && <StepFour prev={prev} step={step} photo={photo} user={user} />}
+              {/* {step === 1 && <StepOne next={next} step={step} prev={prev} photo={photo} setPhoto={setPhoto} />} */}
+              {step === 1 && <StepTwo next={next} prev={prev} step={step} photo={photo} setPhoto={setPhoto} />}
+              {step === 2 && <StepThree next={next} prev={prev} step={step} photo={photo} setPhoto={setPhoto} />}
+              {step === 3 && <StepFour prev={prev} step={step} photo={photo} user={user} />}
             </div>
           </form>
         </div>
@@ -136,101 +127,130 @@ export const Upload = () => {
 function StepZero({ step, next }) {
   return (
     <section className={`step ${step === 0 ? "active" : ""}`} id="step0" data-step={0}>
-      <div className="welcome-card">
+      {/* <div className="welcome-card">
         <div>
           <AiOutlineCamera className="icon" />
           <h2>Welcome to Pixora</h2>
           <p>Upload your asset in minutes</p>
         </div>
+      </div> */}
+      <div className="step-one-container">
+        <div className="hero-content">
+          {/* Icon Wrapper m3a Glow Effect */}
+          <div className="icon-illustration">
+            <div className="glass-circle">
+              <FaCamera className="camera-icon" />
+            </div>
+            <div className="pulse-ring"></div>
+          </div>
+          <div className="text-group">
+            <h1 className="welcome-title">
+              Ready to share your <span className="gradient-text">Vision?</span>
+            </h1>
+            <p className="welcome-subtitle">
+              Join our community of creators. Your high-quality assets deserve a professional home.
+            </p>
+          </div>
+          <div className="action-area">
+            <button onClick={next} className={`page-link next pixora-primary-btn`}>
+              Get Started
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ms-2">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            <p className="hint-text">Estimated time: 2 minutes</p>
+          </div>
+        </div>
       </div>
-      <div className="pagination">
+      {/* <div className="pagination">
         <li className="page-item">
           <button type="button" onClick={next} className={`page-link next`}>
             Next
           </button>
         </li>
-      </div>
+      </div> */}
     </section>
   )
 }
 
 
-function StepOne({ step, next, prev, photo, setPhoto }) {
-  return (
-    <>
-      <section className={`step ${step === 1 ? "active" : ""}`} id="step1" data-step={1}>
-        <div>
-          <p style={{ fontWeight: 500 }}>
-            Choose how you want your photo to be shared on Pixora.
-          </p>
-        </div>
-        <div className="cards">
-          <label className="card">
-            <input
-              type="radio"
-              name="typePhoto"
-              value="free"
-              onChange={(e) => setPhoto({ ...photo, type: e.target.value })}
-              hidden
-            />
-            <div className="card-body">
-              <img
-                src="/outils/svg/image.svg"
-                className="chooseTypeIcon mt-2 mb-3"
-                width="50px"
-                alt=""
-              />
-              <h3>free photo</h3>
-              <p>
-                Choose this option if you want to publish your photo for free.
-                The photo will be available for public use according to
-                Pixora’s usage guidelines.
-              </p>
-              <i>Free to use, no licensing fees.</i>
-            </div>
-          </label>
-          <label className="card">
-            <input
-              type="radio"
-              name="typePhoto"
-              value="licensed"
-              onChange={(e) => setPhoto({ ...photo, type: e.target.value })}
-              hidden
-            />
-            <div className="card-body">
-              <img
-                src="outils/svg/scale.svg"
-                className="chooseTypeIcon mt-2 mb-3"
-                width="50px"
-                alt=""
-              />
-              <h3>Licensed Photo</h3>
-              <p>
-                Choose this option if you want to sell your photo or control
-                how it is used. You can set licensing terms, pricing, and
-                usage rights, including commercial use.
-              </p>
-              <i>Sell your photo with defined usage rights.</i>
-            </div>
-          </label>
-          <input type="hidden" name="photoType" id="photoType" />
-        </div>
-        <div className="pagination">
-          <li className="page-item">
-            <button type="button" onClick={prev} className="page-link prev">
-              Prev
-            </button>
-          </li>
-          <li className="page-item">
-            <button type="button" onClick={next} className={`page-link next ${photo.type === "" ? "disabled" : ""}`}>
-              Next
-            </button>
-          </li>
-        </div>
-      </section>
-    </>
-  );
-}
+// function StepOne({ step, next, prev, photo, setPhoto }) {
+//   return (
+//     <>
+//       <section className={`step ${step === 1 ? "active" : ""}`} id="step1" data-step={1}>
+//         <div>
+//           <p style={{ fontWeight: 500 }}>
+//             Choose how you want your photo to be shared on Pixora.
+//           </p>
+//         </div>
+//         <div className="cards">
+//           <label className="card">
+//             <input
+//               type="radio"
+//               name="typePhoto"
+//               value="free"
+//               onChange={(e) => setPhoto({ ...photo, type: e.target.value })}
+//               hidden
+//             />
+//             <div className="card-body">
+//               <img
+//                 src="/outils/svg/image.svg"
+//                 className="chooseTypeIcon mt-2 mb-3"
+//                 width="50px"
+//                 alt=""
+//               />
+//               <h3>free photo</h3>
+//               <p>
+//                 Choose this option if you want to publish your photo for free.
+//                 The photo will be available for public use according to
+//                 Pixora’s usage guidelines.
+//               </p>
+//               <i>Free to use, no licensing fees.</i>
+//             </div>
+//           </label>
+//           <label className="card">
+//             <input
+//               type="radio"
+//               name="typePhoto"
+//               value="licensed"
+//               onChange={(e) => setPhoto({ ...photo, type: e.target.value })}
+//               hidden
+//             />
+//             <div className="card-body">
+//               <img
+//                 src="outils/svg/scale.svg"
+//                 className="chooseTypeIcon mt-2 mb-3"
+//                 width="50px"
+//                 alt=""
+//               />
+//               <h3>Licensed Photo</h3>
+//               <p>
+//                 Choose this option if you want to sell your photo or control
+//                 how it is used. You can set licensing terms, pricing, and
+//                 usage rights, including commercial use.
+//               </p>
+//               <i>Sell your photo with defined usage rights.</i>
+//             </div>
+//           </label>
+//           <input type="hidden" name="photoType" id="photoType" />
+//         </div>
+//         <div className="pagination">
+//           <li className="page-item">
+//             <button type="button" onClick={prev} className="page-link prev">
+//               Prev
+//             </button>
+//           </li>
+//           <li className="page-item">
+//             <button type="button" onClick={next} className={`page-link next ${photo.type === "" ? "disabled" : ""}`}>
+//               Next
+//             </button>
+//           </li>
+//         </div>
+//       </section>
+//     </>
+//   );
+// }
 function StepTwo({ step, prev, next, photo, setPhoto }) {
   const fileRef = React.useRef(null);
   const [open, setOpen] = useState(false);
@@ -273,7 +293,7 @@ function StepTwo({ step, prev, next, photo, setPhoto }) {
 
   return (
     <>
-      <section className={`step ${step === 2 ? "active" : ""}`} id="step2" data-step={2}>
+      <section className={`step ${step === 1 ? "active" : ""}`} id="step2" data-step={1}>
         <div className="container mt-2 mb-2">
           <div className="card uploadCard">
             <div className="card-body">
@@ -357,19 +377,19 @@ function StepTwo({ step, prev, next, photo, setPhoto }) {
 }
 function StepThree({ step, prev, next, photo, setPhoto }) {
   const [categories, setCategories] = useState([]);
-  const [galleries,setGalleries] = useState([]);
-  useEffect(()=>{
-    try{
-      axios.get('https://api.pixora.test/get_galleries',{withCredentials:true,withXSRFToken:true})
-      .then(res => {
-        if (res.data.success){
-          setGalleries(res.data.galleries);
-        }
-      });
-    }catch(err){
+  const [galleries, setGalleries] = useState([]);
+  useEffect(() => {
+    try {
+      axios.get('https://api.pixora.test/get_galleries', { withCredentials: true, withXSRFToken: true })
+        .then(res => {
+          if (res.data.success) {
+            setGalleries(res.data.galleries);
+          }
+        });
+    } catch (err) {
       console.log(err.response?.data);
     }
-  },[]);
+  }, []);
   const url = 'https://api.pixora.test/get_categories';
   useEffect(() => {
     try {
@@ -385,71 +405,88 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
   }, []);
   return (
     <>
-      <section className={`step ${step === 3 ? "active" : ""}`} id="step3" data-step={3}>
-        <h2 className="fw-semibold d-flex align-items-center justify-content-center text-dark gap-1"><FiInfo /> Photo Details</h2>
+      <section className={`step ${step === 2 ? "active" : ""}`} id="step3" data-step={3}>
+        <div className="text-center mx-auto d-flex justify-content-center align-items-center flex-column mt-3 mb-3">
+          <h2 className="fw-bold welcome-title">
+            <FiInfo className="me-2 text-primary" /> Photo Details
+          </h2>
+          <p className="text-muted">Tell us more about your masterpiece.</p>
+        </div>
         <div className="container">
-          <div className="photo_details d-flex flex-column align-items-center">
-            <div className="form-floating">
+          <div className="photo_details mx-auto">
+            <div className="input-group-custom">
+              <label htmlFor="titlePhoto" className="form-label">
+                Title *
+              </label>
               <input
                 name="title"
                 type="text"
-                id="titlePhoto"
+                // id="titlePhoto"
                 className="form-control"
-                placeholder="Title of photo ..."
+                placeholder="Give it a catchy name..."
                 required
                 value={photo.title}
                 maxLength={100}
                 onChange={(e) => setPhoto({ ...photo, title: e.target.value })}
               />
-              <label htmlFor="titlePhoto" className="form-label">
-                Title *
-              </label>
+
               <p id="titleErr" />
             </div>
-            <div className="form-floating">
+            <div className="input-group-custom">
+              <label htmlFor="descriptionPhoto" className="form-label">
+                Description (optional)
+              </label>
               <textarea
                 name="description"
-                id="descriptionPhoto"
+                // id="descriptionPhoto"
                 className="form-control"
-                placeholder="Description of photo ..."
+                placeholder="The story behind this shot..."
                 required
                 value={photo.description}
                 onChange={(e) => setPhoto({ ...photo, description: e.target.value })}
               />
-              <label htmlFor="descriptionPhoto" className="form-label">
-                Description (optional)
-              </label>
+
               <p id="descriptionErr" />
             </div>
-            <div className="form-floating">
-              <select name="categorie" value={photo.category} className="form-select" id="categoriePhoto" onChange={(e) => setPhoto({ ...photo, category: e.target.value })}>
-                <option>Select category</option>
-                {
-                  categories?.map(c => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))
-                }
-              </select>
-              <label htmlFor="categoriePhoto" className="form-label">
-                Category *
-              </label>
-              <p id="categorieErr" />
+            <div className="row w-100 g-3">
+              <div className="col-md-6">
+
+                <div className="input-group-custom">
+                  <label htmlFor="categoriePhoto" className="form-label">
+                    Category *
+                  </label>
+                  <select name="categorie" value={photo.category} className="form-select" id="categoriePhoto" onChange={(e) => setPhoto({ ...photo, category: e.target.value })}>
+                    <option>Select category</option>
+                    {
+                      categories?.map(c => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))
+                    }
+                  </select>
+
+                  <p id="categorieErr" />
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="input-group-custom">
+                  <label htmlFor="galleryPhoto" className="form-label">
+                    Gallery (Optional)
+                  </label>
+                  <select name="gallery" value={photo.gallery_id} className="form-select" id="galleryPhoto" onChange={(e) => setPhoto({ ...photo, gallery_id: e.target.value })}>
+                    <option value={null}>Select gallery</option>
+                    {
+                      galleries?.map(g => (
+                        <option key={g.id} value={g.id}>{g.title}</option>
+                      ))
+                    }
+                  </select>
+
+                  <p id="galleryErr" />
+                </div>
+              </div>
             </div>
-            <div className="form-floating">
-              <select name="gallery" value={photo.gallery_id} className="form-select" id="galleryPhoto" onChange={(e) => setPhoto({ ...photo, gallery_id: e.target.value })}>
-                <option value={null}>Select gallery</option>
-                {
-                  galleries?.map(g => (
-                    <option key={g.id} value={g.id}>{g.title}</option>
-                  ))
-                }
-              </select>
-              <label htmlFor="galleryPhoto" className="form-label">
-                Gallery
-              </label>
-              <p id="galleryErr" />
-            </div>
-            <div className="form-floating">
+            <div className="input-group-custom">
+              <label htmlFor="tagsPhoto" className="form-label">Tags (optional)</label>
               <textarea
                 name="tags"
                 id="tagsPhoto"
@@ -459,32 +496,18 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
                 value={photo.tags}
                 onChange={(e) => setPhoto({ ...photo, tags: e.target.value })}
               />
-              <label htmlFor="tagsPhoto" className="form-label">Tags (optional)</label>
+
             </div>
-            <div className="form-floating">
-              <input
-                name="location"
-                id="locationPhoto"
-                className="form-control"
-                type="text"
-                placeholder="Location of photo ..."
-                required
-                value={photo.location}
-                onChange={(e) => setPhoto({ ...photo, location: e.target.value })}
-              />
-              <label htmlFor="locationPhoto" className="form-label">
-                Location (optional)
-              </label>
-              <p id="locationErr" />
-            </div>
-            <div className="form-floating">
-              <select name="visibility" value={photo.visibility} className="form-select" id="visibilityPhoto" onChange={(e) => setPhoto({ ...photo, visibility: e.target.value })}>
-                <option value="private">Private</option>
-                <option value="public">Public</option>
-              </select>
+            <div className="input-group-custom">
               <label htmlFor="categoriePhoto" className="form-label">
-                Visibility
+                Who can see this?
               </label>
+              <select name="visibility" value={photo.visibility} className="form-select" id="visibilityPhoto" onChange={(e) => setPhoto({ ...photo, visibility: e.target.value })}>
+                <option value="" disabled hidden>Select who can see this...</option>
+                <option value="private">Private (Only you)</option>
+                <option value="public">Public (Anyone can discover)</option>
+              </select>
+
               <p id="categorieErr" />
             </div>
           </div>
@@ -508,7 +531,7 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
 function StepFour({ step, prev, photo, user }) {
   return (
     <>
-      <section className={`step ${step === 4 ? "active" : ""}`} id="step4" data-step={4}>
+      <section className={`step ${step === 3 ? "active" : ""}`} id="step4" data-step={4}>
         <h3 className="fw-bold">Your file is ready to be published <FaRocket /></h3>
         <p>Review the information below, then click Publish to make it available.</p>
         <div className="publish-card">
@@ -531,7 +554,12 @@ function StepFour({ step, prev, photo, user }) {
               {
                 photo.description && (<li className="list-group-item">
                   <span>Description</span>
-                  <strong>{photo.description}</strong>
+                  <Truncate text={photo?.description} maxLines={3}>
+                    {({ text, open, toggle, showMore, className, style }) => (
+                      <><strong className={className} style={style}>{text}</strong></>
+                    )}
+                  </Truncate>
+                  {/* <strong>{photo.description}</strong> */}
                 </li>)
               }
               {

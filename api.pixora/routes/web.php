@@ -15,6 +15,7 @@ use App\Http\Controllers\GetHeroImages;
 use App\Http\Controllers\GetPhotos;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\MakeFeaturedPhoto;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\Photographer;
 use App\Http\Controllers\ProfileController;
@@ -138,5 +139,7 @@ Route::get('/search', [SearchAtPhotos::class, 'getResult']);
 Route::get('/admin_analytics', [AdminAnalytics::class, 'getStatistics'])->middleware('auth:sanctum');
 
 Route::get('/get_hero_images',[GetHeroImages::class, 'getHeroImages']);
+
+Route::post('/change_featured/{id}',[MakeFeaturedPhoto::class, 'makeFeaturedPhoto'])->middleware('auth:sanctum');
 
 require __DIR__ . '/auth.php';

@@ -34,8 +34,8 @@ class AdminAnalytics extends Controller
                 ->get();
 
             $usersThisMonth = DB::table('users')
-                ->whereMonth('created_at', now()->month())
-                ->whereYear('created_at', now()->year())
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
                 ->orderByDesc('created_at')
                 ->limit(4)
                 ->get();
@@ -93,6 +93,12 @@ class AdminAnalytics extends Controller
                 ->whereIn('role',['admin','editor'])
                 ->limit(5)
                 ->get();
+
+            $featured_photos = DB::table('photos')
+                ->select('id','title','filename','is_featured')
+                ->where('is_featured','=',true)
+                ->limit(4)
+                ->get();
             return response()->json([
                 'success' => true,
                 'data' => [
@@ -114,7 +120,8 @@ class AdminAnalytics extends Controller
                     'top_uploaders' => $top_uploaders,
                     'photos_this_week' => $photo_this_week,
                     'most_commentsPhotos' => $most_commentsPhotos,
-                    'staff' => $staff
+                    'staff' => $staff,
+                    'featured_photos' => $featured_photos
                 ]
             ]);
         } catch (\Exception $e) {

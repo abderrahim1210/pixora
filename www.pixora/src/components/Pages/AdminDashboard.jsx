@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaCamera, FaCameraRetro, FaChartArea, FaChartLine, FaCheckCircle, FaClock, FaComment, FaComments, FaFlag, FaMedal, FaTimesCircle, FaTrophy, FaUserPlus, FaUsers, FaUserShield } from 'react-icons/fa'
+import { FaCamera, FaCameraRetro, FaChartArea, FaChartLine, FaCheckCircle, FaClock, FaComment, FaComments, FaFlag, FaMedal, FaStar, FaTimesCircle, FaTrophy, FaUserPlus, FaUsers, FaUserShield } from 'react-icons/fa'
 import { MdComment, MdEdit, MdPending } from 'react-icons/md'
 import { Truncate } from './Truncate'
 import { Link } from 'react-router-dom'
@@ -146,7 +146,18 @@ const AdminDashboard = ({ analytics }) => {
                                 </div>
                                 <hr />
                                 <div>
-                                    <h2 className='d-flex align-items-center gap-2'><FaComments />Most photos comments <span className='text-primary'>({analytics.most_comments?.length ?? 0})</span></h2>
+                                    <h2 className='d-flex align-items-center gap-2'><FaComments />Featured photos <span className='text-primary'>({analytics.featured_photos?.length ?? 0})</span></h2>
+                                    {
+                                        analytics.featured_photos?.length > 0 ? (
+                                            <PhotosTemplate photos={analytics.featured_photos} />
+                                        ) : (
+                                            <EmptyContent icon={<FaStar className='faIcon' />} text={"No featured photos !"} />
+                                        )
+                                    }
+                                </div>
+                                <hr />
+                                <div>
+                                    <h2 className='d-flex align-items-center gap-2'><FaComments />Most photos comments <span className='text-primary'>({analytics.most_commentsPhotos?.length ?? 0})</span></h2>
                                     {
                                         analytics.most_commentsPhotos?.length > 0 ? (
                                             <PhotosTemplate photos={analytics.most_commentsPhotos} />

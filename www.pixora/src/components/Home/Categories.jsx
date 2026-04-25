@@ -6,7 +6,12 @@ const Categories = () => {
             className="container-fluid tab-pane fade show mt-3 mb-3"
             id="categories"
         >
-            <h1 className="fw-bold text-center">Categories</h1>
+            <div className="for-you-header d-flex justify-content-center align-items-center flex-column text-center gap-1 mb-2">
+                <h1 className="fw-bold text-center">Categories</h1>
+                <span className="text-muted fw-light greeting-text">
+                    — Explore the world through different lenses. —
+                </span>
+            </div>
             <div className="container-fluid mt-3 mb-3">
                 <div className="categories">
                     <div className="category">

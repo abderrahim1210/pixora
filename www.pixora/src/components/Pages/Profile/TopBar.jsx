@@ -28,7 +28,7 @@ const TopBar = ({ user }) => {
                     </li>
                     <li className="nav-item">
                         <a
-                            data-bs-target="#setting"
+                            data-bs-target="#settings"
                             data-bs-toggle="tab"
                             className="nav-link"
                         >

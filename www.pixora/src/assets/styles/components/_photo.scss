@@ -556,3 +556,63 @@
     box-shadow: 0 4px 10px rgba(0, 123, 255, 0.1);
   }
 }
+
+
+.pixora-admin-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  margin-bottom: 12px;
+  
+  // Nfs style d l-bouton Delete (Outline)
+  background: transparent;
+  border: 1.5px solid #e2e8f0; // Lon grey khfif b7al delete
+  border-radius: 50px; // Nfs l-curvature dyal delete button li 3ndk
+  
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  .btn-icon {
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+  }
+
+  // Hover normal
+  &:hover {
+    border-color: #cbd5e1;
+    background-color: #f8fafc;
+    color: #334155;
+    
+    .btn-icon {
+      transform: scale(1.1);
+    }
+  }
+
+  // Fach kiy-welli Featured (The "Active" Theme)
+  &.featured-active {
+    border-color: #f59e0b; // Gold border
+    color: #b45309; // Gold text
+    background-color: #fffdf5; // Soft gold background
+
+    .btn-icon {
+      fill: #f59e0b; // Kat-3mmer l-najma
+      stroke: #f59e0b;
+    }
+
+    &:hover {
+      background-color: #fefce8;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+    }
+  }
+
+  // Active click effect
+  &:active {
+    transform: scale(0.97);
+  }
+}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaBan, FaCamera, FaFacebook, FaGlobe, FaInstagram, FaMapPin, FaTwitter } from 'react-icons/fa'
+import { FaBan, FaCamera, FaFacebook, FaGlobe, FaIdBadge, FaInstagram, FaMapPin, FaTwitter } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import PhotosTemplate from '../PhotosTemplate'
 import { EmptyContent } from '../EmptyContent'

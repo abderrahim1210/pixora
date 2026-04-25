@@ -29,7 +29,7 @@ class UploadController extends Controller
         $title = $photo['title'];
         $description = $photo['description'] ?? null;
         $category = $photo['category'] ?? null;
-        $type = $photo['type'] ?? null;
+        // $type = $photo['type'] ?? null;
         $width = $photo['width'] ?? null;
         $height = $photo['height'] ?? null;
         $ratio = $photo['ratio'] ?? null;
@@ -82,7 +82,7 @@ class UploadController extends Controller
             'user_id' => $user->id,
             'title' => $title,
             'description' => $description,
-            'type' => $type,
+            // 'type' => $type,
             'filename' => $filename,
             'category_id' => $category,
             'size' => $newSize ?? ($photo['size']),

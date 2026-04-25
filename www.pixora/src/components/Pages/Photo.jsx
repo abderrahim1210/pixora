@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Navbar } from "./Layouts/Navbar";
-import { FiCopy, FiFacebook, FiHeart, FiInstagram, FiTwitter } from "react-icons/fi";
+import { FiCopy, FiFacebook, FiHeart, FiInstagram, FiStar, FiTwitter } from "react-icons/fi";
 import { FaCalendar, FaCheck, FaCheckCircle, FaClock, FaComment, FaCrown, FaEye, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaPlus, FaShare, FaSync, FaTags, FaUser, FaWhatsapp } from "react-icons/fa";
 import { FaLocationDot, FaPencil, FaX } from "react-icons/fa6";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -96,6 +96,22 @@ export const Photo = (props) => {
             setLiked(oldLiked);
         }
     }
+
+    const handleFeaturedToggle = () => {
+        try {
+            const changeStatus = async () => {
+                const res = await axios.post(`https://api.pixora.test/change_featured/${id}`, { withCredentials: true, withXSRFToken: true });
+                if (!res.data.success) {
+                    console.log(res.data.message);
+                }
+                setPhoto(prev => ({ ...prev, is_featured: !prev.is_featured }));
+            }
+            changeStatus();
+        } catch (err) {
+            console.log(err?.response?.data);
+        }
+    }
+
     useEffect(() => {
         try {
             axios.get('https://api.pixora.test/get_galleries', { withCredentials: true, withXSRFToken: true })
@@ -435,22 +451,6 @@ export const Photo = (props) => {
                                     <FaComment />
                                     <p>{comments?.length ?? 0} Comments</p>
                                 </li>
-                                {
-                                    photo.type === "licensed" && (<li>
-                                        <FaLayerGroup />
-                                        <p className={`badge text-capitalize rounded-pill d-flex align-items-center gap-1 p-2 ${photo.status === "approved" ? "bg-success-subtle text-success" : photo.status === "pending" ? "bg-warning-subtle text-warning" : "bg-danger-subtle text-danger"}`}>
-                                            {
-                                                photo.status === "pending" ? <FaClock /> : photo.status === "approved" ? <FaCheckCircle /> : <FaX />
-                                            }
-                                            {photo.status}
-                                        </p>
-                                    </li>)
-                                }
-                                <li>
-                                    {
-                                        photo.type === "free" ? (<><FaLockOpen /><p>Free</p></>) : (<><FaLock /><p>Licensed</p></>)
-                                    }
-                                </li>
                                 <li>
                                     <FaTags />
                                     {
@@ -478,16 +478,29 @@ export const Photo = (props) => {
                                     }
                                     {isUser && (<button className="btn p-0 pencil-item" onClick={() => dispatch(toggleEdit("visibility"))}>{!isEdit.visibility ? (<FaPencil />) : (<FaCheck />)}</button>)}
                                 </li>
-                                <li>
-                                    {!!photo.is_featured && (
-                                        <Tooltip text={'This photo was handpicked by our curators for its outstanding composition, creativity, and technical excellence.'}>
-                                            <div className="featured-pill mb-2">
-                                                <FaCrown className="crown-icon" />
-                                                <span>Featured Content</span>
-                                            </div>
-                                        </Tooltip>
-                                    )}
-                                </li>
+                                {
+                                    user?.role === 'user' || user?.role === 'editor' && (
+                                        <li>
+                                            {!!photo.is_featured && (
+                                                <Tooltip text={'This photo was handpicked by our curators for its outstanding composition, creativity, and technical excellence.'}>
+                                                    <div className="featured-pill mb-2">
+                                                        <FaCrown className="crown-icon" />
+                                                        <span>Featured Content</span>
+                                                    </div>
+                                                </Tooltip>
+                                            )}
+                                        </li>
+                                    )
+                                }
+
+                                <button
+                                    className={`pixora-admin-btn ${photo.is_featured ? 'featured-active' : ''}`}
+                                    onClick={handleFeaturedToggle}
+                                >
+                                    <FiStar className="btn-icon" />
+                                    <span>{photo.is_featured ? 'Featured Content' : 'Make Featured'}</span>
+                                </button>
+
                                 {user?.id === photo.user_id && (<div className="d-flex justify-content-end align-items-center flex-column mb-2">
                                     <button
                                         type="reset"

@@ -1,6 +1,8 @@
 import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 const PhotographersTemplate = ({ photographers }) => {
+    const navigate = useNavigate();
     return (
         photographers?.map((u) => (
             <div className="card photographers" key={u.id}>
@@ -18,16 +20,16 @@ const PhotographersTemplate = ({ photographers }) => {
                         />
                     </div>
                     <div className="mt-3 mb-3">
-                        <a href="profil_preview.php?id=<?= $user['id']; ?>">
+                        <span>
                             {u.username}
-                        </a>
+                        </span>
                     </div>
                     <div className="mt-3 mb-3">
                         <button
                             type="button"
                             className="followButton btn"
                             id="followButton"
-                            onClick={() => navigate(`${user.username}/myprofile`)}
+                            onClick={() => navigate(`/photographer/${u.id}`)}
                         >
                             View profile
                         </button>
