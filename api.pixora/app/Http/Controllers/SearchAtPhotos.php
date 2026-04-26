@@ -10,18 +10,28 @@ class SearchAtPhotos extends Controller
     public function getResult(Request $request)
     {
         $searchTerme = $request->query('terme');
-
-        if (empty($searchTerme)) {
-            return response()->json([
-                'success' => true,
-                'result' => []
-            ]);
-        }
+        
+        $type = $request->query('type');
 
         try {
-            $result = DB::table('photos as p')->join('users', 'p.user_id', '=', 'users.id')->join('categories as c','p.category_id','=','c.id')->select('p.id', 'p.title', 'p.filename', 'p.is_featured')->where(function ($query) use ($searchTerme) {
-                $query->where('p.title', 'LIKE', "%{$searchTerme}%")->orWhere('p.tags', 'LIKE', "%{$searchTerme}%")->orWhere('p.description', 'LIKE', "%{$searchTerme}%")->orWhere('c.name','LIKE',"%{$searchTerme}%");
-            })->limit(40)->get();
+            $query = DB::table('photos as p')->join('users', 'p.user_id', '=', 'users.id')->join('categories as c', 'p.category_id', '=', 'c.id')->select('p.id', 'p.title', 'p.filename', 'p.is_featured');
+
+            if (!empty($searchTerme)) {
+                $query->where(function ($q) use ($searchTerme) {
+                    $q->where('p.title', 'LIKE', "%{$searchTerme}%")->orWhere('p.tags', 'LIKE', "%{$searchTerme}%")->orWhere('p.description', 'LIKE', "%{$searchTerme}%")->orWhere('c.name', 'LIKE', "%{$searchTerme}%");
+                });
+            }
+            if ($type === 'popular') {
+                $query->where('p.is_featured', true)->inRandomOrder();
+            } elseif ($type === 'trending') {
+                $query->orderBy('p.id', 'desc');
+            }
+
+            if (empty($searchTerme) && empty($type)){
+                $query->latest('p.created_at');
+            }
+
+            $result = $query->limit(40)->get();
 
             return response()->json([
                 'success' => true,

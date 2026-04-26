@@ -215,7 +215,7 @@ const Photograher = () => {
                                     <div className="mt-3 mb-3">
                                         <button
                                             type="button"
-                                            className={`followButton ${followClasse} ${photographer && photographer?.role === "admin" && "disabled"} btn`}
+                                            className={`followButton ${followClasse} ${photographer && user?.role === "admin" && "disabled"} btn`}
                                             id="followButton"
                                             onClick={() => addFollow(photographer.id)}
                                         >

@@ -13,13 +13,14 @@ import { FaPhotoFilm } from 'react-icons/fa6';
 const SearchPhotos = () => {
     const [searchParams] = useSearchParams();
     const searchTerme = searchParams.get('searchTerme') || '';
+    const typeTerme = searchParams.get('type') || '';
     const [search, setSearch] = useState('');
-    const [visible,setVisible] = useState(16);
+    const [visible, setVisible] = useState(16);
     const fetchPhotos = async ({ queryKey }) => {
-        const [_, term] = queryKey;
-        if (!term) return [];
+        const [_, term, type] = queryKey;
+        if (!term && !type) return [];
         try {
-            const res = await axios.get(`https://api.pixora.test/search`, { params: { terme: term } }, { withCredentials: true });
+            const res = await axios.get(`https://api.pixora.test/search`, { params: { terme: term, type: type } , withCredentials: true });
             if (res.data.success) {
                 return res.data.result;
             }
@@ -30,9 +31,9 @@ const SearchPhotos = () => {
         }
     }
     const { data: photos = [], isLoading, error } = useQuery({
-        queryKey: ['photos', searchTerme],
+        queryKey: ['photos', searchTerme, typeTerme],
         queryFn: fetchPhotos,
-        enabled: !!searchTerme
+        enabled: !!searchTerme || !!typeTerme
     });
 
     const filtredPhotos = photos.filter(p => p.title.toLowerCase().includes(search.toLowerCase()));
@@ -71,7 +72,7 @@ const SearchPhotos = () => {
                     <hr />
                 </div>
                 {
-                    !isLoading ? filtredPhotos?.length > 0 ? ((<PhotosTemplate photos={filtredPhotos} />) ) : (<EmptyContent icon={<FaPhotoFilm className="faIcon" />} text={"No photos found for this term !"} />) : (<Spinner type={'mini'} />)
+                    !isLoading ? filtredPhotos?.length > 0 ? ((<PhotosTemplate photos={filtredPhotos} />)) : (<EmptyContent icon={<FaPhotoFilm className="faIcon" />} text={"No photos found for this term !"} />) : (<Spinner type={'mini'} />)
                 }
             </div>
             <Footer type={'footer'} />

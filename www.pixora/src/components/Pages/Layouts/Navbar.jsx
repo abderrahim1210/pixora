@@ -48,30 +48,30 @@ export const Navbar = ({type}) => {
                   </a>
                   <ul className="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a href="dashboard.php" className="dropdown-item">
+                      <Link to={'/search?type=popular'}  className="dropdown-item">
                         popular photos
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
-                        href="#"
+                      <Link
+                        to={'/search?type=trending'}
                         className="dropdown-item"
-                        data-bs-target="#language"
-                        data-bs-toggle="modal"
                       >
                         new &amp; trending
-                      </a>
+                      </Link>
                     </li>
                     
                     <li>
-                      <a
-                        href="#about"
-                        data-bs-target="#about"
+                      <Link
+                        // href="#categories"
+                        data-bs-target="#categories"
                         data-bs-toggle="tab"
+                        // role="tab"
+                        // to={'/#categories'}
                         className="dropdown-item"
                       >
                         categories
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -79,7 +79,7 @@ export const Navbar = ({type}) => {
               <li className="nav-item">
                 <div className="dropdown">
                   <a
-                    href="#"
+                    href="#about"
                     className="nav-link dropdown-toggle dropdownIcon"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
