@@ -61,7 +61,7 @@ export const Navbar = ({type}) => {
                       </Link>
                     </li>
                     
-                    <li>
+                    {/* <li>
                       <Link
                         // href="#categories"
                         data-bs-target="#categories"
@@ -72,7 +72,7 @@ export const Navbar = ({type}) => {
                       >
                         categories
                       </Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
               </li>
@@ -134,7 +134,7 @@ export const Navbar = ({type}) => {
                         galleries
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <a
                         href="#"
                         className="dropdown-item"
@@ -144,7 +144,7 @@ export const Navbar = ({type}) => {
                       >
                         About
                       </a>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
               </li>

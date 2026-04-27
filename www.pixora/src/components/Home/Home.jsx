@@ -260,7 +260,7 @@ export const Home = () => {
         </div>
         <figure>
           <figcaption>
-            Photo By {heroImage.username}
+            Photo By {heroImage.username?.split('_')[0]}
           </figcaption>
         </figure>
         <br />
