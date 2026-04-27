@@ -41,16 +41,13 @@ class Galleries extends Controller
         ]);
     }
 
-    public function GetGallery(String $id)
+    public function GetGallery($id)
     {
-        $user = Auth::user();
-
-        // $gallery = Gallery::find($id);
-
+        // $user = Auth::user();
 
         $gallery = Gallery::with(['photos' => function ($q) {
-            $q->select('photos.id','filename','title','type','width','height','size');
-        }])->where('id', $id)->where('user_id', $user->id)->first();
+            $q->select('photos.id','filename','title','width','height','size');
+        }])->where('id', $id)->first();
 
         if (!$gallery) {
             return response()->json([
@@ -67,7 +64,7 @@ class Galleries extends Controller
 
     public function DeleteGallery($id)
     {
-        $user = Auth::user();
+        $user = Auth::id();
         if (!$user){
             return response()->json([
                 'success' => false,
@@ -75,7 +72,7 @@ class Galleries extends Controller
             ]);
         }
 
-        $gallery = Gallery::with(['photos'])->where('id',$id)->where('user_id',$user->id)->first();
+        $gallery = Gallery::with(['photos'])->where('id',$id)->orWhere('user_id',$user)->first();
 
         if (!$gallery){
             return response()->json([

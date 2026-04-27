@@ -113,7 +113,7 @@ Route::get('/get_users/{type}', [FetchUsers::class, 'getUsers']);
 
 Route::post('/addFollow', [AddFollow::class, 'addFollow'])->middleware('auth:sanctum');
 
-Route::get('/get_gallery/{id}', [Galleries::class, 'GetGallery'])->middleware('auth:sanctum');
+Route::get('/get_gallery/{id}', [Galleries::class, 'GetGallery']);
 Route::delete('/delete_gallery/{id}', [Galleries::class, 'DeleteGallery'])->middleware('auth:sanctum');
 
 Route::get('/get_infos_photographers/{id}', [Photographer::class, 'getInformations']);
