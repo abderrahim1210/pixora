@@ -5,6 +5,7 @@ import PageSkeleton from '../Pages/PageSkeleton'
 import { FaPhotoFilm } from 'react-icons/fa6'
 import Photos from './Photos'
 import { Link } from 'react-router-dom'
+import { EmptyContent } from '../Pages/EmptyContent'
 
 const ForYou = ({ photos, user, isLoading, users, follows, addFollow, getGreeting, slugiFy, handleLike }) => {
     return (

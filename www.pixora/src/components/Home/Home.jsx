@@ -45,7 +45,7 @@ export const Home = () => {
   const [usrSearched, setUsrSearched] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
-  const [galleries, setGalleries] = useState([]);
+  // const [galleries, setGalleries] = useState([]);
   const [term, setTerm] = useState('');
   const [heroImage, setHeroImage] = useState([]);
 
@@ -67,6 +67,7 @@ export const Home = () => {
   const users = data?.users || [];
   const photos = data?.photos || [];
   const explorePhotos = data?.explore_photos || [];
+  const galleries = data?.galleries || [];
 
   const { data: follows = [] } = useQuery({
     queryKey: ['follows'],
@@ -268,7 +269,7 @@ export const Home = () => {
 
       <div className="tab-content">
         <ForYou photos={photos} user={user} isLoading={isLoading} users={users} follows={follows} addFollow={addFollow} getGreeting={getGreeting} slugiFy={slugiFy} handleLike={handleLike} />
-        <Explore photos={explorePhotos} user={user} slugiFy={slugiFy} handleLike={handleLike} />
+        <Explore photos={explorePhotos} user={user} slugiFy={slugiFy} handleLike={handleLike} galleries={galleries} />
         <Categories />
         <About />
       </div>

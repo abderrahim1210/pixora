@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gallery;
 use App\Models\Photo;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -40,8 +41,12 @@ class Home extends Controller
                 $q->where('user_id', $current_user->id);
             }]);
         })->where('visibility', 'public')->orderBy('likes_count', 'desc')->inRandomOrder()->get();
+
+        $galleries = Gallery::with(['user:id,username','photos' => function ($q) {
+            $q->select('photos.id','filename')->limit(4);
+        }])->limit(40)->get();
         $users = User::select('id', 'username', 'photo_profile')->where('role', 'user')->get();
 
-        return response()->json(['success' => true, 'photos' => $photos, 'explore_photos' => $explorePhotos, 'current_user' => $current_user, 'users' => $users]);
+        return response()->json(['success' => true, 'photos' => $photos, 'explore_photos' => $explorePhotos, 'current_user' => $current_user, 'users' => $users,'galleries' => $galleries]);
     }
 }

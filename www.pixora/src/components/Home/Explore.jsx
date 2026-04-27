@@ -1,7 +1,9 @@
 import React from 'react'
 import Photos from './Photos'
+import GalleryCard from '../Pages/GalleryCard';
+import { Link } from 'react-router-dom';
 
-const Explore = ({ photos, user, slugiFy, handleLike }) => {
+const Explore = ({ photos, user, slugiFy, handleLike, galleries }) => {
     const getExploreGreeting = () => {
         const messages = [
             "Uncover hidden gems from our community.",
@@ -24,8 +26,25 @@ const Explore = ({ photos, user, slugiFy, handleLike }) => {
             </div>
             <div className='photos'>
                 {
-                    photos?.map(p => (
-                        <Photos key={p.id} p={p} user={user} slugiFy={slugiFy} handleLike={handleLike} />
+                    photos?.map((p, index) => (
+                        <React.Fragment key={index}>
+                            {(index + 1) % 5 === 0 && (
+                                <div className="feed-break-section">
+                                    <div className="section-header">
+                                        <h4>Featured Galleries</h4>
+                                        <Link to="/galleries">See all</Link>
+                                    </div>
+                                    <div className='galleries-grid-inner'>
+                                        {
+                                            galleries && galleries.length > 0 && galleries.slice(0, 4).map(g => (
+                                                <GalleryCard g={g} key={g.id} />
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            )}
+                            <Photos key={p.id} p={p} user={user} slugiFy={slugiFy} handleLike={handleLike} />
+                        </React.Fragment>
                     ))
                 }
             </div>
