@@ -17,5 +17,10 @@ class Comment extends Model
 
     public function getCreatedAtHumanAttribute(){
         return $this->created_at->diffForHumans();
-    }    
+    }
+
+    public function reports()
+    {
+        return $this->morphMany(Report::class, 'reportable');
+    }
 }

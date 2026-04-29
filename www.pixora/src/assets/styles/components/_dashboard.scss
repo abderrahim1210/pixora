@@ -10,7 +10,6 @@
   body {
     font-family: "Outfit", "sans-serif";
     font-size: 16px;
-    background-color: #f5f5f5;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -18,10 +17,6 @@
 
   .main-content {
     flex: 1;
-  }
-
-  header {
-    background-color: white;
   }
 
   .form-control:focus,
@@ -36,7 +31,6 @@
     background-color: rgba(255, 255, 255, 0.897);
     backdrop-filter: blur(15px);
     border: none;
-    /* border-radius: 5px; */
   }
 
   #imgAcc,
@@ -411,11 +405,6 @@
     justify-content: end;
   }
 
-  // .filter_bar select:focus {
-  //   border: none;
-  //   border: 1px solid var(--special_color);
-  // }
-
   #upload_button {
     border: 1px solid black;
     padding-left: 10px;
@@ -446,7 +435,6 @@
   #img_acc_slidebar {
     border: 1px solid black;
     border-radius: 50px;
-    /* box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.25); */
   }
 
   #addBio {
@@ -461,7 +449,6 @@
   }
 
   .coverImage {
-    /* background-color: rgb(94, 94, 94); */
     background: linear-gradient(135deg, #454545 0%, #353535 100%);
     padding: 100px;
     border-radius: 10px;
@@ -548,14 +535,6 @@
     font-weight: bold;
     color: #222;
   }
-
-  // .filter_bar select {
-  //   background-color: white;
-  //   border: 1px solid black;
-  //   border-radius: 50px;
-  //   padding-right: 20px;
-  //   padding-left: 20px;
-  // }
 
   #edit_profile textarea {
     resize: none;
@@ -718,8 +697,6 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    // padding: 3px;
-    // background: linear-gradient(270deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
     background-size: 200% 200%;
     animation: gradientMove 4s ease infinite;
     border: 1px solid black;
@@ -733,7 +710,6 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    // background: #000;
   }
 
   .add-btn {
@@ -749,7 +725,6 @@
 
 .create-gallery-modal {
   width: 100%;
-  // max-width: 420px;
 }
 
 

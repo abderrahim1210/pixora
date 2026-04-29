@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Navbar } from "./Layouts/Navbar";
 import { FiCopy, FiFacebook, FiHeart, FiInstagram, FiStar, FiTwitter } from "react-icons/fi";
-import { FaCalendar, FaCheck, FaCheckCircle, FaClock, FaComment, FaCrown, FaEye, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaPlus, FaShare, FaSync, FaTags, FaUser, FaWhatsapp } from "react-icons/fa";
+import { FaCalendar, FaCheck, FaCheckCircle, FaClock, FaComment, FaCrown, FaEye, FaFlag, FaHeart, FaLayerGroup, FaLock, FaLockOpen, FaPlus, FaShare, FaSync, FaTags, FaUser, FaWhatsapp } from "react-icons/fa";
 import { FaLocationDot, FaPencil, FaX } from "react-icons/fa6";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,6 +28,8 @@ import EditButton from "./EditButton";
 import PhotosTemplate from "./PhotosTemplate";
 import PhotosEdited from "./PhotosEdited";
 import Tooltip from "../Overlays/Tooltip";
+import { Flag } from "lucide-react";
+import Report from "./Report";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -130,20 +132,7 @@ export const Photo = (props) => {
             setSelected(photo.galleries.map(g => g.id));
         }
     }, [photo]);
-    // const handleComment = async () => {
-    //     try {
-    //         const res = await axios.post('http://localhost:8000/comments/store', { photo_id: id, comment: comment }, { withCredentials: true, withXSRFToken: true });
-    //         if (res.data.success) {
-    //             notyf.success(res.data.message);
-    //             setComments(prev => [res.data.comment, ...prev]);
-    //             setComment('');
-    //         } else {
-    //             notyf.error(res.data.message);
-    //         }
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // }
+
     useEffect(() => {
         if (photo) {
             dispatch(initEdit({
@@ -343,6 +332,12 @@ export const Photo = (props) => {
                 )
             }
 
+            {show === 'report' && (
+                <ModalTemplate show={show} closeModal={closeModal}>
+                    <Report id={photo?.id} user={user} type={'photo'} />
+                </ModalTemplate>
+            )}
+
             {
                 loading ? <PageSkeleton page='photo' /> :
                     <div className="container-fluid photo-page mt-3 mb-3">
@@ -400,6 +395,11 @@ export const Photo = (props) => {
                                         <FaShare size={20} />
                                     </a>
                                 </div>
+                                {/* <div>
+                                    <a style={{ cursor: "pointer" }} id="shareButton" onClick={() => openModal('share')}>
+                                        <FaFlag size={20} />
+                                    </a>
+                                </div> */}
                             </div>
                             <ul className="list-group mt-3">
                                 <li>
@@ -428,7 +428,7 @@ export const Photo = (props) => {
                                 </li>
                                 <li>
                                     <FaUser />
-                                    <Link to={`/photographer/${photo?.user?.id}`} style={{textDecoration:'none'}}>
+                                    <Link to={`/photographer/${photo?.user?.id}`} style={{ textDecoration: 'none' }}>
                                         <p>{photo.user?.username}</p>
                                     </Link>
                                     {/* <p> 
@@ -480,6 +480,16 @@ export const Photo = (props) => {
                                     }
                                     {isUser && (<button className="btn p-0 pencil-item" onClick={() => dispatch(toggleEdit("visibility"))}>{!isEdit.visibility ? (<FaPencil />) : (<FaCheck />)}</button>)}
                                 </li>
+                                <div
+                                    className="report-trigger-item d-flex align-items-center gap-2 text-danger opacity-75-hover"
+                                    onClick={() => openModal('report')}
+                                    style={{ cursor: 'pointer', transition: '0.3s' }}
+                                >
+                                    <Flag size={14} fill="currentColor" fillOpacity={0.1} />
+                                    <span className="small fw-bold text-uppercase" style={{ letterSpacing: '0.5px' }}>
+                                        Report this photo
+                                    </span>
+                                </div>
                                 {
                                     user?.role === 'user' || user?.role === 'editor' && (
                                         <li>

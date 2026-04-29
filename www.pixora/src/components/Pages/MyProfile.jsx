@@ -90,6 +90,7 @@ export const MyProfile = () => {
   const [imageId, setImageId] = useState(null);
   const [requester_id, setRequester_id] = useState(null);
   const [req_id, setReqId] = useState(null);
+  const [photosCount,setPhotosCount] = useState(null);
   const handleOpenSlide = (image) => {
     setSlides([{ src: image.url, title: image.title }]);
     setOpen(true);
@@ -136,6 +137,7 @@ export const MyProfile = () => {
           setLoading(false);
           setStatistics(res.data.statistics);
           setOriginalUser(res.data.user);
+          setPhotosCount(res.data.photosCount);
           reset(res.data.user);
         }
       }
@@ -473,7 +475,7 @@ export const MyProfile = () => {
                 <div className="row div">
                   <TopBar user={user} />
                   <div className="tab-content">
-                    <Infos user={user} openModal={openModal} statistics={statistics} loading={loading} photos={photos} />
+                    <Infos user={user} openModal={openModal} statistics={statistics} loading={loading} photos={photos} photosCount={photosCount} />
                     <EditProfile user={user} register={register} errors={errors} openModal={openModal} handleDeleteAvatar={handleDeleteAvatar} setEdit={setEdit} handleSubmit={handleSubmit} edit={edit} onSubmit={onSubmit} />
                     <Settings handleLogOut={handleLogOut} />
                     <Statistics statistics={statistics} />

@@ -7,6 +7,7 @@ use App\Models\User;
 // use Illuminate\Http\Client\Request;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -25,11 +26,13 @@ class ProfileController extends Controller
             ], 401);
         }
 
+        $photos_count = DB::table('photos')->where('user_id',$user->id)->count();
+
         return response()->json([
             'success' => true,
             'user' => $user,
             'photos' => $user->photos,
-            'photosCount' => $user->photos_count,
+            'photosCount' => $photos_count,
             'statistics' => [
                 'likes' => $user->likes_count,
                 'followers' => $user->followers_count,

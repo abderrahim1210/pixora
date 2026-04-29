@@ -11,12 +11,13 @@ import Spinner from './Spinner'
 import { useAuth } from '../context/AuthProvider'
 import { fetchFollows, toggleFollowAction } from '../utils/getFollows'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Flag, MoreHorizontal } from 'lucide-react'
+import { useModal } from '../context/ModalProvider'
+import ModalTemplate from './ModalTemplate'
+import Report from './Report'
 const Photograher = () => {
     const { id } = useParams();
-    // const [photographer, setPhotographer] = useState(null);
-    // const [statistics, setStatistics] = useState([]);
-    // const [photos, setPhotos] = useState([]);
-    // const [loading, setLoading] = useState(true);
+    const { show, openModal, closeModal } = useModal();
     const [visible, setVisible] = useState(8);
     const { user } = useAuth();
 
@@ -44,7 +45,6 @@ const Photograher = () => {
 
         try {
             await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
-            // await queryClient.invalidateQueries({ queryKey: ['follows'] });
         } catch (err) {
             queryClient.setQueryData(['follows'], previousFollows);
             console.log(err?.response?.data);
@@ -74,6 +74,13 @@ const Photograher = () => {
     const followText = isFollowed ? 'Followed' : 'Follow';
     return (
         <div data-bs-page='myprofile'>
+            {
+                show === 'report_user' && (
+                    <ModalTemplate show={show} closeModal={closeModal}>
+                        <Report id={photographer?.id} user={user} type={'user'} />
+                    </ModalTemplate>
+                )
+            }
             {
                 isLoading ? (<Spinner text='Photogrpaher page prepared for you ...' />) : (
                     <>
@@ -212,7 +219,7 @@ const Photograher = () => {
                             </div>
                             <div>
                                 {Number(id) !== user?.id ? (
-                                    <div className="mt-3 mb-3">
+                                    <div className="profile-actions-wrapper d-flex align-items-center gap-2 mt-3">
                                         <button
                                             type="button"
                                             className={`followButton ${followClasse} ${photographer && user?.role === "admin" && "disabled"} btn`}
@@ -221,6 +228,19 @@ const Photograher = () => {
                                         >
                                             {followText}
                                         </button>
+                                        <div className="dropdown">
+                                            <button className="btn-more-options" data-bs-toggle="dropdown">
+                                                <MoreHorizontal size={20} />
+                                            </button>
+                                            <ul className="dropdown-menu dropdown-menu-end shadow-sm border-0 pixora-dropdown">
+                                                <li>
+                                                    <button className="dropdown-item text-danger d-flex align-items-center gap-2" onClick={() => openModal('report_user')}>
+                                                        <Flag size={14} />
+                                                        <span>Report User</span>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 ) : (
                                     <div className="mt-3 mb-3">

@@ -10,6 +10,7 @@ import {
   FaTimes,
   FaTrash,
 } from "react-icons/fa";
+
 import { FaPencil } from "react-icons/fa6";
 import { FiCheck } from "react-icons/fi";
 import { Dropdown, Spinner } from "react-bootstrap";
@@ -22,6 +23,7 @@ import Swal from "sweetalert2";
 import { useModal } from "../context/ModalProvider";
 import ModalTemplate from "./ModalTemplate";
 import CommentItem from "./CommentItem";
+import Report from "./Report";
 const Comments = ({ photoId, data, commentRef }) => {
   const { user } = useAuth();
   const { show, openModal, closeModal } = useModal();
@@ -132,12 +134,18 @@ const Comments = ({ photoId, data, commentRef }) => {
                   handleUpComment={handleUpComment}
                   handleDelComment={handleDelComment}
                   handleCopy={handleCopy}
-                  loadingId={loadingId} />
+                  openModal={openModal}
+                  loadingId={loadingId}
+                  show={show}
+                  closeModal={closeModal}
+                />
               ))
             }
           </ModalTemplate>
         )
       }
+
+      
       <div className="comments">
         <h5>Comments</h5>
         <div
@@ -160,7 +168,7 @@ const Comments = ({ photoId, data, commentRef }) => {
               className={`btn btn-primary ${comment === "" ? "disabled" : ""}`}
               onClick={handleComment}
               id="postBtn"
-              // style={comment === "" && {cursor:'not-allowed'}}
+            // style={comment === "" && {cursor:'not-allowed'}}
             >
               Post
             </button>
@@ -175,7 +183,11 @@ const Comments = ({ photoId, data, commentRef }) => {
                 handleUpComment={handleUpComment}
                 handleDelComment={handleDelComment}
                 handleCopy={handleCopy}
-                loadingId={loadingId} />
+                loadingId={loadingId}
+                openModal={openModal}
+                show={show}
+                closeModal={closeModal}
+              />
             ))
           ) : (
             <EmptyContent icon={<FaComments className="faIcon" />} text={"No comments yet — be the first to comment!"} />

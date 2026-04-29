@@ -2,19 +2,32 @@ import React from 'react'
 import { Dropdown, Spinner } from 'react-bootstrap';
 import { FaCheck, FaCopy, FaEllipsisV, FaFlag, FaTimes, FaTrash } from 'react-icons/fa';
 import { FaPencil } from 'react-icons/fa6';
+import Report from './Report';
+import ModalTemplate from './ModalTemplate';
 
 const CommentItem = ({ c,
-  user,
-  isEditing,
-  setIsEditing,
-  editComment,
-  setEditComment,
-  handleUpComment,
-  handleDelComment,
-  handleCopy,
-  loadingId}) => {
+    user,
+    isEditing,
+    setIsEditing,
+    editComment,
+    setEditComment,
+    handleUpComment,
+    handleDelComment,
+    handleCopy,
+    openModal,
+    loadingId,
+    show,
+    closeModal
+}) => {
     return (
         <li data-bs-page='comments' className="comment-item" key={c.id}>
+            {
+                show === "report" && (
+                    <ModalTemplate show={show} closeModal={closeModal}>
+                        <Report id={c.id} user={user} type={'comment'} />
+                    </ModalTemplate>
+                )
+            }
             <img
                 src={
                     c.user.photo_profile
@@ -84,7 +97,7 @@ const CommentItem = ({ c,
                                         <Dropdown.Item onClick={() => handleCopy(c.content)}>
                                             <FaCopy /> Copy
                                         </Dropdown.Item>
-                                        <Dropdown.Item>
+                                        <Dropdown.Item onClick={() => openModal('report')}>
                                             <FaFlag /> Report
                                         </Dropdown.Item>
                                         {

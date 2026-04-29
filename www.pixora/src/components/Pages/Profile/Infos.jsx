@@ -5,7 +5,7 @@ import PhotosTemplate from '../PhotosTemplate'
 import { EmptyContent } from '../EmptyContent'
 import PageSkeleton from '../PageSkeleton'
 
-const Infos = ({user, openModal, statistics, loading, photos}) => {
+const Infos = ({user, openModal, statistics, loading, photos, photosCount}) => {
     return (
         <div className="mt-2 mb-2 tab-pane fade show active" id="info">
             <div
@@ -111,7 +111,7 @@ const Infos = ({user, openModal, statistics, loading, photos}) => {
                     <div>{statistics?.followers ?? 0} Followers</div>
                     <div>{statistics?.followings ?? 0} Following</div>
                     <div>{statistics?.likes ?? 0} Likes</div>
-                    <div>{statistics?.photos_count ?? 0} Photos</div>
+                    <div>{photosCount ?? 0} Photos</div>
                 </div>
                 <div className="social_media mt-2 mb-2">
                     {user.facebook && (

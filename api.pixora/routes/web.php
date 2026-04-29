@@ -18,10 +18,12 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MakeFeaturedPhoto;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\Photographer;
+use App\Http\Controllers\ProfileAnalytics;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePictures;
 use App\Http\Controllers\RequestEdit;
 use App\Http\Controllers\SearchAtPhotos;
+use App\Http\Controllers\SendReport;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UploadResult;
 use App\Models\Category;
@@ -141,5 +143,9 @@ Route::get('/admin_analytics', [AdminAnalytics::class, 'getStatistics'])->middle
 Route::get('/get_hero_images',[GetHeroImages::class, 'getHeroImages']);
 
 Route::post('/change_featured/{id}',[MakeFeaturedPhoto::class, 'makeFeaturedPhoto'])->middleware('auth:sanctum');
+
+Route::post('/send_report',[SendReport::class, 'sendReport'])->middleware('auth:sanctum');
+
+Route::get('/profile_statistics', [ProfileAnalytics::class, 'analytics'])->middleware('auth:sanctum');
 
 require __DIR__ . '/auth.php';

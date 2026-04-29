@@ -243,14 +243,12 @@
   border: 1px solid #ddd;
 }
 
-/* title */
 .gallery-item span {
   font-size: 14px;
   font-weight: 500;
   color: #333;
 }
 
-/* checkbox */
 .checkbox {
   width: 22px;
   height: 22px;
@@ -567,10 +565,9 @@
   padding: 10px 20px;
   margin-bottom: 12px;
   
-  // Nfs style d l-bouton Delete (Outline)
   background: transparent;
-  border: 1.5px solid #e2e8f0; // Lon grey khfif b7al delete
-  border-radius: 50px; // Nfs l-curvature dyal delete button li 3ndk
+  border: 1.5px solid #e2e8f0;
+  border-radius: 50px;
   
   color: #64748b;
   font-weight: 600;
@@ -583,7 +580,6 @@
     transition: transform 0.2s ease;
   }
 
-  // Hover normal
   &:hover {
     border-color: #cbd5e1;
     background-color: #f8fafc;
@@ -594,14 +590,13 @@
     }
   }
 
-  // Fach kiy-welli Featured (The "Active" Theme)
   &.featured-active {
-    border-color: #f59e0b; // Gold border
-    color: #b45309; // Gold text
-    background-color: #fffdf5; // Soft gold background
+    border-color: #f59e0b;
+    color: #b45309;
+    background-color: #fffdf5;
 
     .btn-icon {
-      fill: #f59e0b; // Kat-3mmer l-najma
+      fill: #f59e0b;
       stroke: #f59e0b;
     }
 
@@ -611,8 +606,22 @@
     }
   }
 
-  // Active click effect
   &:active {
     transform: scale(0.97);
   }
+}
+
+.report-trigger-item {
+    padding: 8px 4px;
+    border-radius: 8px;
+    
+    &:hover {
+        opacity: 1 !important;
+        background: rgba(220, 53, 69, 0.05);
+        padding-left: 8px;
+    }
+
+    span {
+        font-size: 11px;
+    }
 }
