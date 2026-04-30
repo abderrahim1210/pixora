@@ -111,7 +111,11 @@ const Infos = ({user, openModal, statistics, loading, photos, photosCount}) => {
                     <div>{statistics?.followers ?? 0} Followers</div>
                     <div>{statistics?.followings ?? 0} Following</div>
                     <div>{statistics?.likes ?? 0} Likes</div>
-                    <div>{photosCount ?? 0} Photos</div>
+                    {
+                        user?.role === 'user' && (
+                            <div>{photosCount ?? 0} Photos</div>
+                        )
+                    }
                 </div>
                 <div className="social_media mt-2 mb-2">
                     {user.facebook && (
@@ -144,7 +148,7 @@ const Infos = ({user, openModal, statistics, loading, photos, photosCount}) => {
                     )}
                 </div>
                 <div className="container-fluid pm-button mt-3">
-                    <Link to={`/user/${user.username}/myphotos`} className={`btn ${user.role === "admin" ? "disabled" : ""}`} id="managePhotos">
+                    <Link to={`/user/${user.username}/myphotos`} className={`btn ${(user?.role === "admin" || user?.role === "editor") ? "disabled" : ""}`} id="managePhotos">
                         manage my photos
                     </Link>
                 </div>

@@ -62,13 +62,11 @@ export const Photo = (props) => {
         axios.get(url, { params: { id }, withCredentials: true })
             .then((res) => {
                 if (res.data.success) {
-                    // console.log(res.data)
                     setPhoto(res.data.photo);
                     setCategory(res.data.category);
                     setLikes(res.data.likes);
                     setComments(res.data.comments);
                     setRequest(res.data.request);
-                    // setUserID(res.data.currUser);
                     setLoading(false);
                     setPhotosEdits(res.data.photos_edits);
                 }
@@ -230,6 +228,7 @@ export const Photo = (props) => {
                 const res = await axios.post('https://api.pixora.test/send_request', { message: requestMessage, owner_id: photo?.user?.id, image_id: photo?.id }, { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
                     notyf.success(res.data.message);
+                    window.location.reload();
                     return;
                 } else {
                     console.log(res.data.message);

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Truncate } from './Truncate'
 import { FaCrown } from 'react-icons/fa';
 import { BiChevronDown } from 'react-icons/bi';
+import ShowMoreButton from './ShowMoreButton';
 
 const PhotosTemplate = ({ photos }) => {
     const [visibility, setVisibility] = useState(4);
@@ -60,11 +61,7 @@ const PhotosTemplate = ({ photos }) => {
             <div className='d-flex justify-content-center mb-3'>
                 {
                     photos?.length > visibility && (
-                        <div className='show-more-container'>
-                            <button className='btn-show-more' onClick={showMore}>
-                                Show more <BiChevronDown size={18} />
-                            </button>
-                        </div>
+                        <ShowMoreButton showMore={showMore} />
                     )
                 }
             </div>

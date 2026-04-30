@@ -36,7 +36,6 @@ export const UserDashboard = () => {
     title: "",
     description: ""
   });
-  // if (!user?.id) navigate('/login');
   useEffect(() => {
     axios
       .get("https://api.pixora.test/get_photos", {
@@ -153,7 +152,7 @@ export const UserDashboard = () => {
             <TopBarPhotos />
             <div className="tab-content">
               <ListePhotos loading={loading} photos={photos} />
-              <Requests requests={requests} myRequests={myRequests} />
+              <Requests requests={requests} setRequests={setRequests} myRequests={myRequests} />
               <Likes photosLikes={photosLikes} loading={loading} />
               <Galleries galleries={galleries} openModal={openModal} />
             </div>

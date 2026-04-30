@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,6 +21,14 @@ class UploadResult extends Controller
         $requester_id = $request->requester_id;
         $req_id = $request->req_id;
         $task_id = $request->task_id;
+        $editor_id = Auth::id();
+        $user = User::find($editor_id);
+        if ($user->role !== 'editor'){
+            return response()->json([
+                'success' => false,
+                'message' => 'You not have a permission for do it this action'
+            ],403);
+        }
         try {
             preg_match('/^data:image\/(\w+);base64,/', $image, $matches);
             $ext = strtolower($matches[1]);
@@ -50,7 +60,8 @@ class UploadResult extends Controller
                 'parent_id' => $photoId,
                 'request_id' => $req_id,
                 'status' => 'accepted',
-                'created_at' => now()
+                'created_at' => now(),
+                'editor_id' => $editor_id
 
             ]);
 

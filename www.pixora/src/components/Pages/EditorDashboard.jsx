@@ -5,6 +5,7 @@ import { EmptyContent } from './EmptyContent';
 import { notyf } from '../../assets/js/notyf';
 import RequestsCard from './RequestsCard';
 import { useAuth } from '../context/AuthProvider';
+import AllRequestsEditor from './AllRequestsEditor';
 
 const EditorDashboard = ({ uploadResAction }) => {
     const [requests, setRequests] = useState([]);
@@ -14,6 +15,8 @@ const EditorDashboard = ({ uploadResAction }) => {
                 const res = await axios.get('https://api.pixora.test/get_requests_for_editors', { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
                     setRequests(res.data.requests);
+                } else {
+                    console.log(res.data);
                 }
             }
             fetchRequests();
@@ -29,15 +32,22 @@ const EditorDashboard = ({ uploadResAction }) => {
     const completedReqs = requests?.filter((r) => r.status === 'completed' && r.editor_id === user?.id);
 
     const downloadImage = (id) => {
-        const downloadURL = `http://localhost:8000/download_photo/${id}`;
+        const downloadURL = `https://api.pixora.test/download_photo/${id}`;
         window.location.href = downloadURL;
         return;
     }
 
     const handleAccept = async (id, req_id) => {
         try {
-            const res = await axios.post('http://localhost:8000/accept_req_edit', { req_id: req_id, task_id: id }, { withCredentials: true, withXSRFToken: true });
+            const res = await axios.post('https://api.pixora.test/accept_req_edit', { req_id: req_id, task_id: id }, { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
+                setRequests(prevRequests =>
+                    prevRequests.map(r =>
+                        r.id === id
+                            ? { ...r, status: 'in_progress', editor_id: user?.id }
+                            : r
+                    )
+                );
                 notyf.success(res.data.message);
             } else {
                 console.log(res.data.message);
@@ -53,9 +63,8 @@ const EditorDashboard = ({ uploadResAction }) => {
                 className="d-flex container-fluid requests-grid mb-3"
                 style={{ gap: 5 }}
             >
-                {
-                    pendingReqs?.length > 0 ? (pendingReqs?.map((r) => (<RequestsCard r={r} key={r.id} handleAccept={handleAccept} uploadResAction={uploadResAction} downloadImage={downloadImage} />))) : (<EmptyContent icon={<FaEdit className='faIcon' />} text={'No requests with status pending found it - try again later'} />)
-                }
+                <AllRequestsEditor requests={pendingReqs} handleAccept={handleAccept} uploadResAction={uploadResAction} downloadImage={downloadImage} />
+                
             </div>
 
             <hr />
@@ -64,9 +73,8 @@ const EditorDashboard = ({ uploadResAction }) => {
                 className="d-flex container-fluid requests-grid mb-3"
                 style={{ gap: 5 }}
             >
-                {
-                    inProgressReqs?.length > 0 ? (inProgressReqs?.map((r) => (<RequestsCard r={r} key={r.id} handleAccept={handleAccept} uploadResAction={uploadResAction} downloadImage={downloadImage} />))) : (<EmptyContent icon={<FaEdit className='faIcon' />} text={'No requests with status in progress found it - try again later'} />)
-                }
+                <AllRequestsEditor requests={inProgressReqs} handleAccept={handleAccept} uploadResAction={uploadResAction} downloadImage={downloadImage} />
+                
             </div>
 
             <hr />
@@ -75,9 +83,8 @@ const EditorDashboard = ({ uploadResAction }) => {
                 className="d-flex container-fluid requests-grid mb-3"
                 style={{ gap: 5 }}
             >
-                {
-                    completedReqs?.length > 0 ? (completedReqs?.map((r) => (<RequestsCard r={r} key={r.id} handleAccept={handleAccept} uploadResAction={uploadResAction} downloadImage={downloadImage} />))) : (<EmptyContent icon={<FaEdit className='faIcon' />} text={'No requests with status completed found it - try again later'} />)
-                }
+                <AllRequestsEditor requests={completedReqs} handleAccept={handleAccept} uploadResAction={uploadResAction} downloadImage={downloadImage} />
+                
             </div>
         </div>
     )

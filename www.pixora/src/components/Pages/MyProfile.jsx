@@ -478,10 +478,20 @@ export const MyProfile = () => {
                     <Infos user={user} openModal={openModal} statistics={statistics} loading={loading} photos={photos} photosCount={photosCount} />
                     <EditProfile user={user} register={register} errors={errors} openModal={openModal} handleDeleteAvatar={handleDeleteAvatar} setEdit={setEdit} handleSubmit={handleSubmit} edit={edit} onSubmit={onSubmit} />
                     <Settings handleLogOut={handleLogOut} />
-                    <Statistics statistics={statistics} />
-                    <AdminDashboard analytics={analytics} />
                     {
-                      user?.role === 'editor' && (<EditorDashboard uploadResAction={uploadResAction} />)
+                      user?.role === 'admin' && (
+                        <AdminDashboard analytics={analytics} />
+                      )
+                    }
+                    {
+                      user?.role === "editor" && (
+                        <EditorDashboard uploadResAction={uploadResAction} />
+                      )
+                    }
+                    {
+                      user?.role === "user" && (
+                        <Statistics statistics={statistics} />
+                      )
                     }
                   </div>
                 </div>

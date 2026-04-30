@@ -6,7 +6,11 @@ const RequestsCard = ({ r, handleAccept,downloadImage,uploadResAction }) => {
         <div className="editor-task-card" key={r?.id}>
             <div className="image-container">
                 <img src={`https://api.pixora.test/storage/photos/${r?.edition_requests?.photo?.filename}`} alt="Original" />
-                <span className='badge'>New Request</span>
+                {
+                    r?.status === 'pending' && (
+                        <span className='badge'>New Request</span>
+                    )
+                }
             </div>
 
             <div className="card-content">

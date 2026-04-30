@@ -1,9 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import RequestCard from '../RequestCard'
 import { EmptyContent } from '../EmptyContent'
 import { FaEdit } from 'react-icons/fa'
+import AllRequests from '../AllRequests'
 
-const Requests = ({requests, myRequests}) => {
+const Requests = ({ requests, setRequests, myRequests }) => {
+    const handleStatusChange = (requestId, newStatus) => {
+        setRequests(prevRequests => {
+            // Bach t-update-i wast group (hit nti m-groupiya b image_id)
+            const updated = { ...prevRequests };
+            Object.keys(updated).forEach(imageId => {
+                updated[imageId] = updated[imageId].map(req =>
+                    req.id === requestId ? { ...req, status: newStatus } : req
+                );
+            });
+            return updated;
+        });
+    };
     return (
         <div className="tab-pane fade show" id="requests">
             <div className="mt-2 mb-2">
@@ -13,32 +26,14 @@ const Requests = ({requests, myRequests}) => {
             </div>
             <div className="container-fluid">
                 <div className="mt-3 mb-3">
-                    {requests && Object.entries(requests).length > 0 ? (
-                        Object.entries(requests).map(([imageId, group]) => (
-                            <RequestCard key={imageId} group={group} />
-                        ))
-                    ) : (
-                        <EmptyContent
-                            icon={<FaEdit className="faIcon" />}
-                            text={"No requests yet — start request with anyone"}
-                        />
-                    )}
+                    <AllRequests requests={requests} />
                 </div>
                 <hr />
                 <div className="mt-3 mb-3">
                     <h2>
-                        Your Requests <span className='text-primary'>({myRequests?.length ?? 0})</span>
+                        Your Requests <span className='text-primary'>({Object.entries(myRequests).length ?? 0})</span>
                     </h2>
-                    {requests && Object.entries(myRequests).length > 0 ? (
-                        Object.entries(myRequests).map(([imageId, group]) => (
-                            <RequestCard key={imageId} group={group} />
-                        ))
-                    ) : (
-                        <EmptyContent
-                            icon={<FaEdit className="faIcon" />}
-                            text={"No requests for you — try again later"}
-                        />
-                    )}
+                    <AllRequests requests={myRequests} />
                 </div>
 
             </div>

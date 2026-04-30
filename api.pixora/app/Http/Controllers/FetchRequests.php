@@ -53,7 +53,7 @@ class FetchRequests extends Controller
                 ]);
             }
 
-            $requests = EditionRequest::with(['requester','image'])->where('requester_id', $user_id)->orderBy('created_at', 'desc')->get()->groupBy('image_id');
+            $requests = EditionRequest::with(['requester','photo'])->where('requester_id', $user_id)->orderBy('created_at', 'desc')->get()->groupBy('image_id');
             return response()->json([
                 'success' => true,
                 'requests' => $requests
