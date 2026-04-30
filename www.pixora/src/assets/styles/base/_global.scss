@@ -615,7 +615,7 @@
 }
 
 .show-more-container {
-  .btn-pixora-more {
+  .btn-show-more {
     position: relative;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
@@ -671,7 +671,6 @@
       transform: translateY(0) scale(0.97);
     }
 
-    // Style dyal Spinner melli t-koun Loading
     .spinner-icon {
       animation: rotate 1s linear infinite;
     }

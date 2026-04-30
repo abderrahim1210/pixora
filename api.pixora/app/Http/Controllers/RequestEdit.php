@@ -48,7 +48,7 @@ class RequestEdit extends Controller
     public function getRequests()
     {
         $user_id = Auth::id();
-        $requests = EditionRequest::with(['requester', 'image'])->where('owner_id', $user_id)->get()->groupBy('image_id');
+        $requests = EditionRequest::with(['requester', 'photo:id,filename,title'])->where('owner_id', $user_id)->get()->groupBy('image_id');
         return response()->json([
             'success' => true,
             'requests' => $requests

@@ -51,7 +51,6 @@ const Photographers = () => {
         return users
             .filter(u => u.username.toLowerCase().startsWith(search.toLowerCase()))
             .map(u => {
-                // const isFollowed = follows.some(fId => Number(fId) === Number(u.id));
                 const isFollowed = follows.includes(u.id);
                 return {
                     ...u,
@@ -75,7 +74,6 @@ const Photographers = () => {
 
         try {
             await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
-            // await queryClient.invalidateQueries({ queryKey: ['follows'] });
         } catch (err) {
             queryClient.setQueryData(['follows'], previousFollows);
             console.log(err?.response?.data);

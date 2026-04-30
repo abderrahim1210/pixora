@@ -21,7 +21,7 @@ import Likes from "./Photos/Likes";
 import Galleries from "./Photos/Galleries";
 import BottomNav from "./Layouts/BottomNav";
 
-export const MyPhotos = () => {
+export const UserDashboard = () => {
   const [photos, setPhotos] = useState([]);
   const [photosLikes, setPhotosLikes] = useState([]);
   const [galleries, setGalleries] = useState([]);
@@ -147,23 +147,21 @@ export const MyPhotos = () => {
           </ModalTemplate>
         )
       }
-      <main className="main-content">
+      <main className="main-content flex-grow-1">
         <div className="container-fluid">
           <div className="row div">
             <TopBarPhotos />
             <div className="tab-content">
               <ListePhotos loading={loading} photos={photos} />
               <Requests requests={requests} myRequests={myRequests} />
-              <Likes photosLikes={photosLikes} />
+              <Likes photosLikes={photosLikes} loading={loading} />
               <Galleries galleries={galleries} openModal={openModal} />
             </div>
           </div>
         </div>
       </main>
       <BottomNav page={'photos'} user={user} />  
-      <div>
-        <Footer type={"dash"} />
-      </div>
+      <Footer type={"dash"} />
     </div>
   );
 };

@@ -8,7 +8,7 @@ const Requests = ({requests, myRequests}) => {
         <div className="tab-pane fade show" id="requests">
             <div className="mt-2 mb-2">
                 <h2>
-                    Requests <p className="d-inline text-primary">( {requests?.length} request)</p>
+                    Requests <p className="d-inline text-primary">( {Object.entries(requests).length ?? 0} request)</p>
                 </h2>
             </div>
             <div className="container-fluid">
@@ -27,7 +27,7 @@ const Requests = ({requests, myRequests}) => {
                 <hr />
                 <div className="mt-3 mb-3">
                     <h2>
-                        Your Requests
+                        Your Requests <span className='text-primary'>({myRequests?.length ?? 0})</span>
                     </h2>
                     {requests && Object.entries(myRequests).length > 0 ? (
                         Object.entries(myRequests).map(([imageId, group]) => (

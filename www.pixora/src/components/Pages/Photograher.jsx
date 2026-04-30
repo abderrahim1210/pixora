@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Navbar } from './Layouts/Navbar'
 import { Footer } from './Layouts/Footer'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { FaBan, FaCamera, FaFacebook, FaGlobe, FaInstagram, FaMapPin, FaTwitter } from 'react-icons/fa'
 import { EmptyContent } from './EmptyContent'
@@ -20,6 +20,7 @@ const Photograher = () => {
     const { show, openModal, closeModal } = useModal();
     const [visible, setVisible] = useState(8);
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     const { data: follows = [] } = useQuery({
         queryKey: ['follows'],
@@ -248,7 +249,7 @@ const Photograher = () => {
                                             type="button"
                                             className="followButton btn"
                                             id="followButton"
-                                            onClick={() => navigate(`${user && user?.username}/myprofile`)}
+                                            onClick={() => navigate(`/user/${user?.username}/myprofile`)}
                                         >
                                             View profile
                                         </button>

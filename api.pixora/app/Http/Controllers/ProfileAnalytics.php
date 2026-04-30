@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class ProfileAnalytics extends Controller
 {
-    public function analytics(Request $request)
+    public function analytics()
     {
         $user = Auth::user();
 

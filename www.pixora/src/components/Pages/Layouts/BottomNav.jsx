@@ -19,7 +19,7 @@ const BottomNav = ({ page, user=null }) => {
         user?.role === 'admin' && { id: 'admin', icon: <MdAnalytics size={20} />, label: 'Analytics (Admin)' }
     ].filter(Boolean);
     const managePhotosItems = [
-        { id: 'photos', icon: <FaCamera size={20} />, label: 'My photos' },
+        { id: 'myphotos', icon: <FaCamera size={20} />, label: 'My photos' },
         { id: 'requests', icon: <FaEdit size={20} />, label: 'My Requests' },
         { id: 'likes', icon: <FaHeart size={20} />, label: 'My photos likes' },
         { id: 'galleries', icon: <MdPhotoLibrary size={20} />, label: 'My galleries' },

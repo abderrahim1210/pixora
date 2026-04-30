@@ -2,8 +2,9 @@ import React from 'react'
 import PhotosTemplate from '../PhotosTemplate'
 import { EmptyContent } from '../EmptyContent'
 import { FaHeart } from 'react-icons/fa'
+import PageSkeleton from '../PageSkeleton'
 
-const Likes = ({photosLikes}) => {
+const Likes = ({ photosLikes, loading }) => {
     return (
         <div className="tab-pane fade show" id="likes">
             <div className="mt-2 mb-2">
@@ -16,7 +17,7 @@ const Likes = ({photosLikes}) => {
             </div>
             <div className="container-fluid">
                 <div>
-                    {photosLikes?.length > 0 ? (
+                    {!loading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} page={'photos'} />) : photosLikes.length > 0 ? (
                         <PhotosTemplate photos={photosLikes} />
                     ) : (
                         <EmptyContent icon={<FaHeart className="faIcon" />} text={"No photos liked yet - try again later"} />

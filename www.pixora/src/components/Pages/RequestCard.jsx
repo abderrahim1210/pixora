@@ -4,7 +4,7 @@ import { notyf } from '../../assets/js/notyf';
 import { useAuth } from '../context/AuthProvider';
 
 const RequestCard = ({ group }) => {
-    const photo = group[0]?.image;
+    const photo = group[0]?.photo;
     const {user} = useAuth();
     const rejectRequest = (id) => {
         try{

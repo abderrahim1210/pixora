@@ -60,19 +60,6 @@ export const Navbar = ({type}) => {
                         new &amp; trending
                       </Link>
                     </li>
-                    
-                    {/* <li>
-                      <Link
-                        // href="#categories"
-                        data-bs-target="#categories"
-                        data-bs-toggle="tab"
-                        // role="tab"
-                        // to={'/#categories'}
-                        className="dropdown-item"
-                      >
-                        categories
-                      </Link>
-                    </li> */}
                   </ul>
                 </div>
               </li>
@@ -122,8 +109,8 @@ export const Navbar = ({type}) => {
                   </a>
                   <ul className="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a onClick={() => navigate(`/user/${user.username}/myphotos`)} style={{cursor:"pointer"}} className={`dropdown-item ${(user?.role === "admin" || user?.role === "editor") && "disabled"}`}>
-                        my photos
+                      <a onClick={() => navigate(`/user/${user.username}/dashboard`)} style={{cursor:"pointer"}} className={`dropdown-item ${(user?.role === "admin" || user?.role === "editor") && "disabled"}`}>
+                        Dashboard
                       </a>
                     </li>
                     <li>
@@ -134,17 +121,6 @@ export const Navbar = ({type}) => {
                         galleries
                       </Link>
                     </li>
-                    {/* <li>
-                      <a
-                        href="#"
-                        className="dropdown-item"
-                        data-bs-target="#about"
-                        data-bs-toggle="tab"
-                        title="About"
-                      >
-                        About
-                      </a>
-                    </li> */}
                   </ul>
                 </div>
               </li>

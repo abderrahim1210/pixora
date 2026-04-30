@@ -9,7 +9,7 @@ const TopBarPhotos = () => {
                 <ul className="nav">
                     <li className="nav-item">
                         <a
-                            data-bs-target="#photos"
+                            data-bs-target="#myphotos"
                             data-bs-toggle="tab"
                             className="nav-link active"
                         >

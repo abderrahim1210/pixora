@@ -1,20 +1,6 @@
 [data-bs-page="myprofile"],
 [data-bs-page="myphotos"] {
 
-  html,
-  body {
-    margin: 0;
-    height: 100%;
-  }
-
-  body {
-    font-family: "Outfit", "sans-serif";
-    font-size: 16px;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-
   .main-content {
     flex: 1;
   }
@@ -67,7 +53,7 @@
   }
 
   #location_icon {
-    color: red !important;
+    color: rgb(225, 11, 11) !important;
   }
 
   .statistic_profile {
@@ -669,9 +655,9 @@
       justify-content: center;
     }
 
-    footer {
-      display: block;
-    }
+    // footer {
+    //   display: block;
+    // }
 
     .photo-info-card,
     #edit_profile strong,

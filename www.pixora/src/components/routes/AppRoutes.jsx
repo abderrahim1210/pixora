@@ -5,13 +5,13 @@ import { Upload } from "../Pages/Upload";
 import { Login } from "../Pages/Login";
 import { SignUp } from "../Pages/SignUp";
 import { MyProfile } from "../Pages/MyProfile";
-import { MyPhotos } from "../Pages/MyPhotos";
 import { Photo } from "../Pages/Photo";
 import GalleryPreview from "../Pages/GalleryPreview";
 import Photograher from "../Pages/Photograher";
 import Photographers from "../Pages/Photographers";
 import GalleriesSection from "../Pages/GalleriesSection";
 import SearchPhotos from "../Pages/SearchPhotos";
+import { UserDashboard } from "../Pages/UserDashboard";
 const AppRoutes = () => {
   
   return (
@@ -21,7 +21,7 @@ const AppRoutes = () => {
       <Route path="/upload" element={<Upload />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
-      <Route path={`/user/:username/myphotos`} element={<MyPhotos />} />
+      <Route path={`/user/:username/dashboard`} element={<UserDashboard />} />
       <Route path={`/user/:username/myprofile`} element={<MyProfile />} />
       <Route path="/photo/:id/:slug" element={<Photo />} />
       <Route path="/gallery/:id" element={<GalleryPreview />} />
