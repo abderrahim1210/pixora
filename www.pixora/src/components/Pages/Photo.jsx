@@ -394,11 +394,6 @@ export const Photo = (props) => {
                                         <FaShare size={20} />
                                     </a>
                                 </div>
-                                {/* <div>
-                                    <a style={{ cursor: "pointer" }} id="shareButton" onClick={() => openModal('share')}>
-                                        <FaFlag size={20} />
-                                    </a>
-                                </div> */}
                             </div>
                             <ul className="list-group mt-3">
                                 <li>
@@ -430,8 +425,6 @@ export const Photo = (props) => {
                                     <Link to={`/photographer/${photo?.user?.id}`} style={{ textDecoration: 'none' }}>
                                         <p>{photo.user?.username}</p>
                                     </Link>
-                                    {/* <p> 
-                                    </p> */}
                                 </li>
                                 <li>
                                     <MdCategory />
@@ -490,7 +483,7 @@ export const Photo = (props) => {
                                     </span>
                                 </div>
                                 {
-                                    user?.role === 'user' || user?.role === 'editor' && (
+                                    user?.role === 'user' && (
                                         <li>
                                             {!!photo.is_featured && (
                                                 <Tooltip text={'This photo was handpicked by our curators for its outstanding composition, creativity, and technical excellence.'}>
@@ -504,13 +497,17 @@ export const Photo = (props) => {
                                     )
                                 }
 
-                                <button
-                                    className={`pixora-admin-btn ${photo.is_featured ? 'featured-active' : ''}`}
-                                    onClick={handleFeaturedToggle}
-                                >
-                                    <FiStar className="btn-icon" />
-                                    <span>{photo.is_featured ? 'Featured Content' : 'Make Featured'}</span>
-                                </button>
+                                {
+                                    user?.role === 'admin' && (
+                                        <button
+                                            className={`pixora-admin-btn ${photo.is_featured ? 'featured-active' : ''}`}
+                                            onClick={handleFeaturedToggle}
+                                        >
+                                            <FiStar className="btn-icon" />
+                                            <span>{photo.is_featured ? 'Featured Content' : 'Make Featured'}</span>
+                                        </button>
+                                    )
+                                }
 
                                 {user?.id === photo.user_id && (<div className="d-flex justify-content-end align-items-center flex-column mb-2">
                                     <button

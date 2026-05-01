@@ -223,7 +223,7 @@ const Photograher = () => {
                                     <div className="profile-actions-wrapper d-flex align-items-center gap-2 mt-3">
                                         <button
                                             type="button"
-                                            className={`followButton ${followClasse} ${photographer && user?.role === "admin" && "disabled"} btn`}
+                                            className={`followButton ${followClasse} ${(user?.role === "admin" || user?.role === "editor") ? "disabled" : ""} btn`}
                                             id="followButton"
                                             onClick={() => addFollow(photographer.id)}
                                         >

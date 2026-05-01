@@ -1,5 +1,7 @@
 import React from 'react'
 import { FaArrowRight, FaDownload, FaUpload } from 'react-icons/fa'
+import { Truncate } from './Truncate'
+import Tooltip from '../Overlays/Tooltip'
 
 const RequestsCard = ({ r, handleAccept,downloadImage,uploadResAction }) => {
     return (
@@ -18,7 +20,14 @@ const RequestsCard = ({ r, handleAccept,downloadImage,uploadResAction }) => {
                     <img src={r?.user?.photo_profile ? `https://api.pixora.test/storage/profile_pictures/${r?.user?.photo_profile}` : '/outils/pngs/useracc2.png'} className='avatar' alt="Avatar" />
                     <span>{r?.user?.username}</span>
                 </div>
-                <p className='message'>{r?.edition_requests?.message}</p>
+                <Truncate text={r?.edition_requests?.message ?? ''} maxChars={50}>
+                    {({text}) => (
+                        <Tooltip text={r?.edition_requests?.message}>
+                            <p className='message'>{text}</p>
+                        </Tooltip>
+                    )}
+                </Truncate>
+                <br />
                 <div className={`badge mb-2 badge-${r?.status}`}>
                     <span>{r?.status}</span>
                 </div>

@@ -23,7 +23,7 @@ const Settings = ({handleLogOut}) => {
                                 </p>
                             </div>
                         </div>
-                        <a href="edit_account.php" className="btn btn-sm">
+                        <a className="btn btn-sm">
                             Edit
                         </a>
                     </div>

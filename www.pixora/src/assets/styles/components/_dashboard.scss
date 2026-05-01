@@ -599,6 +599,33 @@
     color: #6c757d;
   }
 
+  .setting-card .btn {
+    border-radius: 50px;
+    padding: 6px 18px;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #f8f9fa;
+    color: #333;
+
+    &:hover {
+      background: var(--special_color);
+      color: white;
+      border-color: var(--special_color);
+    }
+  }
+
+  .setting-card.text-danger .btn {
+    color: #dc3545;
+
+    &:hover {
+      background: #dc3545;
+      color: white;
+      border-color: #dc3545;
+    }
+  }
+
   .statisticsGraph {
     background: #ffffff;
     border-radius: 20px;
@@ -787,9 +814,11 @@
   padding: 7px;
 }
 
-.photo, .image {
+.photo,
+.image {
   position: relative;
   overflow: hidden;
+
   .featured-badge {
     position: absolute;
     top: 10px;
@@ -806,11 +835,11 @@
     overflow: hidden;
     white-space: nowrap;
     max-width: 35px;
-  
+
     svg {
       min-width: 18px;
     }
-  
+
     .featured-text {
       opacity: 0;
       margin-left: 0;
@@ -819,23 +848,23 @@
       color: white;
       transition: all 0.3s ease;
     }
-  
+
     &:hover {
       max-width: 250px;
       padding-right: 15px;
       background: var(--special_color);
       color: white;
-  
+
       .featured-text {
         opacity: 1;
         margin-left: 8px;
       }
-  
+
       svg {
         color: #ff9d00;
       }
     }
-  
+
     img {
       width: 100%;
       display: block;
