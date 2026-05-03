@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import Avatar from "../Avatar";
 import OffcanvasTemplate from "../OffcanvasTemplate";
-export const Navbar = ({type}) => {
+export const Navbar = ({ type }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   return (
@@ -21,16 +21,31 @@ export const Navbar = ({type}) => {
                   className="nav-link nav-brand p-0 m-0"
                   to={'/'}
                 >
-                  <img
-                    src="/outils/pngs/logo_styled.png"
-                    style={{
-                      padding: "0%",
-                      width: 100,
-                      height: "auto",
-                      margin: 0,
-                    }}
-                    id="logo"
-                  />
+                  {
+                    localStorage.getItem('theme') === 'light' ? (
+                      <img
+                        src="/outils/pngs/logo_styled.png"
+                        style={{
+                          padding: "0%",
+                          width: 100,
+                          height: "auto",
+                          margin: 0,
+                        }}
+                        id="logo"
+                      />
+                    ) : (
+                      <img
+                        src="/outils/pngs/logo_dark.png"
+                        style={{
+                          padding: "0%",
+                          width: 100,
+                          height: "auto",
+                          margin: 0,
+                        }}
+                        id="logo"
+                      />
+                    )
+                  }
                 </Link>
               </li>
             </ul>
@@ -48,7 +63,7 @@ export const Navbar = ({type}) => {
                   </a>
                   <ul className="dropdown-menu dropdown-menu-end">
                     <li>
-                      <Link to={'/search?type=popular'}  className="dropdown-item">
+                      <Link to={'/search?type=popular'} className="dropdown-item">
                         popular photos
                       </Link>
                     </li>
@@ -109,7 +124,7 @@ export const Navbar = ({type}) => {
                   </a>
                   <ul className="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a onClick={() => navigate(`/user/${user.username}/dashboard`)} style={{cursor:"pointer"}} className={`dropdown-item ${(user?.role === "admin" || user?.role === "editor") && "disabled"}`}>
+                      <a onClick={() => navigate(`/user/${user.username}/dashboard`)} style={{ cursor: "pointer" }} className={`dropdown-item ${(user?.role === "admin" || user?.role === "editor") && "disabled"}`}>
                         Dashboard
                       </a>
                     </li>
@@ -200,31 +215,6 @@ export const Navbar = ({type}) => {
         </nav>
         <OffcanvasTemplate user={user} />
       </header>
-      <div
-        className="modal fade"
-        id="language"
-        aria-hidden="true"
-        tabIndex={-1}
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1>Site Language</h1>
-            </div>
-            <div className="modal-body">
-              <div>
-                <select name="" id="language" className="form-select">
-                  <option value="English">English</option>
-                  <option value="Arabic">Arabic</option>
-                </select>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button className="btn-close" data-bs-dismiss="modal" />
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

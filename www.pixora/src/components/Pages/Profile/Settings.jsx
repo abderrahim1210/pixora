@@ -1,10 +1,26 @@
 import React from 'react'
 import { FaLock, FaMoon, FaPaintBrush, FaUserCog, FaUserSlash } from 'react-icons/fa'
 import { FaRightFromBracket, FaShieldHalved } from 'react-icons/fa6'
+import { useModal } from '../../context/ModalProvider';
+import ModalTemplate from "../ModalTemplate";
+import UpdateData from '../Settings/UpdateData';
+import { useTheme } from '../../context/ThemeProvider';
+const Settings = ({ handleLogOut }) => {
+    const { show, openModal, closeModal } = useModal();
+    const {dark,setDark} = useTheme();
 
-const Settings = ({handleLogOut}) => {
+    const toggleTheme = () => {
+        setDark(!dark);
+    }
     return (
         <div className="tab-pane fade show" id="settings">
+            {
+                show === 'updateData' && (
+                    <ModalTemplate show={show} closeModal={closeModal}>
+                        <UpdateData handleLogOut={handleLogOut} />
+                    </ModalTemplate>
+                )
+            }
             <section className="settings-page container mt-4 mb-5">
                 <h2>Setting</h2>
                 <div className="settings-group mb-4">
@@ -23,9 +39,9 @@ const Settings = ({handleLogOut}) => {
                                 </p>
                             </div>
                         </div>
-                        <a className="btn btn-sm">
+                        <button onClick={() => openModal('updateData')} className="btn btn-sm">
                             Edit
-                        </a>
+                        </button>
                     </div>
                 </div>
                 <div className="settings-group mb-4">
@@ -41,7 +57,7 @@ const Settings = ({handleLogOut}) => {
                                 <p>Switch between light and dark mode.</p>
                             </div>
                         </div>
-                        <button type="button" className="btn btn-sm">
+                        <button onClick={toggleTheme} type="button" className="btn btn-sm">
                             Change
                         </button>
                     </div>

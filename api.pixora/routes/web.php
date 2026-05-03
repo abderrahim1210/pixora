@@ -24,6 +24,7 @@ use App\Http\Controllers\ProfilePictures;
 use App\Http\Controllers\RequestEdit;
 use App\Http\Controllers\SearchAtPhotos;
 use App\Http\Controllers\SendReport;
+use App\Http\Controllers\UpdateSensitiveData;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UploadResult;
 use App\Models\Category;
@@ -148,4 +149,7 @@ Route::post('/send_report',[SendReport::class, 'sendReport'])->middleware('auth:
 
 Route::get('/profile_statistics', [ProfileAnalytics::class, 'analytics'])->middleware('auth:sanctum');
 
+Route::post('/verify_password',[UpdateSensitiveData::class, 'checkCurrPassword'])->middleware('auth:sanctum');
+
+Route::post('/update_email_password',[UpdateSensitiveData::class, 'changeEmailPassword'])->middleware('auth:sanctum');
 require __DIR__ . '/auth.php';

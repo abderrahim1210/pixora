@@ -12,11 +12,11 @@ const AllRequestsEditor = ({ requests, handleAccept, uploadResAction, downloadIm
     }
     return (
         <>
-            <div className='d-flex flex-row'>
-                {
-                    requests?.length > 0 ? requests?.slice(0, visible).map((r) => (<RequestsCard r={r} key={r.id} handleAccept={handleAccept} uploadResAction={uploadResAction} downloadImage={downloadImage} />)) : (<EmptyContent icon={<FaEdit className='faIcon' />} text={'No requests with status pending found it - try again later'} />)
-                }
-            </div>
+
+            {
+                requests?.length > 0 ? requests?.slice(0, visible).map((r) => (<RequestsCard r={r} key={r.id} handleAccept={handleAccept} uploadResAction={uploadResAction} downloadImage={downloadImage} />)) : (<EmptyContent icon={<FaEdit className='faIcon' />} text={'No requests with status pending found it - try again later'} />)
+            }
+
             <div className='d-flex justify-content-center mb-3'>
                 {
                     requests?.length > visible && (

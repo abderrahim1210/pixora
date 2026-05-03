@@ -872,3 +872,128 @@
     }
   }
 }
+
+
+.credential-settings-body {
+  // الحفاظ على الخطوط اللي عزاز عليك
+  font-family: "Outfit", "Cairo", sans-serif; 
+  color: #2d3436; // لون نص غامق وبارد
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+
+  .step-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .info-section {
+    .step-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #1a1a1a; // أسود خفيف احترافي
+    }
+    .step-desc {
+      font-size: 0.9rem;
+      color: #636e72; // رمادي هادئ للوصف
+      line-height: 1.6;
+    }
+  }
+
+  .input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    label {
+      font-size: 0.85rem;
+      color: #2d3436;
+      font-weight: 600;
+      padding-left: 2px;
+    }
+
+    .glass-input {
+      background: #f8f9fa; // خلفية فاتحة بزاف
+      border: 1px solid #dfe6e9;
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #2d3436;
+      font-size: 1rem;
+      transition: all 0.25s ease;
+
+      &::placeholder {
+        color: #b2bec3;
+      }
+
+      &:focus {
+        background: #ffffff;
+        border-color: #667eea; // اللون الأساسي لـ Pixora
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.12);
+        outline: none;
+      }
+    }
+  }
+
+  .action-btn {
+    margin-top: 10px;
+    padding: 15px;
+    border-radius: 12px;
+    border: none;
+    // Gradient احترافي كيمشي مع ستايل Pixora
+    // background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: var(--special_color);
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(118, 75, 162, 0.2);
+    transition: all 0.3s ease;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(118, 75, 162, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:disabled {
+      background: #dfe6e9;
+      color: #b2bec3;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+
+  .button-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+
+    .back-link {
+      background: none;
+      border: none;
+      color: #636e72;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: 0.2s;
+      &:hover { color: #1a1a1a; text-decoration: underline; }
+    }
+
+    .save {
+      width: auto;
+      padding: 12px 35px;
+    }
+  }
+}
+
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}

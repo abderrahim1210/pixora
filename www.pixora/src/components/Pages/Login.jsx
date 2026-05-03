@@ -52,13 +52,25 @@ export const Login = () => {
         </div>
         <div className="login-box text-center p-0 row">
           <div>
-            <img
-              src="/outils/pngs/logo_styled.png"
-              className="img-fluid"
-              width="150px"
-              alt="logo"
-              title="Welcome to Pixora"
-            />
+            {
+              localStorage.getItem('theme') === 'light' ? (
+                <img
+                  src="/outils/pngs/logo_styled.png"
+                  className="img-fluid"
+                  width="150px"
+                  alt="logo"
+                  title="Welcome to Pixora"
+                />
+              ) : (
+                <img
+                  src="/outils/pngs/logo_dark.png"
+                  className="img-fluid"
+                  width="150px"
+                  alt="logo"
+                  title="Welcome to Pixora"
+                />
+              )
+            }
           </div>
           <div className="text-start col">
             <form

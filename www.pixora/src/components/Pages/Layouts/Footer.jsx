@@ -51,7 +51,7 @@ export const Footer = ({ type }) => {
       {
         type === "dash" && (
           <div data-bs-page="footer-dashboard">
-            <footer className="footer">
+            <footer className="footer ftr-dash">
               <div className="footer-container">
                 <div className="footer-links">
                   <a href="#">Terms of use</a>

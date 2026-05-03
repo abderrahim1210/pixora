@@ -24,7 +24,10 @@ class PhotoController extends Controller
                 'message' => 'Photo not found'
             ]);
         }
-        $request = EditionRequest::where('image_id', $photo->id)->where('requester_id', $user->id)->first();
+        $request = null;
+        if ($user){
+            $request = EditionRequest::where('image_id', $photo->id)->where('requester_id', $user->id)->first();
+        }
 
         $photo->created_at_human = $photo->created_at->diffForHumans();
         $photo->comments->each(function ($comment) {

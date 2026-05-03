@@ -87,17 +87,19 @@ export const Upload = () => {
     }
   }
 
+  if (!user) return navigate('/login');
+
   return (
     <div data-bs-page="upload">
       <div className="dv1">
         <div className="text-center">
-          <div className="container d-flex justify-content-center">
+          {/* <div className="container d-flex justify-content-center">
             <div className="progress mb-3">
               <div className="progress-bar" style={{ width: `${progress}%`, background: getColors(step) }}>
                 {progress} %
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="step-bar mt-2 mb-2">
             {
               steps.map((s, index) => (
@@ -163,94 +165,10 @@ function StepZero({ step, next }) {
           </div>
         </div>
       </div>
-      {/* <div className="pagination">
-        <li className="page-item">
-          <button type="button" onClick={next} className={`page-link next`}>
-            Next
-          </button>
-        </li>
-      </div> */}
     </section>
   )
 }
 
-
-// function StepOne({ step, next, prev, photo, setPhoto }) {
-//   return (
-//     <>
-//       <section className={`step ${step === 1 ? "active" : ""}`} id="step1" data-step={1}>
-//         <div>
-//           <p style={{ fontWeight: 500 }}>
-//             Choose how you want your photo to be shared on Pixora.
-//           </p>
-//         </div>
-//         <div className="cards">
-//           <label className="card">
-//             <input
-//               type="radio"
-//               name="typePhoto"
-//               value="free"
-//               onChange={(e) => setPhoto({ ...photo, type: e.target.value })}
-//               hidden
-//             />
-//             <div className="card-body">
-//               <img
-//                 src="/outils/svg/image.svg"
-//                 className="chooseTypeIcon mt-2 mb-3"
-//                 width="50px"
-//                 alt=""
-//               />
-//               <h3>free photo</h3>
-//               <p>
-//                 Choose this option if you want to publish your photo for free.
-//                 The photo will be available for public use according to
-//                 Pixora’s usage guidelines.
-//               </p>
-//               <i>Free to use, no licensing fees.</i>
-//             </div>
-//           </label>
-//           <label className="card">
-//             <input
-//               type="radio"
-//               name="typePhoto"
-//               value="licensed"
-//               onChange={(e) => setPhoto({ ...photo, type: e.target.value })}
-//               hidden
-//             />
-//             <div className="card-body">
-//               <img
-//                 src="outils/svg/scale.svg"
-//                 className="chooseTypeIcon mt-2 mb-3"
-//                 width="50px"
-//                 alt=""
-//               />
-//               <h3>Licensed Photo</h3>
-//               <p>
-//                 Choose this option if you want to sell your photo or control
-//                 how it is used. You can set licensing terms, pricing, and
-//                 usage rights, including commercial use.
-//               </p>
-//               <i>Sell your photo with defined usage rights.</i>
-//             </div>
-//           </label>
-//           <input type="hidden" name="photoType" id="photoType" />
-//         </div>
-//         <div className="pagination">
-//           <li className="page-item">
-//             <button type="button" onClick={prev} className="page-link prev">
-//               Prev
-//             </button>
-//           </li>
-//           <li className="page-item">
-//             <button type="button" onClick={next} className={`page-link next ${photo.type === "" ? "disabled" : ""}`}>
-//               Next
-//             </button>
-//           </li>
-//         </div>
-//       </section>
-//     </>
-//   );
-// }
 function StepTwo({ step, prev, next, photo, setPhoto }) {
   const fileRef = React.useRef(null);
   const [open, setOpen] = useState(false);
@@ -582,7 +500,7 @@ function StepFour({ step, prev, photo, user }) {
               }
               <li className="list-group-item">
                 <span>By</span>
-                <strong>{user.username}</strong>
+                <strong>{user?.username}</strong>
               </li>
             </ul>
           </div>

@@ -30,17 +30,17 @@ const CommentItem = ({ c,
             }
             <img
                 src={
-                    c.user.photo_profile
-                        ? `https://api.pixora.test/storage/profile_pictures/${c.user.photo_profile}`
+                    c.user?.photo_profile
+                        ? `https://api.pixora.test/storage/profile_pictures/${c.user?.photo_profile}`
                         : "/outils/pngs/useracc2.png"
                 }
-                alt={c.user.username}
+                alt={c.user?.username}
                 className="comment-avatar"
             />
             <div className="comment-body d-flex justify-content-between align-items-start">
                 <div>
                     <h6 className="comment-author">
-                        {c.user.username}
+                        {c.user?.username}
                         {c.edited && <small>{"Edited"}</small>}
                     </h6>
                     {isEditing !== c.id && (<div className="display-div">
@@ -80,7 +80,7 @@ const CommentItem = ({ c,
                                 <FaEllipsisV />
                             </Dropdown.Toggle>
                             <Dropdown.Menu className="drpMenu">
-                                {c.user_id === user.id ? (
+                                {c.user_id === user?.id ? (
                                     <>
                                         <Dropdown.Item onClick={() => setIsEditing(c.id)}>
                                             <FaPencil /> Edit

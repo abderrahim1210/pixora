@@ -60,7 +60,7 @@ const EditorDashboard = ({ uploadResAction }) => {
         <div className="mt-2 mb-2 tab-pane fade show" id="requests">
             <h2 className='section-title'>Pending Requests <span className='text-primary'>({pendingReqs?.length ?? 0} Request)</span></h2>
             <div
-                className="d-flex flex-column container-fluid requests-grid mb-3"
+                className="requests-grid mb-3"
                 style={{ gap: 5 }}
             >
                 <AllRequestsEditor requests={pendingReqs} handleAccept={handleAccept} uploadResAction={uploadResAction} downloadImage={downloadImage} />

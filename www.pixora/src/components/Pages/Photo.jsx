@@ -71,7 +71,7 @@ export const Photo = (props) => {
                     setPhotosEdits(res.data.photos_edits);
                 }
             }).catch(err => {
-                console.log(err.response.data.message);
+                console.log(err?.response?.data?.message);
                 setLoading(false);
             });
     }, [id]);
@@ -180,7 +180,7 @@ export const Photo = (props) => {
                 } catch (err) {
                     console.log(err.response?.data);
                 } finally {
-                    return navigate(`/user/${user.username}/myphotos`);
+                    return navigate(`/user/${user?.username}/myphotos`);
                 }
             }
         })
@@ -380,7 +380,7 @@ export const Photo = (props) => {
                         <div className="details-panel">
                             <div className="socialActions">
                                 <div>
-                                    <a className={`likeButton ${liked || photo.isLiked ? 'active' : ''}`} style={{ cursor: "pointer" }} onClick={() => handleLike(photo.id)} data-photo-id={photo.id}>
+                                    <a className={`likeButton ${liked || photo?.isLiked ? 'active' : ''}`} style={{ cursor: "pointer" }} onClick={() => handleLike(photo.id)} data-photo-id={photo?.id}>
                                         {liked || photo.isLiked ? <FaHeart size={20} /> : <FiHeart size={20} />}
                                     </a>
                                 </div>
