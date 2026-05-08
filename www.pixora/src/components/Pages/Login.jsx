@@ -51,7 +51,7 @@ export const Login = () => {
           <div>Login Page</div>
         </div>
         <div className="login-box text-center p-0 row">
-          <div>
+          <Link to={'/'}>
             {
               localStorage.getItem('theme') === 'light' ? (
                 <img
@@ -71,7 +71,7 @@ export const Login = () => {
                 />
               )
             }
-          </div>
+          </Link>
           <div className="text-start col">
             <form
               onSubmit={handleSubmit}

@@ -110,15 +110,6 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-// body.dark {
-//   // Dark Mode
-//   --bg-primary: #0f172a;
-//   --text-main: #f8fafc;
-//   --card-bg: rgba(30, 41, 59, 0.7);
-//   --accent: #3b82f6;
-//   background-color: var(--bg-primary) !important;
-// }
-
 .bottom-sheet-modal .modal-content {
     background-color: #ffffff;
     padding: 10px;
@@ -130,7 +121,22 @@ body {
     fill: #ffffff;
 }
 
+
 body.dark {
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+    
+        -webkit-text-fill-color: white !important;
+    
+        transition: background-color 5000s ease-in-out 0s;
+    }
+    
+    input:-webkit-autofill:focus {
+        border: 2px solid !important;
+    }
     background-color: var(--bg_dark) !important;
     color: #f8fafc;
 
@@ -191,15 +197,15 @@ body.dark {
         color: var(--special_color);
     }
 
-    .photographers a{
+    .photographers a {
         color: white !important;
     }
 
-    .followButton.followed{
+    .followButton.followed {
         color: #e2e8f0 !important;
     }
 
-    .btn-more-options{
+    .btn-more-options {
         background-color: rgba(30, 41, 59, 0.7) !important;
         color: white !important;
         border: none !important;
@@ -309,8 +315,8 @@ body.dark {
         }
     }
 
-    .pixora-dropdown{
-        background-color:#1a1a1a !important;
+    .pixora-dropdown {
+        background-color: #1a1a1a !important;
     }
 
     .nav1 #upload_button {
@@ -349,14 +355,36 @@ body.dark {
             color: white;
         }
 
-        .form-control {
+        .form-control,
+        .form-select {
             background: rgba(0, 0, 0, 0.2) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            // border: 1px solid rgba(255, 255, 255, 0.1) !important;
             color: #f8fafc !important;
 
         }
 
-        .form-control:focus {
+        select {
+            background-color: #1a1a1a;
+            color: white;
+
+            option {
+                background-color: #1a1a1a;
+                color: white;
+
+                &:hover,
+                &:focus,
+                &:active {
+                    background-color: var(--special_color) !important;
+                }
+            }
+        }
+
+        input[type="date"] {
+            color-scheme: dark;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
             background-color: rgba(0, 0, 0, 0.2) !important;
         }
 
@@ -453,47 +481,55 @@ body.dark {
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         color: #f8fafc !important;
 
-        .search-input{
+        .search-input {
             color: white;
         }
 
-        .clear-btn{
+        .clear-btn {
             background-color: transparent;
         }
     }
 
-    .btn-follow-sm.followed{
+    .btn-follow-sm.followed {
         // background-color: rgba(255, 255, 255, 0.05) !important;
         color: #e2e8f0 !important;
     }
 
-    .stats-card{
+    .stats-card {
         background-color: rgba(30, 41, 59, 0.7) !important;
     }
 
-    .stats-card, .stats-glass-card{
-        h6,span, strong{
+    .stats-card,
+    .stats-glass-card {
+
+        h6,
+        span,
+        strong {
             color: white !important;
         }
     }
 
-    .loader{
+    .spinner-container {
         background-color: var(--bg_dark) !important;
     }
 
-    .pixora-text-area{
-        color: white;
-    }
-
-    .pixora-report-container .text-muted{
+    .spinner-text {
         color: white !important;
     }
 
-    .share-title{
+    .pixora-text-area {
         color: white;
     }
 
-    .share-btn{
+    .pixora-report-container .text-muted {
+        color: white !important;
+    }
+
+    .share-title {
+        color: white;
+    }
+
+    .share-btn {
         background-color: rgba(30, 41, 59, 0.7);
         color: white;
     }

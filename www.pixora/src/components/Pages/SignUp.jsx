@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { redirect, useNavigate } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { notyf } from "../../assets/js/notyf";
 import { FaCamera, FaGoogle, FaHeart, FaUsers } from "react-icons/fa";
 import { FaPhotoFilm } from "react-icons/fa6";
@@ -75,7 +75,7 @@ export const SignUp = () => {
           <div>Sign up Page</div>
         </div>
         <div className="login-box text-center p-0 row">
-          <div>
+          <Link to={'/'}>
             {
               localStorage.getItem('theme') === 'light' ? (
                 <img
@@ -95,7 +95,7 @@ export const SignUp = () => {
                 />
               )
             }
-          </div>
+          </Link>
           <div>
             <form
               method="post"
@@ -208,27 +208,17 @@ function StepTwo({ next, prev, step, navigate, user, setUser }) {
             </label>
           </div>
           <div className="mt-2 mb-2">
-            You have a account ? <a href="/login" onClick={() => navigate('/login')}>Login</a>
-          </div>
-          <div className="connect-google">
-            <button className="btn d-flex align-items-center"><FaGoogle /> Connect with google</button>
+            You have a account ? <Link to="/login" onClick={() => navigate('/login')}>Login</Link>
           </div>
           <div className="actions mt-2 mb-2">
             <button
-              // type="submit"
-              // className="btn w-100"
-              // id="signupButton"
               onClick={prev} className={`actionButton btn prev`}
-            // title="Click for sign up."
             >
               Prev
             </button>
             <button
-              // type="submit"
-              // className="btn w-100"
               id="signupButton"
               onClick={next} className={`actionButton btn next ${!ok ? "disabled" : ""}`}
-            // title="Click for sign up."
             >
               Next
             </button>
@@ -261,23 +251,8 @@ function StepThree({ prev, next, step, user, setUser, countries }) {
             <label htmlFor="displayName" className="form-label">
               Display name
             </label>
-            {/* <i style={{ opacity: "calc(0.6)" }}>
-              * Type just your name, we are generate it to special name
-              for you
-            </i> */}
           </div>
           <div className="form-floating mt-2 mb-2">
-            {/* <input
-              type="text"
-              id="usercountry"
-              className="form-control"
-              name="country"
-              role="text"
-              placeholder="Type your country ..."
-              value={user.country}
-              onChange={(e => setUser({ ...user, country: e.target.value }))}
-              required
-            /> */}
             <select
               name="country"
               id="usercountry"
@@ -340,24 +315,22 @@ function StepThree({ prev, next, step, user, setUser, countries }) {
               Birth Date
             </label>
           </div>
+          <div className="mb-6">
+            <i className="text-sm text-gray-400 mt-1">
+              * You can edit all of these details later from your settings.
+            </i>
+          </div>
           <div className="actions mt-2 mb-2">
             <button
-              // type="submit"
-              // className="btn w-100"
-              // id="signupButton"
               onClick={prev} className={`actionButton btn prev`}
-            // title="Click for sign up."
             >
               Prev
             </button>
             <button
-              // type="submit"
-              // className="btn w-100"
               id="signupButton"
               onClick={next} className={`actionButton btn next`}
-            // title="Click for sign up."
             >
-              Skip
+              {(user?.display_name || user?.phone_number || user?.country || user?.gender || user?.birth_date) ? 'Next' : 'Skip for now'}
             </button>
           </div>
         </div>
@@ -370,23 +343,34 @@ function StepFour({ prev, next, step, navigate, handleSubmit }) {
   return (
     <section className={`step ${step === 4 ? "active" : ""}`} id="step4" data-step={4}>
       <div className="text-start col">
+        <div className="final-step-container">
+          <div className="success-icon-wrapper">
+            <div className="success-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+
+          <div className="text-content">
+            <h2 className="title">You're all set!</h2>
+            <p className="subtitle">
+              Welcome to the community. Your journey with <span>Pixora</span> starts now.
+            </p>
+          </div>
+
+
+        </div>
         <div>
-          <div className="actions mt-2 mb-2">
+          <div className="actions mb-2">
             <button
-              // type="submit"
-              // className="btn w-100"
-              // id="signupButton"
               onClick={prev} className={`actionButton btn prev`}
-            // title="Click for sign up."
             >
               Prev
             </button>
             <button
-              // type="submit"
-              // className="btn w-100"
               id="signupButton"
               onClick={handleSubmit} className={`actionButton btn next`}
-            // title="Click for sign up."
             >
               Sign Up
             </button>

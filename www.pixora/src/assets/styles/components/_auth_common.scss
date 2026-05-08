@@ -28,7 +28,7 @@
     padding: 20px;
   }
 
-  .form-control:focus{
+  .form-control:focus {
     border-bottom: 2px solid var(--special_color);
   }
 
@@ -137,40 +137,40 @@
     background-color: rgb(0, 54, 115);
   }
 
-  #step1 h1{
+  #step1 h1 {
     font-size: 28px;
     font-weight: 600;
     color: #111;
     margin: 0;
   }
 
-  #step1 p{
+  #step1 p {
     font-size: 15px;
     color: #666;
     line-height: 1.5;
     margin: 0;
   }
 
-  .features{
+  .features {
     display: flex;
     flex-direction: column;
     gap: 12px;
     margin-top: 10px;
   }
 
-  .feature-item{
+  .feature-item {
     display: flex;
     align-items: center;
     gap: 10px;
     font-size: 15px;
     color: #333;
-    background-color: rgba(255,255,255,0.6);
+    background-color: rgba(255, 255, 255, 0.6);
     padding: 14px 14px;
     border-radius: 10px;
     transition: 0.2s;
   }
 
-  .feature-item:hover{
+  .feature-item:hover {
     background-color: rgba(255, 255, 255, 0.9);
     transform: translateY(3px);
   }
@@ -194,6 +194,81 @@
     .dv1-1 button {
       font-size: 14px;
       padding: 10px;
+    }
+  }
+
+  .final-step-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    animation: fadeIn 0.6s ease-out;
+
+    .success-icon-wrapper {
+      margin-bottom: 1.5rem;
+
+      .success-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--special_color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        svg {
+          width: 30px;
+        }
+      }
+    }
+
+    .text-content {
+      margin-bottom: 2.5rem;
+
+      .title {
+        font-size: 1.75rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+        color: #646972;
+        max-width: 280px;
+        line-height: 1.5;
+
+        span {
+          color: #3b82f6;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  // Animations dyal Pro
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleUp {
+    from {
+      transform: scale(0);
+    }
+
+    to {
+      transform: scale(1);
     }
   }
 }
