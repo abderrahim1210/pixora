@@ -29,6 +29,7 @@
 @use './components/get_greeting';
 @use './components/reports';
 @use './components/statistics';
+@use './components/delete_account';
 
 :root {
     --special_color: rgb(0, 120, 255);
@@ -474,5 +475,26 @@ body.dark {
         h6,span, strong{
             color: white !important;
         }
+    }
+
+    .loader{
+        background-color: var(--bg_dark) !important;
+    }
+
+    .pixora-text-area{
+        color: white;
+    }
+
+    .pixora-report-container .text-muted{
+        color: white !important;
+    }
+
+    .share-title{
+        color: white;
+    }
+
+    .share-btn{
+        background-color: rgba(30, 41, 59, 0.7);
+        color: white;
     }
 }

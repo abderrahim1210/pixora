@@ -1,8 +1,11 @@
 import React from "react";
 import { Copyright } from "../Copyright";
 import { FiFacebook, FiGithub, FiInstagram, FiTwitter } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthProvider";
 //import '../../assets/css/footer.css'
 export const Footer = ({ type }) => {
+  const user = useAuth();
   return (
     <>
       {
@@ -17,10 +20,10 @@ export const Footer = ({ type }) => {
                   </div>
                   <div className="footer-col">
                     <h4>Explore</h4>
-                    <a href="#">Home</a>
-                    <a href="#">Explore</a>
-                    <a href="#">Upload</a>
-                    <a href="#">Profile</a>
+                    <Link to={'/'}>Home</Link>
+                    {/* <a href="#">Explore</a> */}
+                    <Link to={'/upload'}>Upload</Link>
+                    <Link to={`/user/${user?.username}/myprofile`}>Profile</Link>
                   </div>
                   <div className="footer-col">
                     <h4>Legal</h4>
@@ -35,7 +38,7 @@ export const Footer = ({ type }) => {
                       <a href=""><FiFacebook /></a>
                       <a href=""><FiInstagram /></a>
                       <a href=""><FiTwitter /></a>
-                      <a href=""><FiGithub /></a>
+                      <a href="https://github.com/abderrahim1210"><FiGithub /></a>
                     </div>
                   </div>
                 </div>

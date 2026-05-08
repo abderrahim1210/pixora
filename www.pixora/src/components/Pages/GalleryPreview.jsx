@@ -114,7 +114,7 @@ const GalleryPreview = () => {
                                                 <div className="meta-info d-flex gap-4 mt-4">
                                                     <div className="meta-item">
                                                         <User size={16} className="text-primary" />
-                                                        <span>{gallery?.user?.display_name || 'Anonymous'}</span>
+                                                        <Link style={{textDecoration:'none'}} to={`/photographer/${gallery?.user?.id}`}>{gallery?.user?.username || 'Anonymous'}</Link>
                                                     </div>
                                                     <div className="meta-item">
                                                         <Calendar size={16} className="text-primary" />

@@ -14,7 +14,6 @@ import { BiChevronDown, BiSearchAlt } from 'react-icons/bi';
 import { Footer } from './Layouts/Footer';
 import PhotographersList from './PhotographersList';
 const Photographers = () => {
-    document.body.title = 'Pixora | Photographers'
     const [search, setSearch] = useState("");
     const navigate = useNavigate();
     const { user } = useAuth();

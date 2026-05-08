@@ -1,0 +1,89 @@
+.step-dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+    font-size: 14px;
+    transition: 0.3s;
+
+    &.active {
+        background: #0078ff;
+        color: white;
+        box-shadow: 0 0 15px rgba(0, 120, 255, 0.4);
+    }
+}
+
+.warning-card {
+    background: rgba(237, 61, 61, 0.1);
+    border-left: 4px solid #ed3d3d;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.custom-input {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+
+    &:focus {
+        border-color: #0078ff !important;
+        box-shadow: none;
+    }
+}
+
+
+.credential-settings-body {
+    color: #2d3436;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+
+    .step-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .info-section {
+        .step-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+        }
+
+        .step-desc {
+            font-size: 0.9rem;
+            color: #636e72;
+            line-height: 1.6;
+        }
+    }
+
+    .input-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        label {
+            font-size: 0.85rem;
+            color: #2d3436;
+            font-weight: 600;
+            padding-left: 2px;
+        }
+    }
+
+    .form-check-input:checked{
+        background-color: red !important;
+        border-color: black !important;
+    }
+
+    .form-check-input:focus{
+        outline: none !important;
+        box-shadow: none !important;
+    }
+}

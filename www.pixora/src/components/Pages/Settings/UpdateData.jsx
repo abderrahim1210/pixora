@@ -49,7 +49,6 @@ const UpdateData = ({handleLogOut}) => {
             const payload = {
                 new_email:form.new_email,
                 new_password:form.newPassword
-                // new_password_confirmation
             }
             const update = async () => {
                 const res = await axios.post('https://api.pixora.test/update_email_password',payload, {withCredentials:true, withXSRFToken:true});

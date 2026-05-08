@@ -62,7 +62,7 @@ export const Upload = () => {
       if (file) {
         const res = await axios.post('https://api.pixora.test/upload', { photo_data: payload }, { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
-          navigate(`/user/${user.username}/myphotos`, { state: { uploaded: true, message: res.data.message } });
+          navigate(`/user/${user.username}/dashboard`, { state: { uploaded: true, message: res.data.message } });
         } else {
           notyf.error(res.data.message);
         }

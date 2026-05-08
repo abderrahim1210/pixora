@@ -63,7 +63,7 @@ const Report = ({ id, user, type }) => {
                     Details
                 </label>
                 <textarea
-                    className="pixora-input-field"
+                    className="form-control pixora-input-field"
                     placeholder="Provide additional information to help our moderators..."
                     rows="3"
                     value={description}

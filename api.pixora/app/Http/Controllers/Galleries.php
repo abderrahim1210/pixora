@@ -43,9 +43,8 @@ class Galleries extends Controller
 
     public function GetGallery($id)
     {
-        // $user = Auth::user();
 
-        $gallery = Gallery::with(['photos' => function ($q) {
+        $gallery = Gallery::with(['user:id,username','photos' => function ($q) {
             $q->select('photos.id','filename','title','width','height','size');
         }])->where('id', $id)->first();
 

@@ -5,6 +5,7 @@ import { useModal } from '../../context/ModalProvider';
 import ModalTemplate from "../ModalTemplate";
 import UpdateData from '../Settings/UpdateData';
 import { useTheme } from '../../context/ThemeProvider';
+import DeleteAccount from '../Settings/DeleteAccount';
 const Settings = ({ handleLogOut }) => {
     const { show, openModal, closeModal } = useModal();
     const {dark,setDark} = useTheme();
@@ -18,6 +19,13 @@ const Settings = ({ handleLogOut }) => {
                 show === 'updateData' && (
                     <ModalTemplate show={show} closeModal={closeModal}>
                         <UpdateData handleLogOut={handleLogOut} />
+                    </ModalTemplate>
+                )
+            }
+            {
+                show === 'deleteAccount' && (
+                    <ModalTemplate show={show} closeModal={closeModal}>
+                        <DeleteAccount />
                     </ModalTemplate>
                 )
             }
@@ -87,7 +95,7 @@ const Settings = ({ handleLogOut }) => {
                                 <p>Permanently remove your account and all data.</p>
                             </div>
                         </div>
-                        <button type="button" className="btn btn-sm">
+                        <button type="button" onClick={(() => openModal('deleteAccount'))} className="btn btn-sm">
                             Delete
                         </button>
                     </div>

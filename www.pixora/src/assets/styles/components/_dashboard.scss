@@ -875,9 +875,8 @@
 
 
 .credential-settings-body {
-  // الحفاظ على الخطوط اللي عزاز عليك
   font-family: "Outfit", "Cairo", sans-serif; 
-  color: #2d3436; // لون نص غامق وبارد
+  color: #2d3436;
   min-height: 320px;
   display: flex;
   flex-direction: column;
@@ -942,8 +941,6 @@
     padding: 15px;
     border-radius: 12px;
     border: none;
-    // Gradient احترافي كيمشي مع ستايل Pixora
-    // background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     background-color: var(--special_color);
     color: white;
     font-weight: 600;

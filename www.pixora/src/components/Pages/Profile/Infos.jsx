@@ -148,7 +148,7 @@ const Infos = ({user, openModal, statistics, loading, photos, photosCount}) => {
                     )}
                 </div>
                 <div className="container-fluid pm-button mt-3">
-                    <Link to={`/user/${user.username}/myphotos`} className={`btn ${(user?.role === "admin" || user?.role === "editor") ? "disabled" : ""}`} id="managePhotos">
+                    <Link to={`/user/${user.username}/dashboard`} className={`btn ${(user?.role === "admin" || user?.role === "editor") ? "disabled" : ""}`} id="managePhotos">
                         manage my photos
                     </Link>
                 </div>

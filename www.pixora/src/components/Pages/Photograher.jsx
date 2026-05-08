@@ -26,10 +26,8 @@ const Photograher = () => {
         queryKey: ['follows'],
         queryFn: async () => {
             const res = await axios.get('https://api.pixora.test/follows', { withCredentials: true, withXSRFToken: true });
-            console.log(res.data.users);
             return res.data?.users?.map(f => f.following_id) || [];
         },
-        // onSuccess: (data) => setLocalFollows(data),
         staleTime: 1000 * 60 * 5,
     });
 
@@ -90,16 +88,18 @@ const Photograher = () => {
                             className="d-flex justify-content-start align-items-center mt-2 mb-3"
                             style={{ flexDirection: "column", gap: 5 }}
                         >
-                            <div className="container-fluid p-0 profileImages">
+                            <div className="container-fluid p-3 profileImages">
                                 <div
                                     className="coverImage"
                                     onContextMenu={(e) => e.preventDefault()}
                                     style={{
-                                        backgroundImage: user?.cover_image
-                                            ? `url("https://api.pixora.test/storage/cover_images/${photographer.cover_image}")`
+                                        backgroundImage: photographer?.cover_image
+                                            ? `url("https://api.pixora.test/storage/cover_images/${photographer?.cover_image}")`
                                             : `linear-gradient(135deg, #454545 0%, #353535 100%)`,
                                         backgroundAttachment: "fixed",
                                         backgroundRepeat: "no-repeat",
+                                        backgroundPosition:'center',
+                                        backgroundSize:'cover',
                                         cursor: "pointer"
                                     }}
                                 >

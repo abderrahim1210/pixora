@@ -4,6 +4,7 @@ use App\Http\Controllers\AcceptEdit;
 use App\Http\Controllers\AddFollow;
 use App\Http\Controllers\AdminAnalytics;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\DeleteAccount;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DownloadImageOriginal;
 use App\Http\Controllers\ExplorePhotos;
@@ -152,4 +153,6 @@ Route::get('/profile_statistics', [ProfileAnalytics::class, 'analytics'])->middl
 Route::post('/verify_password',[UpdateSensitiveData::class, 'checkCurrPassword'])->middleware('auth:sanctum');
 
 Route::post('/update_email_password',[UpdateSensitiveData::class, 'changeEmailPassword'])->middleware('auth:sanctum');
+
+Route::delete('/delete_account',[DeleteAccount::class, 'deleteAccount'])->middleware('auth:sanctum');
 require __DIR__ . '/auth.php';
