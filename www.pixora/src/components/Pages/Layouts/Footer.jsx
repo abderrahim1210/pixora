@@ -21,15 +21,22 @@ export const Footer = ({ type }) => {
                   <div className="footer-col">
                     <h4>Explore</h4>
                     <Link to={'/'}>Home</Link>
-                    {/* <a href="#">Explore</a> */}
                     <Link to={'/upload'}>Upload</Link>
+                    <Link to={'/galleries'}>Galleries</Link>
+                  </div>
+                  <div className="footer-col">
+                    <h4>Profile</h4>
+                    {
+                      (user?.role !== 'editor' && !user?.role !== 'admin') && (<Link to={`/user/${user?.username}/dashboard`}>Dashboard</Link>)
+                    }
                     <Link to={`/user/${user?.username}/myprofile`}>Profile</Link>
+                    <Link to={'/signup'}>Create account</Link>
                   </div>
                   <div className="footer-col">
                     <h4>Legal</h4>
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms of use</a>
-                    <a href="#">Cookies</a>
+                    <Link to={'/legal/privacy'}>Privacy</Link>
+                    <Link to={'/legal/terms'}>Terms of use</Link>
+                    <Link to={'/legal/cookies'}>Cookies</Link>
                   </div>
 
                   <div className="footer-col">
@@ -57,9 +64,9 @@ export const Footer = ({ type }) => {
             <footer className="footer ftr-dash">
               <div className="footer-container">
                 <div className="footer-links">
-                  <a href="#">Terms of use</a>
+                  <Link to={'/legal/terms'}>Terms of use</Link>
                   <span className="divider">•</span>
-                  <a href="#">Privacy & Conditions</a>
+                  <Link to={'/legal/privacy'}>Privacy & Conditions</Link>
                 </div>
 
                 <div className="footer-copy">

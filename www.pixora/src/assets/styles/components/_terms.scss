@@ -1,0 +1,148 @@
+// 1. Variables (Default is Dark Mode)
+:root {
+  --legal-bg: #0a0f18;
+  --legal-card-bg: rgba(255, 255, 255, 0.03);
+  --legal-border: rgba(255, 255, 255, 0.05);
+  --legal-title: #ffffff;
+  --legal-text: #cbd5e1;
+  --legal-muted: #64748b;
+  --legal-sidebar-text: #94a3b8;
+  --primary-blue: rgb(0, 120, 255);
+  --sidebar-hover: rgba(59, 130, 246, 0.1);
+  
+}
+
+// 2. Light Mode Variables
+.legal-container {
+  --legal-bg: #f8fafc; // Off-white clean
+  --legal-card-bg: #ffffff;
+  --legal-border: #e2e8f0;
+  --legal-title: #0f172a;
+  --legal-text: #334155;
+  --legal-muted: #64748b;
+  --legal-sidebar-text: #475569;
+  --sidebar-hover: #eff6ff;
+}
+
+// 3. The Main Styles
+.legal-container {
+  min-height: 100vh;
+  background-color: var(--legal-bg);
+  color: var(--legal-text);
+  padding: 4rem 2rem;
+  display: flex;
+  justify-content: center;
+  transition: all 0.3s ease; // Smooth switch bin dark/light
+
+  .legal-wrapper {
+    max-width: 1100px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 3.5rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // Sidebar
+  .legal-sidebar {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+    background: var(--legal-card-bg);
+    border: 1px solid var(--legal-border);
+    padding: 1.5rem;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
+    .sidebar-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--primary-blue);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+
+      button {
+        text-align: left;
+        padding: 0.8rem 1rem;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+        color: var(--legal-sidebar-text);
+        font-weight: 500;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+
+        &:hover {
+          background: var(--sidebar-hover);
+          color: var(--primary-blue);
+        }
+
+        &.active {
+          background: var(--primary-blue);
+          color: #ffffff !important;
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+      }
+    }
+  }
+
+  // Content
+  .legal-content {
+    .animate-fade {
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      color: var(--legal-title);
+      letter-spacing: -1px;
+    }
+
+    .last-updated {
+      color: var(--legal-muted);
+      margin-bottom: 3rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-blue);
+    }
+
+    p {
+      line-height: 1.8; // Space ktiira bach t-kon readable
+      color: var(--legal-text);
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(8px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}

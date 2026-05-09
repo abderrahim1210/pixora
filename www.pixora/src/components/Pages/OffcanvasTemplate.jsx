@@ -74,7 +74,7 @@ const OffcanvasTemplate = ({ user, page = 'home' }) => {
                                         </div>
                                     )}
 
-                                    <Nav className="flex-column">
+                                    <Nav className="offcanvas-links flex-column">
                                         {navLinks.map((link) => (
                                             <Link
                                                 key={link.path}
@@ -100,7 +100,7 @@ const OffcanvasTemplate = ({ user, page = 'home' }) => {
                                                     <span className="icon"><Compass size={20} /></span>
                                                     <span className="text">Explore</span>
                                                 </div>
-                                                <span style={{ transform: exploreOpen ? 'rotate(180deg)' : 'rotate(0)', transition: '0.3s' }}>
+                                                <span className='explore-chevron-down' style={{ transform: exploreOpen ? 'rotate(180deg)' : 'rotate(0)', transition: '0.3s' }}>
                                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6" /></svg>
                                                 </span>
                                             </div>

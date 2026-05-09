@@ -30,6 +30,8 @@
 @use './components/reports';
 @use './components/statistics';
 @use './components/delete_account';
+@use './components/terms';
+@use './components/cookie_banner';
 
 :root {
     --special_color: rgb(0, 120, 255);
@@ -123,20 +125,37 @@ body {
 
 
 body.dark {
+
     input:-webkit-autofill,
     input:-webkit-autofill:hover,
     input:-webkit-autofill:focus,
     input:-webkit-autofill:active {
         -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
-    
+
         -webkit-text-fill-color: white !important;
-    
+
         transition: background-color 5000s ease-in-out 0s;
     }
-    
+
     input:-webkit-autofill:focus {
         border: 2px solid !important;
     }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+
+        -webkit-text-fill-color: white !important;
+
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    input:-webkit-autofill:focus {
+        border: 2px solid !important;
+    }
+
     background-color: var(--bg_dark) !important;
     color: #f8fafc;
 
@@ -532,5 +551,49 @@ body.dark {
     .share-btn {
         background-color: rgba(30, 41, 59, 0.7);
         color: white;
+    }
+
+    .legal-container {
+        --legal-bg: #0a0f18;
+        --legal-card-bg: rgba(255, 255, 255, 0.03);
+        --legal-border: rgba(255, 255, 255, 0.05);
+        --legal-title: #ffffff;
+        --legal-text: #cbd5e1;
+        --legal-muted: #64748b;
+        --legal-sidebar-text: #94a3b8;
+        --primary-blue: rgb(0, 120, 255);
+        --sidebar-hover: rgba(59, 130, 246, 0.1);
+    }
+
+    .custom-menu-icon{
+        color: white;
+    }
+
+    .custom-offcanvas{
+        background-color: var(--bg_dark) !important;
+    }
+    
+    .user-info h6, .user-info small{
+        color: white !important;
+    }
+
+    .offcanvas-links .nav-link-custom > span.text, .offcanvas-links .nav-link-custom > span.icon, .explore-dropdown-wrapper span.text, .offcanvas-links .explore-chevron-down, .sub-menu .sub-link, .explore-dropdown-wrapper span.icon{
+        color: white !important;
+    }
+
+    .offcanvas-footer{
+        background-color: var(--bg_dark) !important;
+    }
+
+    .offcanvas-header .btn-close{
+        background-color: white !important;
+    }
+
+    .offcanvas-links .nav-link-custom:hover{
+        background-color: var(--special_color);
+    }
+
+    .social_media svg{
+        fill: white !important;
     }
 }

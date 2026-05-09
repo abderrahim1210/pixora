@@ -1,3 +1,4 @@
+import { Compass, Info, LayoutGrid, Sparkles } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { FaCamera, FaChartLine, FaCog, FaEdit, FaHeart, FaIdCard, FaInfoCircle, FaUser } from 'react-icons/fa';
 import { FaGear, FaPencil } from 'react-icons/fa6';
@@ -6,10 +7,10 @@ import { MdAnalytics, MdCategory, MdPhotoLibrary, MdRecommend } from 'react-icon
 import { Link } from 'react-router-dom';
 
 const BottomNav = ({ page, user=null }) => {
-    const homeItems = [{ id: 'foryou', icon: <MdRecommend size={20} />, label: 'For you' },
-    { id: 'explore', icon: <FiCompass size={20} />, label: 'Explore' },
-    { id: 'categories', icon: <MdCategory size={20} />, label: 'Categories' },
-    { id: 'about', icon: <FaInfoCircle size={20} />, label: 'About' },]
+    const homeItems = [{ id: 'foryou', icon: <Sparkles size={20} />, label: 'For you' },
+    { id: 'explore', icon: <Compass size={20} />, label: 'Explore' },
+    { id: 'categories', icon: <LayoutGrid size={20} />, label: 'Categories' },
+    { id: 'about', icon: <Info size={20} />, label: 'About' },]
     const profileItems = [
         { id: 'info', icon: <FaIdCard size={20} />, label: 'Infos' },
         { id: 'editProfile', icon: <FaPencil size={20} />, label: 'Edit Profile' },

@@ -38,6 +38,8 @@ import ForYou from "./ForYou";
 import Categories from "./Categories";
 import About from "./About";
 import Explore from "./Explore";
+import PolicyNotice from "../Pages/PolicyNotice";
+import { Compass, Info, LayoutGrid, Sparkles } from "lucide-react";
 
 
 export const Home = () => {
@@ -45,7 +47,6 @@ export const Home = () => {
   const [usrSearched, setUsrSearched] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
-  // const [galleries, setGalleries] = useState([]);
   const [term, setTerm] = useState('');
   const [heroImage, setHeroImage] = useState([]);
 
@@ -165,6 +166,7 @@ export const Home = () => {
   };
   return (
     <div data-bs-page="pixora">
+      <PolicyNotice />
       <Navbar data={user} className='sticky-top' />
 
       <div className="sticky-top">
@@ -178,7 +180,7 @@ export const Home = () => {
                 data-bs-toggle="tab"
                 title="For you"
               >
-                <MdRecommend /> For you
+                <Sparkles /> For you
               </a>
             </li>
             <li className="nav-item">
@@ -189,7 +191,7 @@ export const Home = () => {
                 data-bs-toggle="tab"
                 title="Explore"
               >
-                <FiCompass /> Explore
+                <Compass /> Explore
               </a>
             </li>
             <li className="nav-item">
@@ -200,7 +202,7 @@ export const Home = () => {
                 data-bs-toggle="tab"
                 title="Categories"
               >
-                <MdCategory /> Categories
+                <LayoutGrid /> Categories
               </a>
             </li>
             <li className="nav-item">
@@ -211,7 +213,7 @@ export const Home = () => {
                 data-bs-toggle="tab"
                 title="About"
               >
-                <FaInfoCircle /> About
+                <Info /> About
               </a>
             </li>
           </ul>

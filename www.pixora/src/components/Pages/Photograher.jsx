@@ -191,28 +191,28 @@ const Photograher = () => {
                             <div className="social_media mt-2 mb-2">
                                 {photographer?.facebook && (
                                     <div>
-                                        <a href="" id="facebookIcon">
+                                        <a href={photographer?.facebook} id="facebookIcon">
                                             <FaFacebook />
                                         </a>
                                     </div>
                                 )}
                                 {photographer?.instagram && (
                                     <div>
-                                        <a href="" id="instagramIcon">
+                                        <a href={photographer?.instagram} id="instagramIcon">
                                             <FaInstagram />
                                         </a>
                                     </div>
                                 )}
                                 {photographer?.x && (
                                     <div>
-                                        <a href="" id="xIcon">
+                                        <a href={photographer?.x} id="xIcon">
                                             <FaTwitter />
                                         </a>
                                     </div>
                                 )}
                                 {photographer?.website && (
                                     <div>
-                                        <a href="" id="webIcon">
+                                        <a href={photographer?.website} id="webIcon">
                                             <FaGlobe />
                                         </a>
                                     </div>

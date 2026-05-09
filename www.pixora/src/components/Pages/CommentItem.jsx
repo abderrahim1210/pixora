@@ -4,6 +4,7 @@ import { FaCheck, FaCopy, FaEllipsisV, FaFlag, FaTimes, FaTrash } from 'react-ic
 import { FaPencil } from 'react-icons/fa6';
 import Report from './Report';
 import ModalTemplate from './ModalTemplate';
+import { Link } from 'react-router-dom';
 
 const CommentItem = ({ c,
     user,
@@ -28,21 +29,25 @@ const CommentItem = ({ c,
                     </ModalTemplate>
                 )
             }
-            <img
-                src={
-                    c.user?.photo_profile
-                        ? `https://api.pixora.test/storage/profile_pictures/${c.user?.photo_profile}`
-                        : "/outils/pngs/useracc2.png"
-                }
-                alt={c.user?.username}
-                className="comment-avatar"
-            />
+            <Link to={`/photographer/${c?.user?.id}`}>
+                <img
+                    src={
+                        c.user?.photo_profile
+                            ? `https://api.pixora.test/storage/profile_pictures/${c.user?.photo_profile}`
+                            : "/outils/pngs/useracc2.png"
+                    }
+                    alt={c.user?.username}
+                    className="comment-avatar"
+                />
+            </Link>
             <div className="comment-body d-flex justify-content-between align-items-start">
                 <div>
-                    <h6 className="comment-author">
-                        {c.user?.username}
-                        {c.edited && <small>{"Edited"}</small>}
-                    </h6>
+                    <Link to={`/photographer/${c?.user?.id}`} style={{ color: '#262626', textDecoration:'none' }}>
+                        <h6 className="comment-author">
+                            {c.user?.username}
+                            {c.edited && <small>{"Edited"}</small>}
+                        </h6>
+                    </Link>
                     {isEditing !== c.id && (<div className="display-div">
                         <p className="comment-text">{c.content}</p>
                     </div>)}

@@ -1,0 +1,99 @@
+.cookie-banner-overlay {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+  .cookie-card {
+    background: rgba(15, 23, 42, 0.8); // Dark Slate m3a transparency
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem 2rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    max-width: 900px;
+    width: 100%;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      text-align: center;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
+    }
+  }
+
+  .cookie-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    .cookie-icon {
+      font-size: 2rem;
+    }
+
+    .cookie-text {
+      h4 {
+        color: white;
+        margin-bottom: 0.2rem;
+        font-weight: 700;
+      }
+      p {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        margin: 0;
+        a {
+          color: #3b82f6;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .cookie-actions {
+    display: flex;
+    gap: 1rem;
+
+    button {
+      padding: 0.6rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-decline {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+      }
+    }
+
+    .btn-accept {
+      background: #3b82f6;
+      border: none;
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      &:hover {
+        background: #2563eb;
+        transform: translateY(-2px);
+      }
+    }
+  }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(100px); }
+  to { opacity: 1; transform: translateY(0); }
+}

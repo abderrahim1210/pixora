@@ -12,24 +12,25 @@ import Photographers from "../Pages/Photographers";
 import GalleriesSection from "../Pages/GalleriesSection";
 import SearchPhotos from "../Pages/SearchPhotos";
 import { UserDashboard } from "../Pages/UserDashboard";
+import Terms from "../Pages/Terms";
 const AppRoutes = () => {
-  
   return (
     <>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/upload" element={<Upload />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path={`/user/:username/dashboard`} element={<UserDashboard />} />
-      <Route path={`/user/:username/myprofile`} element={<MyProfile />} />
-      <Route path="/photo/:id/:slug" element={<Photo />} />
-      <Route path="/gallery/:id" element={<GalleryPreview />} />
-      <Route path="/photographer/:id" element={<Photograher />} />
-      <Route path="/photographers" element={<Photographers />} />
-      <Route path="/galleries" element={<GalleriesSection />} />
-      <Route path="/search" element={<SearchPhotos />} />
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/upload" element={<Upload />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path={`/user/:username/dashboard`} element={<UserDashboard />} />
+        <Route path={`/user/:username/myprofile`} element={<MyProfile />} />
+        <Route path="/photo/:id/:slug" element={<Photo />} />
+        <Route path="/gallery/:id" element={<GalleryPreview />} />
+        <Route path="/photographer/:id" element={<Photograher />} />
+        <Route path="/photographers" element={<Photographers />} />
+        <Route path="/galleries" element={<GalleriesSection />} />
+        <Route path="/search" element={<SearchPhotos />} />
+        <Route path="/legal/:tab" element={<Terms />} />
+      </Routes>
     </>
   );
 };
