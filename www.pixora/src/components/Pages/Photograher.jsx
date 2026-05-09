@@ -3,7 +3,7 @@ import { Navbar } from './Layouts/Navbar'
 import { Footer } from './Layouts/Footer'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
-import { FaBan, FaCamera, FaFacebook, FaGlobe, FaInstagram, FaMapPin, FaTwitter } from 'react-icons/fa'
+import { FaBan, FaCamera, FaFacebook, FaGlobe, FaIdBadge, FaInstagram, FaMapPin, FaTwitter } from 'react-icons/fa'
 import { EmptyContent } from './EmptyContent'
 import PageSkeleton from './PageSkeleton'
 import PhotosTemplate from './PhotosTemplate'
@@ -98,8 +98,8 @@ const Photograher = () => {
                                             : `linear-gradient(135deg, #454545 0%, #353535 100%)`,
                                         backgroundAttachment: "fixed",
                                         backgroundRepeat: "no-repeat",
-                                        backgroundPosition:'center',
-                                        backgroundSize:'cover',
+                                        backgroundPosition: 'center',
+                                        backgroundSize: 'cover',
                                         cursor: "pointer"
                                     }}
                                 >
@@ -157,8 +157,8 @@ const Photograher = () => {
                                 </div>
                                 <div>
                                     {
-                                        photographer?.role === "admin" && (
-                                            <span className="badge">Admin</span>
+                                        (photographer?.role === "admin" || photographer?.role === "editor") && (
+                                            <span className={`badge badge-${photographer?.role}`}><FaIdBadge /> {photographer?.role}</span>
                                         )
                                     }
                                     <p

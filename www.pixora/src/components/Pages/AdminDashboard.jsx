@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaCamera, FaCameraRetro, FaChartArea, FaChartLine, FaCheckCircle, FaClock, FaComment, FaComments, FaFlag, FaMedal, FaStar, FaTimesCircle, FaTrophy, FaUserPlus, FaUsers, FaUserShield } from 'react-icons/fa'
 import { MdComment, MdEdit, MdPending } from 'react-icons/md'
 import { Truncate } from './Truncate'
@@ -9,8 +9,113 @@ import { EmptyContent } from './EmptyContent'
 import { FiUserPlus, FiUsers } from 'react-icons/fi'
 import LatestRequests from './LatestRequests'
 import StaffUserCard from './StaffUserCard'
+import { Star, Stars } from 'lucide-react'
+import axios from 'axios'
+import Swal from 'sweetalert2'
+import { notyf } from '../../assets/js/notyf'
+import withReactComponent from 'sweetalert2-react-content'
+import ShowMoreButton from './ShowMoreButton'
 
-const AdminDashboard = ({ analytics }) => {
+const AdminDashboard = ({ user, analytics, setAnalytics }) => {
+    const [staffVisible, setStaffVisible] = useState(4);
+    const showMore = () => {
+        setStaffVisible(prev => prev + 4);
+    }
+    const removeStaffRole = async (id) => {
+        Swal.fire({
+            title: 'Remove role from user',
+            text: 'Are you sure for remove role from this user ?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes , remove it',
+            confirmButtonColor: '#ed3d3d',
+            cancelButtonText: 'Cancel'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const res = await axios.post('https://api.pixora.test/remove_role', { user_id: id }, { withCredentials: true, withXSRFToken: true });
+                    if (res.data.success) {
+                        setAnalytics(prev => ({ ...prev, staff: prev.staff.filter(s => s.id !== id) }));
+                        notyf.success(res.data.message);
+                    } else {
+                        notyf.error(res.data.message);
+                    }
+                } catch (err) {
+                    console.log(err?.response?.data);
+                }
+            }
+        })
+    }
+
+    const MySwal = withReactComponent(Swal);
+
+    const handleChangeRole = async (id, username, role) => {
+        MySwal.fire({
+            title: <span style={{ color: '#0f172a' }}>Change User Role</span>,
+            html: (
+                <p className="text-gray-500">
+                    You are changing the role for <b>{username}</b>
+                </p>
+            ),
+            input: 'select',
+            inputOptions: {
+                'admin': 'Admin (Full Access)',
+                'editor': 'Editor (Limited Access)',
+                'user': 'Regular User'
+            },
+            inputValue: role,
+            showCancelButton: true,
+            confirmButtonText: 'Update Role',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#3b82f6',
+            cancelButtonColor: '#ef4444',
+            background: 'rgba(255, 255, 255, 0.9)',
+            backdrop: `rgba(15, 23, 42, 0.2) blur(8px)`,
+            customClass: {
+                popup: 'glass-morphism-popup',
+            }
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const res = await axios.post('https://api.pixora.test/change_role', { user_id: id, role: result.value }, { withCredentials: true, withXSRFToken: true });
+                    if (res.data.success) {
+                        setAnalytics(prev => ({ ...prev, staff: prev.staff.map(u => u.id === id ? { ...u, role: result.value } : u) }));
+                        notyf.success(res.data.message);
+                    } else {
+                        notyf.error(res.data.message);
+                    }
+                } catch (err) {
+                    console.log(err?.response?.data);
+                }
+            }
+        })
+    }
+
+    const handleDeleteUser = async (id) => {
+        Swal.fire({
+            title: 'Delete user',
+            text: 'Are you sure for delete this user ?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes , remove it',
+            confirmButtonColor: '#ed3d3d',
+            cancelButtonText: 'Cancel'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const res = await axios.post('https://api.pixora.test/delete_user', { user_id: id }, { withCredentials: true, withXSRFToken: true });
+                    if (res.data.success) {
+                        setAnalytics(prev => ({ ...prev, staff: prev.staff.filter(s => s.id !== id) }));
+                        notyf.success(res.data.message);
+                    } else {
+                        notyf.error(res.data.message);
+                    }
+                } catch (err) {
+                    console.log(err?.response?.data);
+                }
+            }
+        })
+    }
     return (
         <>
             <div className='tab-pane fade show' id='admin'>
@@ -45,14 +150,14 @@ const AdminDashboard = ({ analytics }) => {
                                     </div>
                                 </div>
                                 <hr />
-                                <div className='dashboard-links nav2'>
+                                <div className='dashboard-links nav2 mb-2'>
                                     <nav className='nav'>
                                         <li className='nav-item'><a href="" data-bs-target="#top_photographers"
                                             data-bs-toggle="tab" className='nav-link active'><FaTrophy /> Top photographers ({analytics?.top_photographers?.length ?? 0})</a></li>
                                         <li className='nav-item'><a href="" data-bs-target="#requests"
                                             data-bs-toggle="tab" className='nav-link'><MdEdit /> Requests ({analytics?.requests?.length ?? 0})</a></li>
                                         <li className='nav-item'><a href="" data-bs-target="#staff"
-                                            data-bs-toggle="tab" className='nav-link'><FaUserShield /> Staff ({analytics?.staff?.length ?? 0})</a></li>
+                                            data-bs-toggle="tab" className='nav-link'><FaUserShield /> Staff ({analytics?.staff?.filter(s => s.id !== user?.id)?.length ?? 0})</a></li>
                                         <li className='nav-item'><a href="" data-bs-target="#reports"
                                             data-bs-toggle="tab" className='nav-link'><FaFlag /> Reports ({analytics?.reports?.length ?? 0})</a></li>
                                     </nav>
@@ -85,16 +190,23 @@ const AdminDashboard = ({ analytics }) => {
                                     </div>
                                     <div className="tab-pane fade show" id="staff">
                                         <div>
-                                            <h2 className='d-flex align-items-center gap-2'><FaUserShield /> User <span className='text-primary'>({analytics.staff?.length ?? 0})</span></h2>
+                                            <h2 className='d-flex align-items-center gap-2'><FaUserShield /> Staff <span className='text-primary'>({analytics.staff?.filter(s => s.id !== user?.id).length ?? 0})</span></h2>
                                             <div className='container-fluid div3'>
                                                 {
-                                                    analytics.staff?.length > 0 ? analytics.staff.map((user, index) => (
-                                                        <StaffUserCard user={user} key={index} />
+                                                    analytics.staff?.length > 0 ? analytics?.staff?.filter(u => u.id !== user?.id).slice(0, staffVisible).map((user, index) => (
+                                                        <StaffUserCard user={user} onRemoveRole={removeStaffRole} onChangeRole={handleChangeRole} onDelete={handleDeleteUser} key={index} />
                                                     ))
                                                         : (
                                                             <EmptyContent icon={<FaUserShield className='faIcon' />} text={"No staff found it - try again later"} />
                                                         )
                                                 }
+                                                <div className='container mx-auto d-flex justify-content-center'>
+                                                    {
+                                                        staffVisible < analytics?.staff?.length && (
+                                                            <ShowMoreButton showMore={showMore} />
+                                                        )
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -146,7 +258,7 @@ const AdminDashboard = ({ analytics }) => {
                                 </div>
                                 <hr />
                                 <div>
-                                    <h2 className='d-flex align-items-center gap-2'><FaComments />Featured photos <span className='text-primary'>({analytics.featured_photos?.length ?? 0})</span></h2>
+                                    <h2 className='d-flex align-items-center gap-2'><Stars />Featured photos <span className='text-primary'>({analytics.featured_photos?.length ?? 0})</span></h2>
                                     {
                                         analytics.featured_photos?.length > 0 ? (
                                             <PhotosTemplate photos={analytics.featured_photos} />

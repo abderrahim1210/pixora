@@ -3,6 +3,7 @@
 use App\Http\Controllers\AcceptEdit;
 use App\Http\Controllers\AddFollow;
 use App\Http\Controllers\AdminAnalytics;
+use App\Http\Controllers\AdminUsersActions;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\DeleteAccount;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -162,5 +163,11 @@ Route::delete('/delete_account',[DeleteAccount::class, 'deleteAccount'])->middle
 Route::post('/send_link_email',[ForgotPasswordController::class, 'sendLinkEmail']);
 
 Route::post('/reset_password',[NewPasswordController::class, 'store']);
+
+Route::post('/remove_role',[AdminUsersActions::class, 'removeRole'])->middleware('auth:sanctum');
+
+Route::post('/change_role',[AdminUsersActions::class, 'changeRole'])->middleware('auth:sanctum');
+
+Route::post('/delete_user',[AdminUsersActions::class, 'deleteUser'])->middleware('auth:sanctum');
 
 require __DIR__ . '/auth.php';

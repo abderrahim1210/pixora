@@ -480,7 +480,7 @@ export const MyProfile = () => {
                     <Settings handleLogOut={handleLogOut} />
                     {
                       user?.role === 'admin' && (
-                        <AdminDashboard analytics={analytics} />
+                        <AdminDashboard user={user} analytics={analytics} setAnalytics={setAnalytics} />
                       )
                     }
                     {

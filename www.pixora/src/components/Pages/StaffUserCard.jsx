@@ -1,7 +1,9 @@
+import { UserCog } from 'lucide-react'
 import React from 'react'
-import { FaTrash, FaUserMinus } from 'react-icons/fa'
+import { FaTrash, FaUserCog, FaUserMinus } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 
-const StaffUserCard = ({ user }) => {
+const StaffUserCard = ({ user, onRemoveRole, onChangeRole, onDelete }) => {
     return (
         <div className="staff-member-card">
             <div className={`avatar-box ${user.role}`}>
@@ -9,14 +11,15 @@ const StaffUserCard = ({ user }) => {
             </div>
 
             <div className="user-details">
-                <p className="name">{user.username}</p>
+                <Link to={`/photographer/${user?.id}`}>
+                    <p className="name">{user.username}</p>
+                </Link>
                 <span className={`role-badge ${user.role}`}>
                     {user.role}
                 </span>
             </div>
 
             <div className="card-actions">
-                {/* Button: Remove Role (y-welli user 3adi) */}
                 <button
                     className="action-btn remove"
                     onClick={() => onRemoveRole(user.id)}
@@ -24,8 +27,14 @@ const StaffUserCard = ({ user }) => {
                 >
                     <FaUserMinus />
                 </button>
+                <button
+                    className="action-btn change"
+                    onClick={() => onChangeRole(user.id,user.username,user.role)}
+                    title="Change Staff Role"
+                >
+                    <FaUserCog />
+                </button>
 
-                {/* Button: Delete User */}
                 <button
                     className="action-btn delete"
                     onClick={() => onDelete(user.id)}
@@ -34,7 +43,6 @@ const StaffUserCard = ({ user }) => {
                     <FaTrash />
                 </button>
             </div>
-            {/* <div className="online-status"></div> */}
         </div>
     )
 }

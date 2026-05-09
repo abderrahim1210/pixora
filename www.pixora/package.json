@@ -36,6 +36,7 @@
     "redux": "^5.0.1",
     "styled-components": "^6.1.19",
     "sweetalert2": "^11.26.17",
+    "sweetalert2-react-content": "^5.1.2",
     "yet-another-react-lightbox": "^3.28.0"
   },
   "devDependencies": {

@@ -598,4 +598,20 @@ body.dark {
     .social_media svg{
         fill: white !important;
     }
+
+    .staff-member-card, .stat-card{
+        background-color: rgba(30, 41, 59, 0.7) !important;
+    }
+    
+    .staff-member-card .name, .stat-card h3, .stat-card p{
+        color: white !important;
+    }
+
+    .dashboard-links{
+        background-color: #0f172a !important;
+
+        .nav{
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+    }
 }
