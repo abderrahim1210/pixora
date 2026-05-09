@@ -157,7 +157,7 @@ const Photograher = () => {
                                 </div>
                                 <div>
                                     {
-                                        user?.role === "admin" && (
+                                        photographer?.role === "admin" && (
                                             <span className="badge">Admin</span>
                                         )
                                     }

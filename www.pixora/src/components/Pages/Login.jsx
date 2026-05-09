@@ -110,6 +110,9 @@ export const Login = () => {
                   </label>
                 </div>
                 <div className="mt-2 mb-2">
+                  You are forgot password ?<Link to={'/forgot_password'}>forgot password</Link>
+                </div>
+                <div className="mt-2 mb-2">
                   You don't have a account ? <Link to={'/signup'}>Sign up</Link>
                 </div>
                 <div className="actionsButton mt-2 mb-2">

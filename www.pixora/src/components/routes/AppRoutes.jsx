@@ -13,6 +13,8 @@ import GalleriesSection from "../Pages/GalleriesSection";
 import SearchPhotos from "../Pages/SearchPhotos";
 import { UserDashboard } from "../Pages/UserDashboard";
 import Terms from "../Pages/Terms";
+import { ForgotPassword } from "../Pages/ForgotPassword";
+import { ResetPassword } from "../Pages/ResetPassword";
 const AppRoutes = () => {
   return (
     <>
@@ -30,6 +32,8 @@ const AppRoutes = () => {
         <Route path="/galleries" element={<GalleriesSection />} />
         <Route path="/search" element={<SearchPhotos />} />
         <Route path="/legal/:tab" element={<Terms />} />
+        <Route path="/forgot_password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </>
   );

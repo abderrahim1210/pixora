@@ -32,6 +32,8 @@
 @use './components/delete_account';
 @use './components/terms';
 @use './components/cookie_banner';
+@use './components/forgot_pass';
+@use './components/reset_password';
 
 :root {
     --special_color: rgb(0, 120, 255);

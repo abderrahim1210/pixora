@@ -5,12 +5,14 @@ use App\Http\Controllers\AddFollow;
 use App\Http\Controllers\AdminAnalytics;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\DeleteAccount;
+use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DownloadImageOriginal;
 use App\Http\Controllers\ExplorePhotos;
 use App\Http\Controllers\FetchRequests;
 use App\Http\Controllers\FetchUsers;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Galleries;
 use App\Http\Controllers\GetHeroImages;
 use App\Http\Controllers\GetPhotos;
@@ -23,6 +25,7 @@ use App\Http\Controllers\ProfileAnalytics;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePictures;
 use App\Http\Controllers\RequestEdit;
+use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\SearchAtPhotos;
 use App\Http\Controllers\SendReport;
 use App\Http\Controllers\UpdateSensitiveData;
@@ -155,4 +158,9 @@ Route::post('/verify_password',[UpdateSensitiveData::class, 'checkCurrPassword']
 Route::post('/update_email_password',[UpdateSensitiveData::class, 'changeEmailPassword'])->middleware('auth:sanctum');
 
 Route::delete('/delete_account',[DeleteAccount::class, 'deleteAccount'])->middleware('auth:sanctum');
+
+Route::post('/send_link_email',[ForgotPasswordController::class, 'sendLinkEmail']);
+
+Route::post('/reset_password',[NewPasswordController::class, 'store']);
+
 require __DIR__ . '/auth.php';
