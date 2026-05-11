@@ -324,6 +324,7 @@ export const MyProfile = () => {
       const res = await axios.post('https://api.pixora.test/upload_photo', { image: preview, photo_id: imageId, ownerId: ownerId, requester_id: requester_id, req_id: req_id, task_id: taskId }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         notyf.success(res.data.message);
+        window.location.reload();
       } else {
         console.log(res.data.message);
       }

@@ -15,6 +15,7 @@ import Swal from 'sweetalert2'
 import { notyf } from '../../assets/js/notyf'
 import withReactComponent from 'sweetalert2-react-content'
 import ShowMoreButton from './ShowMoreButton'
+import { ReportCard } from './ReportCard'
 
 const AdminDashboard = ({ user, analytics, setAnalytics }) => {
     const [staffVisible, setStaffVisible] = useState(4);
@@ -210,11 +211,16 @@ const AdminDashboard = ({ user, analytics, setAnalytics }) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="tab-pane fade show" id="rejected">
+                                    {/* <div className="tab-pane fade show" id="rejected">
                                         <EmptyContent icon={<FaTimesCircle className='faIcon' />} text={"No photos rejected — try again later !"} />
-                                    </div>
+                                    </div> */}
                                     <div className="tab-pane fade show" id="reports">
-                                        <EmptyContent icon={<FaFlag className='faIcon' />} text={"No reports yet — try again later !"} />
+                                        {
+                                            analytics?.reports?.length > 0 ? analytics?.reports?.map((r) => (
+                                                <ReportCard report={r} />
+                                            )) : (<EmptyContent icon={<FaFlag className='faIcon' />} text={"No reports yet — try again later !"} />)
+                                        }
+                                        {analytics?.reports?.length > 0 && (<div className='section-header mx-auto'><Link to={'/reports'}>See all</Link></div>)}
                                     </div>
                                 </div>
                                 <hr />

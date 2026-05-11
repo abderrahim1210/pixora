@@ -15,6 +15,8 @@ import { UserDashboard } from "../Pages/UserDashboard";
 import Terms from "../Pages/Terms";
 import { ForgotPassword } from "../Pages/ForgotPassword";
 import { ResetPassword } from "../Pages/ResetPassword";
+import { Reports } from "../Pages/Reports";
+import { ReportDetails } from "../Pages/ReportDetails";
 const AppRoutes = () => {
   return (
     <>
@@ -34,6 +36,8 @@ const AppRoutes = () => {
         <Route path="/legal/:tab" element={<Terms />} />
         <Route path="/forgot_password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/reports" element={<Reports />} />
+        <Route path="/report/:id" element={<ReportDetails />} />
       </Routes>
     </>
   );

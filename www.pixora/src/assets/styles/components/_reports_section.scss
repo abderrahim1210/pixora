@@ -1,0 +1,107 @@
+.reports-manager-page {
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            .icon-box {
+                width: 50px;
+                height: 50px;
+                background: #fef2f2;
+                color: #ef4444;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                font-weight: 900;
+                color: #0f172a;
+                margin: 0;
+            }
+
+            p {
+                color: #64748b;
+                margin: 0;
+                font-size: 0.95rem;
+            }
+        }
+
+        .stats-quick-view {
+            .stat {
+                background: white;
+                padding: 10px 20px;
+                border-radius: 12px;
+                border: 1px solid #e2e8f0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                .count {
+                    font-weight: 800;
+                    font-size: 1.2rem;
+                    color: var(--special_color);
+                }
+
+                .label {
+                    font-size: 0.7rem;
+                    color: #94a3b8;
+                    text-transform: uppercase;
+                }
+            }
+        }
+    }
+
+    .reports-grid {
+        display: grid;
+        // هاد السطر كيدير Responsive تلقائي بلا Media Queries بزاف
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+    }
+
+    .empty-reports {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 100px 0;
+        color: #94a3b8;
+    }
+}
+
+// Loading & Error States
+.flex-center-padding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 15px;
+    color: #64748b;
+}
+
+@media (max-width: 768px) {
+    .reports-manager-page {
+        padding: 15px;
+
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .reports-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+}

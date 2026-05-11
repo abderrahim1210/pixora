@@ -26,7 +26,7 @@ const Requests = ({ requests, setRequests, myRequests }) => {
             </div>
             <div className="container-fluid">
                 <div className="mt-3 mb-3">
-                    <AllRequests requests={requests} />
+                    <AllRequests requests={requests} handleStatusChange={handleStatusChange} />
                 </div>
                 <hr />
                 <div className="mt-3 mb-3">

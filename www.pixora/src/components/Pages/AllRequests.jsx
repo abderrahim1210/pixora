@@ -5,7 +5,7 @@ import RequestCard from './RequestCard';
 import { BiChevronDown } from 'react-icons/bi';
 import ShowMoreButton from './ShowMoreButton';
 
-const AllRequests = ({ requests }) => {
+const AllRequests = ({ requests, handleStatusChange}) => {
     const [visible, setVisible] = useState(1);
 
     const showMore = () => {
@@ -15,7 +15,7 @@ const AllRequests = ({ requests }) => {
         <div>
             {requests && Object.entries(requests).length > 0 ? (
                 Object.entries(requests).slice(0, visible).map(([imageId, group]) => (
-                    <RequestCard key={imageId} group={group} />
+                    <RequestCard key={imageId} group={group} onStatusChange={handleStatusChange} />
                 ))
             ) : (
                 <EmptyContent

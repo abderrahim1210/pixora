@@ -105,14 +105,6 @@ class PhotoController extends Controller
         }
 
         if ($galleries !== null) {
-            // foreach ($galleries as $g) {
-            //     DB::table('gallery_photos')->insert([
-            //         'photo_id' => $photo->id,
-            //         'gallery_id' => $g,
-            //         'created_at' => now(),
-            //         'updated_at' => now()
-            //     ]);
-            // }
             $photo->galleries()->sync($galleries);
         }
 
@@ -151,9 +143,9 @@ class PhotoController extends Controller
 
         $photo->comments()->delete();
 
-        $photo->delete();
-
         Storage::disk('public')->delete('photos/' . $photo->filename);
+        
+        $photo->delete();
 
         return response()->json([
             'success' => true,

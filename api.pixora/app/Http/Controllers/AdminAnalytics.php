@@ -15,7 +15,8 @@ class AdminAnalytics extends Controller
                     (SELECT COUNT(*) FROM users) as users_count,
                     (SELECT COUNT(*) FROM photos) as photos_count,
                     (SELECT COUNT(*) FROM edition_requests) as requests_count,
-                    (SELECT COUNT(*) FROM comments) as comments_count
+                    (SELECT COUNT(*) FROM comments) as comments_count,
+                    (SELECT COUNT(*) FROM reports) as reports_count
             ");
 
             $top_photographers = DB::table('users as u')
@@ -90,14 +91,48 @@ class AdminAnalytics extends Controller
 
             $staff = DB::table('users')
                 ->select('id', 'username', 'role')
-                ->whereIn('role',['admin','editor'])
+                ->whereIn('role', ['admin', 'editor'])
                 ->limit(5)
                 ->get();
 
             $featured_photos = DB::table('photos')
-                ->select('id','title','filename','is_featured')
-                ->where('is_featured','=',true)
+                ->select('id', 'title', 'filename', 'is_featured')
+                ->where('is_featured', '=', true)
                 ->limit(4)
+                ->get();
+
+            $reports = DB::table('reports as r')->join('users as reporter', 'reporter.id', '=', 'r.user_id')
+
+                ->leftJoin('photos as p', function ($join) {
+                    $join->on('p.id', '=', 'r.reportable_id')
+                        ->where('r.reportable_type', '=', 'App\Models\Photo');
+                })
+                ->leftJoin('comments as c', function ($join) {
+                    $join->on('c.id', '=', 'r.reportable_id')
+                        ->where('r.reportable_type', '=', 'App\Models\Comment');
+                })
+                ->leftJoin('users as u_target', function ($join) {
+                    $join->on('u_target.id', '=', 'r.reportable_id')
+                        ->where('r.reportable_type', '=', 'App\Models\User');
+                })
+                ->select(
+                    'r.id',
+                    'r.reason',
+                    'r.description',
+                    'r.status',
+                    'r.created_at',
+                    'r.reportable_type',
+                    'r.reportable_id',
+                    'reporter.username as reporter_name',
+                    DB::raw('CASE 
+            WHEN r.reportable_type LIKE "%Photo%" THEN "Photo Content"
+            WHEN r.reportable_type LIKE "%Comment%" THEN "User Comment"
+            WHEN r.reportable_type LIKE "%User%" THEN u_target.username
+            ELSE "Unknown"
+        END as target_name')
+                )
+                ->orderBy('r.created_at', 'desc')
+                ->limit(5)
                 ->get();
             return response()->json([
                 'success' => true,
@@ -121,7 +156,8 @@ class AdminAnalytics extends Controller
                     'photos_this_week' => $photo_this_week,
                     'most_commentsPhotos' => $most_commentsPhotos,
                     'staff' => $staff,
-                    'featured_photos' => $featured_photos
+                    'featured_photos' => $featured_photos,
+                    'reports' => $reports
                 ]
             ]);
         } catch (\Exception $e) {

@@ -25,6 +25,7 @@ use App\Http\Controllers\Photographer;
 use App\Http\Controllers\ProfileAnalytics;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePictures;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\RequestEdit;
 use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\SearchAtPhotos;
@@ -170,4 +171,9 @@ Route::post('/change_role',[AdminUsersActions::class, 'changeRole'])->middleware
 
 Route::post('/delete_user',[AdminUsersActions::class, 'deleteUser'])->middleware('auth:sanctum');
 
+Route::get('/reports', [ReportsController::class, 'getAllReports'])->middleware('auth:sanctum');
+
+Route::get('/report/{id}', [ReportsController::class, 'show'])->middleware('auth:sanctum');
+
+Route::post('/report', [ReportsController::class, 'reportActions'])->middleware('auth:sanctum');
 require __DIR__ . '/auth.php';

@@ -34,6 +34,9 @@
 @use './components/cookie_banner';
 @use './components/forgot_pass';
 @use './components/reset_password';
+@use './components/report_card';
+@use './components/reports_section';
+@use './components/report_details';
 
 :root {
     --special_color: rgb(0, 120, 255);
