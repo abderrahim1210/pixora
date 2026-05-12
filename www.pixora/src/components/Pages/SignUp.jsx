@@ -26,6 +26,7 @@ export const SignUp = () => {
   const next = () => setStep((s) => s + 1);
   const prev = () => setStep((s) => s - 1);
   const [countries, setCountries] = useState([]);
+  const [heroImage,setHeroImage] = useState([]);
   useEffect(() => {
     try {
       axios.get('/json/countries.json')
@@ -68,14 +69,37 @@ export const SignUp = () => {
       console.log(err.response?.data);
     }
   }
+  useEffect(() => {
+    try {
+      const fetchHeroImage = async () => {
+        const res = await axios.get('https://api.pixora.test/get_hero_images', { withCredentials: true });
+        if (res.data.success) {
+          setHeroImage(res.data.photo);
+        } else {
+          console.log(res.data.message);
+        }
+      }
+
+      fetchHeroImage();
+    } catch (err) {
+      console.log(err?.response?.data);
+    }
+  }, []);
   return (
     <div data-bs-page="signup" id="signup">
       <div className="dv1">
-        <div className="dv1-0 signup_div">
-          <div>Sign up Page</div>
+        <div className="dv1-0 login_div" style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://api.pixora.test/storage/photos/${heroImage.filename}')`,
+          backgroundPosition: heroImage.focal_point || 'center'
+        }}>
+          <div className="login-label">Sign up Page</div>
+
+          <div className="photographer-name">
+            Shot by <strong>{heroImage?.username || 'Anonymous'}</strong>
+          </div>
         </div>
         <div className="login-box text-center p-0 row">
-          <Link to={'/'}>
+          <Link to={'/'} className="logo-img">
             {
               localStorage.getItem('theme') === 'light' ? (
                 <img

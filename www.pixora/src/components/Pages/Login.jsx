@@ -14,11 +14,11 @@ export const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [heroImage, setHeroImage] = useState([]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.get('https://api.pixora.test/sanctum/csrf-cookie', { withCredentials: true, withXSRFToken: true });
-      // const xsrfToken = Cookies.get('XSRF-TOKEN');
       const res = await axios.post('https://api.pixora.test/login', { email, password }, {
         withCredentials: true, withXSRFToken: true, headers: {
           'Accept': 'application/json',
@@ -44,11 +44,34 @@ export const Login = () => {
       navigate(location.pathname, { replace: true, state: {} })
     }
   }, [location.state]);
+  useEffect(() => {
+    try {
+      const fetchHeroImage = async () => {
+        const res = await axios.get('https://api.pixora.test/get_hero_images', { withCredentials: true });
+        if (res.data.success) {
+          setHeroImage(res.data.photo);
+        } else {
+          console.log(res.data.message);
+        }
+      }
+
+      fetchHeroImage();
+    } catch (err) {
+      console.log(err?.response?.data);
+    }
+  }, []);
   return (
     <div data-bs-page="login" id="login">
       <div className="dv1">
-        <div className="dv1-0 login_div">
-          <div>Login Page</div>
+        <div className="dv1-0 login_div" style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://api.pixora.test/storage/photos/${heroImage.filename}')`,
+          backgroundPosition: heroImage.focal_point || 'center'
+        }}>
+          <div className="login-label">Login Page</div>
+
+          <div className="photographer-name">
+            Shot by <strong>{heroImage?.username || 'Anonymous'}</strong>
+          </div>
         </div>
         <div className="login-box text-center p-0 row">
           <Link to={'/'}>
