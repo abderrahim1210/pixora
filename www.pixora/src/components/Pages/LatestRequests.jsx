@@ -1,5 +1,8 @@
 import React from 'react'
-import { FaClock } from 'react-icons/fa'
+import { FaClock, FaPencilAlt, FaUserEdit } from 'react-icons/fa'
+import { EmptyContent } from './EmptyContent'
+import { Pencil } from 'lucide-react'
+import { FaPencil } from 'react-icons/fa6'
 
 const LatestRequests = ({ requests }) => {
     return (
@@ -12,19 +15,27 @@ const LatestRequests = ({ requests }) => {
                         </div>
 
                         <div className="item-details">
-                            <p className="photo-title">{req.title}</p>
+                            <p className="photo-title" title={req.title}>{req.title}</p>
                             <div className="meta">
-                                <span className="editor-name">{req.editor_name}</span>
+                                <span className="editor-name">
+                                    <FaUserEdit className="icon" /> {req.editor_name || 'Unassigned'}
+                                </span>
                                 <span className="dot">•</span>
-                                <span className="time"><FaClock /> {new Date(req.created_at).toLocaleDateString()}</span>
+                                <span className="time">
+                                    <FaClock className="icon" /> {new Date(req.created_at).toLocaleDateString()}
+                                </span>
                             </div>
                         </div>
 
-                        <div className="status-indicator pending"></div>
+                        <div className={`status-indicator ${req.status || 'pending'}`}
+                            title={`Status: ${req.status || 'pending'}`}>
+                        </div>
                     </div>
                 ))
             ) : (
-                <p className="empty-msg">No pending requests at the moment.</p>
+                <div className='empty-content-wrapper'>
+                    <EmptyContent icon={<FaPencil className='faIcon' />} text={'No requests found at moment.'} />
+                </div>
             )}
         </div>
     )

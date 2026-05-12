@@ -11,7 +11,7 @@ const StaffUserCard = ({ user, onRemoveRole, onChangeRole, onDelete }) => {
             </div>
 
             <div className="user-details">
-                <Link to={`/photographer/${user?.id}`}>
+                <Link to={`/photographer/${user?.id}`} style={{textDecoration:'none'}}>
                     <p className="name">{user.username}</p>
                 </Link>
                 <span className={`role-badge ${user.role}`}>

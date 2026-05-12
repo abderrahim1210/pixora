@@ -1,0 +1,50 @@
+.staff-page {
+    padding: 20px 0 60px 0;
+    min-height: 70vh;
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 30px;
+
+        .title {
+            margin-top: 0 !important;
+            font-size: 2.5rem;
+            font-weight: 800;
+            .highlight { color: #268bd2; }
+        }
+        .stats {
+            color: #888;
+            font-size: 1rem;
+            margin-top: -5px;
+        }
+    }
+
+    
+
+    .staff-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+    }
+
+    .btn-show-more {
+        background: #268bd2;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: 0.3s;
+        &:hover {
+            background: darken(#268bd2, 10%);
+            transform: translateY(-2px);
+        }
+    }
+
+    .staff-empty, .staff-status {
+        text-align: center;
+        padding: 100px;
+        color: #666;
+        font-size: 1.2rem;
+    }
+}

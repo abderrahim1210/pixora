@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import React from 'react'
+import React, { useState } from 'react'
 import Spinner from './Spinner';
 import { useAuth } from '../context/AuthProvider'
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,12 @@ import { AlertCircle, Flag } from 'lucide-react';
 import { ReportCard } from './ReportCard';
 import { Navbar } from './Layouts/Navbar';
 import { Footer } from './Layouts/Footer';
+import ShowMoreButton from './ShowMoreButton';
 export const Reports = () => {
+    const [visible, setVisible] = useState(3);
+    const showMore = () => {
+        setVisible(prev => prev + 3);
+    }
     const fetchReports = async () => {
         try {
             const res = await axios.get('https://api.pixora.test/reports', { withCredentials: true, withXSRFToken: true });
@@ -31,10 +36,10 @@ export const Reports = () => {
     const navigate = useNavigate();
     if (isLoading) return (<Spinner type={'mini'} text='Wait a few seconds for get all reports ...' />);
     if (error) return (
-    <div className="error-state">
-        <AlertCircle size={40} />
-        <p>Error: {error.message}</p>
-    </div>);
+        <div className="error-state">
+            <AlertCircle size={40} />
+            <p>Error: {error.message}</p>
+        </div>);
     // if (user.role !== 'admin') return navigate('/');
     return (
         <>
@@ -46,7 +51,7 @@ export const Reports = () => {
                             <Flag size={24} />
                         </div>
                         <div>
-                            <h1>Platform Reports</h1>
+                            <h1 className='title'>Platform Reports</h1>
                             <p>Manage and review all user, photo, and comment flags.</p>
                         </div>
                     </div>
@@ -59,10 +64,9 @@ export const Reports = () => {
                     </div>
                 </div>
 
-                {/* Grid Container */}
                 <div className="reports-grid">
                     {reports && reports.length > 0 ? (
-                        reports.map((report) => (
+                        reports.slice(0, visible).map((report) => (
                             <ReportCard key={report.id} report={report} />
                         ))
                     ) : (
@@ -71,6 +75,13 @@ export const Reports = () => {
                             <p>No reports found on the platform right now.</p>
                         </div>
                     )}
+                </div>
+                <div className='d-flex justify-content-center mt-3 mb-1'>
+                    {
+                        visible < reports?.length && (
+                            <ShowMoreButton showMore={showMore} />
+                        )
+                    }
                 </div>
             </div>
             <Footer type={'dash'} />

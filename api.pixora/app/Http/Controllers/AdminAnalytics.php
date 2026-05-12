@@ -142,6 +142,7 @@ class AdminAnalytics extends Controller
                         'total_photos' => $stats->photos_count,
                         'total_requests' => $stats->requests_count,
                         'total_comments' => $stats->comments_count,
+                        'total_reports' => $stats->reports_count,
                         'pending_editions' => DB::table('edition_requests')->where('status', 'pending')->count(),
                         'active_tasks' => DB::table('editing_tasks')->where('status', 'in_progress')->count()
                     ],

@@ -37,6 +37,8 @@
 @use './components/report_card';
 @use './components/reports_section';
 @use './components/report_details';
+@use './components/staff';
+@use './components/requests_for_admin';
 
 :root {
     --special_color: rgb(0, 120, 255);
@@ -497,7 +499,7 @@ body.dark {
     }
 
     .about-wave-path {
-        fill: var(--bg_dark); // Na7s l-lo9n dyal l-background dyal l-page l-te7t
+        fill: var(--bg_dark);
     }
 
     .search-box {
@@ -515,7 +517,6 @@ body.dark {
     }
 
     .btn-follow-sm.followed {
-        // background-color: rgba(255, 255, 255, 0.05) !important;
         color: #e2e8f0 !important;
     }
 
@@ -570,51 +571,135 @@ body.dark {
         --sidebar-hover: rgba(59, 130, 246, 0.1);
     }
 
-    .custom-menu-icon{
+    .custom-menu-icon {
         color: white;
     }
 
-    .custom-offcanvas{
-        background-color: var(--bg_dark) !important;
-    }
-    
-    .user-info h6, .user-info small{
-        color: white !important;
-    }
-
-    .offcanvas-links .nav-link-custom > span.text, .offcanvas-links .nav-link-custom > span.icon, .explore-dropdown-wrapper span.text, .offcanvas-links .explore-chevron-down, .sub-menu .sub-link, .explore-dropdown-wrapper span.icon{
-        color: white !important;
-    }
-
-    .offcanvas-footer{
+    .custom-offcanvas {
         background-color: var(--bg_dark) !important;
     }
 
-    .offcanvas-header .btn-close{
+    .user-info h6,
+    .user-info small {
+        color: white !important;
+    }
+
+    .offcanvas-links .nav-link-custom>span.text,
+    .offcanvas-links .nav-link-custom>span.icon,
+    .explore-dropdown-wrapper span.text,
+    .offcanvas-links .explore-chevron-down,
+    .sub-menu .sub-link,
+    .explore-dropdown-wrapper span.icon {
+        color: white !important;
+    }
+
+    .offcanvas-footer {
+        background-color: var(--bg_dark) !important;
+    }
+
+    .offcanvas-header .btn-close {
         background-color: white !important;
     }
 
-    .offcanvas-links .nav-link-custom:hover{
+    .offcanvas-links .nav-link-custom:hover {
         background-color: var(--special_color);
     }
 
-    .social_media svg{
+    .social_media svg {
         fill: white !important;
     }
 
-    .staff-member-card, .stat-card{
+    .staff-member-card,
+    .stat-card {
         background-color: rgba(30, 41, 59, 0.7) !important;
+        border: none !important;
     }
-    
-    .staff-member-card .name, .stat-card h3, .stat-card p{
+
+    .staff-member-card .name,
+    .stat-card h3,
+    .stat-card p {
         color: white !important;
     }
 
-    .dashboard-links{
+    .dashboard-links {
         background-color: #0f172a !important;
 
-        .nav{
+        .nav {
             background-color: rgba(59, 130, 246, 0.1);
+        }
+    }
+
+    .pixora-pro-card {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+
+        h4 {
+            color: white !important;
+        }
+
+        span {
+            color: whitesmoke !important;
+        }
+
+        .description {
+            background-color: #1a1a1a;
+            color: white;
+        }
+
+        .main-action-btn {
+            color: white;
+        }
+
+    }
+
+    .preview-item{
+        background-color: rgba(30, 41, 59, 0.7) !important;
+    }
+
+    .report-option{
+        span{
+            color: white !important;
+        }
+        background-color: rgba(59, 130, 246, 0.1) !important;
+    }
+
+    .profile_actions{
+        a{
+            background-color: rgba(59, 130, 246, 0.1) !important;
+        }
+    }
+
+    #editInfos{
+        background-color: rgba(59, 130, 246, 0.1) !important;
+    }
+
+    .comment-author{
+        color: whitesmoke !important;
+    }
+
+    .reports-manager-page {
+        .title-section {
+            .icon-box {
+                background-color: rgba(59, 130, 246, 0.1) !important;
+            }
+        }
+
+        h1{
+            color: white !important;
+        }
+
+        .stat{
+            background-color: rgba(59, 130, 246, 0.1) !important;
+            border: none !important;
+            span.label{
+                color: whitesmoke !important;
+            }
+        }
+    }
+
+    .staff-container{
+        background-color: var(--bg_dark);
+        h1{
+            color: white;
         }
     }
 }

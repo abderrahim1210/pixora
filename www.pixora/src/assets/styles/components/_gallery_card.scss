@@ -21,7 +21,6 @@
     transition: all 0.4s ease;
 }
 
-/* Effet d l-wraq wa7da foq wa7da */
 .layer-0 { z-index: 3; transform: scale(1); }
 .layer-1 { z-index: 2; transform: scale(0.95) translateY(-10px); opacity: 0.8; }
 .layer-2 { z-index: 1; transform: scale(0.9) translateY(-20px); opacity: 0.5; }

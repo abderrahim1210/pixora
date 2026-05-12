@@ -27,9 +27,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePictures;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\RequestEdit;
+use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\SearchAtPhotos;
 use App\Http\Controllers\SendReport;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UpdateSensitiveData;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UploadResult;
@@ -176,4 +178,9 @@ Route::get('/reports', [ReportsController::class, 'getAllReports'])->middleware(
 Route::get('/report/{id}', [ReportsController::class, 'show'])->middleware('auth:sanctum');
 
 Route::post('/report', [ReportsController::class, 'reportActions'])->middleware('auth:sanctum');
+
+Route::get('/get_all_staff', [StaffController::class, 'getStaff'])->middleware('auth:sanctum');
+
+Route::get('/get_requests_admin', [RequestsController::class, 'getRequests'])->middleware('auth:sanctum');
+
 require __DIR__ . '/auth.php';

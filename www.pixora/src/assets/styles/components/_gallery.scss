@@ -198,20 +198,21 @@
 }
 
 .btn-view {
-    background: rgba(255, 255, 255, 0.2); // Glass effect
+    background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.4);
     color: white;
     padding: 6px 18px;
-    border-radius: 50px; // Rounded
+    border-radius: 50px;
     font-size: 0.85rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
     cursor: pointer;
-    align-self: flex-start; // Bach i-bqa f l-jnab
+    align-self: flex-start;
+    text-decoration: none;
 
     &:hover {
         background: var(--special_color);

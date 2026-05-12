@@ -37,7 +37,7 @@ const GalleryCard = ({ g }) => {
 
                         <div className="gallery-footer">
                             <span>{g.photos.length ?? 0} Photos</span>
-                            <Link to={`/gallery/${g.id}`} className="view-btn">View</Link>
+                            <Link to={`/gallery/${g.id}`} style={{textDecoration:'none'}} className="view-btn">View</Link>
                         </div>
                         <span className='gallery-desc'>
                             By {g.user?.username?.split('_')[0]}

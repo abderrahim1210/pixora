@@ -9,7 +9,7 @@ import { EmptyContent } from './EmptyContent'
 import { FiUserPlus, FiUsers } from 'react-icons/fi'
 import LatestRequests from './LatestRequests'
 import StaffUserCard from './StaffUserCard'
-import { Star, Stars } from 'lucide-react'
+import { Flag, Star, Stars } from 'lucide-react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { notyf } from '../../assets/js/notyf'
@@ -147,7 +147,7 @@ const AdminDashboard = ({ user, analytics, setAnalytics }) => {
                                     <div className="stat-card">
                                         <FaComments size={25} className='stat-icon' />
                                         <h3>Comments</h3>
-                                        <p>{analytics.total_comments ?? 0}</p>
+                                        <p>{analytics.counters?.total_comments ?? 0}</p>
                                     </div>
                                 </div>
                                 <hr />
@@ -160,7 +160,7 @@ const AdminDashboard = ({ user, analytics, setAnalytics }) => {
                                         <li className='nav-item'><a href="" data-bs-target="#staff"
                                             data-bs-toggle="tab" className='nav-link'><FaUserShield /> Staff ({analytics?.staff?.filter(s => s.id !== user?.id)?.length ?? 0})</a></li>
                                         <li className='nav-item'><a href="" data-bs-target="#reports"
-                                            data-bs-toggle="tab" className='nav-link'><FaFlag /> Reports ({analytics?.reports?.length ?? 0})</a></li>
+                                            data-bs-toggle="tab" className='nav-link'><FaFlag /> Reports ({analytics?.counters?.total_reports ?? 0})</a></li>
                                     </nav>
                                 </div>
                                 <div className="tab-content">
@@ -177,8 +177,8 @@ const AdminDashboard = ({ user, analytics, setAnalytics }) => {
                                     </div>
                                     <div className="tab-pane fade show" id="requests">
                                         <div>
-                                            <h2 className='d-flex align-items-center gap-2'><MdEdit /> Requests <span className='text-primary'>({analytics.requests?.length ?? 0})</span></h2>
-                                            <div className='container-fluid div3'>
+                                            {analytics?.requests?.length > 0 && (<div className='section-header'><div className='d-flex gap-1 align-items-center'><MdEdit /><h4>Requests <span className='text-primary'>({analytics?.requests?.length ?? 0})</span></h4></div><Link to={'/requests'}>See all</Link></div>)}
+                                            <div className='container-fluid mt-0 div3'>
                                                 {
                                                     analytics.requests?.length > 0 ? (
                                                         <LatestRequests requests={analytics.requests} />
@@ -191,8 +191,8 @@ const AdminDashboard = ({ user, analytics, setAnalytics }) => {
                                     </div>
                                     <div className="tab-pane fade show" id="staff">
                                         <div>
-                                            <h2 className='d-flex align-items-center gap-2'><FaUserShield /> Staff <span className='text-primary'>({analytics.staff?.filter(s => s.id !== user?.id).length ?? 0})</span></h2>
-                                            <div className='container-fluid div3'>
+                                            {analytics?.staff?.length > 0 && (<div className='section-header'><div className='d-flex gap-1 align-items-center'><FaUserShield /><h4>Staff <span className='text-primary'>({analytics?.staff?.length ?? 0})</span></h4></div><Link to={'/staff'}>See all</Link></div>)}
+                                            <div className='container-fluid div3 mt-0'>
                                                 {
                                                     analytics.staff?.length > 0 ? analytics?.staff?.filter(u => u.id !== user?.id).slice(0, staffVisible).map((user, index) => (
                                                         <StaffUserCard user={user} onRemoveRole={removeStaffRole} onChangeRole={handleChangeRole} onDelete={handleDeleteUser} key={index} />
@@ -211,16 +211,15 @@ const AdminDashboard = ({ user, analytics, setAnalytics }) => {
                                             </div>
                                         </div>
                                     </div>
-                                    {/* <div className="tab-pane fade show" id="rejected">
-                                        <EmptyContent icon={<FaTimesCircle className='faIcon' />} text={"No photos rejected — try again later !"} />
-                                    </div> */}
                                     <div className="tab-pane fade show" id="reports">
-                                        {
-                                            analytics?.reports?.length > 0 ? analytics?.reports?.map((r) => (
-                                                <ReportCard report={r} />
-                                            )) : (<EmptyContent icon={<FaFlag className='faIcon' />} text={"No reports yet — try again later !"} />)
-                                        }
-                                        {analytics?.reports?.length > 0 && (<div className='section-header mx-auto'><Link to={'/reports'}>See all</Link></div>)}
+                                        {analytics?.reports?.length > 0 && (<div className='section-header'><div className='d-flex gap-1 align-items-center'><FaFlag /><h4>Reports <span className='text-primary'>({analytics?.counters?.total_reports ?? 0})</span></h4></div><Link to={'/reports'}>See all</Link></div>)}
+                                        <div className='container-fluid' style={{ gap: '50px' }}>
+                                            {
+                                                analytics?.reports?.length > 0 ? analytics?.reports?.map((r,index) => (
+                                                    <ReportCard report={r} key={index} />
+                                                )) : (<EmptyContent icon={<FaFlag className='faIcon' />} text={"No reports yet — try again later !"} />)
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                                 <hr />

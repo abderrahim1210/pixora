@@ -17,6 +17,8 @@ import { ForgotPassword } from "../Pages/ForgotPassword";
 import { ResetPassword } from "../Pages/ResetPassword";
 import { Reports } from "../Pages/Reports";
 import { ReportDetails } from "../Pages/ReportDetails";
+import { AllStaff } from "../Pages/AllStaff";
+import { AllRequestsAdmin } from "../Pages/AllRequestsAdmin";
 const AppRoutes = () => {
   return (
     <>
@@ -38,6 +40,8 @@ const AppRoutes = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/report/:id" element={<ReportDetails />} />
+        <Route path="/staff" element={<AllStaff />} />
+        <Route path="/requests" element={<AllRequestsAdmin />} />
       </Routes>
     </>
   );
