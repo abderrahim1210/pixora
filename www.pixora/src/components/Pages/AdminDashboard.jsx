@@ -151,16 +151,16 @@ const AdminDashboard = ({ user, analytics, setAnalytics }) => {
                                     </div>
                                 </div>
                                 <hr />
-                                <div className='dashboard-links nav2 mb-2'>
+                                <div className='dashboard-links mb-2'>
                                     <nav className='nav'>
                                         <li className='nav-item'><a href="" data-bs-target="#top_photographers"
-                                            data-bs-toggle="tab" className='nav-link active'><FaTrophy /> Top photographers ({analytics?.top_photographers?.length ?? 0})</a></li>
+                                            data-bs-toggle="tab" className='nav-link active'><FaTrophy /> Top photographers <span className='badge-count'>({analytics?.top_photographers?.length ?? 0})</span></a></li>
                                         <li className='nav-item'><a href="" data-bs-target="#requests"
-                                            data-bs-toggle="tab" className='nav-link'><MdEdit /> Requests ({analytics?.requests?.length ?? 0})</a></li>
+                                            data-bs-toggle="tab" className='nav-link'><MdEdit /> Requests <span className="badge-count">({analytics?.requests?.length ?? 0})</span></a></li>
                                         <li className='nav-item'><a href="" data-bs-target="#staff"
-                                            data-bs-toggle="tab" className='nav-link'><FaUserShield /> Staff ({analytics?.staff?.filter(s => s.id !== user?.id)?.length ?? 0})</a></li>
+                                            data-bs-toggle="tab" className='nav-link'><FaUserShield /> Staff <span className='badge-count'>({analytics?.staff?.filter(s => s.id !== user?.id)?.length ?? 0})</span></a></li>
                                         <li className='nav-item'><a href="" data-bs-target="#reports"
-                                            data-bs-toggle="tab" className='nav-link'><FaFlag /> Reports ({analytics?.counters?.total_reports ?? 0})</a></li>
+                                            data-bs-toggle="tab" className='nav-link'><FaFlag /> Reports <span className='badge-count'>({analytics?.counters?.total_reports ?? 0})</span></a></li>
                                     </nav>
                                 </div>
                                 <div className="tab-content">

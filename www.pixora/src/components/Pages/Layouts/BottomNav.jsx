@@ -15,7 +15,7 @@ const BottomNav = ({ page, user=null }) => {
         { id: 'info', icon: <FaIdCard size={20} />, label: 'Infos' },
         { id: 'editProfile', icon: <FaPencil size={20} />, label: 'Edit Profile' },
         { id: 'settings', icon: <FaGear size={20} />, label: 'Settings' },
-        { id: 'statistics', icon: <FaChartLine size={20} />, label: 'Statistics' },
+        user?.role === 'user' && { id: 'statistics', icon: <FaChartLine size={20} />, label: 'Statistics' },
         user?.role === 'editor' && { id: 'requests', icon: <FaEdit size={20} />, label: 'Requests' },
         user?.role === 'admin' && { id: 'admin', icon: <MdAnalytics size={20} />, label: 'Analytics (Admin)' }
     ].filter(Boolean);
@@ -53,7 +53,6 @@ const BottomNav = ({ page, user=null }) => {
                         <li className="nav-item" key={item.id}>
                             <Link
                                 className={`nav-link ${index === 0 && 'active'}`}
-                                // onClick={() => onTabChange(item.id)}
                                 data-bs-target={`#${item.id}`}
                                 data-bs-toggle="tab"
                             >
