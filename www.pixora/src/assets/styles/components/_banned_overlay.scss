@@ -1,0 +1,187 @@
+[data-bs-page='banned_user'] {
+    .pixora-banned-wrapper {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(10, 10, 10, 0.4);
+        backdrop-filter: blur(20px) saturate(180%);
+        padding: 20px;
+        animation: fadeInAnim 0.5s ease-out;
+
+        .banned-card {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+            .card-content {
+                position: relative;
+                z-index: 2;
+                padding: 40px;
+                text-align: center;
+            }
+
+            .glow-1,
+            .glow-2 {
+                position: absolute;
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                filter: blur(60px);
+                opacity: 0.15;
+                z-index: 1;
+            }
+
+            .glow-1 {
+                top: -20px;
+                left: -20px;
+                background: #ff4d4d;
+            }
+
+            .glow-2 {
+                bottom: -20px;
+                right: -20px;
+                background: var(--special_color);
+            }
+
+            .icon-box {
+                width: 90px;
+                height: 90px;
+                background: rgba(239, 68, 68, 0.1);
+                border-radius: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 24px;
+                color: #ef4444;
+                animation: pulseAnim 2s infinite;
+            }
+
+            .title {
+                font-size: 28px;
+                font-weight: 800;
+                color: #1a1a1a;
+                margin-bottom: 8px;
+                letter-spacing: -0.5px;
+            }
+
+            .user-info {
+                font-size: 14px;
+                color: #666;
+                background: #f3f4f6;
+                padding: 6px 16px;
+                border-radius: 100px;
+                display: inline-block;
+                margin-bottom: 24px;
+
+                span {
+                    color: #666 !important;
+                }
+            }
+
+            .description {
+                font-size: 15px;
+                line-height: 1.6;
+                color: #4b5563;
+                margin-bottom: 32px;
+
+                strong {
+                    color: #111;
+                    font-weight: 600;
+                }
+            }
+
+            .action-grid {
+                display: grid;
+                gap: 12px;
+
+                button {
+                    height: 52px;
+                    border-radius: 16px;
+                    font-weight: 700;
+                    font-size: 15px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    cursor: pointer;
+                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                    border: none;
+
+                    &.btn-primary {
+                        background: #111; // Dark Professional look
+                        color: white;
+
+                        &:hover {
+                            transform: translateY(-2px);
+                            background: #222;
+                        }
+                    }
+
+                    &.btn-secondary {
+                        background: transparent;
+                        color: #4b5563;
+                        border: 1px solid #e5e7eb;
+
+                        &:hover {
+                            background: #f9fafb;
+                            border-color: #d1d5db;
+                        }
+                    }
+                }
+            }
+
+            .card-footer {
+                margin-top: 24px;
+
+                a {
+                    color: #9ca3af;
+                    font-size: 13px;
+                    text-decoration: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 5px;
+
+                    &:hover {
+                        color: #4b5563;
+                    }
+                }
+            }
+        }
+    }
+
+    @keyframes fadeInAnim {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes pulseAnim {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+        }
+
+        70% {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 15px rgba(239, 68, 68, 0);
+        }
+
+        100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+        }
+    }
+}

@@ -171,15 +171,17 @@ export const Navbar = ({ type }) => {
               </li>
             </ul>
             <ul className="navbar-nav d-none d-md-flex" id="ul2-1">
-              <li className="nav-item" id="upload_button">
-                <button
-                  onClick={() => navigate("/upload")}
-                  className={`nav-link ${user && (user?.role === "admin" || user?.role === "editor") && "disabled"}`}
-                  title="Upload your photo"
-                >
-                  <FiUpload /> Upload
-                </button>
-              </li>
+              {
+                user?.id && (<li className="nav-item" id="upload_button">
+                  <button
+                    onClick={() => navigate("/upload")}
+                    className={`nav-link ${user && (user?.role === "admin" || user?.role === "editor") && "disabled"}`}
+                    title="Upload your photo"
+                  >
+                    <FiUpload /> Upload
+                  </button>
+                </li>)
+              }
               {user?.id ? (
                 <Link to={`/user/${user?.username}/myprofile`}>
                   <Avatar src={`https://api.pixora.test/storage/profile_pictures/${user.photo_profile}`} size={40} />

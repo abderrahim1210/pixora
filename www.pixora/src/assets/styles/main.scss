@@ -39,6 +39,7 @@
 @use './components/report_details';
 @use './components/staff';
 @use './components/requests_for_admin';
+@use './components/banned_overlay';
 
 :root {
     --special_color: rgb(0, 120, 255);

@@ -75,11 +75,12 @@ export const ReportDetails = () => {
         );
     };
 
-    const statusToResolve = async () => {
+    const statusToResolve = async (typeR) => {
         try {
-            const res = await axios.post('https://api.pixora.test/report', { type: 'resolved', report_id: report?.id }, { withCredentials: true, withXSRFToken: true });
+            const res = await axios.post('https://api.pixora.test/report', { type: typeR, report_id: report?.id,reportableId:report?.reportable_id }, { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 notyf.success(res.data.message);
+                window.location.reload();
             } else {
                 notyf.error(res.data.message);
                 console.log(res.data.message);
@@ -165,9 +166,9 @@ export const ReportDetails = () => {
                             {
                                 report?.status === 'pending' && (
                                     <>
-                                        <button className="admin-btn resolve" onClick={statusToResolve}><CheckCircle size={18} /> Keep & Resolve</button>
+                                        <button className="admin-btn resolve" onClick={() => statusToResolve('resolved')}><CheckCircle size={18} /> Keep & Resolve</button>
                                         <button className="admin-btn delete" onClick={deleteContent}><Trash2 size={18} /> Delete Content</button>
-                                        <button className="admin-btn ban"><Ban size={18} /> Ban User</button>
+                                        <button className="admin-btn ban" onClick={() => statusToResolve('bann_user')}><Ban size={18} /> Ban User</button>
                                     </>
                                 )
                             }

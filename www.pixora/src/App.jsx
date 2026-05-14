@@ -8,8 +8,8 @@ import Spinner from './components/Pages/Spinner';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ThemeProvider from './components/context/ThemeProvider';
 const AppRoutes = React.lazy(() => import('./components/routes/AppRoutes'));
+const queryClient = new QueryClient();
 function App() {
-  const queryClient = new QueryClient();
   return (
     <>
       <QueryClientProvider client={queryClient}>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { Home } from "../Home/Home";
 import { Upload } from "../Pages/Upload";
 import { Login } from "../Pages/Login";
@@ -19,9 +19,19 @@ import { Reports } from "../Pages/Reports";
 import { ReportDetails } from "../Pages/ReportDetails";
 import { AllStaff } from "../Pages/AllStaff";
 import { AllRequestsAdmin } from "../Pages/AllRequestsAdmin";
+import { BannedOverlay } from "../Pages/BannedOverlay";
+import { useAuth } from "../context/AuthProvider";
 const AppRoutes = () => {
+  const { user } = useAuth();
+  const location = useLocation();
+  const isPublicPage = ['/login', '/signup', '/legal/terms', '/reset-password'].includes(location.pathname);
   return (
     <>
+      {
+        user?.status === 'banned' && !isPublicPage && (
+          <BannedOverlay user={user} />
+        )
+      }
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/upload" element={<Upload />} />

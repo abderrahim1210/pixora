@@ -55,13 +55,10 @@ Route::get('/user', function () {
         'email' => $user->email,
         'username' => $user->username,
         'photo_profile' => $user->photo_profile,
-        'role' => $user->role
+        'role' => $user->role,
+        'status' => $user->status
     ]]);
 });
-
-Route::get('/photo/{id}', [PhotoController::class, 'show'])->name('photo');
-Route::post('/photo/{id}', [PhotoController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('/photo/{id}', [PhotoController::class, 'destroy'])->middleware('auth:sanctum');
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 
@@ -69,31 +66,8 @@ Route::delete('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
 Route::get('/homepage', [Home::class, 'getAllPhotos'])->name('home');
 
-Route::prefix('/comments')->group(function () {
-    Route::post('/store', [CommentController::class, 'store'])->middleware('auth:sanctum');
-    Route::put('/{id}', [CommentController::class, 'update'])->middleware('auth:sanctum');
-    Route::delete('/{id}', [CommentController::class, 'destroy'])->middleware('auth:sanctum');
-});
-
 Route::post('/add_like', [LikeController::class, 'store']);
 
-Route::post('/upload', [UploadController::class, 'uploadPhoto'])->middleware('auth:sanctum');
-
-Route::resource('/follows', FollowController::class)->middleware('auth:sanctum');
-
-Route::get('/myprofile', [ProfileController::class, 'getInfos'])->middleware('auth:sanctum');
-
-Route::post('/edit_profile', [ProfileController::class, 'editProfile'])->middleware('auth:sanctum');
-
-Route::prefix('/edit_profile_pictures')->group(function () {
-    Route::post('/avatar', [ProfilePictures::class, 'uploadAvatar'])->middleware('auth:sanctum');
-    Route::post('/cover', [ProfilePictures::class, 'uploadCover'])->middleware('auth:sanctum');
-
-    Route::delete('/delete_avatar', [ProfilePictures::class, 'deleteAvatar'])->middleware('auth:sanctum');
-    Route::delete('/delete_cover', [ProfilePictures::class, 'deleteCover'])->middleware('auth:sanctum');
-});
-
-Route::get('/get_photos', [GetPhotos::class, 'getPhotos'])->middleware('auth:sanctum');
 
 Route::get('/get_categories', function () {
     $categs = Category::select('id', 'name')->get();
@@ -102,7 +76,7 @@ Route::get('/get_categories', function () {
         'categories' => $categs
     ]);
 });
-Route::post('/create_gallery', [Galleries::class, 'AddGallery'])->middleware('auth:sanctum');
+
 
 Route::get('/get_galleries', function () {
     $galleries = Gallery::select('id', 'title', 'description')->with(['photos:id,filename', 'user:id,username'])->where('user_id', Auth::id())->get();
@@ -122,65 +96,98 @@ Route::get('/get_all_galleries', function () {
 
 Route::get('/get_users/{type}', [FetchUsers::class, 'getUsers']);
 
-Route::post('/addFollow', [AddFollow::class, 'addFollow'])->middleware('auth:sanctum');
-
 Route::get('/get_gallery/{id}', [Galleries::class, 'GetGallery']);
-Route::delete('/delete_gallery/{id}', [Galleries::class, 'DeleteGallery'])->middleware('auth:sanctum');
+
 
 Route::get('/get_infos_photographers/{id}', [Photographer::class, 'getInformations']);
 
-Route::post('/send_request', [RequestEdit::class, 'requestEdit'])->middleware('auth:sanctum');
-
-Route::get('/get_requests', [RequestEdit::class, 'getRequests'])->middleware('auth:sanctum');
-
-Route::post('/change_status_req', [RequestEdit::class, 'changeStatusRequest'])->middleware('auth:sanctum');
-
-Route::get('/get_requests_for_editors', [FetchRequests::class, 'getRequests'])->middleware('auth:sanctum');
-
-Route::get('/get_my_requests', [FetchRequests::class, 'getMyRequests'])->middleware('auth:sanctum');
-
-Route::post('/accept_req_edit', [AcceptEdit::class, 'accept'])->middleware('auth:sanctum');
-
-Route::get('/download_photo/{photoId}', [DownloadImageOriginal::class, 'downloadImage'])->middleware('auth:sanctum');
-
-Route::post('/upload_photo', [UploadResult::class, 'uploadResult'])->middleware('auth:sanctum');
-
 Route::get('/search', [SearchAtPhotos::class, 'getResult']);
 
-Route::get('/admin_analytics', [AdminAnalytics::class, 'getStatistics'])->middleware('auth:sanctum');
+Route::get('/get_hero_images', [GetHeroImages::class, 'getHeroImages']);
 
-Route::get('/get_hero_images',[GetHeroImages::class, 'getHeroImages']);
 
-Route::post('/change_featured/{id}',[MakeFeaturedPhoto::class, 'makeFeaturedPhoto'])->middleware('auth:sanctum');
 
-Route::post('/send_report',[SendReport::class, 'sendReport'])->middleware('auth:sanctum');
+Route::post('/send_link_email', [ForgotPasswordController::class, 'sendLinkEmail']);
 
-Route::get('/profile_statistics', [ProfileAnalytics::class, 'analytics'])->middleware('auth:sanctum');
+Route::post('/reset_password', [NewPasswordController::class, 'store']);
 
-Route::post('/verify_password',[UpdateSensitiveData::class, 'checkCurrPassword'])->middleware('auth:sanctum');
+Route::get('/photo/{id}', [PhotoController::class, 'show'])->name('photo');
 
-Route::post('/update_email_password',[UpdateSensitiveData::class, 'changeEmailPassword'])->middleware('auth:sanctum');
+Route::middleware('auth:sanctum', 'CheckUserStatus')->group(function () {
+    Route::post('/remove_role', [AdminUsersActions::class, 'removeRole']);
 
-Route::delete('/delete_account',[DeleteAccount::class, 'deleteAccount'])->middleware('auth:sanctum');
+    Route::post('/change_role', [AdminUsersActions::class, 'changeRole']);
 
-Route::post('/send_link_email',[ForgotPasswordController::class, 'sendLinkEmail']);
+    Route::post('/delete_user', [AdminUsersActions::class, 'deleteUser']);
 
-Route::post('/reset_password',[NewPasswordController::class, 'store']);
+    Route::get('/reports', [ReportsController::class, 'getAllReports']);
 
-Route::post('/remove_role',[AdminUsersActions::class, 'removeRole'])->middleware('auth:sanctum');
+    Route::get('/report/{id}', [ReportsController::class, 'show']);
 
-Route::post('/change_role',[AdminUsersActions::class, 'changeRole'])->middleware('auth:sanctum');
+    Route::post('/report', [ReportsController::class, 'reportActions']);
 
-Route::post('/delete_user',[AdminUsersActions::class, 'deleteUser'])->middleware('auth:sanctum');
+    Route::get('/get_all_staff', [StaffController::class, 'getStaff']);
 
-Route::get('/reports', [ReportsController::class, 'getAllReports'])->middleware('auth:sanctum');
+    Route::get('/get_requests_admin', [RequestsController::class, 'getRequests']);
 
-Route::get('/report/{id}', [ReportsController::class, 'show'])->middleware('auth:sanctum');
+    Route::post('/change_featured/{id}', [MakeFeaturedPhoto::class, 'makeFeaturedPhoto']);
 
-Route::post('/report', [ReportsController::class, 'reportActions'])->middleware('auth:sanctum');
+    Route::post('/send_report', [SendReport::class, 'sendReport']);
+    Route::get('/profile_statistics', [ProfileAnalytics::class, 'analytics']);
 
-Route::get('/get_all_staff', [StaffController::class, 'getStaff'])->middleware('auth:sanctum');
+    Route::post('/verify_password', [UpdateSensitiveData::class, 'checkCurrPassword']);
 
-Route::get('/get_requests_admin', [RequestsController::class, 'getRequests'])->middleware('auth:sanctum');
+    Route::post('/update_email_password', [UpdateSensitiveData::class, 'changeEmailPassword']);
+
+    Route::delete('/delete_account', [DeleteAccount::class, 'deleteAccount']);
+
+    Route::get('/admin_analytics', [AdminAnalytics::class, 'getStatistics']);
+
+    Route::post('/send_request', [RequestEdit::class, 'requestEdit']);
+
+    Route::get('/get_requests', [RequestEdit::class, 'getRequests']);
+
+    Route::post('/change_status_req', [RequestEdit::class, 'changeStatusRequest']);
+
+    Route::get('/get_requests_for_editors', [FetchRequests::class, 'getRequests']);
+
+    Route::get('/get_my_requests', [FetchRequests::class, 'getMyRequests']);
+
+    Route::post('/accept_req_edit', [AcceptEdit::class, 'accept']);
+
+    Route::get('/download_photo/{photoId}', [DownloadImageOriginal::class, 'downloadImage']);
+
+    Route::post('/upload_photo', [UploadResult::class, 'uploadResult']);
+
+    Route::delete('/delete_gallery/{id}', [Galleries::class, 'DeleteGallery']);
+
+    Route::post('/addFollow', [AddFollow::class, 'addFollow']);
+
+    Route::post('/create_gallery', [Galleries::class, 'AddGallery']);
+    Route::get('/get_photos', [GetPhotos::class, 'getPhotos']);
+
+    Route::prefix('/edit_profile_pictures')->group(function () {
+        Route::post('/avatar', [ProfilePictures::class, 'uploadAvatar']);
+        Route::post('/cover', [ProfilePictures::class, 'uploadCover']);
+
+        Route::delete('/delete_avatar', [ProfilePictures::class, 'deleteAvatar']);
+        Route::delete('/delete_cover', [ProfilePictures::class, 'deleteCover']);
+    });
+    Route::post('/upload', [UploadController::class, 'uploadPhoto']);
+
+    Route::resource('/follows', FollowController::class);
+
+    Route::get('/myprofile', [ProfileController::class, 'getInfos']);
+
+    Route::post('/edit_profile', [ProfileController::class, 'editProfile']);
+
+    Route::prefix('/comments')->group(function () {
+        Route::post('/store', [CommentController::class, 'store']);
+        Route::put('/{id}', [CommentController::class, 'update']);
+        Route::delete('/{id}', [CommentController::class, 'destroy']);
+    });
+    Route::post('/photo/{id}', [PhotoController::class, 'update']);
+    Route::delete('/photo/{id}', [PhotoController::class, 'destroy']);
+});
 
 require __DIR__ . '/auth.php';

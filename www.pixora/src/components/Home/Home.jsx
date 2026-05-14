@@ -40,6 +40,7 @@ import About from "./About";
 import Explore from "./Explore";
 import PolicyNotice from "../Pages/PolicyNotice";
 import { Compass, Info, LayoutGrid, Sparkles } from "lucide-react";
+import { BannedOverlay } from "../Pages/BannedOverlay";
 
 
 export const Home = () => {

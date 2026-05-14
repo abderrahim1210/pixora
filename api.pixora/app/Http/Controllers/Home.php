@@ -45,7 +45,7 @@ class Home extends Controller
         $galleries = Gallery::with(['user:id,username','photos' => function ($q) {
             $q->select('photos.id','filename')->limit(4);
         }])->limit(40)->get();
-        $users = User::select('id', 'username', 'photo_profile')->where('role', 'user')->get();
+        $users = User::select('id', 'username', 'photo_profile')->where('role', 'user')->where('status','active')->get();
 
         return response()->json(['success' => true, 'photos' => $photos, 'explore_photos' => $explorePhotos, 'current_user' => $current_user, 'users' => $users,'galleries' => $galleries]);
     }

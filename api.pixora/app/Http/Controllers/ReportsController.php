@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Photo;
 use App\Models\Report;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -195,6 +196,46 @@ class ReportsController extends Controller
                             'success' => false,
                             'message' => 'Error: ' . $e->getMessage()
                         ], 500);
+                    }
+                    break;
+                case 'delete_comment':
+                    DB::beginTransaction();
+                    try {
+                        $comment = DB::table('comments')->where('id', $request->reportableId)->first();
+                        if ($comment) {
+                            DB::table('comments')->where('id',$request->reportableId)->delete();
+                            $report->update(['status' => 'resolved']);
+                            DB::commit();
+                            $msg = 'Comment deleted successfully';
+                        } else {
+                            throw new \Exception("Comment not found in database");
+                        }
+                    } catch (\Exception $e) {
+                        DB::rollBack();
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Error in ' . $e->getMessage()
+                        ]);
+                    }
+                    break;
+                case 'bann_user':
+                    DB::beginTransaction();
+                    try{
+                        $user = User::find($request->reportableId);
+                        if ($user){
+                            $user->update(['status' => 'banned']);
+                            $report->update(['status' => 'resolved']);
+                            DB::commit();
+                            $msg = 'User banned successfully';
+                        }else {
+                            throw new \Exception("User not found in database");
+                        }
+                    }catch(\Exception $e){
+                        DB::rollBack();
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Error in ' . $e->getMessage()
+                        ]);
                     }
                     break;
                 default:

@@ -1,7 +1,8 @@
 import React from 'react'
 import { FaArrowRight, FaCamera, FaGlobe, FaLink, FaStar } from 'react-icons/fa'
-
+import { useNavigate } from 'react-router-dom';
 const About = () => {
+    const navigate = useNavigate();
     return (
         <div
             className="tab-pane fade show mt-3 mb-3"
@@ -74,7 +75,7 @@ const About = () => {
                 <div className="join-community-texts">
                     <h2>join the pixora community</h2>
                     <p>Become part of a global hub for creative minds and visual artists.</p>
-                    <button className="btn">Join now <FaArrowRight /></button>
+                    <button className="btn" onClick={() => navigate('/upload')} >Join now <FaArrowRight /></button>
                 </div>
             </div>
         </div>

@@ -40,7 +40,6 @@ export const Reports = () => {
             <AlertCircle size={40} />
             <p>Error: {error.message}</p>
         </div>);
-    // if (user.role !== 'admin') return navigate('/');
     return (
         <>
             <Navbar />
