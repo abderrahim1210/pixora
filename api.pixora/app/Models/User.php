@@ -108,4 +108,6 @@ class User extends Authenticatable
     public function editionRequests(){
         return $this->hasMany(EditionRequest::class, 'requester_id');
     }
+
+    
 }

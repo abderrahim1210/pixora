@@ -20,6 +20,7 @@ use App\Http\Controllers\GetPhotos;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MakeFeaturedPhoto;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\Photographer;
 use App\Http\Controllers\ProfileAnalytics;
@@ -188,6 +189,10 @@ Route::middleware('auth:sanctum', 'CheckUserStatus')->group(function () {
     });
     Route::post('/photo/{id}', [PhotoController::class, 'update']);
     Route::delete('/photo/{id}', [PhotoController::class, 'destroy']);
+
+    Route::get('/notifications',[NotificationsController::class, 'index']);
+
+    Route::post('/notifications/mark-as-read', [NotificationsController::class, 'markAsRead']);
 });
 
 require __DIR__ . '/auth.php';

@@ -23,4 +23,8 @@ class Comment extends Model
     {
         return $this->morphMany(Report::class, 'reportable');
     }
+
+    public function notifiations(){
+        return $this->morphMany(Notification::class, 'notifiable');
+    }
 }

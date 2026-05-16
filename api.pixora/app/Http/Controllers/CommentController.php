@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Photo;
+use App\Notifications\CommentNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,6 +58,10 @@ class CommentController extends Controller
         $comment->content = $content;
         $comment->user_id = $user->id;
         $comment->save();
+        $photo = Photo::find($photo_id);
+        if ($photo->user_id !== Auth::id()){
+            $photo->user->notify(new CommentNotification($comment,$photo));
+        }
         return response()->json([
             'success' => true,
             'message' => 'Comment added successfully',

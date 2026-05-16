@@ -40,6 +40,7 @@
 @use './components/staff';
 @use './components/requests_for_admin';
 @use './components/banned_overlay';
+@use './components/notifications';
 
 :root {
     --special_color: rgb(0, 120, 255);
@@ -702,5 +703,9 @@ body.dark {
         h1{
             color: white;
         }
+    }
+
+    .notification-center__icon{
+        color: white !important;
     }
 }

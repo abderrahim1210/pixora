@@ -12,4 +12,9 @@ class Like extends Model
     public function photo(){
         return $this->belongsTo(Photo::class);
     }
+
+    // public function notifications()
+    // {
+    //     return $this->morphMany(Notification::class, 'notifiable');
+    // }
 }

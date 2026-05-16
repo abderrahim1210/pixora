@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import Avatar from "../Avatar";
 import OffcanvasTemplate from "../OffcanvasTemplate";
+import { Notification } from "../Notification";
 export const Navbar = ({ type }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -171,6 +172,11 @@ export const Navbar = ({ type }) => {
               </li>
             </ul>
             <ul className="navbar-nav d-none d-md-flex" id="ul2-1">
+              {
+                user?.id && (
+                  <Notification />
+                )
+              }
               {
                 user?.id && (<li className="nav-item" id="upload_button">
                   <button

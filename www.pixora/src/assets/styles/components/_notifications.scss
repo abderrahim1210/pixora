@@ -1,0 +1,218 @@
+// Variables de design pour Pixora
+$primary-blue: #2563eb;
+$primary-blue-light: rgba(37, 99, 235, 0.08);
+$danger-red: #ef4444;
+$text-dark: #1f2937;
+$text-muted: #9ca3af;
+$glass-bg: rgba(255, 255, 255, 0.75);
+$glass-border: rgba(255, 255, 255, 0.3);
+$shadow-pro: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+
+// Keyframes pour l'animation du badge rouge
+@keyframes pulse-badge {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+.notification-center {
+    position: relative;
+    display: inline-block;
+
+    &__trigger {
+        background: none;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+        position: relative;
+        color: #4b5563;
+        transition: color 0.2s ease;
+        border-radius: 50%;
+
+        &:hover {
+            color: $primary-blue;
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    &__icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    &__badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        background-color: $danger-red;
+        color: #ffffff;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 9999px;
+        line-height: 1;
+        animation: pulse-badge 2s infinite;
+    }
+}
+
+.notification-dropdown {
+    position: absolute;
+    right: 0;
+    margin-top: 10px;
+    width: 320px;
+    border-radius: 16px;
+    border: 1px solid $glass-border;
+    background: $glass-bg;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: $shadow-pro;
+    z-index: 50;
+    overflow: hidden;
+
+    &__header {
+        padding: 16px;
+        border-b: 1px solid rgba(0, 0, 0, 0.04);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h3 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: $text-dark;
+        }
+    }
+
+    &__count {
+        font-size: 11px;
+        background-color: rgba(37, 99, 235, 0.1);
+        color: $primary-blue;
+        padding: 2px 8px;
+        border-radius: 9999px;
+        font-weight: 500;
+    }
+
+    &__list {
+        max-height: 260px;
+        overflow-y: auto;
+
+        // Custom Scrollbar pour un look pro
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+    }
+
+    &__empty {
+        padding: 24px;
+        text-align: center;
+        font-size: 13px;
+        color: $text-muted;
+    }
+
+    &__footer {
+        padding: 10px;
+        text-align: center;
+        border-top: 1px solid rgba(0, 0, 0, 0.04);
+
+        button {
+            background: none;
+            border: none;
+            font-size: 12px;
+            color: $primary-blue;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.15s ease;
+
+            &:hover {
+                color: darkblue;
+            }
+        }
+    }
+}
+
+.notification-item {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.02);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: $primary-blue-light;
+    }
+
+    &--unread {
+        background-color: rgba(37, 99, 235, 0.02);
+        font-weight: 500;
+
+        .notification-item__text {
+            color: $text-dark;
+        }
+    }
+
+    &--read {
+        opacity: 0.65;
+    }
+
+    &__status-icon {
+        flex-shrink: 0; // 🌟 Had stoon darori bach l-tswira makt-9rchsh w t-bqa dayra square
+        width: 40px; // Tqdar tcontroli l-7ajm li bghiti hna
+        height: 40px;
+        border-radius: 6px; // Bach tji tswira fiha cornres rounded zwinin
+        overflow: hidden; // Bach l-tswira maktkhrojsh 3la dook rounded corners
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f1f5f9;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; // 🌟 Hada huwa li kiy-khlli l-tswira t-fitta correctly bla ma t-jbed wlla t-khssr ليها l-dimensions
+            display: block;
+        }
+    }
+
+    &__content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__text {
+        margin: 0;
+        font-size: 12.5px;
+        color: #374151;
+        line-height: 1.4;
+        word-wrap: break-word;
+    }
+
+    &__date {
+        display: block;
+        font-size: 10px;
+        color: $text-muted;
+        margin-top: 4px;
+    }
+}
