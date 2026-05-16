@@ -64,6 +64,7 @@ import EditProfile from "./Profile/EditProfile";
 import Settings from "./Profile/Settings";
 import Statistics from "./Profile/Statistics";
 import BottomNav from "./Layouts/BottomNav";
+import { Helmet } from "react-helmet-async";
 
 
 export const MyProfile = () => {
@@ -340,6 +341,9 @@ export const MyProfile = () => {
   }
   return (
     <div data-bs-page="myprofile">
+      <Helmet>
+        <title>Pixora : Profile</title>
+      </Helmet>
       <Navbar />
       {
         !loading ? (

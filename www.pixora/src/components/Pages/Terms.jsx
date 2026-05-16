@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 
 const Terms = () => {
@@ -7,6 +8,9 @@ const Terms = () => {
 
     return (
         <div className="legal-container">
+            <Helmet>
+                <title>Pixora | Terms , Privacy & Cookies</title>
+            </Helmet>
             <div className="legal-wrapper">
                 <aside className="legal-sidebar">
                     <h2 className="sidebar-title">Legal Center</h2>

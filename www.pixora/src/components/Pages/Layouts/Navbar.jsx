@@ -140,37 +140,14 @@ export const Navbar = ({ type }) => {
                   </ul>
                 </div>
               </li>
-              <li className="nav-item">
-                <div className="dropdown">
-                  <a
-                    href="#"
-                    className="nav-link dropdown-toggle dropdownIcon"
-                    aria-expanded="false"
-                    data-bs-toggle="dropdown"
-                    title="Menu"
-                  >
-                    <FiGlobe /> <FaChevronDown />
-                  </a>
-                  <ul className="dropdown-menu dropdown-menu-end">
-                    <li>
-                      <a href="dashboard.php" className="dropdown-item">
-                        English
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="dropdown-item"
-                        data-bs-target="#language"
-                        data-bs-toggle="modal"
-                      >
-                        Arabic
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
             </ul>
+            {/* {user?.id && (
+              <ul className="navbar-nav d-md-none ms-auto me-2 align-items-center">
+                <li className="nav-item">
+                  <Notification />
+                </li>
+              </ul>
+            )} */}
             <ul className="navbar-nav d-none d-md-flex" id="ul2-1">
               {
                 user?.id && (
@@ -221,7 +198,14 @@ export const Navbar = ({ type }) => {
             </ul>
           </div>
         </nav>
-        <OffcanvasTemplate user={user} />
+        <div className="d-flex align-items-center ms-auto d-md-none">
+          {user?.id && (
+            <div className="me-3"> {/* me-3 kaddyr spacing hna bin l-gandora w l-hamburger */}
+              <Notification />
+            </div>
+          )}
+          <OffcanvasTemplate user={user} />
+        </div>
       </header>
     </div>
   );

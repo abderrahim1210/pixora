@@ -15,6 +15,7 @@ import { Flag, MoreHorizontal } from 'lucide-react'
 import { useModal } from '../context/ModalProvider'
 import ModalTemplate from './ModalTemplate'
 import Report from './Report'
+import { Helmet } from 'react-helmet-async'
 const Photograher = () => {
     const { id } = useParams();
     const { show, openModal, closeModal } = useModal();
@@ -73,6 +74,9 @@ const Photograher = () => {
     const followText = isFollowed ? 'Followed' : 'Follow';
     return (
         <div data-bs-page='myprofile'>
+            <Helmet>
+                <title>Pixora | Photographer</title>
+            </Helmet>
             {
                 show === 'report_user' && (
                     <ModalTemplate show={show} closeModal={closeModal}>

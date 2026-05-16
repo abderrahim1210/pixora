@@ -20,6 +20,7 @@ import Requests from "./Photos/Requests";
 import Likes from "./Photos/Likes";
 import Galleries from "./Photos/Galleries";
 import BottomNav from "./Layouts/BottomNav";
+import { Helmet } from "react-helmet-async";
 
 export const UserDashboard = () => {
   const [photos, setPhotos] = useState([]);
@@ -117,6 +118,9 @@ export const UserDashboard = () => {
   if (user?.role === "editor" || user?.role === "admin") return navigate(`/user/${user?.username}/myphotos`);
   return (
     <div data-bs-page="myphotos">
+      <Helmet>
+        <title>Pixora | Dashboard</title>
+      </Helmet>
       <Navbar data={user} />
       {
         show === "create-gallery" && (

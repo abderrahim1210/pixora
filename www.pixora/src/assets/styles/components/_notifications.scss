@@ -1,4 +1,3 @@
-// Variables de design pour Pixora
 $primary-blue: #2563eb;
 $primary-blue-light: rgba(37, 99, 235, 0.08);
 $danger-red: #ef4444;
@@ -8,7 +7,6 @@ $glass-bg: rgba(255, 255, 255, 0.75);
 $glass-border: rgba(255, 255, 255, 0.3);
 $shadow-pro: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
 
-// Keyframes pour l'animation du badge rouge
 @keyframes pulse-badge {
     0% {
         transform: scale(0.95);
@@ -84,6 +82,17 @@ $shadow-pro: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0,
     z-index: 50;
     overflow: hidden;
 
+    @media (max-width: 768px) {
+        position: fixed !important;
+        left: 10px !important;
+        right: 10px !important;
+        width: auto !important; // Kat-khlliha t-wsa3 automatic layout screen lines
+        max-width: calc(100% - 20px) !important;
+        top: 60px !important; // Spacing mn l-foq d l-navbar dyalk
+        margin-top: 0 !important;
+    }
+    
+
     &__header {
         padding: 16px;
         border-b: 1px solid rgba(0, 0, 0, 0.04);
@@ -112,7 +121,6 @@ $shadow-pro: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0,
         max-height: 260px;
         overflow-y: auto;
 
-        // Custom Scrollbar pour un look pro
         &::-webkit-scrollbar {
             width: 5px;
         }
@@ -178,11 +186,11 @@ $shadow-pro: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0,
     }
 
     &__status-icon {
-        flex-shrink: 0; // 🌟 Had stoon darori bach l-tswira makt-9rchsh w t-bqa dayra square
-        width: 40px; // Tqdar tcontroli l-7ajm li bghiti hna
+        flex-shrink: 0;
+        width: 40px;
         height: 40px;
-        border-radius: 6px; // Bach tji tswira fiha cornres rounded zwinin
-        overflow: hidden; // Bach l-tswira maktkhrojsh 3la dook rounded corners
+        border-radius: 6px;
+        overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -191,7 +199,7 @@ $shadow-pro: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0,
         img {
             width: 100%;
             height: 100%;
-            object-fit: cover; // 🌟 Hada huwa li kiy-khlli l-tswira t-fitta correctly bla ma t-jbed wlla t-khssr ليها l-dimensions
+            object-fit: cover;
             display: block;
         }
     }

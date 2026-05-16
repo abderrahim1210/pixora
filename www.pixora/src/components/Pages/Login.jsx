@@ -8,6 +8,7 @@ axios.defaults.xsrfCookieName = 'XSRF-TOKEN';
 axios.defaults.xsrfHeaderName = 'X-XSRF-TOKEN';
 import Cookies from 'js-cookie';
 import { api } from "../utils/getUser";
+import { Helmet } from "react-helmet-async";
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -62,6 +63,9 @@ export const Login = () => {
   }, []);
   return (
     <div data-bs-page="login" id="login">
+      <Helmet>
+        <title>Pixora | Login</title>
+      </Helmet>
       <div className="dv1">
         <div className="dv1-0 login_div" style={{
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://api.pixora.test/storage/photos/${heroImage.filename}')`,

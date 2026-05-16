@@ -30,6 +30,7 @@ import PhotosEdited from "./PhotosEdited";
 import Tooltip from "../Overlays/Tooltip";
 import { Flag } from "lucide-react";
 import Report from "./Report";
+import { Helmet } from "react-helmet-async";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -243,6 +244,9 @@ export const Photo = (props) => {
 
     return (
         <div data-bs-page="photo">
+            <Helmet>
+                <title>Pixora | Photo Preview</title>
+            </Helmet>
             <Navbar data={props.data} />
             {
                 show === "share" && (

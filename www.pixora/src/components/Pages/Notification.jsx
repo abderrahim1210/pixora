@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import moment from 'moment';
 export const Notification = () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -105,7 +106,7 @@ export const Notification = () => {
                                         <div className="notification-item__content">
                                             <p className="notification-item__text">{parsedData?.message || 'New notification'}</p>
                                             <span className="notification-item__date">
-                                                {new Date(notif.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                {moment(notif.created_at).fromNow()}
                                             </span>
                                         </div>
                                     </div>

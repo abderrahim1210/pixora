@@ -5,6 +5,7 @@ import LatestRequests from './LatestRequests';
 import { Navbar } from './Layouts/Navbar';
 import { Footer } from './Layouts/Footer';
 import Spinner from './Spinner';
+import { Helmet } from 'react-helmet-async';
 
 export const AllRequestsAdmin = () => {
     const [statusFilter, setStatusFilter] = useState('all');
@@ -53,6 +54,9 @@ export const AllRequestsAdmin = () => {
     ];
     return (
         <>
+            <Helmet>
+                <title>Pixora | All requests</title>
+            </Helmet>
             <Navbar />
             <div className="all-requests-page">
                 <header className="page-header">

@@ -5,10 +5,13 @@ import "bootstrap/dist/js/bootstrap.bundle.js";
 import "./assets/styles/main.scss";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
+import {HelmetProvider} from 'react-helmet-async';
 createRoot(document.getElementById("root")).render(
   <>
     <BrowserRouter>
-      <App />
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>
     </BrowserRouter>
   </>
 );

@@ -306,6 +306,10 @@
     width: 250px;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    @media (max-width:'768px') {
+      width: 100%;
+    }
   }
 
   .div3 .card:hover {
@@ -640,7 +644,6 @@
   }
 
   .join-community-texts .btn {
-    // background-color: var(--special_color);
     background: linear-gradient(to top, var(--special_color) 50%, #ffffff 50%);
     background-size: 100% 200%;
     background-position: bottom;
@@ -714,6 +717,43 @@
       }
     }
   }
+
+  .hero__subtitle {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+
+    &.fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    &.fade-out {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero__subtitle {
+      font-size: 0.95rem;
+
+      height: 46px;
+      min-height: 46px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      margin-top: 5px;
+      margin-bottom: 15px;
+      padding: 0 10px;
+    }
+  }
 }
 
 .section-header {
@@ -740,4 +780,32 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 5px;
+}
+
+.hero__subtitle {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+
+  // 🌟 L-Transition dynamic hna
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+
+  &.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &.fade-out {
+    opacity: 0;
+    transform: translateY(-5px); // Kiy-df3ha khfif l l-foq mlli kat-7jeb
+  }
+}
+
+// Media query sghira d l-mobile ghir protection
+@media (max-width: 768px) {
+  .hero__subtitle {
+    font-size: 0.95rem;
+  }
 }

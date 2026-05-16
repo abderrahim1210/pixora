@@ -50,6 +50,8 @@ export const Home = () => {
   const [loading, setLoading] = useState(false);
   const [term, setTerm] = useState('');
   const [heroImage, setHeroImage] = useState([]);
+  const [fade, setFade] = useState(true);
+  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
 
   const fetchData = async () => {
     try {
@@ -165,6 +167,37 @@ export const Home = () => {
     if (hour < 18) return "Good Afternoon";
     return "Good Evening";
   };
+
+  const phrases = [
+    "Every Photo Tells A Story. What’s Yours?",
+    "Discover the World Through the Lens of Artists.",
+    "Capture Moments, Share Stories, Inspire Millions.",
+    "Your Portal to Premium Moroccan Photography.",
+    "Freeze Time, Capture Emotion, Share Art.",
+
+    "Where Moroccan Heritage Meets Modern Lenses.",
+
+    "A Visual Journey Through Every Frame.",
+
+    "Framing the Beauty of the Unseen World.",
+
+    "Your Lens, Your Story, Your Pixora.",
+
+    "Explore Premium Shots from Top Photographers.",
+  ];
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setFade(false);
+
+      setTimeout(() => {
+        setCurrentPhraseIndex((prevIndex) => (prevIndex + 1) % phrases.length);
+        setFade(true);
+      }, 500);
+    }, 4000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <div data-bs-page="pixora">
       <PolicyNotice />
@@ -227,8 +260,8 @@ export const Home = () => {
         <div className="container-fluid p-0">
           <Motion>
             <h1>discover amazing photos on Pixora</h1>
-            <p id="quote" className="mb-2">
-              Every photo tells a story. What’s yours?
+            <p id="quote" className={`mb-2 hero__subtitle ${fade ? 'fade-in' : 'fade-out'}`}>
+              {phrases[currentPhraseIndex]}
             </p>
           </Motion>
           <div className="div2-1">

@@ -11,12 +11,12 @@ import { FaArrowRight, FaCamera, FaCheck, FaRocket } from "react-icons/fa";
 import { AiOutlineCamera } from "react-icons/ai";
 import { FiInfo } from "react-icons/fi";
 import { Truncate } from "./Truncate";
+import { Helmet } from "react-helmet-async";
 
 export const Upload = () => {
   const [step, setStep] = useState(0);
   const navigate = useNavigate();
   const { user } = useAuth();
-  // if (!user?.id) return navigate('/login');
   const steps = ['Get started', 'Upload', 'Details', 'Publish'];
   const [photo, setPhoto] = useState({
     title: "",
@@ -91,15 +91,11 @@ export const Upload = () => {
 
   return (
     <div data-bs-page="upload">
+      <Helmet>
+        <title>Pixora | Upload</title>
+      </Helmet>
       <div className="dv1">
         <div className="text-center">
-          {/* <div className="container d-flex justify-content-center">
-            <div className="progress mb-3">
-              <div className="progress-bar" style={{ width: `${progress}%`, background: getColors(step) }}>
-                {progress} %
-              </div>
-            </div>
-          </div> */}
           <div className="step-bar mt-2 mb-2">
             {
               steps.map((s, index) => (
@@ -115,7 +111,6 @@ export const Upload = () => {
           >
             <div className="mb-3">
               {step === 0 && <StepZero next={next} step={step} />}
-              {/* {step === 1 && <StepOne next={next} step={step} prev={prev} photo={photo} setPhoto={setPhoto} />} */}
               {step === 1 && <StepTwo next={next} prev={prev} step={step} photo={photo} setPhoto={setPhoto} />}
               {step === 2 && <StepThree next={next} prev={prev} step={step} photo={photo} setPhoto={setPhoto} />}
               {step === 3 && <StepFour prev={prev} step={step} photo={photo} user={user} />}

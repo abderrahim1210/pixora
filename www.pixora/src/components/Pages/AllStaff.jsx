@@ -5,6 +5,7 @@ import StaffUserCard from './StaffUserCard';
 import { Navbar } from './Layouts/Navbar';
 import { Footer } from './Layouts/Footer';
 import { BiSearchAlt } from 'react-icons/bi';
+import { Helmet } from 'react-helmet-async';
 
 export const AllStaff = () => {
     const [visible, setVisible] = useState(4);
@@ -43,6 +44,9 @@ export const AllStaff = () => {
 
     return (
         <>
+            <Helmet>
+                <title>Pixora | All Staff</title>
+            </Helmet>
             <Navbar />
             <section className="staff-page">
                 <div className="container">

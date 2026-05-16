@@ -6,6 +6,7 @@ import { FaCamera, FaGoogle, FaHeart, FaUsers } from "react-icons/fa";
 import { FaPhotoFilm } from "react-icons/fa6";
 import { MdPhoto, MdPhotoCamera } from "react-icons/md";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet-async";
 
 
 export const SignUp = () => {
@@ -87,6 +88,9 @@ export const SignUp = () => {
   }, []);
   return (
     <div data-bs-page="signup" id="signup">
+      <Helmet>
+        <title>Pixora | Sign Up</title>
+      </Helmet>
       <div className="dv1">
         <div className="dv1-0 login_div" style={{
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://api.pixora.test/storage/photos/${heroImage.filename}')`,

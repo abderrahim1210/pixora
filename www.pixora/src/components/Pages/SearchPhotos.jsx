@@ -46,7 +46,6 @@ const SearchPhotos = () => {
     return (
         <>
             <Navbar />
-
             <div className="container-fluid">
                 <div className='mt-3'>
                     <h1 className="fw-bold text-center">All photos <span className='text-primary'>({photos?.length ?? 0} photo)</span></h1>

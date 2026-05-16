@@ -10,7 +10,6 @@ const OffcanvasTemplate = ({ user, page = 'home' }) => {
     const location = useLocation();
     const navLinks = [
         { name: 'Home', path: '/', icon: <Home size={20} /> },
-        // { name: 'Explore', path: '/explore', icon: <Compass size={20} /> },
         { name: 'My Profile', path: `/user/${user?.username}/myprofile`, icon: <Image size={20} /> },
         { name: 'Dashboard', path: `/user/${user?.username}/dashboard`, icon: <Images size={20} /> },
         { name: 'Upload', path: '/upload', icon: <PlusSquare size={20} /> },

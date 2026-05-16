@@ -5,12 +5,16 @@ import Avatar from './Avatar'
 import { EmptyContent } from './EmptyContent'
 import { FaCameraRetro } from 'react-icons/fa'
 import Spinner from './Spinner'
+import { Helmet } from 'react-helmet-async'
 
 const PhotographersList = ({ user,filtredUsers, isLoading, visible,addFollow }) => {
     const navigate = useNavigate();
     return (
 
         <div className="container-fluid div3">
+            <Helmet>
+                <title>Pixora | Photographers</title>
+            </Helmet>
             {
                 !isLoading ? filtredUsers?.length > 0 ? (
                     filtredUsers?.slice(0, visible).map((u) => (

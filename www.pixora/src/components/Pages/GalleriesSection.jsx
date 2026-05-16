@@ -6,6 +6,7 @@ import axios from 'axios'
 import { Footer } from './Layouts/Footer'
 import { Navbar } from './Layouts/Navbar'
 import { BiChevronDown, BiSearchAlt } from 'react-icons/bi'
+import { Helmet } from 'react-helmet-async'
 const GalleriesSection = () => {
     const [visible, setVisible] = useState(5);
     const [searchTerme,setSearchTerme] = useState('');
@@ -38,6 +39,9 @@ const GalleriesSection = () => {
 
     return (
         <>
+            <Helmet>
+                <title>Pixora | Galleries</title>
+            </Helmet>
             <Navbar />
             <div
                 className="container-fluid tab-pane fade show mt-3 mb-3"
