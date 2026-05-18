@@ -1,7 +1,7 @@
 # 📸 PIXORA - Professional Photography Platform
 
 <p align="center">
-  <img src="./www.pixora/public/outils/favicons/favicon.jpg" alt="Pixora Logo" width="300"/>
+  <img src="./www.pixora/public/outils/pngs/logo_dark.png" alt="Pixora Logo" width="300"/>
 </p>
 
 <p align="center">
@@ -39,7 +39,7 @@
 
 ## 🏗️ Technical Architecture
 - **Frontend:** React.js, SCSS (7-1 Pattern), Axios, Vite.
-- **Backend:** Laravel 11, RESTful API, Laravel Sanctum (Auth).
+- **Backend:** Laravel 12, RESTful API, Laravel Sanctum (Auth).
 - **Database:** MySQL (Eloquent ORM).
 
 ---
