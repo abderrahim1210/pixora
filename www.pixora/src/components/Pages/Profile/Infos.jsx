@@ -5,7 +5,7 @@ import PhotosTemplate from '../PhotosTemplate'
 import { EmptyContent } from '../EmptyContent'
 import PageSkeleton from '../PageSkeleton'
 
-const Infos = ({user, openModal, statistics, loading, photos, photosCount}) => {
+const Infos = ({ user, openModal, statistics, loading, photos, photosCount }) => {
     return (
         <div className="mt-2 mb-2 tab-pane fade show active" id="info">
             <div
@@ -86,19 +86,23 @@ const Infos = ({user, openModal, statistics, loading, photos, photosCount}) => {
                                 <span className={`badge badge-${user?.role}`}><FaIdBadge /> {user?.role}</span>
                             )
                         }
-                        <p
+                        <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(user?.country || '')}`}
+                            target='_blank'
+                            rel="noopener noreferrer"
                             className="mb-1 mx-auto"
                             style={{
                                 textDecoration: "underline",
                                 width: "max-content",
                                 cursor: "pointer",
+                                color:'#1A1A1A'
                             }}
                             data-bs-toggle="tooltip"
                             title="View in map"
                         >
                             <FaMapPin id="location_icon" />
                             {user?.country}
-                        </p>
+                        </a>
                     </div>
                     <div>
                         <p className="mb-1">@{user?.email}</p>

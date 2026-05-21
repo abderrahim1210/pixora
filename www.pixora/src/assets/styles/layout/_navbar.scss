@@ -24,12 +24,19 @@
   }
 
   .nav1 {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     font-weight: bold;
     z-index: 1050 !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03),
+      0 1px 3px rgba(0, 0, 0, 0.02);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease-in-out;
   }
 
-  .dropdown .dropdown-menu a:hover,.dropdown .dropdown-menu .dropdown-item a.active {
+  .dropdown .dropdown-menu a:hover,
+  .dropdown .dropdown-menu .dropdown-item a.active {
     background-color: var(--special_color) !important;
     color: white !important;
   }
@@ -72,39 +79,6 @@
 
   #signupButton:hover {
     background-color: rgb(0, 54, 115);
-  }
-
-  .offcanvas,
-  .offcanvas .list-group-item {
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-  }
-
-  .offcanvas-body .list-group .list-group-item {
-    border: none;
-    color: black;
-    border-radius: 0;
-    text-transform: capitalize;
-  }
-
-  .offcanvas-body .list-group .list-group-item:hover {
-    background-color: var(--special_color);
-    color: white;
-  }
-
-  .offcanvas-body .btn {
-    border: 1px solid black;
-    text-transform: capitalize;
-  }
-
-  .offcanvas-body #login {
-    color: black;
-    background-color: whitesmoke;
-  }
-
-  .offcanvas-body #signupButton {
-    color: black;
-    background-color: var(--special_color);
   }
 
   #imgAcc {

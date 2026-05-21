@@ -1,0 +1,584 @@
+body.dark {
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+
+        -webkit-text-fill-color: white !important;
+
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    input:-webkit-autofill:focus {
+        border: 2px solid !important;
+    }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+
+        -webkit-text-fill-color: white !important;
+
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    input:-webkit-autofill:focus {
+        border: 2px solid !important;
+    }
+
+    background-color: var(--bg_dark) !important;
+    color: #f8fafc;
+
+    .bottom-sheet-modal .modal-content {
+        background: rgba(30, 41, 59, 0.7) !important;
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #f8fafc;
+    }
+
+    .modal-body {
+        background: transparent !important;
+    }
+
+    .photo-details-card,
+    .setting-card {
+        background: rgba(30, 41, 59, 0.7) !important;
+        backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        .btn {
+            background: rgba(59, 130, 246, 0.1) !important;
+            color: white;
+        }
+
+        h6,
+        p,
+        span,
+        .text-secondary {
+            color: #f8fafc !important;
+        }
+    }
+
+    .navbar {
+        background: #0f172a !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        .nav-link,
+        .navbar-brand {
+            color: #f8fafc;
+        }
+    }
+
+    .nav2 .nav-item .nav-link {
+        color: #fff;
+
+        &.active {
+            color: #fff;
+
+            &:hover {
+                color: #fff;
+            }
+        }
+
+        &:hover {
+            color: white;
+        }
+    }
+
+    #ul2 .nav-item .nav-link:hover:not(#upload_button),
+    #ul2-1 #loginButton:hover,
+    .send-bell a:hover {
+        color: var(--special_color);
+    }
+
+    .photographers a {
+        color: white !important;
+    }
+
+    .followButton.followed {
+        color: #e2e8f0 !important;
+    }
+
+    .btn-more-options {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+        color: white !important;
+        border: none !important;
+    }
+
+    .form-control,
+    .btn-light {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .list-group {
+        background: #0f172a !important;
+    }
+
+    .photo-info-card,
+    #edit_profile,
+    #edit_profile div .list-group-item {
+        background: #0f172a !important;
+        color: #fff;
+    }
+
+    .ftr-dash {
+        background: #0f172a !important;
+
+        .footer-links a {
+            color: #fff !important;
+        }
+    }
+
+    #copyrightText {
+        color: #fff !important;
+    }
+
+    .user-info>span {
+        color: white !important;
+    }
+
+    .comments,
+    .modal-content .modal-body {
+        background-color: rgba(30, 41, 59, 0.7);
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+
+        }
+
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.705) !important;
+        }
+
+
+
+        .comment-body {
+            background: rgba(255, 255, 255, 0.05) !important;
+
+            p {
+                color: #e2e8f0;
+            }
+
+            small,
+            span {
+                color: #e2e8f0;
+            }
+        }
+
+        .drpToggle {
+            color: white;
+
+            &:hover {
+                color: var(--special_color);
+            }
+        }
+
+        .show-more {
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: #3b82f6 !important;
+            border: 1px solid rgba(59, 130, 246, 0.3) !important;
+        }
+    }
+
+    .card,
+    .details-panel>.list-group {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+        color: #fff;
+    }
+
+    .socialActions {
+        background-color: rgba(30, 41, 59, 0.7);
+    }
+
+    .socialActions a {
+        color: #fff;
+    }
+
+    .dropdown .dropdown-menu {
+        background-color: var(--bg_dark);
+
+        a {
+            color: #fff !important;
+
+            &.disabled {
+                display: none;
+            }
+        }
+    }
+
+    .pixora-dropdown {
+        background-color: #1a1a1a !important;
+    }
+
+    .nav1 #upload_button {
+        border: 1px solid #fff;
+    }
+
+    .gallery-card {
+        background-color: rgba(30, 41, 59, 0.7);
+    }
+
+    .mini-user-card {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+
+        h6 {
+            color: #fff !important;
+        }
+    }
+
+    .greeting-text {
+        color: #fff !important;
+    }
+
+    #edit_profile {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+    }
+
+    #edit_profile .list-group .list-group-item {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+    }
+
+    .login-box {
+        background-color: #0f172a;
+        color: white;
+
+        .form-label {
+            color: white;
+        }
+
+        .form-control,
+        .form-select {
+            background: rgba(0, 0, 0, 0.2) !important;
+            // border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: #f8fafc !important;
+
+        }
+
+        select {
+            background-color: #1a1a1a;
+            color: white;
+
+            option {
+                background-color: #1a1a1a;
+                color: white;
+
+                &:hover,
+                &:focus,
+                &:active {
+                    background-color: var(--special_color) !important;
+                }
+            }
+        }
+
+        input[type="date"] {
+            color-scheme: dark;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background-color: rgba(0, 0, 0, 0.2) !important;
+        }
+
+        // .form-control::placeholder {
+        //     color: #64748b;
+        // }
+    }
+
+    .welcome-title {
+        color: white !important;
+    }
+
+    .pixora-primary-btn {
+        background-color: var(--special_color) !important;
+    }
+
+    #upload {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+        color: white !important;
+        border-color: 1px solid white !important;
+
+        i {
+            color: rgba(255, 255, 255, 0.856) !important;
+        }
+    }
+
+    .photoInformations td {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+        color: white;
+    }
+
+    .photo_details {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+
+        .form-control,
+        .form-select {
+            background: rgba(0, 0, 0, 0.2) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: #f8fafc !important;
+        }
+
+        .form-select option {
+            background-color: #1a1a1a;
+        }
+
+        .form-control::placeholder {
+            color: #e2e8f0 !important;
+        }
+
+        .form-label {
+            color: white !important;
+        }
+    }
+
+    #step3 .text-muted {
+        color: white !important;
+    }
+
+    .publish-card {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+    }
+
+    .publish-list .list-group-item {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+
+        span {
+            color: #e2e8f0;
+        }
+
+        strong {
+            color: white !important;
+        }
+    }
+
+    .about-feature,
+    .owner-infos {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+    }
+
+    .owner-infos {
+
+        h3,
+        p {
+            color: white;
+        }
+    }
+
+    .about-wave-path {
+        fill: var(--bg_dark);
+    }
+
+    .search-box {
+        background: rgba(0, 0, 0, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #f8fafc !important;
+
+        .search-input {
+            color: white;
+        }
+
+        .clear-btn {
+            background-color: transparent;
+        }
+    }
+
+    .btn-follow-sm.followed {
+        color: #e2e8f0 !important;
+    }
+
+    .stats-card {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+    }
+
+    .stats-card,
+    .stats-glass-card {
+
+        h6,
+        span,
+        strong {
+            color: white !important;
+        }
+    }
+
+    .spinner-container {
+        background-color: var(--bg_dark) !important;
+    }
+
+    .spinner-text {
+        color: white !important;
+    }
+
+    .pixora-text-area {
+        color: white;
+    }
+
+    .pixora-report-container .text-muted {
+        color: white !important;
+    }
+
+    .share-title {
+        color: white;
+    }
+
+    .share-btn {
+        background-color: rgba(30, 41, 59, 0.7);
+        color: white;
+    }
+
+    .legal-container {
+        --legal-bg: #0a0f18;
+        --legal-card-bg: rgba(255, 255, 255, 0.03);
+        --legal-border: rgba(255, 255, 255, 0.05);
+        --legal-title: #ffffff;
+        --legal-text: #cbd5e1;
+        --legal-muted: #64748b;
+        --legal-sidebar-text: #94a3b8;
+        --primary-blue: rgb(0, 120, 255);
+        --sidebar-hover: rgba(59, 130, 246, 0.1);
+    }
+
+    .custom-menu-icon {
+        color: white;
+    }
+
+    .custom-offcanvas {
+        background-color: var(--bg_dark) !important;
+    }
+
+    .user-info h6,
+    .user-info small {
+        color: white !important;
+    }
+
+    .offcanvas-links .nav-link-custom>span.text,
+    .offcanvas-links .nav-link-custom>span.icon,
+    .explore-dropdown-wrapper span.text,
+    .offcanvas-links .explore-chevron-down,
+    .sub-menu .sub-link,
+    .explore-dropdown-wrapper span.icon {
+        color: white !important;
+    }
+
+    .offcanvas-footer {
+        background-color: var(--bg_dark) !important;
+    }
+
+    .offcanvas-header .btn-close {
+        background-color: white !important;
+    }
+
+    .offcanvas-links .nav-link-custom:hover {
+        background-color: var(--special_color);
+    }
+
+    .social_media svg {
+        fill: white !important;
+    }
+
+    .staff-member-card,
+    .stat-card {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+        border: none !important;
+    }
+
+    .staff-member-card .name,
+    .stat-card h3,
+    .stat-card p {
+        color: white !important;
+    }
+
+    .dashboard-links {
+        background-color: #0f172a !important;
+
+        .nav {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+    }
+
+    .pixora-pro-card {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+
+        h4 {
+            color: white !important;
+        }
+
+        span {
+            color: whitesmoke !important;
+        }
+
+        .description {
+            background-color: #1a1a1a;
+            color: white;
+        }
+
+        .main-action-btn {
+            color: white;
+        }
+
+    }
+
+    .preview-item {
+        background-color: rgba(30, 41, 59, 0.7) !important;
+    }
+
+    .report-option {
+        span {
+            color: white !important;
+        }
+
+        background-color: rgba(59, 130, 246, 0.1) !important;
+    }
+
+    .profile_actions {
+        a {
+            background-color: rgba(59, 130, 246, 0.1) !important;
+        }
+    }
+
+    #editInfos {
+        background-color: rgba(59, 130, 246, 0.1) !important;
+    }
+
+    .comment-author {
+        color: whitesmoke !important;
+    }
+
+    .reports-manager-page {
+        .title-section {
+            .icon-box {
+                background-color: rgba(59, 130, 246, 0.1) !important;
+            }
+        }
+
+        h1 {
+            color: white !important;
+        }
+
+        .stat {
+            background-color: rgba(59, 130, 246, 0.1) !important;
+            border: none !important;
+
+            span.label {
+                color: whitesmoke !important;
+            }
+        }
+    }
+
+    .staff-container {
+        background-color: var(--bg_dark);
+
+        h1 {
+            color: white;
+        }
+    }
+
+    .notification-center__icon {
+        color: white !important;
+    }
+}

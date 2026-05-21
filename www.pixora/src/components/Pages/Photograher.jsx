@@ -22,6 +22,7 @@ const Photograher = () => {
     const [visible, setVisible] = useState(8);
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [followers, setFollowers] = useState(0);
 
     const { data: follows = [] } = useQuery({
         queryKey: ['follows'],
@@ -44,7 +45,12 @@ const Photograher = () => {
         queryClient.setQueryData(['follows'], newFollows);
 
         try {
-            await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
+            const res = await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
+            if (res.data.status === 'followed'){
+                setFollowers(prev => prev + 1);
+            }else{
+                setFollowers(prev => prev - 1);
+            }
         } catch (err) {
             queryClient.setQueryData(['follows'], previousFollows);
             console.log(err?.response?.data);
@@ -68,6 +74,12 @@ const Photograher = () => {
     const photographer = data?.photographer || [];
     const statistics = data?.statistics || [];
     const photos = data?.photos || [];
+
+     useEffect(() => {
+        if (data?.statistics){
+            setFollowers(data?.statistics?.followers || 0);
+        }
+    },[data]);
 
     const isFollowed = follows.includes(Number(id));
     const followClasse = isFollowed ? 'active' : '';
@@ -165,7 +177,10 @@ const Photograher = () => {
                                             <span className={`badge badge-${photographer?.role}`}><FaIdBadge /> {photographer?.role}</span>
                                         )
                                     }
-                                    <p
+                                    <a
+                                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(photographer?.country || '')}`}
+                                        target='_blank'
+                                        rel="noopener noreferrer"
                                         className="mb-1 mx-auto"
                                         style={{
                                             textDecoration: "underline",
@@ -177,7 +192,7 @@ const Photograher = () => {
                                     >
                                         <FaMapPin id="location_icon" />
                                         {photographer?.country}
-                                    </p>
+                                    </a>
                                 </div>
                                 <div>
                                     <p className="mb-1">@{photographer?.email}</p>
@@ -187,7 +202,7 @@ const Photograher = () => {
                                 </div>
                             </div>
                             <div className="container statistic_profile">
-                                <div>{statistics?.followers ?? 0} Followers</div>
+                                <div>{followers ?? 0} Followers</div>
                                 <div>{statistics?.followings ?? 0} Following</div>
                                 <div>{statistics?.likes ?? 0} Likes</div>
                                 <div>{statistics?.photosCount ?? 0} Photos</div>

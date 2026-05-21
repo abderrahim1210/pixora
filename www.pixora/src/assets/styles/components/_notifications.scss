@@ -3,7 +3,7 @@ $primary-blue-light: rgba(37, 99, 235, 0.08);
 $danger-red: #ef4444;
 $text-dark: #1f2937;
 $text-muted: #9ca3af;
-$glass-bg: rgba(255, 255, 255, 0.75);
+$glass-bg: rgba(255, 255, 255, 0.931);
 $glass-border: rgba(255, 255, 255, 0.3);
 $shadow-pro: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
 
@@ -86,9 +86,9 @@ $shadow-pro: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0,
         position: fixed !important;
         left: 10px !important;
         right: 10px !important;
-        width: auto !important; // Kat-khlliha t-wsa3 automatic layout screen lines
+        width: auto !important;
         max-width: calc(100% - 20px) !important;
-        top: 60px !important; // Spacing mn l-foq d l-navbar dyalk
+        top: 60px !important;
         margin-top: 0 !important;
     }
     

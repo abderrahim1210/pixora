@@ -21,8 +21,8 @@ class Photographer extends Controller
 
         $photos = $photographer->photos;
         $likes = $photographer->likes->count();
-        $followings = Follow::where('following_id',$photographer->id)->count();
-        $followers = Follow::where('follower_id',$photographer->id)->count();
+        $followers = Follow::where('following_id',$photographer->id)->count();
+        $followings = Follow::where('follower_id',$photographer->id)->count();
 
         return response()->json([
             'success' => true,

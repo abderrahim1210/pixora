@@ -11,15 +11,16 @@ class FetchUsers extends Controller
     public function getUsers($type)
     {
         try{
-            $users = User::select('id','username','display_name','photo_profile')->where('role','user')->get();
+            $users = User::select('id','username','display_name','photo_profile')->where('role','user')->where('status','active')->get();
             $top_users = DB::table('users as u')->join('photos as p','u.id','=','p.user_id')->select('u.id','u.username','u.photo_profile',DB::raw('COUNT(p.id) as totalUploads'))
             ->where('u.role','=','user')
+            ->where('u.status','=','active')
             ->groupBy('u.id','u.username','u.photo_profile')
             ->orderBy('totalUploads','desc')
             ->limit(3)
             ->get();
 
-            $featured_artists = DB::table('users as u')->join('photos as p','u.id','=','p.user_id')->select('u.id','u.username','u.photo_profile')->where('p.is_featured','=',true)->limit(5)->get();
+            $featured_artists = DB::table('users as u')->join('photos as p','u.id','=','p.user_id')->select('u.id','u.username','u.photo_profile')->where('p.is_featured','=',true)->where('u.status','=','active')->limit(5)->get();
             if ($type === "top_photographers"){
                 return response()->json(['success' => true,'users' => $top_users]);
             }else if($type === "featured_artists"){

@@ -54,10 +54,15 @@ class LikeController extends Controller
             $check->delete();
             $photo->isLiked = false;
         } else {
+            Like::create([
+                'user_id' => $user->id,
+                'photo_id' => $id
+            ]);
+            $photo->isLiked = true;
             try {
                 $photoOwner = $photo->user;
 
-                if ($photoOwner && $user) {
+                if ($photoOwner && $photoOwner->id !== $user->id) {
                     $photoOwner->notify(new PostLikedNotification($user, $photo));
                     Log::info('Notification success for owner: ' . $photoOwner->id);
                 }
