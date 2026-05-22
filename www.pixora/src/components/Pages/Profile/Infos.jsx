@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaBan, FaCamera, FaFacebook, FaGlobe, FaIdBadge, FaInstagram, FaMapPin, FaTwitter } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-import PhotosTemplate from '../PhotosTemplate'
+import PhotosTemplate from '../Templates/PhotosTemplate'
 import { EmptyContent } from '../EmptyContent'
 import PageSkeleton from '../PageSkeleton'
 
@@ -90,7 +90,7 @@ const Infos = ({ user, openModal, statistics, loading, photos, photosCount }) =>
                             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(user?.country || '')}`}
                             target='_blank'
                             rel="noopener noreferrer"
-                            className="mb-1 mx-auto"
+                            className="mb-1 mx-auto location_link"
                             style={{
                                 textDecoration: "underline",
                                 width: "max-content",

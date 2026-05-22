@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { Offcanvas, Nav } from 'react-bootstrap';
 import { Home, Compass, Image, PlusSquare, User, Settings, LogOut, X, Images } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthProvider';
-import Avatar from './Avatar';
+import { useAuth } from '../../context/AuthProvider';
+import Avatar from '../Avatar';
 const OffcanvasTemplate = ({ user, page = 'home' }) => {
     const [show, setShow] = useState(false);
     const [exploreOpen, setExploreOpen] = useState(false);

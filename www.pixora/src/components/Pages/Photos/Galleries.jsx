@@ -1,5 +1,5 @@
 import React from 'react'
-import GalleriesTemplate from '../GalleriesTemplate'
+import GalleriesTemplate from '../Templates/GalleriesTemplate'
 import { FaPlus } from 'react-icons/fa'
 
 const Galleries = ({galleries, openModal}) => {

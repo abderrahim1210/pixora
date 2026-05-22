@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 
 const GalleryCard = ({ g }) => {
-    // const previewPhotos = gallery.photos?.slice(0, 3) || [];
 
     return (
         <div className="gallery-card-wrapper">

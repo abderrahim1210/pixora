@@ -26,7 +26,7 @@ import { notyf } from "../../assets/js/notyf";
 import PageSkeleton from '../Pages/PageSkeleton';
 import { EmptyContent } from "../Pages/EmptyContent";
 import { FaPhotoFilm } from "react-icons/fa6";
-import GalleriesTemplate from "../Pages/GalleriesTemplate";
+import GalleriesTemplate from "../Pages/Templates/GalleriesTemplate";
 import { motion } from 'framer-motion';
 import Motion from "../Pages/Motion";
 import Avatar from "../Pages/Avatar";

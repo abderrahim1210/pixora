@@ -1,5 +1,5 @@
 import React from 'react'
-import { EmptyContent } from './EmptyContent'
+import { EmptyContent } from '../EmptyContent'
 import { MdPhotoLibrary } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 

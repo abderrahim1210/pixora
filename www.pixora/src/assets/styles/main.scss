@@ -3,9 +3,9 @@
 @use './components/home';
 @use './components/dashboard';
 @use './components/auth_common';
-@use './layout/navbar';
-@use './layout/bottom_nav';
-@use './layout/footer';
+@use './layouts/navbar';
+@use './layouts/bottom_nav';
+@use './layouts/footer';
 @use './components/photo';
 @use './components/avatar';
 @use './components/upload';
@@ -25,7 +25,7 @@
 @use './components/latest_requests';
 @use './components/staff_user';
 @use './overlays/tooltip';
-@use './layout/offcanvas';
+@use './layouts/offcanvas';
 @use './components/get_greeting';
 @use './components/reports';
 @use './components/statistics';

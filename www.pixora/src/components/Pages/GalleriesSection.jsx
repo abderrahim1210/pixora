@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import GalleriesTemplate from './GalleriesTemplate'
+import GalleriesTemplate from './Templates/GalleriesTemplate'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 

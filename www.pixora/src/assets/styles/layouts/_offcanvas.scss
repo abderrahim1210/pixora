@@ -14,7 +14,6 @@
         transition: transform 0.3s ease;
         &:hover {
             transform: rotate(90deg);
-            color: #000;
         }
     }
 
@@ -79,7 +78,6 @@
     }
 }
 
-// L-icon SVG dyalk li derti
 .custom-menu-icon {
     transition: all 0.3s ease;
     padding: 0;
@@ -94,17 +92,15 @@
 }
 
 
-/* Sub-menu hidden state */
 .sub-menu-container {
     max-height: 0;
     overflow: hidden;
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    margin-left: 2.8rem; /* Align text with parent text */
+    margin-left: 2.8rem;
     border-left: 2px solid rgba(0, 120, 255, 0.1);
 }
 
-/* Sub-menu open state */
 .sub-menu.open {
     max-height: 120px;
     opacity: 1;

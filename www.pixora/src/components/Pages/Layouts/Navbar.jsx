@@ -1,11 +1,10 @@
 import React from "react";
 import { FaChevronDown } from "react-icons/fa";
-//import '../../assets/css/navbar.css'
 import { FiBell, FiGlobe, FiSend, FiUpload } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import Avatar from "../Avatar";
-import OffcanvasTemplate from "../OffcanvasTemplate";
+import OffcanvasTemplate from "../Templates/OffcanvasTemplate";
 import { Notification } from "../Notification";
 export const Navbar = ({ type }) => {
   const { user } = useAuth();
@@ -141,13 +140,6 @@ export const Navbar = ({ type }) => {
                 </div>
               </li>
             </ul>
-            {/* {user?.id && (
-              <ul className="navbar-nav d-md-none ms-auto me-2 align-items-center">
-                <li className="nav-item">
-                  <Notification />
-                </li>
-              </ul>
-            )} */}
             <ul className="navbar-nav d-none d-md-flex" id="ul2-1">
               {
                 user?.id && (
@@ -200,7 +192,7 @@ export const Navbar = ({ type }) => {
         </nav>
         <div className="d-flex align-items-center ms-auto d-md-none">
           {user?.id && (
-            <div className="me-3"> {/* me-3 kaddyr spacing hna bin l-gandora w l-hamburger */}
+            <div className="me-3">
               <Notification />
             </div>
           )}

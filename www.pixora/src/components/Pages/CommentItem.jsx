@@ -3,7 +3,7 @@ import { Dropdown, Spinner } from 'react-bootstrap';
 import { FaCheck, FaCopy, FaEllipsisV, FaFlag, FaTimes, FaTrash } from 'react-icons/fa';
 import { FaPencil } from 'react-icons/fa6';
 import Report from './Report';
-import ModalTemplate from './ModalTemplate';
+import ModalTemplate from './Templates/ModalTemplate';
 import { Link } from 'react-router-dom';
 
 const CommentItem = ({ c,

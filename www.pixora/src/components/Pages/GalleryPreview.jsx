@@ -5,7 +5,7 @@ import { Navbar } from './Layouts/Navbar';
 import { Footer } from './Layouts/Footer';
 import { EmptyContent } from './EmptyContent';
 import { MdPhotoAlbum } from 'react-icons/md';
-import PhotosTemplate from './PhotosTemplate';
+import PhotosTemplate from './Templates/PhotosTemplate';
 import { FaPencil, FaPhotoFilm } from 'react-icons/fa6';
 import PageSkeleton from './PageSkeleton';
 import { Truncate } from './Truncate';

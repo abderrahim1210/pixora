@@ -21,7 +21,7 @@ import { notyf } from "../../assets/js/notyf";
 import { useAuth } from "../context/AuthProvider";
 import Swal from "sweetalert2";
 import { useModal } from "../context/ModalProvider";
-import ModalTemplate from "./ModalTemplate";
+import ModalTemplate from "./Templates/ModalTemplate";
 import CommentItem from "./CommentItem";
 import Report from "./Report";
 const Comments = ({ photoId, data, commentRef }) => {

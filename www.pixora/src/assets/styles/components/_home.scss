@@ -793,7 +793,6 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   margin-bottom: 20px;
 
-  // 🌟 L-Transition dynamic hna
   transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 
   &.fade-in {
@@ -803,11 +802,10 @@
 
   &.fade-out {
     opacity: 0;
-    transform: translateY(-5px); // Kiy-df3ha khfif l l-foq mlli kat-7jeb
+    transform: translateY(-5px);
   }
 }
 
-// Media query sghira d l-mobile ghir protection
 @media (max-width: 768px) {
   .hero__subtitle {
     font-size: 0.95rem;

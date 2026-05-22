@@ -253,8 +253,6 @@
   left: 0;
   background-color: white;
   width: 100%;
-  // height: 100%;
-  // z-index: 9999;
   color: rgb(19, 94, 196);
   display: flex;
   flex-direction: column;
@@ -401,8 +399,9 @@
 }
 
 .comment-body {
-  background-color: #F3F4F6;
+  background-color:#ebebeb !important;
   border-radius: 10px;
+  border: 1px solid #efeff0;
   padding: 10px 15px;
   flex: 1;
 }
@@ -461,10 +460,6 @@
 }
 
 .myphotos {
-  /* display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-wrap: wrap; */
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 18px;
@@ -472,7 +467,6 @@
 }
 
 .myphotos .card {
-  /*max-width:400px; */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   height: fit-content;
   border-radius: 14px;

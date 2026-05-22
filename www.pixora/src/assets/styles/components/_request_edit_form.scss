@@ -12,7 +12,6 @@ $border-light:rgba(255,255,255,0.1);
     p{
         margin: 0;
         font-size: 0.85rem;
-        // color: var(--special_color);
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
@@ -21,7 +20,6 @@ $border-light:rgba(255,255,255,0.1);
         display: block;
         margin-top: 4px;
         font-size: 1.1rem;
-        // color: #fff;
         font-weight: 600;
     }
 }
@@ -30,26 +28,18 @@ $border-light:rgba(255,255,255,0.1);
     width: 100%;
     min-height: 120px;
     background: rgba(0, 0, 0, 0.1) !important;
-    // background: rgba(255, 255, 255, 0.03) !important;
     border: 1px solid $border-light;
     border-radius: 12px;
     padding: 15px;
-    // color: #ffffff !important;
     font-size: 0.95rem;
     margin-bottom: 1.5rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    // backdrop-filter: blur(10px);
     resize: none;
-
-    // &::placeholder{
-    //     color: rgba(255,255,255,0.3);
-    // }
 
     &:focus{
         outline: none;
         border-color:var(--special_color) !important;
         box-shadow: 0 0 15px rgba(0,210,255,0.15);
-        // background: rgba(116, 116, 116, 0.05) !important; 
     }
 }
 

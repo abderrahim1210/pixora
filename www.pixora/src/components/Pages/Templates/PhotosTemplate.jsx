@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Truncate } from './Truncate'
+import { Truncate } from '../Truncate'
 import { FaCrown } from 'react-icons/fa';
 import { BiChevronDown } from 'react-icons/bi';
-import ShowMoreButton from './ShowMoreButton';
+import ShowMoreButton from '../ShowMoreButton';
 
 const PhotosTemplate = ({ photos }) => {
     const [visibility, setVisibility] = useState(4);

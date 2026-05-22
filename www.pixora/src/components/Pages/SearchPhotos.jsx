@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Footer } from './Layouts/Footer';
-import PhotosTemplate from './PhotosTemplate';
+import PhotosTemplate from './Templates/PhotosTemplate';
 import { Navbar } from './Layouts/Navbar';
 import { BiSearchAlt } from 'react-icons/bi';
 import Spinner from './Spinner';

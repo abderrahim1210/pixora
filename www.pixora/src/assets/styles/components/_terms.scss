@@ -12,9 +12,8 @@
   
 }
 
-// 2. Light Mode Variables
 .legal-container {
-  --legal-bg: #f8fafc; // Off-white clean
+  --legal-bg: #f8fafc;
   --legal-card-bg: #ffffff;
   --legal-border: #e2e8f0;
   --legal-title: #0f172a;
@@ -24,7 +23,6 @@
   --sidebar-hover: #eff6ff;
 }
 
-// 3. The Main Styles
 .legal-container {
   min-height: 100vh;
   background-color: var(--legal-bg);
@@ -32,8 +30,7 @@
   padding: 4rem 2rem;
   display: flex;
   justify-content: center;
-  transition: all 0.3s ease; // Smooth switch bin dark/light
-
+  transition: all 0.3s ease;
   .legal-wrapper {
     max-width: 1100px;
     width: 100%;
@@ -97,7 +94,6 @@
     }
   }
 
-  // Content
   .legal-content {
     .animate-fade {
       animation: fadeIn 0.5s ease-out;
@@ -127,7 +123,7 @@
     }
 
     p {
-      line-height: 1.8; // Space ktiira bach t-kon readable
+      line-height: 1.8;
       color: var(--legal-text);
       margin-bottom: 1.5rem;
       font-size: 1.05rem;
@@ -135,7 +131,6 @@
   }
 }
 
-// Animations
 @keyframes fadeIn {
   from { 
     opacity: 0; 

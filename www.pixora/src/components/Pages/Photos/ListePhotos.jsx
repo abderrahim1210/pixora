@@ -1,5 +1,5 @@
 import React from 'react'
-import PhotosTemplate from '../PhotosTemplate'
+import PhotosTemplate from '../Templates/PhotosTemplate'
 import PageSkeleton from '../PageSkeleton'
 import { EmptyContent } from '../EmptyContent'
 import { FaCamera } from 'react-icons/fa'

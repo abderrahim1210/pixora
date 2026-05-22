@@ -581,4 +581,36 @@ body.dark {
     .notification-center__icon {
         color: white !important;
     }
+
+    .location_link{
+        color: #ffffff !important;
+    }
+
+    .nav2 .nav-link{
+        &:hover{
+            color: var(--special_color) !important;
+        }
+        &.active:hover{
+            color: white !important;
+        }
+    }
+
+    #upload_button button:hover{
+        color: #64748b !important;
+    }
+
+    .gallery-container .gallery-header-glass{
+        background-color: rgba(59, 130, 246, 0.1) !important;
+
+        .badge-category{
+            color: #0f172a !important;
+        }
+        .gallery-title-large{
+            color: #ffffff !important;
+        }
+
+        span, .gallery-description-text{
+            color: #94a3b8 !important;
+        }
+    }
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import { FaLock, FaMoon, FaPaintBrush, FaUserCog, FaUserSlash } from 'react-icons/fa'
 import { FaRightFromBracket, FaShieldHalved } from 'react-icons/fa6'
 import { useModal } from '../../context/ModalProvider';
-import ModalTemplate from "../ModalTemplate";
+import ModalTemplate from "../Templates/ModalTemplate";
 import UpdateData from '../Settings/UpdateData';
 import { useTheme } from '../../context/ThemeProvider';
 import DeleteAccount from '../Settings/DeleteAccount';

@@ -13,35 +13,7 @@
     font-weight: bolder;
   }
 
-  // .form-control,
-  // .form-select {
-  //   border: none;
-  //   border-bottom: 3px solid black;
-  //   background-color: #f0f0f0;
-  //   width: 400px;
-  // }
-
-  // .form-select {
-  //   border: none;
-  //   border-bottom: 3px solid var(--special_dark-color);
-  // }
-
-  // .form-select:focus {
-  //   border-bottom: 3px solid var(--special_color);
-  // }
-
-  // .form-control:focus,
-  // .form-select:focus {
-  //   background-color: #f0f0f0;
-  //   border-bottom: 3px solid var(--special_color);
-  // }
-
-  // .form-control::placeholder {
-  //   opacity: calc(0.8);
-  // }
-
   .upload-box {
-    // color: black;
     width: 100%;
     flex: 1;
     height: 80vh;
@@ -75,11 +47,6 @@
     color: white;
   }
 
-  // .form-label {
-  //   font-weight: 600;
-  //   margin-left: 5px;
-  // }
-
   #uploadButton {
     background-color: var(--special_color);
     color: black;
@@ -93,9 +60,7 @@
   }
 
   .dv1 {
-    // backdrop-filter: blur(30px);
     display: flex;
-    // color: white;
     flex-direction: column;
     align-items: center;
     margin-top: 50px;
@@ -106,26 +71,9 @@
     background-image: url("outils/jpg/photographer5.png");
   }
 
-
-  // .form-control,
-  // .form-select {
-  //   border: none;
-  //   border-radius: 0;
-  //   border-bottom: 2px solid var(--special_dark-color);
-  //   padding: 10px;
-  // }
-
   .form-control::placeholder {
     opacity: calc(0.7);
   }
-
-  // .form-label {
-  //   margin-left: 2px;
-  // }
-
-  // .form-control:focus {
-  //   border-bottom: 2px solid var(--special_color);
-  // }
 
   .form-check-input:focus {
     outline: none !important;
@@ -236,7 +184,6 @@
     width: 100%;
     border: 2px dashed black;
     border-radius: 10px;
-    // padding: 40px;
   }
 
   .uploadCard i {
@@ -253,12 +200,6 @@
     margin-bottom: 10px;
     height: auto;
   }
-
-  // .photo_details .form-control,
-  // .photo_details .form-select {
-  //   width: 600px;
-  //   max-width: 700px;
-  // }
 
   .progress {
     width: 50%;
@@ -542,7 +483,7 @@
         height: 100px;
         background: rgba(0, 123, 255, 0.05);
         border: 1px solid rgba(0, 123, 255, 0.1);
-        border-radius: 30px; // Squircle shape
+        border-radius: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -593,7 +534,7 @@
     }
 
     .pixora-primary-btn {
-      background: #0f172a; // Dark slate hsen mn blue standard
+      background: #0f172a;
       color: white;
       padding: 14px 36px;
       border-radius: 14px;

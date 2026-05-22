@@ -335,12 +335,11 @@
     gap: 12px;
     margin-bottom: 1.5rem;
     border-bottom: 1px solid #f1f3f5;
-    padding-bottom: 12px; // Bach t-kon nafs l-masafa d-l-cards l-khrin
+    padding-bottom: 12px;
 
     .icon {
       font-size: 1.2rem;
 
-      // Had l-class 'blue' hiya li sta3melti f FaHistory
       &.blue {
         color: #00a8e8;
       }
@@ -351,7 +350,7 @@
       font-weight: 700;
       color: #2d3436;
       font-size: 1rem;
-      letter-spacing: -0.2px; // Modern touch
+      letter-spacing: -0.2px;
     }
   }
 }
