@@ -16,6 +16,9 @@ import { useModal } from '../context/ModalProvider'
 import ModalTemplate from './Templates/ModalTemplate'
 import Report from './Report'
 import { Helmet } from 'react-helmet-async'
+import GalleriesTemplate from './Templates/GalleriesTemplate'
+import Tooltip from '../Overlays/Tooltip'
+import moment from 'moment'
 const Photograher = () => {
     const { id } = useParams();
     const { show, openModal, closeModal } = useModal();
@@ -46,9 +49,9 @@ const Photograher = () => {
 
         try {
             const res = await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
-            if (res.data.status === 'followed'){
+            if (res.data.status === 'followed') {
                 setFollowers(prev => prev + 1);
-            }else{
+            } else {
                 setFollowers(prev => prev - 1);
             }
         } catch (err) {
@@ -74,12 +77,13 @@ const Photograher = () => {
     const photographer = data?.photographer || [];
     const statistics = data?.statistics || [];
     const photos = data?.photos || [];
+    const galleries = data?.galleries || [];
 
-     useEffect(() => {
-        if (data?.statistics){
+    useEffect(() => {
+        if (data?.statistics) {
             setFollowers(data?.statistics?.followers || 0);
         }
-    },[data]);
+    }, [data]);
 
     const isFollowed = follows.includes(Number(id));
     const followClasse = isFollowed ? 'active' : '';
@@ -195,7 +199,9 @@ const Photograher = () => {
                                     </a>
                                 </div>
                                 <div>
-                                    <p className="mb-1">@{photographer?.email}</p>
+                                    <Tooltip text={`Account created at : ${moment(photographer?.created_at).fromNow()} | Last updated : ${moment(photographer?.updated_at).fromNow()}`}>
+                                        <p className="mb-1">@{photographer?.email}</p>
+                                    </Tooltip>
                                 </div>
                                 <div>
                                     <p>{user?.bio}</p>
@@ -278,14 +284,30 @@ const Photograher = () => {
 
 
                             <div className="container-fluid">
-                                <div className="mb-3">
-                                    {isLoading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos?.length > 0 ? (
-                                        <PhotosTemplate photos={photos.slice(0, visible)} />
-                                    ) : user?.role === "user" ? (<EmptyContent icon={<FaCamera className="faIcon" />} text={"No photos yet — start sharing your moments!"} />) : (<EmptyContent icon={<FaBan className="faIcon" />} text={"Upload is not availabe for adminstrators"} />)}
+
+
+                                <div className={galleries?.length > 0 ? 'row' : ''}>
+                                    <div className='col-lg-8 col-12'>
+                                        {isLoading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos?.length > 0 ? (
+                                            <>
+                                                <PhotosTemplate photos={photos.slice(0, visible)} />
+                                                {user?.role === "user" && photos?.length > visible && (<button className='btn btn-link' onClick={showMoreItems} style={{ textDecoration: "underline" }}>
+                                                    Show more
+                                                </button>)}
+                                            </>
+                                        ) : user?.role === "user" ? (<EmptyContent icon={<FaCamera className="faIcon" />} text={"No photos yet — start sharing your moments!"} />) : (<EmptyContent icon={<FaBan className="faIcon" />} text={"Upload is not availabe for adminstrators"} />)}
+
+                                    </div>
+
+                                    {
+                                        galleries?.length > 0 && (
+                                            <div className="col-lg-4 col-12 galleries-photographer">
+                                                <h4 className='fw-bold'>Galleries</h4>
+                                                <GalleriesTemplate galleries={galleries} />
+                                            </div>
+                                        )
+                                    }
                                 </div>
-                                {user?.role === "user" && photos?.length > visible && (<button className='btn btn-link' onClick={showMoreItems} style={{ textDecoration: "underline" }}>
-                                    Show more
-                                </button>)}
                             </div>
                         </div>
                         <Footer type={'footer'} />

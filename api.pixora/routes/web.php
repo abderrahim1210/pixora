@@ -23,6 +23,7 @@ use App\Http\Controllers\MakeFeaturedPhoto;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\Photographer;
+use App\Http\Controllers\PhotosLikeOriginal;
 use App\Http\Controllers\ProfileAnalytics;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePictures;
@@ -113,6 +114,8 @@ Route::post('/send_link_email', [ForgotPasswordController::class, 'sendLinkEmail
 Route::post('/reset_password', [NewPasswordController::class, 'store']);
 
 Route::get('/photo/{id}', [PhotoController::class, 'show'])->name('photo');
+
+Route::get('/photos_like_original',[PhotosLikeOriginal::class, 'GetPhotos']);
 
 Route::middleware('auth:sanctum', 'CheckUserStatus')->group(function () {
     Route::post('/remove_role', [AdminUsersActions::class, 'removeRole']);

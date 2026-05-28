@@ -31,6 +31,8 @@ import Tooltip from "../Overlays/Tooltip";
 import { Flag } from "lucide-react";
 import Report from "./Report";
 import { Helmet } from "react-helmet-async";
+import { PhotosLikeOriginal } from "./PhotosLikeOriginal";
+import { useQuery } from "@tanstack/react-query";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -242,12 +244,34 @@ export const Photo = (props) => {
         }
     }
 
+    const categoryPhoto = categories?.find(c => c.id === fields.category_id)?.name;
+
+    const fetchPhotos = async () => {
+        try {
+            const res = await axios.get('https://api.pixora.test/photos_like_original', {
+                params: {
+                    title: photo?.title,
+                    category: photo?.category_id,
+                    tags: photo?.tags
+                },
+                withCredentials: true
+            });
+            if (res.data.success) return res.data.photos;
+        } catch (err) {
+            console.log(err?.response?.data);
+        }
+    }
+
+    const { data: photos_like_original = [], isLoading, error } = useQuery({
+        queryKey: ['photos_like_original'],
+        queryFn: fetchPhotos
+    });
     return (
         <div data-bs-page="photo">
             <Helmet>
                 <title>Pixora | Photo Preview</title>
             </Helmet>
-            <Navbar data={props.data} />
+            <Navbar />
             {
                 show === "share" && (
                     <ModalTemplate show={show} closeModal={closeModal}>
@@ -380,6 +404,13 @@ export const Photo = (props) => {
                                     )
                                 }
                             </div>
+                            {
+                                photo && (
+                                    <div className="d-none d-md-block photos_like_original">
+                                        <PhotosLikeOriginal photos={photos_like_original} isLoading={isLoading} error={error} />
+                                    </div>
+                                )
+                            }
                         </div>
                         <div className="details-panel">
                             <div className="socialActions">
@@ -545,6 +576,13 @@ export const Photo = (props) => {
                                 }
                             </ul>
                             <Comments data={comments} commentRef={commentRef} photoId={photo.id} user={user} />
+                            {
+                                photo && (
+                                    <div className="d-block d-md-none mt-3 photos_like_original">
+                                        <PhotosLikeOriginal photos={photos_like_original} isLoading={isLoading} error={error} />
+                                    </div>
+                                )
+                            }
                         </div>
 
                     </div>
