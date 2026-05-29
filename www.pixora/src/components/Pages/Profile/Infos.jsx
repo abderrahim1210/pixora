@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import PhotosTemplate from '../Templates/PhotosTemplate'
 import { EmptyContent } from '../EmptyContent'
 import PageSkeleton from '../PageSkeleton'
-
+import moment from 'moment'
+import Tooltip from '../../Overlays/Tooltip'
 const Infos = ({ user, openModal, statistics, loading, photos, photosCount }) => {
     return (
         <div className="mt-2 mb-2 tab-pane fade show active" id="info">
@@ -105,15 +106,17 @@ const Infos = ({ user, openModal, statistics, loading, photos, photosCount }) =>
                         </a>
                     </div>
                     <div>
-                        <p className="mb-1">@{user?.email}</p>
+                        <Tooltip text={`Account created at : ${moment(user?.created_at).fromNow()} | Last updated : ${moment(user?.updated_at).fromNow()}`}>
+                            <p className="mb-1">@{user?.email}</p>
+                        </Tooltip>
                     </div>
                     <div>
                         <p>{user?.bio}</p>
                     </div>
                 </div>
                 <div className="container statistic_profile">
-                    <div>{statistics?.followers ?? 0} Followers</div>
-                    <div>{statistics?.followings ?? 0} Following</div>
+                    <div>{statistics?.followers ?? 0} <Link className='follow-list-links' onClick={() => openModal('followers')}>Followers</Link></div>
+                    <div>{statistics?.followings ?? 0} <Link className='follow-list-links' onClick={() => openModal('followings')}>Followings</Link></div>
                     <div>{statistics?.likes ?? 0} Likes</div>
                     {
                         user?.role === 'user' && (

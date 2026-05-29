@@ -15,6 +15,7 @@ use App\Http\Controllers\FetchUsers;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Galleries;
+use App\Http\Controllers\GetFollowsListe;
 use App\Http\Controllers\GetHeroImages;
 use App\Http\Controllers\GetPhotos;
 use App\Http\Controllers\Home;
@@ -116,6 +117,8 @@ Route::post('/reset_password', [NewPasswordController::class, 'store']);
 Route::get('/photo/{id}', [PhotoController::class, 'show'])->name('photo');
 
 Route::get('/photos_like_original',[PhotosLikeOriginal::class, 'GetPhotos']);
+
+Route::get('/get_follows_liste',[GetFollowsListe::class, 'getFollows']);
 
 Route::middleware('auth:sanctum', 'CheckUserStatus')->group(function () {
     Route::post('/remove_role', [AdminUsersActions::class, 'removeRole']);

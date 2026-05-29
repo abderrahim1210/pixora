@@ -65,6 +65,7 @@ import Settings from "./Profile/Settings";
 import Statistics from "./Profile/Statistics";
 import BottomNav from "./Layouts/BottomNav";
 import { Helmet } from "react-helmet-async";
+import { MergeModalFollows } from "./MergeModalFollows";
 
 
 export const MyProfile = () => {
@@ -73,7 +74,6 @@ export const MyProfile = () => {
   const [statistics, setStatistics] = useState({});
   const [analytics, setAnalytics] = useState({});
   const [edit, setEdit] = useState(false);
-  // const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
   const [originalUser, setOriginalUser] = useState({});
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
@@ -84,7 +84,6 @@ export const MyProfile = () => {
   const profileRef = useRef();
   const coverRef = useRef();
   const [loading, setLoading] = useState(true);
-  // const [requests, setRequests] = useState([]);
   const [preview, setPreview] = useState(null);
   const [taskId, setTaskId] = useState(null);
   const [ownerId, setOwnerId] = useState(null);
@@ -459,12 +458,16 @@ export const MyProfile = () => {
                           <div className="d-flex justify-content-center">
                             <button className="btn-upload-result" onClick={() => uploadResult()}>Submit</button>
                           </div>
-
                         </>
                       )
                     }
                   </div>
                 </ModalTemplate>
+              )
+            }
+            {
+              (show === 'followings' || show === 'followers') && (
+                <MergeModalFollows show={show} closeModal={closeModal} id={user?.id} type={show} />
               )
             }
             <input type="file" id="upload-input" hidden onChange={handleFile} accept="image/*" />

@@ -1,0 +1,60 @@
+.follow-list-container {
+    padding: 20px;
+    max-height: 400px;
+    overflow-y: auto; // باش إلا كانو بزاف يولي Scroll
+
+    h3 {
+        margin-bottom: 15px;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .list-items {
+        list-style: none;
+        padding: 0;
+
+        .follow-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+
+            .user-info {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+
+                img {
+                    width: 45px;
+                    height: 45px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                }
+
+                span {
+                    font-weight: 500;
+                    font-size: 14px;
+                }
+            }
+
+            .btn-follow {
+                background-color: #0095f6;
+                color: white;
+                border: none;
+                padding: 6px 16px;
+                border-radius: 6px;
+                font-weight: 600;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #0073c2;
+                }
+            }
+        }
+    }
+
+    .no-data {
+        text-align: center;
+        color: #8e8e8e;
+    }
+}

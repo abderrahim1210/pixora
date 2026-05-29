@@ -19,6 +19,9 @@ import { Helmet } from 'react-helmet-async'
 import GalleriesTemplate from './Templates/GalleriesTemplate'
 import Tooltip from '../Overlays/Tooltip'
 import moment from 'moment'
+import { FollowListe } from './FollowListe'
+import { FollowButton } from './FollowButton'
+import { MergeModalFollows } from './MergeModalFollows'
 const Photograher = () => {
     const { id } = useParams();
     const { show, openModal, closeModal } = useModal();
@@ -27,37 +30,8 @@ const Photograher = () => {
     const navigate = useNavigate();
     const [followers, setFollowers] = useState(0);
 
-    const { data: follows = [] } = useQuery({
-        queryKey: ['follows'],
-        queryFn: async () => {
-            const res = await axios.get('https://api.pixora.test/follows', { withCredentials: true, withXSRFToken: true });
-            return res.data?.users?.map(f => f.following_id) || [];
-        },
-        staleTime: 1000 * 60 * 5,
-    });
-
     const showMoreItems = () => {
         setVisible((prev) => prev + 8);
-    }
-
-    const queryClient = useQueryClient();
-    const addFollow = async (id) => {
-        await queryClient.cancelQueries({ queryKey: ['follows'] });
-        const newFollows = follows.includes(id) ? follows.filter(fid => fid !== id) : [...follows, id];
-        const previousFollows = queryClient.getQueryData(['follows']) || [];
-        queryClient.setQueryData(['follows'], newFollows);
-
-        try {
-            const res = await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
-            if (res.data.status === 'followed') {
-                setFollowers(prev => prev + 1);
-            } else {
-                setFollowers(prev => prev - 1);
-            }
-        } catch (err) {
-            queryClient.setQueryData(['follows'], previousFollows);
-            console.log(err?.response?.data);
-        }
     }
 
     const fetchInfos = async () => {
@@ -85,9 +59,10 @@ const Photograher = () => {
         }
     }, [data]);
 
-    const isFollowed = follows.includes(Number(id));
-    const followClasse = isFollowed ? 'active' : '';
-    const followText = isFollowed ? 'Followed' : 'Follow';
+    useEffect(() => {
+        closeModal();
+    }, [id]);
+
     return (
         <div data-bs-page='myprofile'>
             <Helmet>
@@ -98,6 +73,11 @@ const Photograher = () => {
                     <ModalTemplate show={show} closeModal={closeModal}>
                         <Report id={photographer?.id} user={user} type={'user'} />
                     </ModalTemplate>
+                )
+            }
+            {
+                (show === 'followers' || show === 'followings') && (
+                    <MergeModalFollows key={`${photographer?.id}-${show}`} show={show} closeModal={closeModal} id={photographer?.id} type={show} />
                 )
             }
             {
@@ -208,8 +188,8 @@ const Photograher = () => {
                                 </div>
                             </div>
                             <div className="container statistic_profile">
-                                <div>{followers ?? 0} Followers</div>
-                                <div>{statistics?.followings ?? 0} Following</div>
+                                <div>{followers ?? 0} <Link className='follow-list-links' onClick={() => openModal('followers')}>Followers</Link></div>
+                                <div>{statistics?.followings ?? 0} <Link className='follow-list-links' onClick={() => openModal('followings')}>Followings</Link></div>
                                 <div>{statistics?.likes ?? 0} Likes</div>
                                 <div>{statistics?.photosCount ?? 0} Photos</div>
                             </div>
@@ -244,42 +224,22 @@ const Photograher = () => {
                                 )}
                             </div>
                             <div>
-                                {Number(id) !== user?.id ? (
-                                    <div className="profile-actions-wrapper d-flex align-items-center gap-2 mt-3">
-                                        <button
-                                            type="button"
-                                            className={`followButton ${followClasse} ${(user?.role === "admin" || user?.role === "editor") ? "disabled" : ""} btn`}
-                                            id="followButton"
-                                            onClick={() => addFollow(photographer.id)}
-                                        >
-                                            {followText}
+                                <div className="profile-actions-wrapper d-flex align-items-center gap-2 mt-3">
+                                    <FollowButton user_id={photographer?.id} />
+                                    <div className="dropdown">
+                                        <button className="btn-more-options" data-bs-toggle="dropdown">
+                                            <MoreHorizontal size={20} />
                                         </button>
-                                        <div className="dropdown">
-                                            <button className="btn-more-options" data-bs-toggle="dropdown">
-                                                <MoreHorizontal size={20} />
-                                            </button>
-                                            <ul className="dropdown-menu dropdown-menu-end shadow-sm border-0 pixora-dropdown">
-                                                <li>
-                                                    <button className="dropdown-item text-danger d-flex align-items-center gap-2" onClick={() => openModal('report_user')}>
-                                                        <Flag size={14} />
-                                                        <span>Report User</span>
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        <ul className="dropdown-menu dropdown-menu-end shadow-sm border-0 pixora-dropdown">
+                                            <li>
+                                                <button className="dropdown-item text-danger d-flex align-items-center gap-2" onClick={() => openModal('report_user')}>
+                                                    <Flag size={14} />
+                                                    <span>Report User</span>
+                                                </button>
+                                            </li>
+                                        </ul>
                                     </div>
-                                ) : (
-                                    <div className="mt-3 mb-3">
-                                        <button
-                                            type="button"
-                                            className="followButton btn"
-                                            id="followButton"
-                                            onClick={() => navigate(`/user/${user?.username}/myprofile`)}
-                                        >
-                                            View profile
-                                        </button>
-                                    </div>
-                                )}
+                                </div>
                             </div>
 
 

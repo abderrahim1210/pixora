@@ -42,6 +42,7 @@
 @use './components/banned_overlay';
 @use './components/notifications';
 @use './base/dark_theme';
+@use './components/follow_liste';
 
 :root {
     --special_color: rgb(0, 120, 255);
