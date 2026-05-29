@@ -247,9 +247,11 @@ export const Photo = (props) => {
     const categoryPhoto = categories?.find(c => c.id === fields.category_id)?.name;
 
     const fetchPhotos = async () => {
+        console.log("Sending params:", { title: photo?.title, category: photo?.category_id, tags: photo?.tags });
         try {
             const res = await axios.get('https://api.pixora.test/photos_like_original', {
                 params: {
+                    id:photo?.id,
                     title: photo?.title,
                     category: photo?.category_id,
                     tags: photo?.tags
@@ -263,8 +265,9 @@ export const Photo = (props) => {
     }
 
     const { data: photos_like_original = [], isLoading, error } = useQuery({
-        queryKey: ['photos_like_original'],
-        queryFn: fetchPhotos
+        queryKey: ['photos_like_original',photo?.id],
+        queryFn: fetchPhotos,
+        enabled:!!photo.id
     });
     return (
         <div data-bs-page="photo">
