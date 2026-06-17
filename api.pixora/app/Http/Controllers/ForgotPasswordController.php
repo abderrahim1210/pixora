@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ResetPasswordMail;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,12 +23,15 @@ class ForgotPasswordController extends Controller
             ], 422);
         }
 
-        $status = Password::broker()->sendResetLink(
-            $request->only('email')
-        );
+        $user = User::where('email', $request->email)->first();
 
-        return $status === Password::RESET_LINK_SENT
-            ? response()->json(['success' => true,'message' => 'Link sent successfully'])
-            : response()->json(['success' => false,'message' => 'Error - try again later !'], 500);
+        $token = Password::createToken($user);
+
+        $url = "https://www.pixora.test/reset-password?token=" . $token . "&email=" . urlencode($user->email);
+
+        Mail::to($user->email)->send(new ResetPasswordMail($url));
+
+        return response()->json(['success' => true, 'message' => 'Link sent successfully']);
+
     }
 }
