@@ -33,7 +33,7 @@ const CommentItem = ({ c,
                 <img
                     src={
                         c.user?.photo_profile
-                            ? `https://api.pixora.test/storage/profile_pictures/${c.user?.photo_profile}`
+                            ? c.user?.photo_profile
                             : "/outils/pngs/useracc2.png"
                     }
                     alt={c.user?.username}
