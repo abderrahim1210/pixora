@@ -256,7 +256,6 @@ body.dark {
         .form-control,
         .form-select {
             background: rgba(0, 0, 0, 0.2) !important;
-            // border: 1px solid rgba(255, 255, 255, 0.1) !important;
             color: #f8fafc !important;
 
         }
@@ -285,10 +284,6 @@ body.dark {
         .form-select:focus {
             background-color: rgba(0, 0, 0, 0.2) !important;
         }
-
-        // .form-control::placeholder {
-        //     color: #64748b;
-        // }
     }
 
     .welcome-title {
@@ -588,7 +583,7 @@ body.dark {
 
     .nav2 .nav-link{
         &:hover{
-            color: var(--special_color) !important;
+            color: white !important;
         }
         &.active:hover{
             color: white !important;
@@ -624,5 +619,13 @@ body.dark {
 
     .follows-username{
         color: white !important;
+    }
+
+    .step-title{
+        color: white !important;
+    }
+
+    .step-wrapper label{
+        color: white;
     }
 }

@@ -18,12 +18,9 @@ const Infos = ({ user, openModal, statistics, loading, photos, photosCount }) =>
                         className="coverImage"
                         onContextMenu={(e) => e.preventDefault()}
                         style={{
-                            backgroundImage: user.cover_image
+                            backgroundImage: user?.cover_image
                                 ? `url("https://api.pixora.test/storage/cover_images/${user?.cover_image}")`
-                                : `linear-gradient(135deg, #454545 0%, #353535 100%)`,
-                            backgroundAttachment: "fixed",
-                            backgroundRepeat: "no-repeat",
-                            cursor: "pointer"
+                                : `linear-gradient(135deg, #454545 0%, #353535 100%)`
                         }}
                         onClick={() => openModal('coverImage')}
                     >

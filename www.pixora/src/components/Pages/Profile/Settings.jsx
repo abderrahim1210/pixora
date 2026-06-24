@@ -30,7 +30,7 @@ const Settings = ({ handleLogOut }) => {
                 )
             }
             <section className="settings-page container mt-4 mb-5">
-                <h2>Setting</h2>
+                <h2>Settings</h2>
                 <div className="settings-group mb-4">
                     <h5 className="text-secondary mb-3">
                         <FaUserCog className="me-2" />
