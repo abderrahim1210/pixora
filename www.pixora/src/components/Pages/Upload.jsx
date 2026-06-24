@@ -65,6 +65,8 @@ export const Upload = () => {
           navigate(`/user/${user.username}/dashboard`, { state: { uploaded: true, message: res.data.message } });
         } else {
           notyf.error(res.data.message);
+          console.log(res.data.message);
+          console.log(res);
         }
       }
     } catch (err) {

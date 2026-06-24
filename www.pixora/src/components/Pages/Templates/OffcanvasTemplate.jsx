@@ -64,7 +64,7 @@ const OffcanvasTemplate = ({ user, page = 'home' }) => {
                                     {user && (
                                         <div className="user-profile-section px-4 py-3 mb-3 d-flex align-items-center gap-3">
                                             <div className="avatar-wrapper">
-                                                <img src={user?.photo_profile ? `https://api.pixora.test/storage/profile_pictures/${user.photo_profile}` : '/outils/pngs/useracc2.png'} alt="avatar" />
+                                                <img src={user?.photo_profile ? user.photo_profile : '/outils/pngs/useracc2.png'} alt="avatar" />
                                             </div>
                                             <div className="user-info">
                                                 <h6 className="mb-0 fw-bold">{user.display_name}</h6>

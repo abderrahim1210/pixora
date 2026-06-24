@@ -140,7 +140,7 @@ const GalleryPreview = () => {
                                         {gallery?.photos?.slice(0, visible)?.map((photo) => (
                                             <div key={photo.id} className="photo-card-wrapper">
                                                 <img
-                                                    src={`https://api.pixora.test/storage/photos/${photo.filename}`}
+                                                    src={photo.filename}
                                                     alt={photo.title}
                                                     className="photo-img"
                                                 />

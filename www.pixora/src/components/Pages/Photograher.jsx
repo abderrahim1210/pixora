@@ -63,6 +63,7 @@ const Photograher = () => {
         closeModal();
     }, [id]);
 
+    console.log(photographer)
     return (
         <div data-bs-page='myprofile'>
             <Helmet>
@@ -93,14 +94,9 @@ const Photograher = () => {
                                     className="coverImage"
                                     onContextMenu={(e) => e.preventDefault()}
                                     style={{
-                                        backgroundImage: photographer?.cover_image
-                                            ? `url("https://api.pixora.test/storage/cover_images/${photographer?.cover_image}")`
-                                            : `linear-gradient(135deg, #454545 0%, #353535 100%)`,
-                                        backgroundAttachment: "fixed",
-                                        backgroundRepeat: "no-repeat",
-                                        backgroundPosition: 'center',
-                                        backgroundSize: 'cover',
-                                        cursor: "pointer"
+                                        background: photographer?.cover_image
+                                            ? `url('${photographer?.cover_image}')`
+                                            : `linear-gradient(135deg, #454545 0%, #353535 100%)`
                                     }}
                                 >
                                     <div className="d-flex justify-content-center">
@@ -139,7 +135,7 @@ const Photograher = () => {
                                         <img
                                             src={
                                                 photographer?.photo_profile
-                                                    ? "https://api.pixora.test/storage/profile_pictures/" + photographer.photo_profile
+                                                    ? photographer.photo_profile
                                                     : "/outils/pngs/useracc2.png"
                                             }
                                             onContextMenu={(e) => e.preventDefault()}

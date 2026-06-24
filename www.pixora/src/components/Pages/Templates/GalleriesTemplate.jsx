@@ -19,7 +19,7 @@ const GalleriesTemplate = ({ galleries, visible }) => {
                                                     <div className="gallery-preview">
                                                         {
                                                             g.photos.slice(0, 4).map((p, index) => (
-                                                                <img key={index} src={`https://api.pixora.test/storage/photos/${p.filename}`} alt="" />
+                                                                <img key={index} src={p.filename} alt="" />
                                                             ))
                                                         }
                                                     </div>

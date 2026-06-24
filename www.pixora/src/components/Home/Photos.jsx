@@ -26,7 +26,7 @@ const Photos = ({ p, user, slugiFy, handleLike }) => {
                     style={{ cursor: "pointer" }}
                     to={`/photo/${p.id}/${slugiFy(p.title)}`}
                 >
-                    <img src={`https://api.pixora.test/storage/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
+                    <img src={p.filename} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
                 </Link>
                 <div className="info">
                     <a

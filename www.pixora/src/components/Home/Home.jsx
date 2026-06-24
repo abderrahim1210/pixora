@@ -255,7 +255,7 @@ export const Home = () => {
       </div>
 
       <div className="div2" style={
-        { backgroundImage: `url('https://api.pixora.test/storage/photos/${heroImage.filename}')` }
+        { backgroundImage: `url(${heroImage.filename})` }
       }>
         <div className="container-fluid p-0">
           <Motion>

@@ -159,7 +159,7 @@ export const Navbar = ({ type }) => {
               }
               {user?.id ? (
                 <Link to={`/user/${user?.username}/myprofile`}>
-                  <Avatar src={`https://api.pixora.test/storage/profile_pictures/${user.photo_profile}`} size={40} />
+                  <Avatar src={user.photo_profile} size={40} />
                 </Link>
               ) : (
                 <>

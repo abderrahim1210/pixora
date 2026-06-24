@@ -19,7 +19,7 @@ const Infos = ({ user, openModal, statistics, loading, photos, photosCount }) =>
                         onContextMenu={(e) => e.preventDefault()}
                         style={{
                             backgroundImage: user?.cover_image
-                                ? `url("https://api.pixora.test/storage/cover_images/${user?.cover_image}")`
+                                ? `url('${user?.cover_image}')`
                                 : `linear-gradient(135deg, #454545 0%, #353535 100%)`
                         }}
                         onClick={() => openModal('coverImage')}
@@ -61,7 +61,7 @@ const Infos = ({ user, openModal, statistics, loading, photos, photosCount }) =>
                             <img
                                 src={
                                     user.photo_profile
-                                        ? "https://api.pixora.test/storage/profile_pictures/" + user.photo_profile
+                                        ? user.photo_profile
                                         : "/outils/pngs/useracc2.png"
                                 }
                                 onClick={() => openModal("profilePicture")}

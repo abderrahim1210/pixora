@@ -36,7 +36,7 @@ const PhotosTemplate = ({ photos }) => {
                                         style={{ cursor: "pointer" }}
                                         to={`/photo/${p.id}/${slugiFy(p.title)}`}
                                     >
-                                        <img src={`https://api.pixora.test/storage/photos/${p.filename}`} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
+                                        <img src={p.filename} alt={p.title} onContextMenu={(e) => e.preventDefault()} />
                                     </Link>
                                 </div>
                                 <div className="d-flex justify-content-between p-2">

@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+// use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+// use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine as Cloudinary;
+// use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary as FacadesCloudinary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,15 +33,14 @@ class UploadController extends Controller
         $title = $photo['title'];
         $description = $photo['description'] ?? null;
         $category = $photo['category'] ?? null;
-        // $type = $photo['type'] ?? null;
-        $width = $photo['width'] ?? null;
-        $height = $photo['height'] ?? null;
+        // $width = $photo['width'] ?? null;
+        // $height = $photo['height'] ?? null;
         $ratio = $photo['ratio'] ?? null;
         $orientation = $photo['orientation'] ?? null;
         $tags = $photo['tags'] ?? "";
-        $size = $photo['size'] ?? "";
+        // $size = $photo['size'] ?? "";
         $image = $photo['image'];
-        $location = $photo['location'] ?? "";
+        // $location = $photo['location'] ?? "";
         $gallery_id = $photo['gallery_id'] ?? null;
         $visibilty = $photo['visibility'];
 
@@ -60,30 +63,38 @@ class UploadController extends Controller
             ]);
         }
 
-        $filename = time() . '_' . uniqid() . ".webp";
-        $path = storage_path('/app/public/photos/' . $filename);
-
         try {
-            
+
+            $uploader = new \Cloudinary\Api\Upload\UploadApi();
             $manager = new ImageManager(new Driver());
 
             $img = $manager->read($image);
-            
-            $img->scale(width:1200);
 
-            $img->toWebp(75)->save($path);
+            $img->scale(width: 1200);
 
-            $newSize = filesize($path);
+            $encodedImage = $img->toWebp(75);
+
+            $tempPath = storage_path('app/temp_' . uniqid() . '.webp');
+            $encodedImage->save($tempPath);
+            $result = $uploader->upload($tempPath, [
+                'folder' => 'pixora_photos'
+            ]);
+
+            unlink($tempPath);
+            if (!$result) {
+                throw new \Exception("Cloudinary upload failed, check credentials.");
+            }
+            $imageUrl = $result['secure_url'];
+            $newSize = strlen($encodedImage);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Error processing']);
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
 
         $photoModel = Photo::create([
             'user_id' => $user->id,
             'title' => $title,
             'description' => $description,
-            // 'type' => $type,
-            'filename' => $filename,
+            'filename' => $imageUrl,
             'category_id' => $category,
             'size' => $newSize ?? ($photo['size']),
             'width' => $img->width(),

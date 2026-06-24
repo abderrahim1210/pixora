@@ -11,7 +11,7 @@ const LatestRequests = ({ requests }) => {
                 requests.map((req) => (
                     <div className="preview-item" key={req.id}>
                         <div className="photo-thumb">
-                            <img src={`https://api.pixora.test/storage/photos/${req.filename}`} alt="task" />
+                            <img src={req.filename} alt="task" />
                         </div>
 
                         <div className="item-details">

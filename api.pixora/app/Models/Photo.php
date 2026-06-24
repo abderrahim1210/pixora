@@ -9,23 +9,29 @@ class Photo extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    public function comments(){
+    protected $appends = ['image_url'];
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function likes(){
+    public function likes()
+    {
         return $this->hasMany(Like::class);
     }
 
-    public function getCreatedAtHumanAttribute(){
+    public function getCreatedAtHumanAttribute()
+    {
         return $this->created_at->diffForHumans();
     }
 
@@ -34,12 +40,22 @@ class Photo extends Model
         return $this->belongsToMany(Gallery::class, 'gallery_photos');
     }
 
-    public function editingRequests(){
+    public function editingRequests()
+    {
         return $this->hasMany(EditingTasks::class, 'image_od');
     }
 
     public function reports()
     {
         return $this->morphMany(Report::class, 'reportable');
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if (str_contains($this->filename, 'https://')) {
+            return $this->filename;
+        }
+
+        return asset('storage/photos/' . $this->filename);
     }
 }

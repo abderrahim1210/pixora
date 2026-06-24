@@ -269,6 +269,7 @@ export const Photo = (props) => {
         queryFn: fetchPhotos,
         enabled:!!photo.id
     });
+
     return (
         <div data-bs-page="photo">
             <Helmet>
@@ -382,7 +383,7 @@ export const Photo = (props) => {
                                 }}
                             />
                             <img
-                                src={`https://api.pixora.test/storage/photos/${photo.filename}`}
+                                src={photo?.image_url}
                                 loading="lazy"
                                 decoding="async"
                                 onContextMenu={(e) => e.preventDefault()}

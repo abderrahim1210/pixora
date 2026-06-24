@@ -17,7 +17,7 @@ const PhotosTemplate = ({ photos }) => {
                                     id="caption"
                                     style={{ cursor: "pointer" }}
                                 >
-                                    <img src={`https://api.pixora.test/storage/edited_images/${p?.path}`} alt={p?.parent?.title} onContextMenu={(e) => e.preventDefault()} />
+                                    <img src={p?.path} alt={p?.parent?.title} onContextMenu={(e) => e.preventDefault()} />
 
                                 </Link>
                             </div>
