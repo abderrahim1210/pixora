@@ -68,7 +68,7 @@ export const Login = () => {
       </Helmet>
       <div className="dv1">
         <div className="dv1-0 login_div" style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://api.pixora.test/storage/photos/${heroImage.filename}')`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('${heroImage.filename}')`,
           backgroundPosition: heroImage.focal_point || 'center'
         }}>
           <div className="login-label">Login Page</div>

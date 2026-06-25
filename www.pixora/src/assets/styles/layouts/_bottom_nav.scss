@@ -13,12 +13,11 @@ $shadow-soft: 0 -10px 30px rgba(0, 0, 0, 0.05);
   bottom: 20px !important;
   z-index: 1050;
   
-  // Glassmorphism effect
   background: $glass-bg !important;
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid $glass-border;
-  border-radius: 25px; // Round corners
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 25px;
   box-shadow: $shadow-soft;
   
   padding: 10px 15px;
@@ -41,22 +40,18 @@ $shadow-soft: 0 -10px 30px rgba(0, 0, 0, 0.05);
         border-radius: 12px;
         transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
-        // Hover effect
         &:hover {
           transform: translateY(-5px);
         }
 
-        // Active State
         &.active {
           position: relative;
           
-          // Icon style mli kat-koun active
           svg {
             color: #007bff !important;
             filter: drop-shadow(0 2px 5px rgba(0, 123, 255, 0.4));
           }
 
-          // Dik l-noqta sghira (indicator) t7t l-icon
           &::after {
             content: '';
             position: absolute;
@@ -84,7 +79,7 @@ $shadow-soft: 0 -10px 30px rgba(0, 0, 0, 0.05);
   position: fixed;
   bottom: 0;
   width: 100%;
-  z-index: 1050; // Khassha t-koun foq kolchi mli t-koun bayna
+  z-index: 1050;
 }
 
 .show-nav {
@@ -94,14 +89,11 @@ $shadow-soft: 0 -10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .hide-nav {
-  // Kat-habbat l-navbar l-te7t b 100% bach t-ghber nishan
   transform: translateY(120%); 
   opacity: 0;
-  pointer-events: none; // Bach l-user may-clickich 3liha mli t-koun m-ghabya
+  pointer-events: none;
 }
 
 .nav3 {
-  // L-code dyalk l-9dim bqa dima bih
   bottom: 20px !important; 
-  // ...
 }

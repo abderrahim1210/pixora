@@ -47,7 +47,7 @@ const RequestCard = ({ group, onStatusChange }) => {
     return (
         <div className="photo-requests-group">
             <div className="group-header">
-                <img src={`https://api.pixora.test/storage/photos/${photo?.filename}`} alt={photo?.title} className='mini-preview' />
+                <img src={photo?.filename} alt={photo?.title} className='mini-preview' />
                 <div className="photo-meta">
                     <h4>{photo?.title}</h4>
                     <span className="request-count">{group?.length ?? 0} Requests</span>
@@ -59,7 +59,7 @@ const RequestCard = ({ group, onStatusChange }) => {
                     group?.map((req) => (
                         <div key={req.id} className="user-request-item">
                             <div className="user-info">
-                                <img src={req?.requester?.photo_profile ? `https://api.pixora.test/storage/profile_pictures/${req?.requester?.photo_profile}` : '/outils/pngs/useracc2.png'} alt="User" className='avatar' />
+                                <img src={req?.requester?.photo_profile ?? '/outils/pngs/useracc2.png'} alt="User" className='avatar' />
                                 <div className="user-text">
                                     <strong>{req?.requester?.username}</strong>
                                     <span>{req?.message}</span>

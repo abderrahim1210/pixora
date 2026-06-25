@@ -79,11 +79,13 @@ const Infos = ({ user, openModal, statistics, loading, photos, photosCount }) =>
                         <h3 className="fw-semibold mb-1">{user?.display_name}</h3>
                     </div>
                     <div>
-                        {
-                            (user.role === "admin" || user.role === "editor") && (
-                                <span className={`badge badge-${user?.role}`}><FaIdBadge /> {user?.role}</span>
-                            )
-                        }
+                        <div>
+                            {
+                                (user.role === "admin" || user.role === "editor") && (
+                                    <span className={`badge badge-${user?.role}`}><FaIdBadge /> {user?.role}</span>
+                                )
+                            }
+                        </div>
                         <a
                             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(user?.country || '')}`}
                             target='_blank'
@@ -93,7 +95,7 @@ const Infos = ({ user, openModal, statistics, loading, photos, photosCount }) =>
                                 textDecoration: "underline",
                                 width: "max-content",
                                 cursor: "pointer",
-                                color:'#1A1A1A'
+                                color: '#1A1A1A'
                             }}
                             data-bs-toggle="tooltip"
                             title="View in map"

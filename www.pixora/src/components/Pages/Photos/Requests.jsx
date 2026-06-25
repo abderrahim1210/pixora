@@ -7,7 +7,6 @@ import AllRequests from '../AllRequests'
 const Requests = ({ requests, setRequests, myRequests }) => {
     const handleStatusChange = (requestId, newStatus) => {
         setRequests(prevRequests => {
-            // Bach t-update-i wast group (hit nti m-groupiya b image_id)
             const updated = { ...prevRequests };
             Object.keys(updated).forEach(imageId => {
                 updated[imageId] = updated[imageId].map(req =>

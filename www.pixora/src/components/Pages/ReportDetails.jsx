@@ -50,7 +50,7 @@ export const ReportDetails = () => {
         if (type.includes('photo')) {
             return (
                 <div className="preview-container photo-preview">
-                    <img src={`https://api.pixora.test/storage/photos/${report?.photo_url}`} alt="Reported Content" onError={(e) => {
+                    <img src={report?.photo_url} alt="Reported Content" onError={(e) => {
                         e.target.src = '/assets/images/deleted-placeholder.png';
                     }} />
                     <div className="preview-meta">Photo ID: #{report?.reportable_id}</div>

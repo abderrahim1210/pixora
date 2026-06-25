@@ -23,7 +23,7 @@ const EditProfile = ({ user, register, errors, openModal, handleDeleteAvatar, se
                         accept=".png, .jpg"
                     />
                     <img
-                        src={user.photo_profile ? `https://api.pixora.test/storage/profile_pictures/${user.photo_profile}` : "/outils/pngs/useracc2.png"}
+                        src={user.photo_profile ? user.photo_profile : "/outils/pngs/useracc2.png"}
                         width="100px"
                         className="img_acc mt-2 mb-2"
                         id="imgAcc1"

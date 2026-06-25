@@ -10,7 +10,7 @@ const PhotographersTemplate = ({ photographers }) => {
                     <div className="mt-3 mb-3">
                         <img
                             src={`${u.photo_profile
-                                ? `https://api.pixora.test/storage/profile_pictures/${u.photo_profile}`
+                                ? u.photo_profile
                                 : "/outils/pngs/useracc2.png"
                                 }`}
                             id="imgAcc"
