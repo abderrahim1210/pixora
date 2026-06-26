@@ -376,7 +376,7 @@ export const Photo = (props) => {
                             <LightBox
                                 open={open}
                                 close={() => setOpen(false)}
-                                slides={[{ src: `https://api.pixora.test/storage/photos/${photo.filename}`, title: photo.title }]}
+                                slides={[{ src: photo.filename, title: photo.title }]}
                                 plugins={[Zoom]}
                                 carousel={{
                                     arrows: false
