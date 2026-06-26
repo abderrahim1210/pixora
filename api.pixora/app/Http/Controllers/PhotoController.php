@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\EditionRequest;
 use App\Models\Image;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 class PhotoController extends Controller
 {
@@ -135,6 +132,10 @@ class PhotoController extends Controller
             ]);
         }
 
+
+        $cloudinary = new \App\Http\Controllers\CloudinaryActions();
+        $cloudinary->destroy($photo->filename, 'pixora_photos/', 'photos/');
+
         DB::table('gallery_photos')
             ->where('photo_id', $photo->id)
             ->delete();
@@ -143,7 +144,6 @@ class PhotoController extends Controller
 
         $photo->comments()->delete();
 
-        Storage::disk('public')->delete('photos/' . $photo->filename);
         
         $photo->delete();
 

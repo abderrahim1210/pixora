@@ -369,7 +369,7 @@ export const MyProfile = () => {
                           e.preventDefault();
                           closeModal();
                           setTimeout(() => {
-                            handleOpenSlide({ url: `https://api.pixora.test/storage/profile_pictures/${user.photo_profile}`, title: 'Profile Image' })
+                            handleOpenSlide({ url: user.photo_profile, title: 'Profile Image' })
                           }, 200);
                         }}>
                           <span>Preview profile picture</span>
@@ -415,7 +415,7 @@ export const MyProfile = () => {
                         e.preventDefault();
                         closeModal();
                         setTimeout(() => {
-                          handleOpenSlide({ url: `http://api.pixora.test/storage/cover_images/${user.cover_image}`, title: 'Cover Image' })
+                          handleOpenSlide({ url: user.cover_image, title: 'Cover Image' })
                         }, 200);
                       }}>
                         <span>Preview cover picture</span>

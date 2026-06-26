@@ -3,16 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-// use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-// use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine as Cloudinary;
-// use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary as FacadesCloudinary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\Facades\Image;
-use Intervention\Image\ImageManager;
+
 
 class UploadController extends Controller
 {
@@ -29,88 +23,58 @@ class UploadController extends Controller
         $user = Auth::user();
 
         $photo = $request->photo_data;
-
         $title = $photo['title'];
         $description = $photo['description'] ?? null;
         $category = $photo['category'] ?? null;
-        // $width = $photo['width'] ?? null;
-        // $height = $photo['height'] ?? null;
         $ratio = $photo['ratio'] ?? null;
         $orientation = $photo['orientation'] ?? null;
         $tags = $photo['tags'] ?? "";
-        // $size = $photo['size'] ?? "";
         $image = $photo['image'];
-        // $location = $photo['location'] ?? "";
         $gallery_id = $photo['gallery_id'] ?? null;
         $visibilty = $photo['visibility'];
 
 
-        preg_match('/^data:image\/(\w+);base64,/', $image, $matches);
-        $ext = strtolower($matches[1]);
+        $check = new \App\Http\Controllers\ValideImage();
+        $valide = $check->valide($image);
 
-        $allowed = ['png', 'jpg', 'jpeg'];
-        if (!in_array($ext, $allowed)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'We are not allow this files'
-            ]);
-        }
+        if ($valide) {
+            try {
+                $upload = new \App\Http\Controllers\CloudinaryActions();
+                $res = $upload->upload($image, 'pixora_photos');
+                $imageUrl = $res['image_url'];
+                $photoModel = Photo::create([
+                    'user_id' => $user->id,
+                    'title' => $title,
+                    'description' => $description,
+                    'filename' => $imageUrl,
+                    'category_id' => $category,
+                    'size' => $newSize ?? ($photo['size']),
+                    'width' => $res['width'],
+                    'height' => $res['height'],
+                    'ratio' => $ratio,
+                    'orientation' => $orientation,
+                    'tags' => $tags,
+                    'gallery_id' => $gallery_id,
+                    'visibility' => $visibilty
+                ]);
 
-        if (strlen($image) / 1024 / 1024 > 100) {
-            return response()->json([
-                'success' => false,
-                'message' => 'File too large'
-            ]);
-        }
-
-        try {
-
-            $uploader = new \Cloudinary\Api\Upload\UploadApi();
-            $manager = new ImageManager(new Driver());
-
-            $img = $manager->read($image);
-
-            $img->scale(width: 1200);
-
-            $encodedImage = $img->toWebp(75);
-
-            $tempPath = storage_path('app/temp_' . uniqid() . '.webp');
-            $encodedImage->save($tempPath);
-            $result = $uploader->upload($tempPath, [
-                'folder' => 'pixora_photos'
-            ]);
-
-            unlink($tempPath);
-            if (!$result) {
-                throw new \Exception("Cloudinary upload failed, check credentials.");
+                if ($gallery_id) {
+                    DB::table('gallery_photos')->insert([
+                        'photo_id' => $photoModel->id,
+                        'gallery_id' => $gallery_id,
+                        'created_at' => now()
+                    ]);
+                }
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Upload failed: ' . $e->getMessage()
+                ], 500);
             }
-            $imageUrl = $result['secure_url'];
-            $newSize = strlen($encodedImage);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()]);
-        }
-
-        $photoModel = Photo::create([
-            'user_id' => $user->id,
-            'title' => $title,
-            'description' => $description,
-            'filename' => $imageUrl,
-            'category_id' => $category,
-            'size' => $newSize ?? ($photo['size']),
-            'width' => $img->width(),
-            'height' => $img->height(),
-            'ratio' => $ratio,
-            'orientation' => $orientation,
-            'tags' => $tags,
-            'gallery_id' => $gallery_id,
-            'visibility' => $visibilty
-        ]);
-
-        if ($gallery_id) {
-            DB::table('gallery_photos')->insert([
-                'photo_id' => $photoModel->id,
-                'gallery_id' => $gallery_id,
-                'created_at' => now()
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Image not supported'
             ]);
         }
 

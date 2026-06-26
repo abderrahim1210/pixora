@@ -5,20 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-// use Intervention\Image\Image;
-// use Intervention\Image\Image;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
 
 class ProfilePictures extends Controller
 {
     public function uploadAvatar(Request $request)
     {
-        // $request->validate([
-        //     'profile_image' => ['required','image','max:2048']
-        // ]);
-
         $user_id = Auth::id();
 
         if (!$user_id) {
@@ -30,57 +21,34 @@ class ProfilePictures extends Controller
 
         $user = User::find($user_id);
 
-        if ($user->photo_profile && Storage::disk('public')->exists('profile_pictures/' . $user->photo_profile)) {
-            Storage::disk('public')->delete('profile_pictures/' . $user->photo_profile);
+        if ($user->photo_profile) {
+            $cloudinary = new \App\Http\Controllers\CloudinaryActions();
+            $cloudinary->destroy($user->photo_profile, 'pixora_photos_profile/', 'profile_pictures/');
         }
-
         $profile_image = $request->profile_image;
-        if (!preg_match('/^data:image\/(\w+);base64,/', $profile_image, $type)) {
+
+        $check = new \App\Http\Controllers\ValideImage();
+        $valide = $check->valide($profile_image);
+
+        if ($valide) {
+            try {
+                $upload = new \App\Http\Controllers\CloudinaryActions();
+                $res = $upload->upload($profile_image, 'pixora_photos_profile');
+                $imageUrl = $res['image_url'];
+                $user->photo_profile = $imageUrl;
+                $user->save();
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Upload failed: ' . $e->getMessage()
+                ], 500);
+            }
+        } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid image format'
+                'message' => 'Image not supported'
             ]);
         }
-        $ext = strtolower($type[1]);
-
-        $allowed = ['png', 'jpg', 'jpeg', 'webp'];
-        if (!in_array($ext, $allowed)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'We are not allow this files'
-            ]);
-        }
-
-        if (strlen($profile_image) / 1024 / 1024 > 100) {
-            return response()->json([
-                'success' => false,
-                'message' => 'File too large'
-            ]);
-        }
-
-        $filename = time() . '_' . uniqid() . ".webp";
-        $path = storage_path('/app/public/profile_pictures/' . $filename);
-
-        try {
-            $manager = new ImageManager(new Driver());
-
-            // 2. Read image men base64
-            $img = $manager->read($profile_image);
-            // $img->resize(1200, null, function ($constraint) {
-            //     $constraint->aspectRatio();
-            //     $constraint->upsize();
-            // });
-            $img->scale(width: 1200);
-
-            $img->toWebp(75)->save($path);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => "Error processing" . $e
-            ]);
-        }
-
-        $user->photo_profile = $filename;
-        $user->save();
 
         return response()->json([
             'success' => true,
@@ -101,58 +69,32 @@ class ProfilePictures extends Controller
 
         $user = User::find($user_id);
 
-        if ($user->cover_image && Storage::disk('public')->exists('/cover_images/' . $user->cover_image)) {
-            Storage::disk('public')->delete('cover_image/' . $user->cover_image);
-        }
 
         $cover_image = $request->cover_image;
-        if (!preg_match('/^data:image\/(\w+);base64,/', $cover_image, $type)) {
+
+
+        $check = new \App\Http\Controllers\ValideImage();
+        $valide = $check->valide($cover_image);
+
+        if ($valide) {
+            try {
+                $upload = new \App\Http\Controllers\CloudinaryActions();
+                $res = $upload->upload($cover_image, 'cover_images');
+                $imageUrl = $res['image_url'];
+                $user->cover_image = $imageUrl;
+                $user->save();
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Upload failed: ' . $e->getMessage()
+                ], 500);
+            }
+        } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid image format'
+                'message' => 'Image not supported'
             ]);
         }
-
-        $ext = strtolower($type[1]);
-
-        $allowed = ['jpeg', 'jpg', 'webp'];
-
-        if (!in_array($ext, $allowed)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'We are not allow this files'
-            ]);
-        }
-
-        if (strlen($cover_image) / 1024 / 1024 > 100) {
-            return response()->json([
-                'success' => false,
-                'message' => 'File too large'
-            ]);
-        }
-
-        $filename = time() . '_' . uniqid() . ".webp";
-        $path = storage_path('/app/public/cover_images/' . $filename);
-        try {
-            $manager = new ImageManager(new Driver());
-
-            // 2. Read image men base64
-            $img = $manager->read($cover_image);
-            // $img->resize(1200, null, function ($constraint) {
-            //     $constraint->aspectRatio();
-            //     $constraint->upsize();
-            // });
-            $img->scale(width: 1200);
-
-            $img->toWebp(75)->save($path);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => "Error processing" . $e
-            ]);
-        }
-
-        $user->cover_image = $filename;
-        $user->save();
 
         return response()->json([
             'success' => true,
@@ -173,9 +115,8 @@ class ProfilePictures extends Controller
 
         $user = User::find($user_id);
 
-        if ($user->photo_profile && Storage::disk('public')->exists('profile_pictures/' . $user->photo_profile)) {
-            Storage::disk('public')->delete('profile_pictures/' . $user->photo_profile);
-        }
+        $cloudinary = new \App\Http\Controllers\CloudinaryActions();
+        $cloudinary->destroy($user->photo_profile, 'pixora_photos_profile/', 'profile_pictures/');
 
         $user->photo_profile = null;
         $user->save();
@@ -199,9 +140,8 @@ class ProfilePictures extends Controller
 
         $user = User::find($user_id);
 
-        if ($user->cover_image && Storage::disk('public')->exists('cover_images/' . $user->cover_image)) {
-            Storage::disk('public')->delete('cover_images/' . $user->cover_image);
-        }
+        $cloudinary = new \App\Http\Controllers\CloudinaryActions();
+        $cloudinary->destroy($user->cover_image, 'cover_images/', 'cover_images/');
 
         $user->cover_image = null;
         $user->save();
