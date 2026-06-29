@@ -6,6 +6,7 @@ import { Navbar } from './Layouts/Navbar';
 import { Footer } from './Layouts/Footer';
 import { BiSearchAlt } from 'react-icons/bi';
 import { Helmet } from 'react-helmet-async';
+import { StaffManagement as useStaffManagement } from './StaffManagement';
 
 export const AllStaff = () => {
     const [visible, setVisible] = useState(4);
@@ -41,6 +42,8 @@ export const AllStaff = () => {
         return user.username.toLowerCase().includes(search.toLowerCase()) ||
             user.email.toLowerCase().includes(search.toLowerCase());
     });
+
+    const { handleChangeRole, handleDeleteUser, removeStaffRole } = useStaffManagement();
 
     return (
         <>
@@ -80,7 +83,7 @@ export const AllStaff = () => {
                     ) : filteredUsers.length > 0 ? (
                         <div className="staff-grid">
                             {filteredUsers.slice(0, visible).map((member) => (
-                                <StaffUserCard key={member.id} user={member} />
+                                <StaffUserCard key={member.id} user={member} onRemoveRole={removeStaffRole} onChangeRole={handleChangeRole} onDelete={handleDeleteUser} />
                             ))}
                         </div>
                     ) : (

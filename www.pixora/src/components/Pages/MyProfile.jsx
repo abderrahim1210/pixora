@@ -66,13 +66,14 @@ import Statistics from "./Profile/Statistics";
 import BottomNav from "./Layouts/BottomNav";
 import { Helmet } from "react-helmet-async";
 import { MergeModalFollows } from "./MergeModalFollows";
+import { useQuery } from "@tanstack/react-query";
 
 
 export const MyProfile = () => {
   const [user, setUser] = useState({});
   const [photos, setPhotos] = useState([]);
   const [statistics, setStatistics] = useState({});
-  const [analytics, setAnalytics] = useState({});
+  // const [analytics, setAnalytics] = useState({});
   const [edit, setEdit] = useState(false);
   const navigate = useNavigate();
   const [originalUser, setOriginalUser] = useState({});
@@ -90,7 +91,7 @@ export const MyProfile = () => {
   const [imageId, setImageId] = useState(null);
   const [requester_id, setRequester_id] = useState(null);
   const [req_id, setReqId] = useState(null);
-  const [photosCount,setPhotosCount] = useState(null);
+  const [photosCount, setPhotosCount] = useState(null);
   const handleOpenSlide = (image) => {
     setSlides([{ src: image.url, title: image.title }]);
     setOpen(true);
@@ -178,22 +179,40 @@ export const MyProfile = () => {
     }
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
+  // useEffect(() => {
+  // const fetchData = async () => {
+  //   try {
+  //     const res = await axios.get('https://api.pixora.test/admin_analytics', { withCredentials: true, withXSRFToken: true });
+  //     if (res.data.success) {
+  //       setAnalytics(res.data.data);
+  //     } else {
+  //       console.error(res.data.message);
+  //     }
+  //   } catch (err) {
+  //     console.log(err?.response?.data || err?.message);
+  //   }
+  // }
+  // fetchData();
+
+  // }, []);
+
+  const { data:adminAnalytics=[], isLoading, error } = useQuery({
+    queryKey: ['adminAnalytics'],
+    queryFn: async () => {
       try {
         const res = await axios.get('https://api.pixora.test/admin_analytics', { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
-          setAnalytics(res.data.data);
-        } else {
-          console.error(res.data.message);
+          return res.data;
         }
-      }catch(err){
+      } catch (err) {
         console.log(err?.response?.data || err?.message);
       }
-    }
-    fetchData();
+    },
+    staleTime: 1000 * 60 * 5,
+    enabled: !!user && user.role === "admin",
+  });
 
-  }, []);
+  const analytics = adminAnalytics?.data || [];
 
   const handleLogOut = async () => {
     try {
@@ -488,7 +507,7 @@ export const MyProfile = () => {
                     <Settings handleLogOut={handleLogOut} />
                     {
                       user?.role === 'admin' && (
-                        <AdminDashboard user={user} analytics={analytics} setAnalytics={setAnalytics} />
+                        <AdminDashboard user={user} analytics={analytics} />
                       )
                     }
                     {

@@ -79,6 +79,7 @@ export const Home = () => {
       const res = await axios.get('https://api.pixora.test/follows', { withCredentials: true, withXSRFToken: true });
       return res.data?.users?.map(f => f.following_id) || [];
     },
+    staleTime: 1000 * 60 * 5,
     onSuccess: (data) => setLocalFollows(data)
   });
 
