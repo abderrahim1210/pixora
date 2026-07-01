@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class EditionRequest extends Model
 {
+    use HasFactory;
     // protected $hidden = ['image','photo'];
     public function photo (){
         return $this->belongsTo(Photo::class,'image_id');

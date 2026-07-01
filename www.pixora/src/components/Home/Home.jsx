@@ -256,7 +256,7 @@ export const Home = () => {
       </div>
 
       <div className="div2" style={
-        { backgroundImage: `url(${heroImage.filename})` }
+        { backgroundImage: `url(${heroImage?.filename})` }
       }>
         <div className="container-fluid p-0">
           <Motion>
@@ -298,7 +298,7 @@ export const Home = () => {
         </div>
         <figure>
           <figcaption>
-            Photo By {heroImage.username?.split('_')[0]}
+            Photo By {heroImage?.username?.split('_')[0]}
           </figcaption>
         </figure>
         <br />

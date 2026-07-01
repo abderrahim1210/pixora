@@ -16,15 +16,16 @@ class PhotoFactory extends Factory
      */
     public function definition(): array
     {
+        $allowedIdsCategs = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 31, 32, 33, 34, 35, 36];
         return [
-            'user_id' => fake()->numberBetween(1,10),
-            'category_id' => fake()->numberBetween(1,10),
+            'user_id' => \App\Models\User::inRandomOrder()->where('role','user')->first()->id,
+            'category_id' => fake()->randomElement($allowedIdsCategs),
             'title' => fake()->sentence(),
             'description' => fake()->paragraph(),
             // 'type' => fake()->word(),
-            'filename' => fake()->imageUrl(),
+            'filename' => 'https://picsum.photos/640/480?random=' . fake()->numberBetween(1, 1000),
             // 'visibilty' => fake()->boolean(),
-            'location' => fake()->country(),
+            // 'location' => fake()->country(),
             'tags' => fake()->word(),
             'width' => fake()->randomNumber(),
             'height' => fake()->randomNumber(),

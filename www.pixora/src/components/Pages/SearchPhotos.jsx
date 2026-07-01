@@ -40,7 +40,7 @@ const SearchPhotos = () => {
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
-        setVisible(5);
+        setVisible(16);
         return;
     }
     return (

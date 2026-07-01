@@ -6,10 +6,10 @@ import { BiChevronDown } from 'react-icons/bi';
 import ShowMoreButton from '../ShowMoreButton';
 
 const PhotosTemplate = ({ photos }) => {
-    const [visibility, setVisibility] = useState(4);
+    const [visibility, setVisibility] = useState(16);
 
     const showMore = () => {
-        setVisibility(prev => prev + 4);
+        setVisibility(prev => prev + 16);
     }
     function slugiFy(text) {
         return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");

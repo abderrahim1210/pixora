@@ -17,7 +17,7 @@ const Photographers = () => {
     const [search, setSearch] = useState("");
     const navigate = useNavigate();
     const { user } = useAuth();
-    const [visible, setVisible] = useState(5);
+    const [visible, setVisible] = useState(16);
     const [searchParams] = useSearchParams();
     const type = searchParams.get('type') || 'all';
     const [localFollows, setLocalFollows] = useState([]);
@@ -61,7 +61,7 @@ const Photographers = () => {
     }, [search, users, follows]);
 
     const showMoreProducts = () => {
-        setVisible(prev => prev + 5);
+        setVisible(prev => prev + 16);
     }
 
     const queryClient = useQueryClient();
@@ -81,7 +81,7 @@ const Photographers = () => {
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
-        setVisible(5);
+        setVisible(16);
         return;
     }
     return (

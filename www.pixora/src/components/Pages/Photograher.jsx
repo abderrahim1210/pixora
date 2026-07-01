@@ -22,6 +22,7 @@ import moment from 'moment'
 import { FollowListe } from './FollowListe'
 import { FollowButton } from './FollowButton'
 import { MergeModalFollows } from './MergeModalFollows'
+import ShowMoreButton from './ShowMoreButton'
 const Photograher = () => {
     const { id } = useParams();
     const { show, openModal, closeModal } = useModal();
@@ -63,7 +64,6 @@ const Photograher = () => {
         closeModal();
     }, [id]);
 
-    console.log(photographer)
     return (
         <div data-bs-page='myprofile'>
             <Helmet>
@@ -243,15 +243,17 @@ const Photograher = () => {
 
 
                                 <div className={galleries?.length > 0 ? 'row' : ''}>
-                                    <div className='col-lg-8 col-12'>
+                                    <div className={galleries.length > 0 ? 'col-lg-8 col-12' : 'col-12'}>
                                         {isLoading ? Array(6).fill().map((_, i) => <PageSkeleton key={i} />) : photos?.length > 0 ? (
                                             <>
                                                 <PhotosTemplate photos={photos.slice(0, visible)} />
-                                                {user?.role === "user" && photos?.length > visible && (<button className='btn btn-link' onClick={showMoreItems} style={{ textDecoration: "underline" }}>
-                                                    Show more
-                                                </button>)}
+                                                {user?.role === "user" && photos?.length > visible && (
+                                                    <div className='d-flex justify-content-center mb-2'>
+                                                        <ShowMoreButton showMore={showMoreItems} />
+                                                    </div>
+                                                )}
                                             </>
-                                        ) : user?.role === "user" ? (<EmptyContent icon={<FaCamera className="faIcon" />} text={"No photos yet — start sharing your moments!"} />) : (<EmptyContent icon={<FaBan className="faIcon" />} text={"Upload is not availabe for adminstrators"} />)}
+                                        ) : <EmptyContent icon={<FaCamera className="faIcon" />} text={"No photos yet — start sharing your moments!"} />}
 
                                     </div>
 

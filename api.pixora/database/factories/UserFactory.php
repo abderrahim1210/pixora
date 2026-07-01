@@ -28,8 +28,8 @@ class UserFactory extends Factory
             'username' => fake()->userName(),
             'display_name' => fake()->lastName(),
             'bio' => fake()->paragraph(),
-            'photo_profile' => fake()->imageUrl(),
-            'cover_image' => fake()->imageUrl(),
+            'photo_profile' => 'https://picsum.photos/seed/' . fake()->uuid() . '/200/200',
+            'cover_image' => 'https://picsum.photos/seed/' . fake()->uuid() . '/1200/400',
             'country' => fake()->country(),
             'phone_number' => fake()->phoneNumber(),
             'birth_date' => fake()->date(),
@@ -49,7 +49,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
