@@ -43,6 +43,7 @@
 @use './components/notifications';
 @use './base/dark_theme';
 @use './components/follow_liste';
+@use './components/search_list';
 
 :root {
     --special_color: rgb(0, 120, 255);

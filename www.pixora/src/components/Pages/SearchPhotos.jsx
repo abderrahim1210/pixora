@@ -33,7 +33,8 @@ const SearchPhotos = () => {
     const { data: photos = [], isLoading, error } = useQuery({
         queryKey: ['photos', searchTerme, typeTerme],
         queryFn: fetchPhotos,
-        enabled: !!searchTerme || !!typeTerme
+        enabled: !!searchTerme || !!typeTerme,
+        staleTime: 1000 * 60 * 5
     });
 
     const filtredPhotos = photos.filter(p => p.title.toLowerCase().includes(search.toLowerCase()));

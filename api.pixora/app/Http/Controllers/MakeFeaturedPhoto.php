@@ -10,7 +10,7 @@ class MakeFeaturedPhoto extends Controller
     public function makeFeaturedPhoto($id)
     {
         try{
-            $photo = DB::table('photos')->select('id','is_featured')->where('id',$id)->first();
+            $photo = DB::table('photos')->select('id','is_featured')->find($id);
             if ($photo){
                 $newStatus = !$photo->is_featured;
                 DB::table('photos')->where('id',$id)->update(['is_featured' => $newStatus]);

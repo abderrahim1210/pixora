@@ -41,7 +41,7 @@ import Explore from "./Explore";
 import PolicyNotice from "../Pages/PolicyNotice";
 import { Compass, Info, LayoutGrid, Sparkles } from "lucide-react";
 import { BannedOverlay } from "../Pages/BannedOverlay";
-
+import { SearchsList } from "./SearchsList";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -52,6 +52,7 @@ export const Home = () => {
   const [heroImage, setHeroImage] = useState([]);
   const [fade, setFade] = useState(true);
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+  const [showSuggestions,setShowSuggestions] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -199,6 +200,9 @@ export const Home = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  const handleSearch = () => {
+    navigate(`/search?searchTerme=${term}`)
+  }
   return (
     <div data-bs-page="pixora">
       <PolicyNotice />
@@ -274,14 +278,18 @@ export const Home = () => {
                 placeholder="Search for anything ..."
                 title="Search"
                 value={term}
-                onChange={(e) => setTerm(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setTerm(value);
+                  setShowSuggestions(true);
+                }}
               />
               <button
                 type="button"
                 className="btn"
                 id="searchButton"
                 title="Click for search"
-                onClick={() => navigate(`/search?searchTerme=${term}`)}
+                onClick={handleSearch}
               >
                 <FaSearch />
               </button>
@@ -295,6 +303,9 @@ export const Home = () => {
               </button>
             </div>
           </div>
+          {
+            term.length > 2 ? (<SearchsList term={term} onSelect={handleSearch} />) : (<></>)
+          }
         </div>
         <figure>
           <figcaption>

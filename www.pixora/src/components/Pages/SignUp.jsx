@@ -27,7 +27,7 @@ export const SignUp = () => {
   const next = () => setStep((s) => s + 1);
   const prev = () => setStep((s) => s - 1);
   const [countries, setCountries] = useState([]);
-  const [heroImage,setHeroImage] = useState([]);
+  const [heroImage, setHeroImage] = useState([]);
   useEffect(() => {
     try {
       axios.get('/json/countries.json')
@@ -93,14 +93,18 @@ export const SignUp = () => {
       </Helmet>
       <div className="dv1">
         <div className="dv1-0 login_div" style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('${heroImage.filename}')`,
-          backgroundPosition: heroImage.focal_point || 'center'
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('${heroImage?.filename ?? "/outils/jpg/photographe4.png"}')`,
+          backgroundPosition: heroImage?.focal_point || 'center'
         }}>
           <div className="login-label">Sign up Page</div>
 
-          <div className="photographer-name">
-            Shot by <strong>{heroImage?.username || 'Anonymous'}</strong>
-          </div>
+          {
+            heroImage && (
+              <div className="photographer-name">
+                Shot by <strong>{heroImage?.username || 'Anonymous'}</strong>
+              </div>
+            )
+          }
         </div>
         <div className="login-box text-center p-0 row">
           <Link to={'/'} className="logo-img">

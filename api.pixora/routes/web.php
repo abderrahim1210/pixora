@@ -33,6 +33,7 @@ use App\Http\Controllers\RequestEdit;
 use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\SearchAtPhotos;
+use App\Http\Controllers\SearchTerms;
 use App\Http\Controllers\SendReport;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UpdateSensitiveData;
@@ -119,6 +120,8 @@ Route::get('/photo/{id}', [PhotoController::class, 'show'])->name('photo');
 Route::get('/photos_like_original',[PhotosLikeOriginal::class, 'GetPhotos']);
 
 Route::get('/get_follows_liste',[GetFollowsListe::class, 'getFollows']);
+
+Route::get('/get_search_suggestions',[SearchTerms::class, 'search']);
 
 Route::middleware('auth:sanctum', 'CheckUserStatus')->group(function () {
     Route::post('/remove_role', [AdminUsersActions::class, 'removeRole']);

@@ -10,7 +10,7 @@ class GetHeroImages extends Controller
     public function getHeroImages()
     {
         try{
-            $photos = DB::table('photos as p')->join('users as u','p.user_id','=','u.id')->where('p.is_featured','=',true)->select('p.id','p.filename','u.username')->inRandomOrder()->first();
+            $photos = DB::table('photos as p')->join('users as u','p.user_id','=','u.id')->where('p.is_featured',1)->select('p.id','p.filename','u.username')->inRandomOrder()->first();
         return response()->json([
             'success' => true,
             'photo' => $photos
