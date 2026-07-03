@@ -34,7 +34,7 @@ export const FollowListe = ({ userId, type }) => {
                         {users.map(u => (
                             <li key={u?.id} className="follow-item">
                                 <div className="user-info">
-                                    <img src={u?.photo_profile ? `https://api.pixora.test/storage/profile_pictures/${u?.photo_profile}` : '/outils/pngs/useracc2.png'} alt={u?.username} />
+                                    <img src={u?.photo_profile ? u?.photo_profile : '/outils/pngs/useracc2.png'} alt={u?.username} />
                                     <Link className='follows-username' to={user?.id === u.id ? `/user/${u?.username}/myprofile` : `/photographer/${u?.id}`}>{u?.username.split('_')[0]}</Link>
                                 </div>
                                 <FollowButton user_id={u.id} />

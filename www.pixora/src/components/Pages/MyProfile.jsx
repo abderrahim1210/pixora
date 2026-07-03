@@ -179,24 +179,7 @@ export const MyProfile = () => {
     }
   }
 
-  // useEffect(() => {
-  // const fetchData = async () => {
-  //   try {
-  //     const res = await axios.get('https://api.pixora.test/admin_analytics', { withCredentials: true, withXSRFToken: true });
-  //     if (res.data.success) {
-  //       setAnalytics(res.data.data);
-  //     } else {
-  //       console.error(res.data.message);
-  //     }
-  //   } catch (err) {
-  //     console.log(err?.response?.data || err?.message);
-  //   }
-  // }
-  // fetchData();
-
-  // }, []);
-
-  const { data:adminAnalytics=[], isLoading, error } = useQuery({
+  const { data: adminAnalytics = [], isLoading, error } = useQuery({
     queryKey: ['adminAnalytics'],
     queryFn: async () => {
       try {
