@@ -3,6 +3,7 @@
   grid-template-columns: 2fr 1fr 1fr;
   gap: 1.5rem;
   margin-top: 2rem;
+  align-items: start;
 
   @media (max-width: 1200px) {
     grid-template-columns: 1fr 1fr;
@@ -17,7 +18,7 @@
     border-radius: 22px;
     padding: 1.5rem;
     border: 1px solid #f1f1f1;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.153);
 
     .card-header {
       display: flex;
@@ -329,6 +330,7 @@
 }
 
 .stats-glass-card {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.153);
   .card-header {
     display: flex;
     align-items: center;

@@ -253,7 +253,7 @@ const Photograher = () => {
                                                     </div>
                                                 )}
                                             </>
-                                        ) : <EmptyContent icon={<FaCamera className="faIcon" />} text={"No photos yet — start sharing your moments!"} />}
+                                        ) : <EmptyContent icon={<FaCamera className="faIcon" />} text={"No photos published yet !"} />}
 
                                     </div>
 

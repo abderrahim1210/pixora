@@ -33,6 +33,8 @@ import Report from "./Report";
 import { Helmet } from "react-helmet-async";
 import { PhotosLikeOriginal } from "./PhotosLikeOriginal";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from 'sonner';
+import { showPixoraToast } from "../../assets/js/toast";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -208,7 +210,9 @@ export const Photo = (props) => {
 
     const copyLink = () => {
         navigator.clipboard.writeText(photoUrl).then(() => {
-            notyf.success('Link copied !');
+            // notyf.success('Link copied !');
+            // toast('Link copied !',{position:'top-center'});
+            showPixoraToast('Link copied !')
         })
             .catch((err) => {
                 notyf.error('Failed to copy link');
@@ -247,7 +251,6 @@ export const Photo = (props) => {
     const categoryPhoto = categories?.find(c => c.id === fields.category_id)?.name;
 
     const fetchPhotos = async () => {
-        console.log("Sending params:", { title: photo?.title, category: photo?.category_id, tags: photo?.tags });
         try {
             const res = await axios.get('https://api.pixora.test/photos_like_original', {
                 params: {

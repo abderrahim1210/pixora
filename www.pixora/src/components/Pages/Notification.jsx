@@ -36,7 +36,6 @@ export const Notification = () => {
             });
         },
         onSuccess: () => {
-            // Kiy-gool l TanStack Query y-3awd y-fetchi l-data bach t-red badge 0 correctly
             queryClient.invalidateQueries({ queryKey: ['notifications'] });
         },
         onError: (err) => {

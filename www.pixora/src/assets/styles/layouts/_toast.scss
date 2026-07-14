@@ -1,0 +1,21 @@
+.pixora-toast {
+  background: #0a0a0a;
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  
+  border-left: 4px solid var(--special_color);
+  
+  margin-top: 40vh;
+  
+  animation: slideAndScale 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes slideAndScale {
+  0% { transform: translateY(-20px) scale(0.9); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}

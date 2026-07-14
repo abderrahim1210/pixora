@@ -573,8 +573,14 @@ body.dark {
         }
     }
 
-    .notification-center__icon {
-        color: white !important;
+    .notification-center__trigger {
+        color: #a0aec0;
+        transition: color 0.3s ease;
+        background: none;
+    }
+
+    .notification-center__trigger:hover {
+        color: var(--special_color);
     }
 
     .location_link {
@@ -638,7 +644,6 @@ body.dark {
         left: 0;
         width: 100%;
 
-        // Dark Theme Styling
         background: rgba(30, 30, 35, 0.9);
         backdrop-filter: blur(15px);
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -661,7 +666,6 @@ body.dark {
             align-items: center;
             font-weight: 400;
 
-            // أيقونة خفيفة
             &::before {
                 content: "🔍";
                 font-size: 0.8rem;
@@ -687,5 +691,44 @@ body.dark {
             opacity: 1;
             transform: translateY(0);
         }
+    }
+
+    .notification-dropdown {
+        background-color: #1a202c;
+        border: 1px solid #2d3748;
+        color: #e2e8f0;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    }
+
+    .notification-dropdown__header {
+        border-bottom: 1px solid #2d3748;
+
+        h3 {
+            color: white;
+        }
+    }
+
+    .notification-item {
+        border-bottom: 1px solid #2d3748;
+    }
+
+    .notification-item--unread {
+        background-color: #2d3748;
+    }
+
+    .notification-item__text {
+        color: #cbd5e0;
+    }
+
+    .notification-item__date {
+        color: #718096;
+    }
+
+    .notification-dropdown__footer {
+        border-top: 1px solid #2d3748;
+    }
+
+    .notification-dropdown__footer button {
+        color: #63b3ed;
     }
 }

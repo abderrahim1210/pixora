@@ -7,6 +7,7 @@ import axios from 'axios';
 import Spinner from './components/Pages/Spinner';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ThemeProvider from './components/context/ThemeProvider';
+import { Toaster } from 'sonner';
 const AppRoutes = React.lazy(() => import('./components/routes/AppRoutes'));
 const queryClient = new QueryClient();
 function App() {
@@ -19,6 +20,7 @@ function App() {
               <ModalProvider>
                 <Suspense fallback={<Spinner />}>
                   <AppRoutes />
+                  <Toaster position='top-center' />
                 </Suspense>
               </ModalProvider>
             </AuthProvider>

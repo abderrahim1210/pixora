@@ -42,9 +42,9 @@ export const Footer = ({ type }) => {
                   <div className="footer-col">
                     <h4>Follow us</h4>
                     <div className="socials">
-                      <a href=""><FiFacebook /></a>
-                      <a href=""><FiInstagram /></a>
-                      <a href=""><FiTwitter /></a>
+                      <a href="https://web.facebook.com/abd.errahim.8088/"><FiFacebook /></a>
+                      <a href="https://www.instagram.com/abderrahim47_/"><FiInstagram /></a>
+                      <a href="https://x.com/Abderrahim80138"><FiTwitter /></a>
                       <a href="https://github.com/abderrahim1210"><FiGithub /></a>
                     </div>
                   </div>
