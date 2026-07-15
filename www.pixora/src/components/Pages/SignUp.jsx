@@ -1,12 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, redirect, useNavigate } from "react-router-dom";
-import { notyf } from "../../assets/js/notyf";
 import { FaCamera, FaGoogle, FaHeart, FaUsers } from "react-icons/fa";
 import { FaPhotoFilm } from "react-icons/fa6";
 import { MdPhoto, MdPhotoCamera } from "react-icons/md";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
+import { showPixoraToast } from "../../assets/js/toast";
 
 
 export const SignUp = () => {
@@ -53,7 +53,6 @@ export const SignUp = () => {
         aggres_condition: user.aggres_condition
       }
       const res = await axios.post('https://api.pixora.test/register', payload, { withCredentials: true, withXSRFToken: true });
-      console.log(res.data)
       if (res.data.success) {
         Swal.fire({
           icon: "success",
@@ -64,7 +63,7 @@ export const SignUp = () => {
         });
         navigate('/login');
       } else {
-        notyf.error(res.data.message);
+        showPixoraToast(`Error : ${res.data.message}`);
       }
     } catch (err) {
       console.log(err.response?.data);

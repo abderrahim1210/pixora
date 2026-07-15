@@ -2,10 +2,10 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { FaArrowRight, FaDownload, FaEdit, FaUpload } from 'react-icons/fa'
 import { EmptyContent } from './EmptyContent';
-import { notyf } from '../../assets/js/notyf';
 import RequestsCard from './RequestsCard';
 import { useAuth } from '../context/AuthProvider';
 import AllRequestsEditor from './AllRequestsEditor';
+import { showPixoraToast } from '../../assets/js/toast';
 
 const EditorDashboard = ({ uploadResAction }) => {
     const [requests, setRequests] = useState([]);
@@ -48,7 +48,7 @@ const EditorDashboard = ({ uploadResAction }) => {
                             : r
                     )
                 );
-                notyf.success(res.data.message);
+                showPixoraToast(res.data.message);
             } else {
                 console.log(res.data.message);
             }

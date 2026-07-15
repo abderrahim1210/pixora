@@ -17,13 +17,13 @@ import { Dropdown, Spinner } from "react-bootstrap";
 import axios from "axios";
 import copy from 'copy-to-clipboard';
 import { EmptyContent } from './EmptyContent'
-import { notyf } from "../../assets/js/notyf";
 import { useAuth } from "../context/AuthProvider";
 import Swal from "sweetalert2";
 import { useModal } from "../context/ModalProvider";
 import ModalTemplate from "./Templates/ModalTemplate";
 import CommentItem from "./CommentItem";
 import Report from "./Report";
+import { showPixoraToast } from "../../assets/js/toast";
 const Comments = ({ photoId, data, commentRef }) => {
   const { user } = useAuth();
   const { show, openModal, closeModal } = useModal();
@@ -44,10 +44,7 @@ const Comments = ({ photoId, data, commentRef }) => {
 
   const handleCopy = (text) => {
     copy(text);
-    notyf.open({
-      type: 'info',
-      message: 'Comment copied successfully'
-    });
+    showPixoraToast('Comment copied');
   }
 
   useEffect(() => {
@@ -58,12 +55,12 @@ const Comments = ({ photoId, data, commentRef }) => {
     try {
       const res = await axios.post('https://api.pixora.test/comments/store', { photo_id: photoId, comment: comment }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
-        notyf.success(res.data.message);
+        showPixoraToast(res.data.message);
         // setComments(prev => [res.data.comment, ...prev]);
         setLocalComments(prev => [res.data.comment, ...prev]);
         setComment('');
       } else {
-        notyf.error(res.data.message);
+        showPixoraToast(`Error : ${res.data.message}`);
       }
     } catch (err) {
       console.log(err.response?.data);
@@ -79,9 +76,9 @@ const Comments = ({ photoId, data, commentRef }) => {
     try {
       const res = await axios.put(url, { photo_id: photoId, content: newContent, comment_id: commentId }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
-        notyf.success(res.data.message);
+        showPixoraToast(res.data.message);
       } else {
-        notyf.error(res.data.message);
+        showPixoraToast(`Error : ${res.data.message}`);
       }
     } catch (err) {
       setLocalComments(oldComments);
@@ -108,10 +105,10 @@ const Comments = ({ photoId, data, commentRef }) => {
         try {
           const res = await axios.delete(url, { data: { comment_id: commentId, user_id: user, photo_id: photoId }, withCredentials: true, withXSRFToken: true });
           if (res.data.success) {
-            notyf.success(res.data.message);
+            showPixoraToast(res.data.message);
           } else {
             setLocalComments(oldComments);
-            notyf.error(res.data.message);
+            showPixoraToast(`Error : ${res.data.message}`)
           }
         } catch (err) {
           setLocalComments(oldComments);

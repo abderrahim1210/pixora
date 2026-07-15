@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ShieldAlert, Copyright, Ban, MessageSquare, Info, ChevronRight, Send } from 'lucide-react';
 import axios from 'axios';
-import { notyf } from '../../assets/js/notyf';
+import { showPixoraToast } from '../../assets/js/toast';
 const Report = ({ id, user, type }) => {
     const [reason, setReason] = useState('');
     const [description, setDescription] = useState('');
@@ -15,7 +15,7 @@ const Report = ({ id, user, type }) => {
                 if (!user) return navigate('/login');
                 const res = await axios.post('https://api.pixora.test/send_report', { data: payload }, { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
-                    notyf.success(res.data);
+                    showPixoraToast(res.data.message);
                     return navigate(`/user/${user?.username}/myprofile`);
                 } else {
                     console.log(res.data);

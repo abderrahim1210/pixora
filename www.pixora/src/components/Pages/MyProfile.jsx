@@ -49,7 +49,6 @@ import "yet-another-react-lightbox/styles.css";
 import { useModal } from "../context/ModalProvider";
 import { useAuth } from "../context/AuthProvider";
 import { Truncate } from "./Truncate";
-import { notyf } from "../../assets/js/notyf";
 import PageSkeleton from "./PageSkeleton";
 import AdminDashboard from "./AdminDashboard";
 import PhotosTemplate from "./Templates/PhotosTemplate";
@@ -67,6 +66,7 @@ import BottomNav from "./Layouts/BottomNav";
 import { Helmet } from "react-helmet-async";
 import { MergeModalFollows } from "./MergeModalFollows";
 import { useQuery } from "@tanstack/react-query";
+import { showPixoraToast } from "../../assets/js/toast";
 
 
 export const MyProfile = () => {
@@ -226,10 +226,10 @@ export const MyProfile = () => {
       try {
         const res = await axios.post(profilePicturesURL, { profile_image: base64Image }, { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
-          notyf.success(res.data.message);
+          showPixoraToast(res.data.message);
           return window.location.reload();
         } else {
-          notyf.error(res.data.message);
+          showPixoraToast(`Error : ${res.data.message}`);
         }
       } catch (err) {
         console.log(err.response?.data);
@@ -250,10 +250,10 @@ export const MyProfile = () => {
       try {
         const res = await axios.post(coverPictureURL, { cover_image: base64Image }, { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
-          notyf.success(res.data.message);
+          showPixoraToast(res.data.message);
           return window.location.reload();
         } else {
-          notyf.error(res.data.message);
+          showPixoraToast(`Error : ${res.data.message}`);
         }
       } catch (err) {
         console.log(err.response?.data);
@@ -275,10 +275,10 @@ export const MyProfile = () => {
         try {
           const res = await axios.delete(deleteProfilePictureURL, { withCredentials: true, withXSRFToken: true });
           if (res.data.success) {
-            notyf.success(res.data.message);
+            showPixoraToast(res.data.message);
             return window.location.reload();
           } else {
-            notyf.error(res.data.message);
+            showPixoraToast(res.data.message);
           }
         } catch (err) {
           console.log(err.response?.data);
@@ -303,10 +303,10 @@ export const MyProfile = () => {
         try {
           const res = await axios.delete(deleteCoverPictureURL, { withCredentials: true, withXSRFToken: true });
           if (res.data.success) {
-            notyf.success(res.data.message);
+            showPixoraToast(res.data.message);
             return window.location.reload();
           } else {
-            notyf.error(res.data.message);
+            showPixoraToast(`Error : ${res.data.message}`)
           }
         } catch (err) {
           console.log(err);
@@ -325,7 +325,7 @@ export const MyProfile = () => {
     try {
       const res = await axios.post('https://api.pixora.test/upload_photo', { image: preview, photo_id: imageId, ownerId: ownerId, requester_id: requester_id, req_id: req_id, task_id: taskId }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
-        notyf.success(res.data.message);
+        showPixoraToast(res.data.message);
         window.location.reload();
       } else {
         console.log(res.data.message);

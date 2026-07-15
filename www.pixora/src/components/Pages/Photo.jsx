@@ -15,7 +15,6 @@ import 'yet-another-react-lightbox/styles.css';
 
 import { Truncate } from "./Truncate";
 import { useAuth } from "../context/AuthProvider";
-import { notyf } from '../../assets/js/notyf';
 import Swal from "sweetalert2";
 import AsyncSelect from "react-select/async";
 import PageSkeleton from "./PageSkeleton";
@@ -178,9 +177,9 @@ export const Photo = (props) => {
                     const res = await axios.delete(url, { withCredentials: true, withXSRFToken: true });
                     console.log(res.data);
                     if (res.data.success) {
-                        notyf.success(res.data.message);
+                        showPixoraToast(res.data.message);
                     } else {
-                        notyf.error(res.data.message);
+                        showPixoraToast(`Error : ${res.data.message}`);
                     }
                 } catch (err) {
                     console.log(err.response?.data);
@@ -195,13 +194,12 @@ export const Photo = (props) => {
         try {
             const res = await axios.post(`https://api.pixora.test/photo/${id}`, { photo_id: photo.id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id, visibility: fields?.visibility, tags: fields?.tags, galleries: selected }, { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
-                console.log(res.data);
                 dispatch(initEdit(data))
-                notyf.success(res.data.message);
+                showPixoraToast(res.data.message);
                 window.location.reload();
             } else {
-                console.log(res.data)
-                notyf.error(res.data.message);
+                console.log(res.data.message);
+                showPixoraToast(`Error : ${res.data.message}`);
             }
         } catch (err) {
             console.error(err.response?.data);
@@ -210,12 +208,10 @@ export const Photo = (props) => {
 
     const copyLink = () => {
         navigator.clipboard.writeText(photoUrl).then(() => {
-            // notyf.success('Link copied !');
-            // toast('Link copied !',{position:'top-center'});
             showPixoraToast('Link copied !')
         })
             .catch((err) => {
-                notyf.error('Failed to copy link');
+                showPixoraToast('Failed to copy link');
                 console.error(err);
             })
     }
@@ -234,7 +230,7 @@ export const Photo = (props) => {
             const sendRequestEdit = async () => {
                 const res = await axios.post('https://api.pixora.test/send_request', { message: requestMessage, owner_id: photo?.user?.id, image_id: photo?.id }, { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
-                    notyf.success(res.data.message);
+                    showPixoraToast(res.data.message);
                     window.location.reload();
                     return;
                 } else {

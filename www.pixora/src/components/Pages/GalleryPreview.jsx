@@ -13,6 +13,7 @@ import { FaCheck } from 'react-icons/fa';
 import { useAuth } from '../context/AuthProvider';
 import Swal from 'sweetalert2';
 import { Calendar, ChevronDown, ImageIcon, Loader2, Trash2, User } from 'lucide-react';
+import { showPixoraToast } from '../../assets/js/toast';
 
 const GalleryPreview = () => {
     const { id } = useParams();
@@ -71,9 +72,9 @@ const GalleryPreview = () => {
                     const res = await axios.delete(`https://api.pixora.test/delete_gallery/${id}`, { withCredentials: true, withXSRFToken: true });
                     console.log(res.data);
                     if (res.data.success) {
-                        notyf.success(res.data.message);
+                        showPixoraToast(res.data.message);
                     } else {
-                        notyf.error(res.data.message);
+                        showPixoraToast(`Error : ${res.data.message}`);
                     }
                 } catch (err) {
                     console.log(err.response?.data);

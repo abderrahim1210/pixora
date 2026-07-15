@@ -140,7 +140,6 @@ const Photograher = () => {
                                             }
                                             onContextMenu={(e) => e.preventDefault()}
                                             alt={user?.username}
-                                            title="Your profile picture"
                                         />
                                     </div>
                                 </div>

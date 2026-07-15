@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import { notyf } from '../../assets/js/notyf';
 import { useAuth } from '../context/AuthProvider';
 import { BiChevronDown } from 'react-icons/bi';
+import { showPixoraToast } from '../../assets/js/toast';
 
 const RequestCard = ({ group, onStatusChange }) => {
     const [visible, setVisible] = useState(1);
@@ -16,7 +16,7 @@ const RequestCard = ({ group, onStatusChange }) => {
             const reject = async () => {
                 const res = await axios.post('https://api.pixora.test/change_status_req', { req_id: id, type: 'reject' }, { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
-                    notyf.success(res.data.message);
+                    showPixoraToast(res.data.message);
                     onStatusChange(request_id, 'rejected');
                 } else {
                     console.log(res.data.message);
@@ -34,7 +34,7 @@ const RequestCard = ({ group, onStatusChange }) => {
                 const res = await axios.post('https://api.pixora.test/change_status_req', { id: request_id, req_id: id, type: 'accept' }, { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
                     onStatusChange(request_id, 'approved');
-                    notyf.success(res.data.message);
+                    showPixoraToast(res.data.message);
                 } else {
                     console.log(res.data.message);
                 }

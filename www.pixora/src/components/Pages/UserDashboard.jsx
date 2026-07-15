@@ -21,6 +21,7 @@ import Likes from "./Photos/Likes";
 import Galleries from "./Photos/Galleries";
 import BottomNav from "./Layouts/BottomNav";
 import { Helmet } from "react-helmet-async";
+import { showPixoraToast } from "../../assets/js/toast";
 
 export const UserDashboard = () => {
   const [photos, setPhotos] = useState([]);
@@ -57,7 +58,7 @@ export const UserDashboard = () => {
   }, []);
   useEffect(() => {
     if (location.state?.uploaded) {
-      notyf.success(location.state.message);
+      showPixoraToast(location.state.message);
       navigate(location.pathname, { replace: true, state: {} })
     }
   }, [location.state]);
@@ -107,9 +108,9 @@ export const UserDashboard = () => {
     try {
       const res = await axios.post('https://api.pixora.test/create_gallery', { title: gallery.title, description: gallery.description }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
-        notyf.success(res.data.message);
+        showPixoraToast(res.data.message);
       } else {
-        notyf.error(res.data.message);
+        showPixoraToast(`Error : ${res.data.message}`);
       }
     } catch (err) {
       console.log(err.response?.data?.message)

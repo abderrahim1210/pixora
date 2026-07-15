@@ -22,7 +22,6 @@ import axios from "axios";
 import { MdAlbum, MdCategory, MdPhotoAlbum, MdRecommend } from "react-icons/md";
 import { useAuth } from '../context/AuthProvider'
 import { Truncate } from "../Pages/Truncate";
-import { notyf } from "../../assets/js/notyf";
 import PageSkeleton from '../Pages/PageSkeleton';
 import { EmptyContent } from "../Pages/EmptyContent";
 import { FaPhotoFilm } from "react-icons/fa6";

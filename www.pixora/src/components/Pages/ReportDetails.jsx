@@ -7,8 +7,8 @@ import { AlertCircle, ArrowLeft, Ban, CheckCircle, MessageSquare, ShieldAlert, T
 import moment from 'moment'
 import { Navbar } from './Layouts/Navbar';
 import { Footer } from './Layouts/Footer';
-import { notyf } from '../../assets/js/notyf';
 import Swal from 'sweetalert2';
+import { showPixoraToast } from '../../assets/js/toast';
 export const ReportDetails = () => {
     const { id } = useParams();
     const getReport = async () => {
@@ -79,10 +79,10 @@ export const ReportDetails = () => {
         try {
             const res = await axios.post('https://api.pixora.test/report', { type: typeR, report_id: report?.id,reportableId:report?.reportable_id }, { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
-                notyf.success(res.data.message);
+                showPixoraToast(res.data.message);
                 window.location.reload();
             } else {
-                notyf.error(res.data.message);
+                showPixoraToast(`Error : ${res.data.message}`);
                 console.log(res.data.message);
             }
         } catch (err) {
@@ -104,10 +104,10 @@ export const ReportDetails = () => {
                 try {
                     const res = await axios.post('https://api.pixora.test/report', { type: 'delete_photo', report_id: report?.id, reportableId: report?.reportable_id }, { withCredentials: true, withXSRFToken: true });
                     if (res.data.success) {
-                        notyf.success(res.data.message);
+                        showPixoraToast(res.data.message);
                         window.location.reload();
                     } else {
-                        notyf.error(res.data.message);
+                        showPixoraToast(`Error : ${res.data.message}`);
                         console.log(res.data.message);
                     }
                 } catch (err) {

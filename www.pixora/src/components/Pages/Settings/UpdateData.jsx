@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import {notyf} from '../../../assets/js/notyf'
+import { showPixoraToast } from '../../../assets/js/toast';
 const UpdateData = ({handleLogOut}) => {
     const [step, setStep] = useState(1);
     const [form, setForm] = useState({
@@ -16,7 +16,7 @@ const UpdateData = ({handleLogOut}) => {
 
     const handleVerify = () => {
         if (!form.current_password){
-            notyf.error('Please enter the password !');
+            showPixoraToast("Error : Please enter the password !");
             return;
         }
         setLoading(true);
@@ -24,7 +24,7 @@ const UpdateData = ({handleLogOut}) => {
             const verify = async () => {
                 const res = await axios.post('https://api.pixora.test/verify_password',{password:form.current_password},{withCredentials:true,withXSRFToken:true});
                 if (!res.data.success){
-                    notyf.error(res.data.message);
+                    showPixoraToast(`Error : ${res.data.message}`);
                     return setLoading(false);
                 }else{
                     console.log(res.data.message);
@@ -40,7 +40,7 @@ const UpdateData = ({handleLogOut}) => {
 
     const handleUpdateData = () => {
         if (!form.new_email || !form.newPassword){
-            notyf.error('Please enter new email or new password');
+            showPixoraToast("Error : Please enter new email or new password");
             return;
         }
 
@@ -54,11 +54,11 @@ const UpdateData = ({handleLogOut}) => {
                 const res = await axios.post('https://api.pixora.test/update_email_password',payload, {withCredentials:true, withXSRFToken:true});
                 if (res.data.success){
                     console.log(res.data);
-                    notyf.success(res.data.message);
+                    showPixoraToast(res.data.message);
                     handleLogOut();
                 }else{
                     console.log(res.data);
-                    notyf.error(res.data.message);
+                    showPixoraToast(`Error : ${res.data.message}`);
                     setLoading(false);
                 }
             }

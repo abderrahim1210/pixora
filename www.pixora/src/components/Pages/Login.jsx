@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios'
 import { Link, useNavigate } from "react-router-dom";
-import { notyf } from "../../assets/js/notyf";
 axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
 axios.defaults.xsrfCookieName = 'XSRF-TOKEN';
@@ -9,6 +8,7 @@ axios.defaults.xsrfHeaderName = 'X-XSRF-TOKEN';
 import Cookies from 'js-cookie';
 import { api } from "../utils/getUser";
 import { Helmet } from "react-helmet-async";
+import { showPixoraToast } from "../../assets/js/toast";
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -41,7 +41,7 @@ export const Login = () => {
   }
   useEffect(() => {
     if (location.state?.liked) {
-      notyf.error(location.state.message);
+      showPixoraToast(`Error : ${location.state.message}`);
       navigate(location.pathname, { replace: true, state: {} })
     }
   }, [location.state]);

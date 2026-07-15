@@ -2,8 +2,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import React from 'react'
 import Swal from 'sweetalert2';
-import { notyf } from '../../assets/js/notyf';
 import withReactComponent from 'sweetalert2-react-content';
+import { showPixoraToast } from '../../assets/js/toast';
 
 export const StaffManagement = () => {
     const queryClient = useQueryClient();
@@ -23,9 +23,9 @@ export const StaffManagement = () => {
                     const res = await axios.post('https://api.pixora.test/remove_role', { user_id: id }, { withCredentials: true, withXSRFToken: true });
                     if (res.data.success) {
                         queryClient.invalidateQueries({ queryKey: ['adminAnalytics'] });
-                        notyf.success(res.data.message);
+                        showPixoraToast(res.data.message);
                     } else {
-                        notyf.error(res.data.message);
+                        showPixoraToast(`Error : ${res.data.message}`);
                     }
                 } catch (err) {
                     console.log(err?.response?.data);
@@ -67,9 +67,9 @@ export const StaffManagement = () => {
                     const res = await axios.post('https://api.pixora.test/change_role', { user_id: id, role: result.value }, { withCredentials: true, withXSRFToken: true });
                     if (res.data.success) {
                         queryClient.invalidateQueries({ queryKey: ['adminAnalytics'] });
-                        notyf.success(res.data.message);
+                        showPixoraToast(res.data.message);
                     } else {
-                        notyf.error(res.data.message);
+                        showPixoraToast(`Error : ${res.data.message}`);
                     }
                 } catch (err) {
                     console.log(err?.response?.data);
@@ -92,9 +92,9 @@ export const StaffManagement = () => {
                     const res = await axios.post('https://api.pixora.test/delete_user', { user_id: id }, { withCredentials: true, withXSRFToken: true });
                     if (res.data.success) {
                         queryClient.invalidateQueries({ queryKey: ['adminAnalytics'] });
-                        notyf.success(res.data.message);
+                        showPixoraToast(res.data.message);
                     } else {
-                        notyf.error(res.data.message);
+                        showPixoraToast(`Error : ${res.data.message}`);
                     }
                 } catch (err) {
                     console.log(err?.response?.data);

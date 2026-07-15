@@ -6,12 +6,12 @@ import LightBox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
 
-import { notyf } from "../../assets/js/notyf";
 import { FaArrowRight, FaCamera, FaCheck, FaRocket } from "react-icons/fa";
 import { AiOutlineCamera } from "react-icons/ai";
 import { FiInfo } from "react-icons/fi";
 import { Truncate } from "./Truncate";
 import { Helmet } from "react-helmet-async";
+import { showPixoraToast } from "../../assets/js/toast";
 
 export const Upload = () => {
   const [step, setStep] = useState(0);
@@ -64,9 +64,8 @@ export const Upload = () => {
         if (res.data.success) {
           navigate(`/user/${user.username}/dashboard`, { state: { uploaded: true, message: res.data.message } });
         } else {
-          notyf.error(res.data.message);
+          showPixoraToast(`Error : ${res.data.message}`);
           console.log(res.data.message);
-          console.log(res);
         }
       }
     } catch (err) {

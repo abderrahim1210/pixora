@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { FaArrowRight, FaCheckCircle, FaExclamationTriangle, FaLock, FaTrashAlt } from 'react-icons/fa';
-import { notyf } from '../../../assets/js/notyf';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { showPixoraToast } from '../../../assets/js/toast';
 
 const DeleteAccount = () => {
     const [step, setStep] = useState(1);
@@ -14,13 +14,13 @@ const DeleteAccount = () => {
     const [agreed, setAgreed] = useState(false);
 
     const handleVerify = () => {
-        if (!currentPass) return notyf.error('Please enter your current password !');
+        if (!currentPass) return showPixoraToast("Error : Please enter your current password !");
         setLoading(true);
         try {
             const verify = async () => {
                 const res = await axios.post('https://api.pixora.test/verify_password', { password: currentPass }, { withCredentials: true, withXSRFToken: true });
                 if (!res.data.success) {
-                    notyf.error(res.data.message);
+                    showPixoraToast(`Error : ${res.data.message}`);
                     return setLoading(false);
                 } else {
                     console.log(res.data.message);
@@ -37,12 +37,11 @@ const DeleteAccount = () => {
         try {
             const res = await axios.delete('https://api.pixora.test/delete_account', { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
-                notyf.success(res.data.message);
+                showPixoraToast(res.data.message);
                 console.log(res.data);
                 return navigate('/signup');
             }else{
                 console.log(res.data.message);
-                console.log(res.data);
             }
 
         } catch (err) {
