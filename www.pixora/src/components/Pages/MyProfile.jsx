@@ -68,7 +68,6 @@ import { MergeModalFollows } from "./MergeModalFollows";
 import { useQuery } from "@tanstack/react-query";
 import { showPixoraToast } from "../../assets/js/toast";
 
-
 export const MyProfile = () => {
   const [user, setUser] = useState({});
   const [photos, setPhotos] = useState([]);
