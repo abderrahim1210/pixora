@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Offcanvas, Nav } from 'react-bootstrap';
-import { Home, Compass, Image, PlusSquare, User, Settings, LogOut, X, Images } from 'lucide-react';
+import { Home, Compass, Image, PlusSquare, User, Settings, LogOut, X, Images, LogIn, UserPlus } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthProvider';
 import Avatar from '../Avatar';
@@ -10,10 +10,16 @@ const OffcanvasTemplate = ({ user, page = 'home' }) => {
     const location = useLocation();
     const navLinks = [
         { name: 'Home', path: '/', icon: <Home size={20} /> },
-        { name: 'My Profile', path: `/user/${user?.username}/myprofile`, icon: <Image size={20} /> },
-        { name: 'Dashboard', path: `/user/${user?.username}/dashboard`, icon: <Images size={20} /> },
-        { name: 'Upload', path: '/upload', icon: <PlusSquare size={20} /> },
+        ...(user ? [
+            { name: 'My Profile', path: `/user/${user?.username}/myprofile`, icon: <Image size={20} /> },
+            { name: 'Dashboard', path: `/user/${user?.username}/dashboard`, icon: <Images size={20} /> },
+            { name: 'Upload', path: '/upload', icon: <PlusSquare size={20} /> },
+        ] : [
+            { name: 'Sign Up', path: `/signup`, icon: <LogIn size={20} /> },
+            { name: 'Login', path: `/login`, icon: <UserPlus size={20} /> },
+        ])
     ];
+
     return (
         <>
             <button
@@ -127,24 +133,21 @@ const OffcanvasTemplate = ({ user, page = 'home' }) => {
                                                 </div>
                                             )}
                                         </div>
-
-                                        {/* <div className="separator my-3"></div>
-
-                                        <Link to="/settings" className="nav-link-custom" onClick={() => setShow(false)}>
-                                            <span className="icon"><Settings size={20} /></span>
-                                            <span className="text">Settings</span>
-                                        </Link> */}
                                     </Nav>
                                 </>
                             )
                         }
                     </div>
-                    <div className="offcanvas-footer px-4 py-4 border-top mt-auto bg-light bg-opacity-50">
-                        <button className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 rounded-3 py-2">
-                            <LogOut size={18} />
-                            <span>Logout</span>
-                        </button>
-                    </div>
+                    {
+                        user && (
+                            <div className="offcanvas-footer px-4 py-4 border-top mt-auto bg-light bg-opacity-50">
+                                <button className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 rounded-3 py-2">
+                                    <LogOut size={18} />
+                                    <span>Logout</span>
+                                </button>
+                            </div>
+                        )
+                    }
                 </Offcanvas.Body>
             </Offcanvas>
         </>

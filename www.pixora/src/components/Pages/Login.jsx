@@ -9,6 +9,7 @@ import Cookies from 'js-cookie';
 import { api } from "../utils/getUser";
 import { Helmet } from "react-helmet-async";
 import { showPixoraToast } from "../../assets/js/toast";
+import { GoogleLoginButton } from "./GoogleLoginButton";
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -151,6 +152,7 @@ export const Login = () => {
                     Login
                   </button>
                 </div>
+                <GoogleLoginButton />
                 {error && <div className="container p-3 text-light bg-danger"><p>{error}</p></div>}
               </div>
             </form>

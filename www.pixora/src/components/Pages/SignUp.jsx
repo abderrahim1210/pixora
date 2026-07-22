@@ -7,6 +7,7 @@ import { MdPhoto, MdPhotoCamera } from "react-icons/md";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
 import { showPixoraToast } from "../../assets/js/toast";
+import { GoogleLoginButton } from "./GoogleLoginButton";
 
 
 export const SignUp = () => {
@@ -241,6 +242,7 @@ function StepTwo({ next, prev, step, navigate, user, setUser }) {
           <div className="mt-2 mb-2">
             You have a account ? <Link to="/login" onClick={() => navigate('/login')}>Login</Link>
           </div>
+          <GoogleLoginButton />
           <div className="actions mt-2 mb-2">
             <button
               onClick={prev} className={`actionButton btn prev`}

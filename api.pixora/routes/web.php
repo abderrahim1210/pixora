@@ -18,6 +18,7 @@ use App\Http\Controllers\Galleries;
 use App\Http\Controllers\GetFollowsListe;
 use App\Http\Controllers\GetHeroImages;
 use App\Http\Controllers\GetPhotos;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MakeFeaturedPhoto;
@@ -117,11 +118,15 @@ Route::post('/reset_password', [NewPasswordController::class, 'store']);
 
 Route::get('/photo/{id}', [PhotoController::class, 'show'])->name('photo');
 
-Route::get('/photos_like_original',[PhotosLikeOriginal::class, 'GetPhotos']);
+Route::get('/photos_like_original', [PhotosLikeOriginal::class, 'GetPhotos']);
 
-Route::get('/get_follows_liste',[GetFollowsListe::class, 'getFollows']);
+Route::get('/get_follows_liste', [GetFollowsListe::class, 'getFollows']);
 
-Route::get('/get_search_suggestions',[SearchTerms::class, 'search']);
+Route::get('/get_search_suggestions', [SearchTerms::class, 'search']);
+
+Route::get('/auth/google/redirect', [GoogleController::class, 'redirectToGoogle']);
+
+Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
 Route::middleware('auth:sanctum', 'CheckUserStatus')->group(function () {
     Route::post('/remove_role', [AdminUsersActions::class, 'removeRole']);
@@ -199,7 +204,7 @@ Route::middleware('auth:sanctum', 'CheckUserStatus')->group(function () {
     Route::post('/photo/{id}', [PhotoController::class, 'update']);
     Route::delete('/photo/{id}', [PhotoController::class, 'destroy']);
 
-    Route::get('/notifications',[NotificationsController::class, 'index']);
+    Route::get('/notifications', [NotificationsController::class, 'index']);
 
     Route::post('/notifications/mark-as-read', [NotificationsController::class, 'markAsRead']);
 });

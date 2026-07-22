@@ -45,6 +45,7 @@
 @use './components/follow_liste';
 @use './components/search_list';
 @use './layouts/toast';
+@use './components/google_login_button';
 
 :root {
     --special_color: rgb(0, 120, 255);
