@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./api.pixora
+      dockerfile: Dockerfile.backend
+    container_name: pixora_backend
+    restart: always
+    ports:
+      - "8000:9000"
+    environment:
+      - DB_HOST=db
+      - DB_DATABASE=pixora
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./www.pixora
+      dockerfile: Dockerfile.frontend
+    container_name: pixora_frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  db:
+    image: mysql:8.0
+    container_name: pixora_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: pixora
+      MYSQL_ROOT_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

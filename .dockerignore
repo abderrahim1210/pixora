@@ -1,0 +1,16 @@
+.git
+.gitignore
+
+.env
+.env.local
+.env.*
+
+node_modules
+npm-debug.log
+dist
+build
+
+vendor
+storage/*.key
+bootstrap/cache/*.php
+*.sqlite
