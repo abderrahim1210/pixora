@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Follow;
+use App\Models\PaymentSetting;
 use App\Models\User;
 // use Illuminate\Http\Client\Request;
 use Illuminate\Http\Request;
@@ -15,10 +16,10 @@ class ProfileController extends Controller
     {
 
         $user = User::with([
-            'photos' => function($query){
-                $query->select('id','title','filename','user_id')->latest()->limit(4);
+            'photos' => function ($query) {
+                $query->select('id', 'title', 'filename', 'user_id')->latest()->limit(4);
             }
-        ])->withCount(['likes','followers','followings'])->find(Auth::id());
+        ])->withCount(['likes', 'followers', 'followings'])->find(Auth::id());
 
         if (!$user) {
             return response()->json([
@@ -26,13 +27,16 @@ class ProfileController extends Controller
             ], 401);
         }
 
-        $photos_count = DB::table('photos')->where('user_id',$user->id)->count();
+        $photos_count = DB::table('photos')->where('user_id', $user->id)->count();
+
+        $paymentsSettings = PaymentSetting::where('user_id', $user->id)->get();
 
         return response()->json([
             'success' => true,
             'user' => $user,
             'photos' => $user->photos,
             'photosCount' => $photos_count,
+            'paymentsSettings' => $paymentsSettings,
             'statistics' => [
                 'likes' => $user->likes_count,
                 'followers' => $user->followers_count,

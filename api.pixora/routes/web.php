@@ -22,7 +22,9 @@ use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MakeFeaturedPhoto;
+use App\Http\Controllers\ManagePaymentsAccounts;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\PaymentSettingController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\Photographer;
 use App\Http\Controllers\PhotosLikeOriginal;
@@ -109,7 +111,6 @@ Route::get('/get_infos_photographers/{id}', [Photographer::class, 'getInformatio
 Route::get('/search', [SearchAtPhotos::class, 'getResult']);
 
 Route::get('/get_hero_images', [GetHeroImages::class, 'getHeroImages']);
-
 
 
 Route::post('/send_link_email', [ForgotPasswordController::class, 'sendLinkEmail']);
@@ -207,6 +208,14 @@ Route::middleware('auth:sanctum', 'CheckUserStatus')->group(function () {
     Route::get('/notifications', [NotificationsController::class, 'index']);
 
     Route::post('/notifications/mark-as-read', [NotificationsController::class, 'markAsRead']);
+
+    Route::get('/auth/paypal/redirect', [PaymentSettingController::class, 'redirectPaypal']);
+
+    Route::get('/auth/paypal/callback', [PaymentSettingController::class, 'handlePaypalCallback']);
+
+    Route::get('/get_payment_accounts', [PaymentSettingController::class, 'get_payments']);
+
+    Route::get('/get_payment_accounts', [ManagePaymentsAccounts::class, 'get_accounts']);
 });
 
 require __DIR__ . '/auth.php';

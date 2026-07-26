@@ -21,6 +21,7 @@ import { AllStaff } from "../Pages/AllStaff";
 import { AllRequestsAdmin } from "../Pages/AllRequestsAdmin";
 import { BannedOverlay } from "../Pages/BannedOverlay";
 import { useAuth } from "../context/AuthProvider";
+import { ManagePaymentAccounts } from "../Pages/Profile/ManagePaymentAccounts";
 const AppRoutes = () => {
   const { user } = useAuth();
   const location = useLocation();
@@ -52,6 +53,7 @@ const AppRoutes = () => {
         <Route path="/report/:id" element={<ReportDetails />} />
         <Route path="/staff" element={<AllStaff />} />
         <Route path="/requests" element={<AllRequestsAdmin />} />
+        <Route path="/manage_payment_accounts" element={<ManagePaymentAccounts />} />
       </Routes>
     </>
   );

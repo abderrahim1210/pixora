@@ -1,0 +1,223 @@
+.pixora-dashboard-card.payment-accounts-widget-light {
+  background-color: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 16px;
+  padding: 24px;
+  color: #18181b;
+  width: 100%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+
+  .widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 16px;
+
+    .title-area {
+      h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin: 0 0 4px 0;
+        color: #09090b;
+      }
+
+      p {
+        font-size: 0.85rem;
+        color: #71717a;
+        margin: 0;
+      }
+    }
+
+    .pixora-btn-primary {
+      background-color: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      white-space: nowrap;
+
+      &:hover {
+        background-color: #1d4ed8;
+      }
+
+      &:active {
+        transform: scale(0.97);
+      }
+    }
+  }
+
+  .widget-content {
+    .accounts-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 2px;
+
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #d4d4d8;
+        border-radius: 4px;
+      }
+
+      .account-row-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 14px 16px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: #f1f5f9;
+          border-color: #cbd5e1;
+        }
+
+        &.is-active {
+          background-color: #f0fdf4;
+          border-color: #bbf7d0;
+        }
+
+        .account-main-info {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+
+          .method-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &.paypal {
+              background-color: rgba(37, 99, 235, 0.1);
+              color: #2563eb;
+            }
+
+            &.stripe {
+              background-color: rgba(124, 58, 237, 0.1);
+              color: #7c3aed;
+            }
+
+            &.bank {
+              background-color: rgba(217, 119, 6, 0.1);
+              color: #d97706;
+            }
+
+            &.default {
+              background-color: rgba(113, 113, 122, 0.1);
+              color: #52525b;
+            }
+          }
+
+          .account-details-text {
+            .identifier-row {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              margin-bottom: 2px;
+
+              .identifier-text {
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: #09090b;
+              }
+
+              .active-badge-pill {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                background-color: #dcfce7;
+                color: #16a34a;
+                font-size: 0.7rem;
+                padding: 2px 8px;
+                border-radius: 20px;
+                font-weight: 600;
+              }
+            }
+
+            .method-type-label {
+              font-size: 0.75rem;
+              color: #71717a;
+              text-transform: uppercase;
+              letter-spacing: 0.05em;
+              font-weight: 500;
+            }
+          }
+        }
+
+        .account-actions-box {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+
+          .action-icon-btn {
+            background: #ffffff;
+            border: 1px solid #e4e4e7;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #71717a;
+            cursor: pointer;
+            transition: all 0.2s;
+
+            &.star-btn {
+              &:hover {
+                background: #fef9c3;
+                border-color: #fde047;
+                color: #ca8a04;
+              }
+            }
+
+            &.delete-btn {
+              &:hover {
+                background: #fee2e2;
+                border-color: #fca5a5;
+                color: #dc2626;
+              }
+            }
+          }
+        }
+      }
+
+      .empty-state-box {
+        text-align: center;
+        padding: 28px 0;
+        color: #71717a;
+        font-size: 0.85rem;
+        background: #f8fafc;
+        border: 1px dashed #cbd5e1;
+        border-radius: 12px;
+      }
+    }
+  }
+}
+
+.pixora-dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .dashboard-content-area {
+    flex: 1;
+    width: 100%;
+  }
+}

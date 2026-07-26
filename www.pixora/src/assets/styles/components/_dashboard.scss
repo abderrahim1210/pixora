@@ -1176,3 +1176,32 @@
   color: #1a1a1a;
   text-decoration: none;
 }
+
+.credential-settings-body {
+    .btn-connect-paypal {
+        background-color: #0070ba; // لون PayPal الرسمي
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+
+        &:hover {
+            background-color: #005ea6;
+            transform: translateY(-1px);
+        }
+    }
+
+    .connected-paypal-box {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        
+        .badge-verified {
+            background: #10b981;
+            color: #fff;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+    }
+}

@@ -86,7 +86,7 @@ $transition: 180ms ease;
   transition: background $transition, transform $transition;
 
   &:hover {
-    background: darken($slate, 6%);
+    background: $slate;
   }
 
   &:active {
