@@ -216,6 +216,8 @@ Route::middleware('auth:sanctum', 'CheckUserStatus')->group(function () {
     Route::get('/get_payment_accounts', [PaymentSettingController::class, 'get_payments']);
 
     Route::get('/get_payment_accounts', [ManagePaymentsAccounts::class, 'get_accounts']);
+
+    Route::delete('/delete_payout_account/{id}', [ManagePaymentsAccounts::class, 'destroy']);
 });
 
 require __DIR__ . '/auth.php';

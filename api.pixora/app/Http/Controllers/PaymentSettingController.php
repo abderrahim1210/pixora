@@ -32,8 +32,9 @@ class PaymentSettingController extends Controller
     {
         $code = $request->input('code');
         $user = User::find(Auth::id());
+        $frontend_url = env('FRONTEND_URL');
         if (!$code) {
-            return redirect("https://www.pixora.test/user/$user->username/myprofile");
+            return redirect($frontend_url . "/user/" . $user->username . "/myprofile");
         }
 
         $clientId = config('services.paypal.client_id');
@@ -49,7 +50,7 @@ class PaymentSettingController extends Controller
         ]);
 
         if (!$response->successful()) {
-            return redirect("https://www.pixora.test/user/$user->username/myprofile");
+            return redirect($frontend_url . "/user/" . $user->username . "/myprofile");
         }
 
         $accessToken = $response->json('access_token');
@@ -61,7 +62,7 @@ class PaymentSettingController extends Controller
         $userResponse = Http::withToken($accessToken)->get($userInfoUrl);
 
         if (!$userResponse->successful()) {
-            return redirect("https://www.pixora.test/user/$user->username/myprofile");
+            return redirect($frontend_url . "/user/" . $user->username . "/myprofile");
         }
 
         $paypalData = $userResponse->json();
@@ -77,6 +78,6 @@ class PaymentSettingController extends Controller
         $user->update([
             'payment_email' => $verifiedEmail
         ]);
-        return redirect("https://www.pixora.test/user/$user->username/myprofile");
+        return redirect($frontend_url . "/user/" . $user->username . "/myprofile");
     }
 }
