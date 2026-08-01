@@ -47,6 +47,7 @@
 @use './layouts/toast';
 @use './components/google_login_button';
 @use './components/payments_accounts';
+@use './components/request_edit_modal';
 
 :root {
     --special_color: rgb(0, 120, 255);

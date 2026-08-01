@@ -17,6 +17,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Galleries;
 use App\Http\Controllers\GetFollowsListe;
 use App\Http\Controllers\GetHeroImages;
+use App\Http\Controllers\GetPaymentAccount;
 use App\Http\Controllers\GetPhotos;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\Home;
@@ -218,6 +219,8 @@ Route::middleware('auth:sanctum', 'CheckUserStatus')->group(function () {
     Route::get('/get_payment_accounts', [ManagePaymentsAccounts::class, 'get_accounts']);
 
     Route::delete('/delete_payout_account/{id}', [ManagePaymentsAccounts::class, 'destroy']);
+
+    Route::get('/get_payment_account', [GetPaymentAccount::class, 'get_account']);
 });
 
 require __DIR__ . '/auth.php';

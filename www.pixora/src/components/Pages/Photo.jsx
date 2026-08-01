@@ -34,6 +34,7 @@ import { PhotosLikeOriginal } from "./PhotosLikeOriginal";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from 'sonner';
 import { showPixoraToast } from "../../assets/js/toast";
+import { RequestEditModal } from "./RequestEditModal";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -44,7 +45,6 @@ export const Photo = (props) => {
     const [cities, setCities] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
     const [loading, setLoading] = useState(true);
-    // const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
     const { user } = useAuth();
     const [liked, setLiked] = useState(photo?.isLiked);
@@ -79,6 +79,7 @@ export const Photo = (props) => {
                 setLoading(false);
             });
     }, [id]);
+    console.log(photosEdits)
     const handleLike = async (photoid) => {
         try {
             const oldLiked = liked;
@@ -350,14 +351,7 @@ export const Photo = (props) => {
             {
                 show === "request_edit" && (
                     <ModalTemplate show={show} closeModal={closeModal}>
-                        <div className="modal-body-content">
-                            <div className="context">
-                                <p>Target Image :</p>
-                                <strong>{photo.title}</strong>
-                            </div>
-                            <textarea name="request_message" className="pixora-text-area" value={requestMessage} onChange={(e) => setRequestMessage(e.target.value)} placeholder="Write your message here ..." />
-                            <button className="btn-send-request" onClick={requestEditForm}>Confirm Request</button>
-                        </div>
+                        <RequestEditModal photo={photo} />
                     </ModalTemplate>
                 )
             }

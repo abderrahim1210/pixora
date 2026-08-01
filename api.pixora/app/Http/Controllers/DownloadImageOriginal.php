@@ -10,15 +10,13 @@ class DownloadImageOriginal extends Controller
     public function downloadImage($photoId){
         $photo = Photo::findOrFail($photoId);
 
-        $file_path = storage_path('app/public/photos/'.$photo->filename);
-
-        if (!file_exists($file_path)){
+        if (!$photo->filename){
             return response()->json([
                 'success' => false,
-                'message' => 'File not found on server'
+                'message' => 'Imzge not found on server'
             ],404);
         }
 
-        return response()->download($file_path,$photo->filename ?? 'image.png');
+        return redirect()->away($photo->filename);
     }
 }

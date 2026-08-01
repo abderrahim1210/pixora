@@ -22,7 +22,7 @@ class PhotoController extends Controller
             ]);
         }
         $request = null;
-        if ($user){
+        if ($user) {
             $request = EditionRequest::where('image_id', $photo->id)->where('requester_id', $user->id)->first();
         }
 
@@ -32,7 +32,8 @@ class PhotoController extends Controller
         });
         $photo->isLiked = $user ? $photo->likes->contains('user_id', $user->id) : false;
 
-        $photos_edits = Image::with(['parent:filename','request.requester:id,username','editor:id,username'])->where('parent_id', $photo->id)->whereNotNull('request_id')->get();
+        $photos_edits = Image::with(['parent:id,filename','request.requester:id,username','editor:id,username'])->where('parent_id', $photo->id)->get();
+
         return response()->json([
             'success' => true,
             'photo' => $photo,
@@ -144,7 +145,7 @@ class PhotoController extends Controller
 
         $photo->comments()->delete();
 
-        
+
         $photo->delete();
 
         return response()->json([

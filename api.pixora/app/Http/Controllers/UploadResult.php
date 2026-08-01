@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PaymentSetting;
 use App\Models\User;
 use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Request;
@@ -23,62 +24,64 @@ class UploadResult extends Controller
         $task_id = $request->task_id;
         $editor_id = Auth::id();
         $user = User::find($editor_id);
-        if ($user->role !== 'editor'){
+        if ($user->role !== 'editor') {
             return response()->json([
                 'success' => false,
                 'message' => 'You not have a permission for do it this action'
-            ],403);
+            ], 403);
         }
-        try {
-            preg_match('/^data:image\/(\w+);base64,/', $image, $matches);
-            $ext = strtolower($matches[1]);
 
-            $image = substr($image, strpos($image, ',') + 1);
-            $image = base64_decode($image);
+        $check = new \App\Http\Controllers\ValideImage();
+        $valide = $check->valide($image);
 
-            $allowed = ['png', 'jpg', 'jpeg'];
-            if (!in_array($ext, $allowed)) {
+        $basePrice = 50;
+        $platformFee = 5;
+        $totalAmount = $basePrice + $platformFee;
+
+        
+        if ($valide) {
+            try {
+                $upload = new \App\Http\Controllers\CloudinaryActions();
+                $res = $upload->upload($image, 'pixora_photos');
+                $payment_owner_account = PaymentSetting::where('user_id', $requester_id)->first();
+                $imageUrl = $res['image_url'];
+                DB::table('images')->insert([
+                    'path' => $imageUrl,
+                    'owner_id' => $ownerId,
+                    'parent_id' => $photoId,
+                    'request_id' => $req_id,
+                    'status' => 'accepted',
+                    'created_at' => now(),
+                    'editor_id' => $editor_id
+
+                ]);
+
+                DB::table('editing_tasks')->where('id', $task_id)->update([
+                    'status' => 'completed',
+                    'edited_file_url' => $imageUrl,
+                    'updated_at' => now()
+                ]);
+
+                DB::table('payments')->insert([
+                    'request_id' => $req_id,
+                    'user_id' => $ownerId,
+                    'amount' => $totalAmount,
+                    'payment_method' => $payment_owner_account->method_type,
+                    'transaction_id' => 'TEST_TXN_' . uniqid(),
+                    'status' => 'pending',
+                    'created_at' => now(),
+                    'payment_account_id' => $payment_owner_account->id
+                ]);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Photo uploaded result successfully'
+                ]);
+            } catch (\Exception $e) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'We are not allow this files'
+                    'message' => "Error in " . $e
                 ]);
             }
-
-            if (strlen($image) / 1024 / 1024 > 100) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'File too large'
-                ]);
-            }
-
-            $filename = uniqid() . "edited_image_req_id" . $req_id . "_taks_id_" . $task_id . "." . $ext;
-
-            Storage::disk('public')->put('edited_images/' . $filename, $image);
-            DB::table('images')->insert([
-                'path' => $filename,
-                'owner_id' => $ownerId,
-                'parent_id' => $photoId,
-                'request_id' => $req_id,
-                'status' => 'accepted',
-                'created_at' => now(),
-                'editor_id' => $editor_id
-
-            ]);
-
-            DB::table('editing_tasks')->where('id',$task_id)->update([
-                'status' => 'completed',
-                'edited_file_url' => "edited_images/" . $filename,
-                'updated_at' => now()
-            ]);
-            return response()->json([
-                'success' => true,
-                'message' => 'Photo uploaded result successfully'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => "Error in " . $e
-            ]);
         }
     }
 }

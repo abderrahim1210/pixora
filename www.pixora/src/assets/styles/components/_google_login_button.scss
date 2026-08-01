@@ -143,7 +143,7 @@ $transition: 180ms ease;
   }
 
   &:hover {
-    background: darken($white, 3%);
+    background: $white;
     border-color: $slate;
   }
 
