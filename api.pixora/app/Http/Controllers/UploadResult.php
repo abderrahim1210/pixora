@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\PaymentSetting;
+use App\Models\Photo;
 use App\Models\User;
+use App\Notifications\AlertGoToPay;
 use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +26,7 @@ class UploadResult extends Controller
         $task_id = $request->task_id;
         $editor_id = Auth::id();
         $user = User::find($editor_id);
+
         if ($user->role !== 'editor') {
             return response()->json([
                 'success' => false,
@@ -38,9 +41,11 @@ class UploadResult extends Controller
         $platformFee = 5;
         $totalAmount = $basePrice + $platformFee;
 
-        
+
         if ($valide) {
             try {
+                $photo = Photo::find($photoId);
+                $requester = User::find($requester_id);
                 $upload = new \App\Http\Controllers\CloudinaryActions();
                 $res = $upload->upload($image, 'pixora_photos');
                 $payment_owner_account = PaymentSetting::where('user_id', $requester_id)->first();
@@ -52,8 +57,8 @@ class UploadResult extends Controller
                     'request_id' => $req_id,
                     'status' => 'accepted',
                     'created_at' => now(),
-                    'editor_id' => $editor_id
-
+                    'editor_id' => $editor_id,
+                    'is_paid' => false,
                 ]);
 
                 DB::table('editing_tasks')->where('id', $task_id)->update([
@@ -62,16 +67,21 @@ class UploadResult extends Controller
                     'updated_at' => now()
                 ]);
 
+                $transaction_id = "TEST_TXN_" . uniqid();
+
                 DB::table('payments')->insert([
                     'request_id' => $req_id,
                     'user_id' => $ownerId,
                     'amount' => $totalAmount,
                     'payment_method' => $payment_owner_account->method_type,
-                    'transaction_id' => 'TEST_TXN_' . uniqid(),
+                    'transaction_id' => $transaction_id,
                     'status' => 'pending',
                     'created_at' => now(),
                     'payment_account_id' => $payment_owner_account->id
                 ]);
+
+                $requester->notify(new AlertGoToPay($photo, $transaction_id,$req_id));
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Photo uploaded result successfully'

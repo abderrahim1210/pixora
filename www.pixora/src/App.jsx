@@ -8,9 +8,15 @@ import Spinner from './components/Pages/Spinner';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ThemeProvider from './components/context/ThemeProvider';
 import { Toaster } from 'sonner';
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 const AppRoutes = React.lazy(() => import('./components/routes/AppRoutes'));
 const queryClient = new QueryClient();
 function App() {
+  const initilaOptions = {
+    'client-id': 'AYIfLgtwBF1H2eHIyHiwFq5QLa6iiC_CrJzos2FeVx3Vwn8rhj8a59l6FS5fn7XdLTG1gTrC5CLjDQFZ',
+    currency: 'USD',
+    intent: 'capture'
+  };
   return (
     <>
       <QueryClientProvider client={queryClient}>
@@ -19,7 +25,9 @@ function App() {
             <AuthProvider>
               <ModalProvider>
                 <Suspense fallback={<Spinner />}>
-                  <AppRoutes />
+                  <PayPalScriptProvider options={initilaOptions}>
+                    <AppRoutes />
+                  </PayPalScriptProvider>
                   <Toaster position='top-center' />
                 </Suspense>
               </ModalProvider>

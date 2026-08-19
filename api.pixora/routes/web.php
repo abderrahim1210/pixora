@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\DeleteAccount;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DownloadEditedImage;
 use App\Http\Controllers\DownloadImageOriginal;
 use App\Http\Controllers\ExplorePhotos;
 use App\Http\Controllers\FetchRequests;
@@ -26,6 +27,7 @@ use App\Http\Controllers\MakeFeaturedPhoto;
 use App\Http\Controllers\ManagePaymentsAccounts;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\PaymentSettingController;
+use App\Http\Controllers\PaymentVerify;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\Photographer;
 use App\Http\Controllers\PhotosLikeOriginal;
@@ -221,6 +223,10 @@ Route::middleware('auth:sanctum', 'CheckUserStatus')->group(function () {
     Route::delete('/delete_payout_account/{id}', [ManagePaymentsAccounts::class, 'destroy']);
 
     Route::get('/get_payment_account', [GetPaymentAccount::class, 'get_account']);
+
+    Route::post('/payment/capture', [PaymentVerify::class, 'pay']);
+
+    Route::get('/image/get/{req_id}', [DownloadEditedImage::class, 'download']);
 });
 
 require __DIR__ . '/auth.php';

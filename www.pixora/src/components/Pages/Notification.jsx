@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import moment from 'moment';
+import { MessageCircleIcon, Pencil } from 'lucide-react';
 export const Notification = () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -26,7 +27,6 @@ export const Notification = () => {
 
     const notifications = data?.all ?? [];
     const unreadCount = data?.unread?.length ?? 0;
-
 
     const markAsReadMutation = useMutation({
         mutationFn: async () => {
@@ -97,9 +97,10 @@ export const Notification = () => {
                                         className={`notification-item ${notif.read_at ? 'notification-item--read' : 'notification-item--unread'}`}
                                     >
                                         <div className="notification-item__status-icon">
-                                            {notif.type.includes('PostLikedNotification') && <img src={`https://api.pixora.test/storage/photos/${notif.data.photo_url}`} />}
-                                            {notif.type.includes('CommentNotification') && <Link style={{ textDecoration: 'none' }} to={`/photo/${notif.data.photo_id}/${slugiFy(notif.data.photo_title ?? '')}`}>💬</Link>}
-                                            {notif.type.includes('FollowNotification') && <Link style={{ textDecoration: 'none' }} to={`/photographer/${notif.data.follower_id}`}><img src={notif.data.follower_avatar ? `https://api.pixora.test/storage/profile_pictures/${notif.data.follower_avatar}` : '/outils/pngs/useracc2.png'} /></Link>}
+                                            {notif.type.includes('PostLikedNotification') && <img src={notif.data.photo_url} alt='Photo' />}
+                                            {notif.type.includes('CommentNotification') && <Link style={{ textDecoration: 'none' }} to={`/photo/${notif.data.photo_id}/${slugiFy(notif.data.photo_title ?? '')}`}><MessageCircleIcon /></Link>}
+                                            {notif.type.includes('FollowNotification') && <Link style={{ textDecoration: 'none' }} to={`/photographer/${notif.data.follower_id}`}><img src={notif.data.follower_avatar ? notif.data.follower_avatar : '/outils/pngs/useracc2.png'} /></Link>}
+                                            {notif.type.includes('AlertGoToPay') && <Link style={{ textDecoration: 'none' }} to={`/payment_verify/${notif.data.req_id}`}><Pencil /></Link>}
                                         </div>
 
                                         <div className="notification-item__content">

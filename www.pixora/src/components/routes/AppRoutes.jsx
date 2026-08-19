@@ -22,6 +22,8 @@ import { AllRequestsAdmin } from "../Pages/AllRequestsAdmin";
 import { BannedOverlay } from "../Pages/BannedOverlay";
 import { useAuth } from "../context/AuthProvider";
 import { ManagePaymentAccounts } from "../Pages/Profile/ManagePaymentAccounts";
+import { PaymentVerify } from "../Pages/PaymentVerify";
+import { DownloadImage } from "../Pages/DownloadImage";
 const AppRoutes = () => {
   const { user } = useAuth();
   const location = useLocation();
@@ -54,6 +56,8 @@ const AppRoutes = () => {
         <Route path="/staff" element={<AllStaff />} />
         <Route path="/requests" element={<AllRequestsAdmin />} />
         <Route path="/manage_payment_accounts" element={<ManagePaymentAccounts />} />
+        <Route path="/payment_verify/:req_id" element={<PaymentVerify />} />
+        <Route path="/download/image/:req_id" element={<DownloadImage />} />
       </Routes>
     </>
   );

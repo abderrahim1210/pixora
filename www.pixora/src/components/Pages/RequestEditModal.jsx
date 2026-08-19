@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import { showPixoraToast } from '../../assets/js/toast';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import Spinner from './Spinner';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthProvider';
 
 export const RequestEditModal = ({ photo }) => {
     const [step, setStep] = useState(1);
@@ -11,6 +12,7 @@ export const RequestEditModal = ({ photo }) => {
     const [request, setRequest] = useState("");
     const EDITION_PRICE = 50;
     const PLATFORM_FEE = 5;
+    const { user } = useAuth();
     const { data, isLoading } = useQuery({
         queryKey: ['payment-account'],
         queryFn: async () => {
@@ -90,7 +92,7 @@ export const RequestEditModal = ({ photo }) => {
                         ) : (
                             <div className="alert alert-warning p-2 mb-0 small">
                                 <span>No active payment method found. </span>
-                                <Link to="/settings/profile" className="fw-bold alert-link">Add payment method in settings</Link>
+                                <Link to={`/user/${user?.username}/myprofile`} className="fw-bold alert-link">Add payment method in settings</Link>
                             </div>
                         )}
                     </div>

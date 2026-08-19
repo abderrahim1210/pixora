@@ -79,7 +79,7 @@ export const Photo = (props) => {
                 setLoading(false);
             });
     }, [id]);
-    console.log(photosEdits)
+    // console.log(photosEdits)
     const handleLike = async (photoid) => {
         try {
             const oldLiked = liked;
@@ -176,7 +176,6 @@ export const Photo = (props) => {
             if (result.isConfirmed) {
                 try {
                     const res = await axios.delete(url, { withCredentials: true, withXSRFToken: true });
-                    console.log(res.data);
                     if (res.data.success) {
                         showPixoraToast(res.data.message);
                     } else {
