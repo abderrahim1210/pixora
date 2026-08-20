@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminUsersActions;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\DeleteAccount;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\CheckPaidPhoto;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DownloadEditedImage;
 use App\Http\Controllers\DownloadImageOriginal;
@@ -227,6 +228,8 @@ Route::middleware('auth:sanctum', 'CheckUserStatus')->group(function () {
     Route::post('/payment/capture', [PaymentVerify::class, 'pay']);
 
     Route::get('/image/get/{req_id}', [DownloadEditedImage::class, 'download']);
+
+    Route::get('/check_paiment_image/{req_id}', [CheckPaidPhoto::class, 'check']);
 });
 
 require __DIR__ . '/auth.php';

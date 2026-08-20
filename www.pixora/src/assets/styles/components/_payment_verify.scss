@@ -1,0 +1,79 @@
+.pixora-payment-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9fafb;
+  padding: 2rem;
+
+  .payment-card {
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+    border: 1px solid #f3f4f6;
+
+    .lock-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      color: #6b7280;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .amount-box {
+      background: #f3f4f6;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      span {
+        color: #4b5563;
+        font-weight: 500;
+      }
+
+      .price {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+    }
+
+    .paypal-buttons-wrapper {
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+    .secure-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: #9ca3af;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+}

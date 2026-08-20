@@ -1,114 +1,33 @@
-// .request-edit-modal {
-//     .modal-body-content {
-//         padding: 1.5rem;
-//     }
-
-//     .border-bottom {
-//         border-color: #eaeaea !important;
-//     }
-
-//     .step-content {
-//         display: flex;
-//         flex-direction: column;
-//         gap: 1rem;
-
-//         .form-label {
-//             margin-bottom: 0;
-//         }
-//     }
-
-//     .pixora-text-area {
-//         resize: none;
-//         border-radius: 8px;
-//         border: 1px solid #ced4da;
-//         padding: 12px;
-//         font-size: 0.95rem;
-//         width: 100%;
-//         transition: all 0.2s ease-in-out;
-
-//         &:focus {
-//             border-color: #0d6efd;
-//             box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
-//         }
-//     }
-
-//     .payment-verification-box {
-//         background-color: #f8f9fa;
-//         border: 1px solid #e9ecef !important;
-//         border-radius: 8px;
-        
-//         .badge {
-//             font-size: 0.75rem;
-//             padding: 5px 8px;
-//         }
-
-//         .alert {
-//             font-size: 0.85rem;
-//             border-radius: 6px;
-//         }
-//     }
-
-//     .price-details-box {
-//         border: 1px solid #e9ecef !important;
-//         border-radius: 8px;
-//         background-color: #ffffff;
-        
-//         hr {
-//             border-color: #e9ecef;
-//         }
-//     }
-
-//     .btn-send-request {
-//         background-color: #0d6efd;
-//         color: #fff;
-//         border: none;
-//         border-radius: 6px;
-//         font-weight: 600;
-//         padding: 10px;
-//         width: 100%;
-//         transition: background-color 0.2s ease;
-
-//         &:hover {
-//             background-color: #0b5ed7;
-//         }
-
-//         &:disabled, &.opacity-50 {
-//             opacity: 0.65;
-//             cursor: not-allowed;
-//         }
-//     }
-
-//     .btn-outline-secondary {
-//         border-radius: 6px;
-//         font-weight: 500;
-//         padding: 10px;
-        
-//         &:hover {
-//             background-color: #6c757d;
-//             color: #fff;
-//         }
-//     }
-// }
-
 .request-edit-modal {
+  background-color: #1e293b !important; // Slate 800
+  color: #f8fafc !important;
+  border-radius: 16px;
+  overflow: hidden;
+
   // Modal Container Override
   .modal-dialog {
     max-width: 520px;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  }
+
+  .modal-content, .modal-body {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border: 1px solid #334155 !important;
   }
 
   .modal-body-content {
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    background-color: #ffffff;
+    background-color: #1e293b !important;
   }
 
   // Header Style
   .border-bottom {
-    border-color: #f1f3f5 !important;
+    border-color: #334155 !important;
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
     
@@ -117,11 +36,11 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       font-weight: 600;
-      color: #868e96;
+      color: #94a3b8;
     }
 
     strong {
-      color: #212529;
+      color: #f8fafc;
       font-size: 1.1rem;
     }
 
@@ -130,8 +49,8 @@
       padding: 0.4em 0.8em;
       border-radius: 20px;
       font-weight: 500;
-      background-color: #e9ecef !important;
-      color: #495057;
+      background-color: #334155 !important;
+      color: #cbd5e1;
     }
   }
 
@@ -146,11 +65,11 @@
       h6 {
         font-size: 1.05rem;
         font-weight: 700;
-        color: #1a1a1a;
+        color: #f8fafc;
       }
       p {
         font-size: 0.85rem;
-        color: #6c757d;
+        color: #94a3b8;
       }
     }
 
@@ -158,40 +77,43 @@
     .pixora-text-area {
       resize: none;
       border-radius: 12px;
-      border: 1.5px solid #dee2e6;
+      border: 1.5px solid #334155;
       padding: 1rem;
       font-size: 0.95rem;
       width: 100%;
-      background-color: #fafbfc;
+      background-color: #0f172a !important; // Slate 900
+      color: #f8fafc !important;
       transition: all 0.25s ease;
 
       &::placeholder {
-        color: #adb5bd;
+        color: #64748b;
       }
 
       &:focus {
-        border-color: #0d6efd;
-        background-color: #fff;
-        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+        border-color: #38bdf8 !important;
+        background-color: #0f172a !important;
+        box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
         outline: none;
       }
     }
 
     // Payment Box Pro Style
-    .payment-card-box {
-      background-color: #f8f9fa;
-      border: 1.5px solid #e9ecef !important;
+    .payment-card-box, .payment-verification-box {
+      background-color: #0f172a !important; // Slate 900
+      border: 1.5px solid #334155 !important;
       border-radius: 12px;
       padding: 1.25rem;
       width: 100%;
+      color: #cbd5e1;
       transition: all 0.2s ease;
 
       &:hover {
-        border-color: #ced4da !important;
+        border-color: #475569 !important;
       }
 
       .badge.bg-success {
-        background-color: #198754 !important;
+        background-color: #065f46 !important;
+        color: #34d399;
         font-size: 0.7rem;
         padding: 0.35em 0.65em;
         border-radius: 6px;
@@ -202,43 +124,58 @@
         padding: 0.35rem 0.85rem;
         border-radius: 8px;
         font-weight: 600;
+        color: #38bdf8;
+        border-color: #38bdf8;
+
+        &:hover {
+          background-color: #38bdf8;
+          color: #0f172a;
+        }
       }
 
       .alert-warning {
-        background-color: #fff3cd;
-        border: 1px solid #ffecb5;
+        background-color: rgba(217, 119, 6, 0.15);
+        border: 1px solid rgba(217, 119, 6, 0.3);
         border-radius: 10px;
-        color: #664d03;
+        color: #fbbf24;
         
         .btn-dark {
+          background-color: #334155;
+          border: none;
           border-radius: 8px;
           font-weight: 600;
           font-size: 0.85rem;
           padding: 0.5rem;
+          color: #f8fafc;
+        }
+
+        .alert-link {
+          color: #fcd34d !important;
         }
       }
     }
 
     // Price Details Pro Box
     .price-details-box {
-      border: 1.5px solid #e9ecef !important;
+      border: 1.5px solid #334155 !important;
       border-radius: 12px;
-      background-color: #fafbfc;
+      background-color: #0f172a !important; // Slate 900
       padding: 1.25rem;
       width: 100%;
+      color: #cbd5e1;
       
       span {
         font-size: 0.9rem;
       }
 
       hr {
-        border-color: #dee2e6;
+        border-color: #334155 !important;
         margin: 0.75rem 0;
       }
 
       .fw-bold.text-dark {
         font-size: 1rem;
-        color: #111 !important;
+        color: #f8fafc !important;
       }
     }
 
@@ -264,14 +201,14 @@
 
     // Primary Action Button
     .btn-primary, .btn-send-request {
-      background-color: #0d6efd;
-      color: #fff;
+      background-color: #38bdf8 !important; // Modern Accent Blue
+      color: #0f172a !important;
       border: none;
-      box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
 
       &:hover {
-        background-color: #0b5ed7;
-        box-shadow: 0 6px 15px rgba(13, 110, 253, 0.35);
+        background-color: #7dd3fc !important;
+        box-shadow: 0 6px 15px rgba(56, 189, 248, 0.35);
         transform: translateY(-1px);
       }
 
@@ -280,7 +217,7 @@
       }
 
       &:disabled, &.opacity-50 {
-        opacity: 0.6;
+        opacity: 0.5;
         cursor: not-allowed;
         box-shadow: none;
         transform: none;
@@ -289,15 +226,22 @@
 
     // Secondary Outline Button
     .btn-outline-secondary {
-      border: 1.5px solid #ced4da;
-      color: #495057;
+      border: 1.5px solid #475569;
+      color: #cbd5e1;
       background-color: transparent;
 
       &:hover {
-        background-color: #f1f3f5;
-        color: #212529;
-        border-color: #adb5bd;
+        background-color: #334155;
+        color: #ffffff;
+        border-color: #64748b;
       }
+    }
+  }
+
+  a {
+    color: #38bdf8;
+    &:hover {
+      color: #7dd3fc;
     }
   }
 }

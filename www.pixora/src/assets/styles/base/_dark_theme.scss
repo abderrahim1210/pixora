@@ -40,10 +40,6 @@ body.dark {
         color: #f8fafc;
     }
 
-    .modal-body {
-        background: transparent !important;
-    }
-
     .photo-details-card,
     .setting-card {
         background: rgba(30, 41, 59, 0.7) !important;
@@ -730,5 +726,255 @@ body.dark {
 
     .notification-dropdown__footer button {
         color: #63b3ed;
+    }
+
+
+    .pixora-payment-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 80vh;
+        justify-content: center;
+        align-items: center;
+        background-color: #0f172a;
+        padding: 2rem;
+
+        .payment-card {
+            background: #1e293b;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            border: 1px solid #334155;
+
+            h2 {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: #f8fafc;
+                margin-bottom: 0.5rem;
+            }
+
+            p.subtitle {
+                color: #94a3b8;
+                font-size: 0.95rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .amount-box {
+                background: #0f172a;
+                padding: 1rem;
+                border-radius: 10px;
+                margin-bottom: 1.5rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border: 1px solid #334155;
+
+                span {
+                    color: #94a3b8;
+                    font-weight: 500;
+                }
+
+                .price {
+                    font-size: 1.25rem;
+                    font-weight: 700;
+                    color: #38bdf8;
+                }
+            }
+
+            .paypal-buttons-wrapper {
+                margin-top: 1rem;
+                width: 100%;
+            }
+
+            .secure-note {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                margin-top: 1.5rem;
+                font-size: 0.85rem;
+                color: #64748b;
+            }
+        }
+    }
+
+    .pixora-download-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 80vh;
+        justify-content: center;
+        align-items: center;
+        background-color: #0f172a;
+        padding: 2rem;
+
+        .download-card {
+            background: #1e293b;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            border: 1px solid #334155;
+
+            .success-icon {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+                font-weight: 700;
+                color: #f8fafc;
+                margin-bottom: 0.5rem;
+            }
+
+            p.subtitle {
+                color: #94a3b8;
+                font-size: 0.95rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .image-preview {
+                width: 100%;
+                max-height: 300px;
+                object-fit: cover;
+                border-radius: 10px;
+                margin-bottom: 1.5rem;
+                border: 1px solid #334155;
+            }
+
+            .btn-download {
+                display: inline-block;
+                width: 100%;
+                background-color: #38bdf8;
+                color: #0f172a;
+                padding: 0.75rem 1.5rem;
+                border-radius: 10px;
+                font-weight: 600;
+                text-decoration: none;
+                transition: background 0.2s;
+                box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+
+                &:hover {
+                    background-color: #7dd3fc;
+                }
+            }
+        }
+    }
+
+    .request-edit-modal {
+        background-color: #1e293b;
+        color: #f8fafc;
+        padding: 1.5rem;
+        border-radius: 16px;
+        border: 1px solid #334155;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+
+        .border-bottom {
+            border-color: #334155 !important;
+        }
+
+        .text-muted {
+            color: #94a3b8 !important;
+        }
+
+        .badge.bg-secondary {
+            background-color: #334155 !important;
+            color: #cbd5e1;
+        }
+
+        .badge.bg-success {
+            background-color: #065f46 !important;
+            color: #34d399;
+        }
+
+        .form-label {
+            color: #e2e8f0;
+        }
+
+        // Textarea styling
+        .pixora-text-area {
+            background-color: #0f172a !important;
+            border: 1px solid #334155 !important;
+            color: #f8fafc !important;
+            border-radius: 10px;
+
+            &:focus {
+                border-color: #38bdf8 !important;
+                box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+            }
+
+            &::placeholder {
+                color: #64748b;
+            }
+        }
+
+        .payment-verification-box,
+        .price-details-box {
+            background-color: #0f172a !important;
+            border: 1px solid #334155 !important;
+            border-radius: 10px;
+            color: #cbd5e1;
+
+            hr {
+                border-color: #334155 !important;
+            }
+
+            .text-dark {
+                color: #f8fafc !important;
+            }
+        }
+
+        .alert-warning {
+            background-color: rgba(217, 119, 6, 0.15) !important;
+            border: 1px solid rgba(217, 119, 6, 0.3);
+            color: #fbbf24 !important;
+
+            .alert-link {
+                color: #fcd34d !important;
+            }
+        }
+
+        .btn-outline-secondary {
+            background-color: transparent;
+            border-color: #475569;
+            color: #cbd5e1;
+            border-radius: 10px;
+
+            &:hover {
+                background-color: #334155;
+                color: #ffffff;
+                border-color: #64748b;
+            }
+        }
+
+        .btn-send-request {
+            background-color: #38bdf8;
+            color: #0f172a;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: background 0.2s;
+
+            &:hover {
+                background-color: #7dd3fc;
+            }
+
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        }
+
+        a {
+            color: #38bdf8;
+
+            &:hover {
+                color: #7dd3fc;
+            }
+        }
     }
 }
