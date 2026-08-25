@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PaymentSetting;
 use App\Models\Photo;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Notifications\AlertGoToPay;
 use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Request;
@@ -80,7 +81,15 @@ class UploadResult extends Controller
                     'payment_account_id' => $payment_owner_account->id
                 ]);
 
-                $requester->notify(new AlertGoToPay($photo, $transaction_id,$req_id));
+                // Wallet::create([
+                //     'user_id' => $editor_id,
+                //     'balance' => env('EDITOR_AMOUNT')
+                // ]);
+
+                $wallet = Wallet::firstOrCreate(['user_id' => $editor_id]);
+                $wallet->increment('balance',env('EDITOR_AMOUNT'));
+
+                $requester->notify(new AlertGoToPay($photo, $transaction_id, $req_id));
 
                 return response()->json([
                     'success' => true,

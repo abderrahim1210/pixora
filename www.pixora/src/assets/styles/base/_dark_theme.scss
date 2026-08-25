@@ -873,6 +873,19 @@ body.dark {
         border: 1px solid #334155;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 
+        .step-content {
+            background-color: #1e293b !important;
+
+            // Ila kan chi container dayer b-hal da'ira
+            div {
+                background-color: transparent !important;
+            }
+        }
+
+        strong {
+            color: white;
+        }
+
         .border-bottom {
             border-color: #334155 !important;
         }

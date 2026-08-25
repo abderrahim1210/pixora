@@ -24,7 +24,6 @@ export const RequestEditModal = ({ photo }) => {
     if (isLoading) return <Spinner type={'mini'} />;
 
     const payment_account = data?.account ?? null;
-    console.log(payment_account);
 
     const requestEditForm = async () => {
         try {
