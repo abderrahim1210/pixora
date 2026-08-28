@@ -81,13 +81,8 @@ class UploadResult extends Controller
                     'payment_account_id' => $payment_owner_account->id
                 ]);
 
-                // Wallet::create([
-                //     'user_id' => $editor_id,
-                //     'balance' => env('EDITOR_AMOUNT')
-                // ]);
-
                 $wallet = Wallet::firstOrCreate(['user_id' => $editor_id]);
-                $wallet->increment('balance',env('EDITOR_AMOUNT'));
+                $wallet->increment('balance', env('EDITOR_AMOUNT'));
 
                 $requester->notify(new AlertGoToPay($photo, $transaction_id, $req_id));
 

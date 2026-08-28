@@ -20,19 +20,19 @@ class PaymentVerify extends Controller
             }
 
             $request_settings = DB::table('payments')->where('request_id', $req_id)->first();
-            if (!$request_settings){
+            if (!$request_settings) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Payment record not found.'
                 ]);
             }
 
-            DB::table('payments')->where('request_id',$req_id)->update([
+            DB::table('payments')->where('request_id', $req_id)->update([
                 'status' => 'completed',
                 'transaction_id' => $transaction_id
             ]);
 
-            DB::table('images')->where('request_id',$req_id)->update([
+            DB::table('images')->where('request_id', $req_id)->update([
                 'is_paid' => true
             ]);
 

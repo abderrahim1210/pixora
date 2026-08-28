@@ -17,6 +17,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.29",
         "laravel/tinker": "^2.10.1",
+        "openai-php/laravel": "^0.20.0",
         "srmklive/paypal": "^3.1"
     },
     "require-dev": {

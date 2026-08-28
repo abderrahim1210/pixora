@@ -225,11 +225,10 @@ Route::middleware('auth:sanctum', 'CheckUserStatus')->group(function () {
 
     Route::get('/get_payment_account', [GetPaymentAccount::class, 'get_account']);
 
-    Route::post('/payment/capture', [PaymentVerify::class, 'pay']);
 
     Route::get('/image/get/{req_id}', [DownloadEditedImage::class, 'download']);
-
-    Route::get('/check_paiment_image/{req_id}', [CheckPaidPhoto::class, 'check']);
 });
+Route::get('/check_payment_image/{req_id}', [CheckPaidPhoto::class, 'check']);
+Route::post('/payment/capture', [PaymentVerify::class, 'pay']);
 
 require __DIR__ . '/auth.php';

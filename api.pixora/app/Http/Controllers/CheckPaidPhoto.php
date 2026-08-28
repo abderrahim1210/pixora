@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CheckPaidPhoto extends Controller
@@ -17,16 +18,20 @@ class CheckPaidPhoto extends Controller
                 ]);
             }
 
-            $is_paid = DB::table('images')->where('request_id', $req_id)->select('is_paid')->first();
-            if ($is_paid) {
+            $edition_request = DB::table('editing_tasks')->where('requester_id', Auth::id())->where('request_id', $req_id)->first();
+
+            if (!$edition_request) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Your dont have a permission for paid at this edit.'
+                ]);
+            }
+
+            $imageRecord = DB::table('images')->where('request_id', $req_id)->select('is_paid')->first();
+            if ($imageRecord && $imageRecord->is_paid === 1) {
                 return response()->json([
                     'success' => true,
                     'message' => 'The image is paid'
-                ]);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'The image is not paid'
                 ]);
             }
         } catch (\Exception $e) {
