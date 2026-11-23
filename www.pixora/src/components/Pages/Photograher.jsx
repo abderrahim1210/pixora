@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Navbar } from './Layouts/Navbar'
 import { Footer } from './Layouts/Footer'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios'
+import { api } from '../utils/api';
 import { FaBan, FaCamera, FaFacebook, FaGlobe, FaIdBadge, FaInstagram, FaMapPin, FaTwitter } from 'react-icons/fa'
 import { EmptyContent } from './EmptyContent'
 import PageSkeleton from './PageSkeleton'
@@ -37,7 +37,7 @@ const Photograher = () => {
 
     const fetchInfos = async () => {
         try {
-            const res = await axios.get(`https://api.pixora.test/get_infos_photographers/${id}`, { withCredentials: true, withXSRFToken: true });
+            const res = await api.get(`/get_infos_photographers/${id}`, { withCredentials: true, withXSRFToken: true });
             return res.data;
 
         } catch (err) {

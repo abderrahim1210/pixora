@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from '../utils/api';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Navbar } from './Layouts/Navbar';
@@ -14,7 +14,7 @@ export const PaymentVerify = () => {
   useEffect(() => {
     const send = async () => {
       try {
-        const res = await axios.get(`https://api.pixora.test/check_payment_image/${req_id}`, { withCredentials: true, withXSRFToken: true });
+        const res = await api.get(`/check_payment_image/${req_id}`, { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
           setIsPaid(true);
           console.log(res.data);
@@ -83,7 +83,7 @@ export const PaymentVerify = () => {
                     const realTransactionId = details.id;
 
                     try {
-                      const res = await axios.post('https://api.pixora.test/payment/capture', {
+                      const res = await api.post('/payment/capture', {
                         req_id: req_id,
                         transaction_id: realTransactionId
                       }, { withCredentials: true, withXSRFToken: true });
@@ -92,7 +92,7 @@ export const PaymentVerify = () => {
 
                       if (res.data.success) {
                         alert('Payment successful! Photo unlocked.');
-                        window.location.href = `https://www.pixora.test/download/image/${req_id}`;
+                        window.location.href = `${window.location.origin}/download/image/${req_id}`;
                       }
                     } catch (err) {
                       console.log('Error updating payment', err);

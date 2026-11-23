@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from '../utils/api';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Navbar } from './Layouts/Navbar';
@@ -10,7 +10,7 @@ export const DownloadImage = () => {
     const [imageURL, setImageURL] = useState("");
     const [error, setError] = useState('');
     useEffect(() => {
-        axios.get(`https://api.pixora.test/image/get/${req_id}`, { withCredentials: true, withXSRFToken: true }).then(res => {
+        api.get(`/image/get/${req_id}`, { withCredentials: true, withXSRFToken: true }).then(res => {
             if (res.data.success) {
                 setImageURL(res.data.image);
             } else {

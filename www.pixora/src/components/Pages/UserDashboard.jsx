@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "./Layouts/Navbar";
-import axios from "axios";
+import { api } from '../utils/api';
 import { FaCamera, FaEdit, FaHeart, FaPlus } from "react-icons/fa";
 import { MdPhotoLibrary } from "react-icons/md";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -39,8 +39,8 @@ export const UserDashboard = () => {
     description: ""
   });
   useEffect(() => {
-    axios
-      .get("https://api.pixora.test/get_photos", {
+    api
+      .get("/get_photos", {
         withCredentials: true,
         withXSRFToken: true
       })
@@ -69,7 +69,7 @@ export const UserDashboard = () => {
   useEffect(() => {
     try {
       const fetchRequests = async () => {
-        const res = await axios.get('https://api.pixora.test/get_requests', { withCredentials: true, withXSRFToken: true });
+        const res = await api.get('/get_requests', { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
           setRequests(res.data.requests);
         }
@@ -83,7 +83,7 @@ export const UserDashboard = () => {
   useEffect(() => {
     try {
       const fetchMyReqs = async () => {
-        const res = await axios.get('https://api.pixora.test/get_my_requests', { withCredentials: true, withXSRFToken: true });
+        const res = await api.get('/get_my_requests', { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
           setMyRequests(res.data.requests);
         } else {
@@ -106,7 +106,7 @@ export const UserDashboard = () => {
     }
 
     try {
-      const res = await axios.post('https://api.pixora.test/create_gallery', { title: gallery.title, description: gallery.description }, { withCredentials: true, withXSRFToken: true });
+      const res = await api.post('/create_gallery', { title: gallery.title, description: gallery.description }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         showPixoraToast(res.data.message);
       } else {

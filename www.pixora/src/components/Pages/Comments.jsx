@@ -14,7 +14,7 @@ import {
 import { FaPencil } from "react-icons/fa6";
 import { FiCheck } from "react-icons/fi";
 import { Dropdown, Spinner } from "react-bootstrap";
-import axios from "axios";
+import { api } from '../utils/api';
 import copy from 'copy-to-clipboard';
 import { EmptyContent } from './EmptyContent'
 import { useAuth } from "../context/AuthProvider";
@@ -53,7 +53,7 @@ const Comments = ({ photoId, data, commentRef }) => {
 
   const handleComment = async () => {
     try {
-      const res = await axios.post('https://api.pixora.test/comments/store', { photo_id: photoId, comment: comment }, { withCredentials: true, withXSRFToken: true });
+      const res = await api.post('/comments/store', { photo_id: photoId, comment: comment }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         showPixoraToast(res.data.message);
         // setComments(prev => [res.data.comment, ...prev]);
@@ -68,13 +68,13 @@ const Comments = ({ photoId, data, commentRef }) => {
   }
 
   const handleUpComment = async (commentId, newContent) => {
-    const url = `https://api.pixora.test/comments/${commentId}`;
+    const url = `/comments/${commentId}`;
     const oldComments = [...localComments];
 
     setLocalComments(prev => prev.map(c => c.id === commentId ? { ...c, content: newContent, edited: true } : c));
     setLoadingId(commentId);
     try {
-      const res = await axios.put(url, { photo_id: photoId, content: newContent, comment_id: commentId }, { withCredentials: true, withXSRFToken: true });
+      const res = await api.put(url, { photo_id: photoId, content: newContent, comment_id: commentId }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         showPixoraToast(res.data.message);
       } else {
@@ -89,7 +89,7 @@ const Comments = ({ photoId, data, commentRef }) => {
   }
 
   const handleDelComment = async (commentId) => {
-    const url = `https://api.pixora.test/comments/${commentId}`;
+    const url = `/comments/${commentId}`;
     const oldComments = [...localComments];
     Swal.fire({
       title: 'Delete photo',
@@ -103,7 +103,7 @@ const Comments = ({ photoId, data, commentRef }) => {
       if (result.isConfirmed) {
         setLocalComments(prev => prev.filter(c => c.id !== commentId));
         try {
-          const res = await axios.delete(url, { data: { comment_id: commentId, user_id: user, photo_id: photoId }, withCredentials: true, withXSRFToken: true });
+          const res = await api.delete(url, { data: { comment_id: commentId, user_id: user, photo_id: photoId }, withCredentials: true, withXSRFToken: true });
           if (res.data.success) {
             showPixoraToast(res.data.message);
           } else {

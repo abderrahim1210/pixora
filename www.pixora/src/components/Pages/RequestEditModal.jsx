@@ -1,6 +1,6 @@
 import React, { use, useState } from 'react'
 import { showPixoraToast } from '../../assets/js/toast';
-import axios from 'axios';
+import { api } from '../utils/api';
 import { useQuery } from '@tanstack/react-query';
 import Spinner from './Spinner';
 import { Link } from 'react-router-dom';
@@ -16,7 +16,7 @@ export const RequestEditModal = ({ photo }) => {
     const { data, isLoading } = useQuery({
         queryKey: ['payment-account'],
         queryFn: async () => {
-            const res = await axios.get('https://api.pixora.test/get_payment_account', { withCredentials: true, withXSRFToken: true });
+            const res = await api.get('/get_payment_account', { withCredentials: true, withXSRFToken: true });
             return res.data;
         },
     });
@@ -28,7 +28,7 @@ export const RequestEditModal = ({ photo }) => {
     const requestEditForm = async () => {
         try {
             const sendRequestEdit = async () => {
-                const res = await axios.post('https://api.pixora.test/send_request', { message: requestMessage, owner_id: photo?.user?.id, image_id: photo?.id }, { withCredentials: true, withXSRFToken: true });
+                const res = await api.post('/send_request', { message: requestMessage, owner_id: photo?.user?.id, image_id: photo?.id }, { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
                     showPixoraToast(res.data.message);
                     window.location.reload();

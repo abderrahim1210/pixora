@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { FaPaypal } from 'react-icons/fa';
+import { apiUrl } from '../../utils/api';
 
 export const PaymentSettings = ({ closeModal }) => {
     const [selectedMethod, setSelectedMethod] = useState("");
@@ -11,7 +12,7 @@ export const PaymentSettings = ({ closeModal }) => {
     
     const handleConnectPayPal = () => {
         setLoading(true);
-        window.location.href = "https://api.pixora.test/auth/paypal/redirect";
+        window.location.href = apiUrl('/auth/paypal/redirect');
     }
     return (
         <div className="credential-settings-body">

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { api } from '../utils/api';
 import React, { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Footer } from './Layouts/Footer';
@@ -20,7 +20,7 @@ const SearchPhotos = () => {
         const [_, term, type] = queryKey;
         if (!term && !type) return [];
         try {
-            const res = await axios.get(`https://api.pixora.test/search`, { params: { terme: term, type: type } , withCredentials: true });
+            const res = await api.get(`/search`, { params: { terme: term, type: type } , withCredentials: true });
             if (res.data.success) {
                 return res.data.result;
             }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FaArrowRight, FaCheckCircle, FaExclamationTriangle, FaLock, FaTrashAlt } from 'react-icons/fa';
-import axios from 'axios';
+import { api } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { showPixoraToast } from '../../../assets/js/toast';
 
@@ -18,7 +18,7 @@ const DeleteAccount = () => {
         setLoading(true);
         try {
             const verify = async () => {
-                const res = await axios.post('https://api.pixora.test/verify_password', { password: currentPass }, { withCredentials: true, withXSRFToken: true });
+                const res = await api.post('/verify_password', { password: currentPass }, { withCredentials: true, withXSRFToken: true });
                 if (!res.data.success) {
                     showPixoraToast(`Error : ${res.data.message}`);
                     return setLoading(false);
@@ -35,7 +35,7 @@ const DeleteAccount = () => {
 
     const handleDeleteAccount = async () => {
         try {
-            const res = await axios.delete('https://api.pixora.test/delete_account', { withCredentials: true, withXSRFToken: true });
+            const res = await api.delete('/delete_account', { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 showPixoraToast(res.data.message);
                 console.log(res.data);

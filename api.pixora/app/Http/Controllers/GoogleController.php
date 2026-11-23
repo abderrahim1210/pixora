@@ -32,7 +32,7 @@ class GoogleController extends Controller
 
             Auth::login($user);
 
-            return redirect('https://www.pixora.test/');
+            return redirect(rtrim((string) config('app.frontend_url'), '/') . '/');
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ArrowLeft, Link, Mail, Send } from 'lucide-react'
 import { Exception } from 'sass';
-import axios from 'axios';
+import { api } from '../utils/api';
 export const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [isSent, setIsSent] = useState(false);
@@ -17,7 +17,7 @@ export const ForgotPassword = () => {
         }, 2000);
 
         try{
-            const res = await axios.post('https://api.pixora.test/send_link_email',{email:email},{withCredentials:true});
+            const res = await api.post('/send_link_email',{email:email},{withCredentials:true});
             if (res.data.success){
                 setIsSent(true);
                 setLoading(false);

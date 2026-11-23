@@ -12,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('payments', function (Blueprint $table) {
-            $table->dropColumn('pixora_amound');
-            $table->dropColumn('pixora_amount');
-            $table->decimal('pixora_amount',10,2)->default(5)->after('editor_amount');
+            $table->decimal('pixora_amount',10,2)->default(5.00)->after('editor_amount')->change();
         });
     }
 

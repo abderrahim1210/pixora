@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { api } from '../utils/api';
 import React, { useState } from 'react'
 import Spinner from './Spinner';
 import { useAuth } from '../context/AuthProvider'
@@ -16,7 +16,7 @@ export const Reports = () => {
     }
     const fetchReports = async () => {
         try {
-            const res = await axios.get('https://api.pixora.test/reports', { withCredentials: true, withXSRFToken: true });
+            const res = await api.get('/reports', { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 return res.data.reports;
             } else {

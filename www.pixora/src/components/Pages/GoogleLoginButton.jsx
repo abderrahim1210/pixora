@@ -1,11 +1,11 @@
-import axios from 'axios';
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import { apiUrl } from '../utils/api';
 
 export const GoogleLoginButton = () => {
     const navigate = useNavigate();
     const handleGoogleCallbalck = async () => {
-        window.location.href = 'https://api.pixora.test/auth/google/redirect';
+        window.location.href = apiUrl('/auth/google/redirect');
     }
     return (
         <button className="google-login-btn" onClick={handleGoogleCallbalck}>

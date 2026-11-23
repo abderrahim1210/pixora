@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React from 'react'
 import { useAuth } from '../context/AuthProvider';
-import axios from 'axios';
+import { api } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 
 export const FollowButton = ({ user_id }) => {
@@ -9,7 +9,7 @@ export const FollowButton = ({ user_id }) => {
     const { data: follows = [] } = useQuery({
         queryKey: ['follows'],
         queryFn: async () => {
-            const res = await axios.get('https://api.pixora.test/follows', { withCredentials: true, withXSRFToken: true });
+            const res = await api.get('/follows', { withCredentials: true, withXSRFToken: true });
             return res.data?.users?.map(f => f.following_id) || [];
         },
         staleTime: 1000 * 60 * 5,
@@ -23,7 +23,7 @@ export const FollowButton = ({ user_id }) => {
         queryClient.setQueryData(['follows'], newFollows);
 
         try {
-            const res = await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
+            const res = await api.post('/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
         } catch (err) {
             queryClient.setQueryData(['follows'], previousFollows);
             console.log(err?.response?.data);

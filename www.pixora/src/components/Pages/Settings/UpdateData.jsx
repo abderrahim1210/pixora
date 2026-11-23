@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axios from 'axios'
+import { api } from '../../utils/api';
 import { showPixoraToast } from '../../../assets/js/toast';
 const UpdateData = ({handleLogOut}) => {
     const [step, setStep] = useState(1);
@@ -22,7 +22,7 @@ const UpdateData = ({handleLogOut}) => {
         setLoading(true);
         try{
             const verify = async () => {
-                const res = await axios.post('https://api.pixora.test/verify_password',{password:form.current_password},{withCredentials:true,withXSRFToken:true});
+                const res = await api.post('/verify_password',{password:form.current_password},{withCredentials:true,withXSRFToken:true});
                 if (!res.data.success){
                     showPixoraToast(`Error : ${res.data.message}`);
                     return setLoading(false);
@@ -51,7 +51,7 @@ const UpdateData = ({handleLogOut}) => {
                 new_password:form.newPassword
             }
             const update = async () => {
-                const res = await axios.post('https://api.pixora.test/update_email_password',payload, {withCredentials:true, withXSRFToken:true});
+                const res = await api.post('/update_email_password',payload, {withCredentials:true, withXSRFToken:true});
                 if (res.data.success){
                     console.log(res.data);
                     showPixoraToast(res.data.message);

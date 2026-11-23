@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { api } from '../utils/api';
 import React from 'react'
 import Swal from 'sweetalert2';
 import withReactComponent from 'sweetalert2-react-content';
@@ -20,7 +20,7 @@ export const StaffManagement = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await axios.post('https://api.pixora.test/remove_role', { user_id: id }, { withCredentials: true, withXSRFToken: true });
+                    const res = await api.post('/remove_role', { user_id: id }, { withCredentials: true, withXSRFToken: true });
                     if (res.data.success) {
                         queryClient.invalidateQueries({ queryKey: ['adminAnalytics'] });
                         showPixoraToast(res.data.message);
@@ -64,7 +64,7 @@ export const StaffManagement = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await axios.post('https://api.pixora.test/change_role', { user_id: id, role: result.value }, { withCredentials: true, withXSRFToken: true });
+                    const res = await api.post('/change_role', { user_id: id, role: result.value }, { withCredentials: true, withXSRFToken: true });
                     if (res.data.success) {
                         queryClient.invalidateQueries({ queryKey: ['adminAnalytics'] });
                         showPixoraToast(res.data.message);
@@ -89,7 +89,7 @@ export const StaffManagement = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await axios.post('https://api.pixora.test/delete_user', { user_id: id }, { withCredentials: true, withXSRFToken: true });
+                    const res = await api.post('/delete_user', { user_id: id }, { withCredentials: true, withXSRFToken: true });
                     if (res.data.success) {
                         queryClient.invalidateQueries({ queryKey: ['adminAnalytics'] });
                         showPixoraToast(res.data.message);

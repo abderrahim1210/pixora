@@ -13,7 +13,7 @@ class PaymentSettingController extends Controller
     public function redirectPaypal()
     {
         $clientId = config('services.paypal.client_id');
-        $redirectUri = config('services.paypal.redirect');
+        $redirectUri = rtrim((string) config('app.url'), '/') . '/auth/paypal/callback';
         $mode = config('services.paypal.mode', 'sandbox');
 
         $baseUrl = $mode === 'live' ? 'https://www.paypal.com/signin/authorize' : 'https://www.sandbox.paypal.com/signin/authorize';
@@ -32,9 +32,9 @@ class PaymentSettingController extends Controller
     {
         $code = $request->input('code');
         $user = User::find(Auth::id());
-        $frontend_url = env('FRONTEND_URL');
+        $frontendUrl = rtrim((string) config('app.frontend_url'), '/');
         if (!$code) {
-            return redirect($frontend_url . "/user/" . $user->username . "/myprofile");
+            return redirect($frontendUrl . "/user/" . $user->username . "/myprofile");
         }
 
         $clientId = config('services.paypal.client_id');
@@ -46,11 +46,11 @@ class PaymentSettingController extends Controller
         $response = Http::withBasicAuth($clientId, $clientSecret)->asForm()->post($tokenUrl, [
             'grant_type' => 'authorization_code',
             'code' => $code,
-            'redirect_url' => config('services.paypal.redirect'),
+            'redirect_url' => rtrim((string) config('app.url'), '/') . '/auth/paypal/callback',
         ]);
 
         if (!$response->successful()) {
-            return redirect($frontend_url . "/user/" . $user->username . "/myprofile");
+            return redirect($frontendUrl . "/user/" . $user->username . "/myprofile");
         }
 
         $accessToken = $response->json('access_token');
@@ -62,7 +62,7 @@ class PaymentSettingController extends Controller
         $userResponse = Http::withToken($accessToken)->get($userInfoUrl);
 
         if (!$userResponse->successful()) {
-            return redirect($frontend_url . "/user/" . $user->username . "/myprofile");
+            return redirect($frontendUrl . "/user/" . $user->username . "/myprofile");
         }
 
         $paypalData = $userResponse->json();
@@ -78,6 +78,6 @@ class PaymentSettingController extends Controller
         $user->update([
             'payment_email' => $verifiedEmail
         ]);
-        return redirect($frontend_url . "/user/" . $user->username . "/myprofile");
+        return redirect($frontendUrl . "/user/" . $user->username . "/myprofile");
     }
 }

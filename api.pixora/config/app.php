@@ -52,7 +52,13 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://backend.test'),
+    'url' => env('APP_URL', 'https://api.example.com'),
+
+    'frontend_url' => env('FRONTEND_URL', 'https://app.example.com'),
+
+    'editor_amount' => env('EDITOR_AMOUNT'),
+
+    'trusted_proxies' => env('TRUSTED_PROXIES'),
 
     /*
     |--------------------------------------------------------------------------

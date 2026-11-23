@@ -82,7 +82,7 @@ class UploadResult extends Controller
                 ]);
 
                 $wallet = Wallet::firstOrCreate(['user_id' => $editor_id]);
-                $wallet->increment('balance', env('EDITOR_AMOUNT'));
+                $wallet->increment('balance', config('app.editor_amount'));
 
                 $requester->notify(new AlertGoToPay($photo, $transaction_id, $req_id));
 

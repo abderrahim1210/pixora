@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { api } from '../utils/api';
 import React, { useEffect, useState } from 'react'
 import StaffUserCard from './StaffUserCard';
 import { Navbar } from './Layouts/Navbar';
@@ -17,7 +17,7 @@ export const AllStaff = () => {
     }
     const fetchStaff = async () => {
         try {
-            const res = await axios.get('https://api.pixora.test/get_all_staff', { withCredentials: true, withXSRFToken: true });
+            const res = await api.get('/get_all_staff', { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 return res.data.staff;
             } else {

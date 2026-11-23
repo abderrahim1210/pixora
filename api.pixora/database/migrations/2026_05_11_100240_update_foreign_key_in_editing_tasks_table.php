@@ -17,26 +17,26 @@ return new class extends Migration
         $column = 'request_id';
         $referencedTable = 'edition_requests';
 
+        if (!Schema::hasColumn($tableName, $column)) {
+            return;
+        }
+
         DB::table($tableName)
             ->whereNotExists(function ($query) use ($referencedTable) {
-                $query->select(DB::raw(1))
+                $query->selectRaw('1')
                     ->from($referencedTable)
-                    ->whereRaw("$referencedTable.id = editing_tasks.request_id");
+                    ->whereColumn("$referencedTable.id", "editing_tasks.request_id");
             })->delete();
 
-        $foreignKey = DB::select(
-            "SELECT CONSTRAINT_NAME 
-         FROM information_schema.KEY_COLUMN_USAGE 
-         WHERE TABLE_SCHEMA = ? 
-         AND TABLE_NAME = ? 
-         AND COLUMN_NAME = ? 
-         AND REFERENCED_TABLE_NAME IS NOT NULL",
-            [env('DB_DATABASE'), $tableName, $column]
+        $foreignKeys = array_filter(
+            Schema::getForeignKeys($tableName),
+            static fn (array $foreignKey): bool => in_array($column, $foreignKey['columns'], true)
         );
+        $driver = DB::connection()->getDriverName();
 
-        Schema::table($tableName, function (Blueprint $table) use ($foreignKey, $column, $referencedTable) {
-            if (!empty($foreignKey)) {
-                $table->dropForeign($foreignKey[0]->CONSTRAINT_NAME);
+        Schema::table($tableName, function (Blueprint $table) use ($foreignKeys, $column, $referencedTable, $driver) {
+            foreach ($foreignKeys as $foreignKey) {
+                $table->dropForeign($driver === 'sqlite' ? $foreignKey['columns'] : $foreignKey['name']);
             }
 
             $table->foreign($column)

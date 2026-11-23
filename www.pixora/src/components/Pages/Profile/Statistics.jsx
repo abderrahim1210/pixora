@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { api } from '../../utils/api';
 import React from 'react'
 import { FaCamera, FaHeart, FaUserPlus, FaUsers } from 'react-icons/fa'
 import { FaMapMarkerAlt, FaChartPie, FaFire, FaHistory } from 'react-icons/fa';
 const Statistics = ({ statistics }) => {
     const fetchStats = async () => {
         try {
-            const res = await axios.get('https://api.pixora.test/profile_statistics', { withCredentials: true, withXSRFToken: true });
+            const res = await api.get('/profile_statistics', { withCredentials: true, withXSRFToken: true });
             return res.data;
         } catch (err) {
             console.log(err?.response?.data);

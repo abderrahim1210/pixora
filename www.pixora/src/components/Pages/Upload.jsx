@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import axios from 'axios';
+import { api } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthProvider";
 import LightBox from 'yet-another-react-lightbox';
@@ -60,7 +60,7 @@ export const Upload = () => {
         gallery_id: photo.gallery_id
       }
       if (file) {
-        const res = await axios.post('https://api.pixora.test/upload', { photo_data: payload }, { withCredentials: true, withXSRFToken: true });
+        const res = await api.post('/upload', { photo_data: payload }, { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
           navigate(`/user/${user.username}/dashboard`, { state: { uploaded: true, message: res.data.message } });
         } else {
@@ -294,7 +294,7 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
   const [galleries, setGalleries] = useState([]);
   useEffect(() => {
     try {
-      axios.get('https://api.pixora.test/get_galleries', { withCredentials: true, withXSRFToken: true })
+      api.get('/get_galleries', { withCredentials: true, withXSRFToken: true })
         .then(res => {
           if (res.data.success) {
             setGalleries(res.data.galleries);
@@ -304,10 +304,10 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
       console.log(err.response?.data);
     }
   }, []);
-  const url = 'https://api.pixora.test/get_categories';
+  const url = '/get_categories';
   useEffect(() => {
     try {
-      axios.get(url)
+      api.get(url)
         .then(res => {
           if (res.data.success) {
             setCategories(res.data.categories);

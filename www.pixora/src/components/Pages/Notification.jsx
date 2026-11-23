@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { api } from '../utils/api';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import moment from 'moment';
@@ -9,7 +9,7 @@ export const Notification = () => {
 
     const fetchNotifications = async () => {
         try {
-            const res = await axios.get('https://api.pixora.test/notifications', { withCredentials: true, withXSRFToken: true });
+            const res = await api.get('/notifications', { withCredentials: true, withXSRFToken: true });
             if (!res.data.success) {
                 console.log(res.data);
             }
@@ -30,7 +30,7 @@ export const Notification = () => {
 
     const markAsReadMutation = useMutation({
         mutationFn: async () => {
-            return await axios.post('https://api.pixora.test/notifications/mark-as-read', {}, {
+            return await api.post('/notifications/mark-as-read', {}, {
                 withCredentials: true,
                 withXSRFToken: true
             });

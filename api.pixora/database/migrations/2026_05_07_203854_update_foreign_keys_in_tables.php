@@ -29,19 +29,15 @@ return new class extends Migration
                 $column = $rel['col'];
                 $referencedTable = $rel['ref'];
 
-                $foreignKeys = DB::select(
-                    "SELECT CONSTRAINT_NAME 
-                 FROM information_schema.KEY_COLUMN_USAGE 
-                 WHERE TABLE_SCHEMA = ? 
-                 AND TABLE_NAME = ? 
-                 AND COLUMN_NAME = ? 
-                 AND REFERENCED_TABLE_NAME IS NOT NULL",
-                    [env('DB_DATABASE'), $tableName, $column]
+                $foreignKeys = array_filter(
+                    Schema::getForeignKeys($tableName),
+                    static fn (array $foreignKey): bool => in_array($column, $foreignKey['columns'], true)
                 );
+                $driver = DB::connection()->getDriverName();
 
-                Schema::table($tableName, function (Blueprint $table) use ($foreignKeys, $column, $referencedTable) {
+                Schema::table($tableName, function (Blueprint $table) use ($foreignKeys, $column, $referencedTable, $driver) {
                     foreach ($foreignKeys as $fk) {
-                        $table->dropForeign($fk->CONSTRAINT_NAME);
+                        $table->dropForeign($driver === 'sqlite' ? $fk['columns'] : $fk['name']);
                     }
 
                     $table->foreign($column)

@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from 'axios'
+import { api } from '../utils/api';
 import { Link, useNavigate } from "react-router-dom";
-axios.defaults.withCredentials = true;
-axios.defaults.withXSRFToken = true;
-axios.defaults.xsrfCookieName = 'XSRF-TOKEN';
-axios.defaults.xsrfHeaderName = 'X-XSRF-TOKEN';
 import Cookies from 'js-cookie';
-import { api } from "../utils/getUser";
 import { Helmet } from "react-helmet-async";
 import { showPixoraToast } from "../../assets/js/toast";
 import { GoogleLoginButton } from "./GoogleLoginButton";
@@ -20,8 +15,8 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.get('https://api.pixora.test/sanctum/csrf-cookie', { withCredentials: true, withXSRFToken: true });
-      const res = await axios.post('https://api.pixora.test/login', { email, password }, {
+      await api.get('/sanctum/csrf-cookie', { withCredentials: true, withXSRFToken: true });
+      const res = await api.post('/login', { email, password }, {
         withCredentials: true, withXSRFToken: true, headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest',
@@ -49,7 +44,7 @@ export const Login = () => {
   useEffect(() => {
     try {
       const fetchHeroImage = async () => {
-        const res = await axios.get('https://api.pixora.test/get_hero_images', { withCredentials: true });
+        const res = await api.get('/get_hero_images', { withCredentials: true });
         if (res.data.success) {
           setHeroImage(res.data.photo);
         } else {

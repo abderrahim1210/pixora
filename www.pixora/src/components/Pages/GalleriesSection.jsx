@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import GalleriesTemplate from './Templates/GalleriesTemplate'
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import { api } from '../utils/api';
 
 import { Footer } from './Layouts/Footer'
 import { Navbar } from './Layouts/Navbar'
@@ -12,7 +12,7 @@ const GalleriesSection = () => {
     const [searchTerme,setSearchTerme] = useState('');
     const fetchGalleries = async () => {
         try {
-            const res = await axios.get('https://api.pixora.test/get_all_galleries', { withCredentials: true, withXSRFToken: true });
+            const res = await api.get('/get_all_galleries', { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 return res.data.galleries;
             }

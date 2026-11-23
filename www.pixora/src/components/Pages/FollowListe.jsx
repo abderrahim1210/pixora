@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { api } from '../utils/api';
 import React from 'react'
 import { EmptyContent } from './EmptyContent';
 import { Users } from 'lucide-react';
@@ -11,7 +11,7 @@ export const FollowListe = ({ userId, type }) => {
     const { user } = useAuth();
     const fetchUsers = async () => {
         try {
-            const res = await axios.get('https://api.pixora.test/get_follows_liste', { params: { user_id: userId, type: type }, withCredentials: true });
+            const res = await api.get('/get_follows_liste', { params: { user_id: userId, type: type }, withCredentials: true });
             if (res.data.success) return res.data.users;
         } catch (err) {
             console.log(err?.response?.data);

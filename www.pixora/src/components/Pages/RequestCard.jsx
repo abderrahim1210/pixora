@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from '../utils/api';
 import React, { useState } from 'react'
 import { useAuth } from '../context/AuthProvider';
 import { BiChevronDown } from 'react-icons/bi';
@@ -14,7 +14,7 @@ const RequestCard = ({ group, onStatusChange }) => {
     const rejectRequest = (request_id, id) => {
         try {
             const reject = async () => {
-                const res = await axios.post('https://api.pixora.test/change_status_req', { req_id: id, type: 'reject' }, { withCredentials: true, withXSRFToken: true });
+                const res = await api.post('/change_status_req', { req_id: id, type: 'reject' }, { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
                     showPixoraToast(res.data.message);
                     onStatusChange(request_id, 'rejected');
@@ -31,7 +31,7 @@ const RequestCard = ({ group, onStatusChange }) => {
     const acceptRequest = (request_id, id) => {
         try {
             const accept = async () => {
-                const res = await axios.post('https://api.pixora.test/change_status_req', { id: request_id, req_id: id, type: 'accept' }, { withCredentials: true, withXSRFToken: true });
+                const res = await api.post('/change_status_req', { id: request_id, req_id: id, type: 'accept' }, { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
                     onStatusChange(request_id, 'approved');
                     showPixoraToast(res.data.message);

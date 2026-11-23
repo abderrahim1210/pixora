@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from '../utils/api';
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Navbar } from './Layouts/Navbar';
@@ -34,8 +34,8 @@ const GalleryPreview = () => {
     useEffect(() => {
         const fetchPhotos = async () => {
             try {
-                const url = `https://api.pixora.test/get_gallery/${id}`;
-                const res = await axios.get(url, { withCredentials: true, withXSRFToken: true });
+                const url = `/get_gallery/${id}`;
+                const res = await api.get(url, { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
                     setGallery(res.data.gallery);
                     setLoading(false);
@@ -69,7 +69,7 @@ const GalleryPreview = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await axios.delete(`https://api.pixora.test/delete_gallery/${id}`, { withCredentials: true, withXSRFToken: true });
+                    const res = await api.delete(`/delete_gallery/${id}`, { withCredentials: true, withXSRFToken: true });
                     console.log(res.data);
                     if (res.data.success) {
                         showPixoraToast(res.data.message);

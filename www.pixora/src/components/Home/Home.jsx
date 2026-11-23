@@ -18,7 +18,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar } from "../Pages/Layouts/Navbar";
 import { Footer } from "../Pages/Layouts/Footer";
-import axios from "axios";
+import { api } from '../utils/api';
 import { MdAlbum, MdCategory, MdPhotoAlbum, MdRecommend } from "react-icons/md";
 import { useAuth } from '../context/AuthProvider'
 import { Truncate } from "../Pages/Truncate";
@@ -55,7 +55,7 @@ export const Home = () => {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get("https://api.pixora.test/homepage", { withCredentials: true });
+      const res = await api.get("/homepage", { withCredentials: true });
       return res.data;
     } catch (err) {
       console.log(err?.response?.data);
@@ -76,7 +76,7 @@ export const Home = () => {
   const { data: follows = [] } = useQuery({
     queryKey: ['follows'],
     queryFn: async () => {
-      const res = await axios.get('https://api.pixora.test/follows', { withCredentials: true, withXSRFToken: true });
+      const res = await api.get('/follows', { withCredentials: true, withXSRFToken: true });
       return res.data?.users?.map(f => f.following_id) || [];
     },
     staleTime: 1000 * 60 * 5,
@@ -89,7 +89,7 @@ export const Home = () => {
     queryClient.setQueryData(['follows'], newFollows);
 
     try {
-      await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
+      await api.post('/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
     } catch (err) {
       queryClient.setQueryData(['follows'], previousFollows);
       console.log(err?.response?.data);
@@ -99,7 +99,7 @@ export const Home = () => {
   useEffect(() => {
     try {
       const fetchHeroImage = async () => {
-        const res = await axios.get('https://api.pixora.test/get_hero_images', { withCredentials: true });
+        const res = await api.get('/get_hero_images', { withCredentials: true });
         if (res.data.success) {
           setHeroImage(res.data.photo);
         } else {
@@ -141,7 +141,7 @@ export const Home = () => {
       };
     });
     try {
-      const res = await axios.post("https://api.pixora.test/add_like", { photo_id: photoid }, { withCredentials: true, withXSRFToken: true });
+      const res = await api.post("/add_like", { photo_id: photoid }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         queryClient.setQueryData(['data'], (oldData) => {
           if (!oldData) return oldData;

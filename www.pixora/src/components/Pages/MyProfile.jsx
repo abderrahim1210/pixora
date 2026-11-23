@@ -35,7 +35,7 @@ import {
   FaWebAwesome,
   FaX,
 } from "react-icons/fa6";
-import axios from "axios";
+import { api } from '../utils/api';
 import { Modal } from "react-bootstrap";
 import { MdAnalytics, MdUpload } from "react-icons/md";
 import { FiEye, FiTrash, FiUpload } from "react-icons/fi";
@@ -123,8 +123,8 @@ export const MyProfile = () => {
   }
 
   useEffect(() => {
-    axios
-      .get("https://api.pixora.test/myprofile", {
+    api
+      .get("/myprofile", {
         withCredentials: true,
         withXSRFToken: true,
         headers: {
@@ -148,7 +148,7 @@ export const MyProfile = () => {
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post('https://api.pixora.test/edit_profile', data, { withCredentials: true, withXSRFToken: true });
+      const res = await api.post('/edit_profile', data, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         Swal.fire({
           icon: "success",
@@ -184,7 +184,7 @@ export const MyProfile = () => {
     queryKey: ['adminAnalytics'],
     queryFn: async () => {
       try {
-        const res = await axios.get('https://api.pixora.test/admin_analytics', { withCredentials: true, withXSRFToken: true });
+        const res = await api.get('/admin_analytics', { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
           return res.data;
         }
@@ -200,7 +200,7 @@ export const MyProfile = () => {
 
   const handleLogOut = async () => {
     try {
-      const res = await axios.delete('https://api.pixora.test/logout', { withCredentials: true, withXSRFToken: true });
+      const res = await api.delete('/logout', { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         navigate('/login');
       }
@@ -209,10 +209,10 @@ export const MyProfile = () => {
     }
   }
 
-  const profilePicturesURL = "https://api.pixora.test/edit_profile_pictures/avatar";
-  const coverPictureURL = "https://api.pixora.test/edit_profile_pictures/cover";
-  const deleteProfilePictureURL = "https://api.pixora.test/edit_profile_pictures/delete_avatar";
-  const deleteCoverPictureURL = "https://api.pixora.test/edit_profile_pictures/delete_cover";
+  const profilePicturesURL = "/edit_profile_pictures/avatar";
+  const coverPictureURL = "/edit_profile_pictures/cover";
+  const deleteProfilePictureURL = "/edit_profile_pictures/delete_avatar";
+  const deleteCoverPictureURL = "/edit_profile_pictures/delete_cover";
 
   const handleProfileSelect = async () => {
 
@@ -225,7 +225,7 @@ export const MyProfile = () => {
     reader.onload = async () => {
       const base64Image = reader.result;
       try {
-        const res = await axios.post(profilePicturesURL, { profile_image: base64Image }, { withCredentials: true, withXSRFToken: true });
+        const res = await api.post(profilePicturesURL, { profile_image: base64Image }, { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
           showPixoraToast(res.data.message);
           return window.location.reload();
@@ -249,7 +249,7 @@ export const MyProfile = () => {
     reader.onload = async () => {
       const base64Image = reader.result;
       try {
-        const res = await axios.post(coverPictureURL, { cover_image: base64Image }, { withCredentials: true, withXSRFToken: true });
+        const res = await api.post(coverPictureURL, { cover_image: base64Image }, { withCredentials: true, withXSRFToken: true });
         if (res.data.success) {
           showPixoraToast(res.data.message);
           return window.location.reload();
@@ -274,7 +274,7 @@ export const MyProfile = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await axios.delete(deleteProfilePictureURL, { withCredentials: true, withXSRFToken: true });
+          const res = await api.delete(deleteProfilePictureURL, { withCredentials: true, withXSRFToken: true });
           if (res.data.success) {
             showPixoraToast(res.data.message);
             return window.location.reload();
@@ -302,7 +302,7 @@ export const MyProfile = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await axios.delete(deleteCoverPictureURL, { withCredentials: true, withXSRFToken: true });
+          const res = await api.delete(deleteCoverPictureURL, { withCredentials: true, withXSRFToken: true });
           if (res.data.success) {
             showPixoraToast(res.data.message);
             return window.location.reload();
@@ -324,7 +324,7 @@ export const MyProfile = () => {
 
   const uploadResult = async () => {
     try {
-      const res = await axios.post('https://api.pixora.test/upload_photo', { image: preview, photo_id: imageId, ownerId: ownerId, requester_id: requester_id, req_id: req_id, task_id: taskId }, { withCredentials: true, withXSRFToken: true });
+      const res = await api.post('/upload_photo', { image: preview, photo_id: imageId, ownerId: ownerId, requester_id: requester_id, req_id: req_id, task_id: taskId }, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         showPixoraToast(res.data.message);
         window.location.reload();

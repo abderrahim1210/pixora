@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { api } from '../utils/api';
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Spinner from './Spinner';
@@ -13,7 +13,7 @@ export const ReportDetails = () => {
     const { id } = useParams();
     const getReport = async () => {
         try {
-            const res = await axios.get(`https://api.pixora.test/report/${id}`, { withCredentials: true, withXSRFToken: true });
+            const res = await api.get(`/report/${id}`, { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 return res.data.report;
             } else {
@@ -77,7 +77,7 @@ export const ReportDetails = () => {
 
     const statusToResolve = async (typeR) => {
         try {
-            const res = await axios.post('https://api.pixora.test/report', { type: typeR, report_id: report?.id,reportableId:report?.reportable_id }, { withCredentials: true, withXSRFToken: true });
+            const res = await api.post('/report', { type: typeR, report_id: report?.id,reportableId:report?.reportable_id }, { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 showPixoraToast(res.data.message);
                 window.location.reload();
@@ -102,7 +102,7 @@ export const ReportDetails = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await axios.post('https://api.pixora.test/report', { type: 'delete_photo', report_id: report?.id, reportableId: report?.reportable_id }, { withCredentials: true, withXSRFToken: true });
+                    const res = await api.post('/report', { type: 'delete_photo', report_id: report?.id, reportableId: report?.reportable_id }, { withCredentials: true, withXSRFToken: true });
                     if (res.data.success) {
                         showPixoraToast(res.data.message);
                         window.location.reload();

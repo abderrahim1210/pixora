@@ -1,4 +1,5 @@
-import axios from "axios";
+import { api } from '../utils/api';
+import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { FaCamera, FaGoogle, FaHeart, FaUsers } from "react-icons/fa";
@@ -53,7 +54,7 @@ export const SignUp = () => {
         birth_date: user.birth_date,
         aggres_condition: user.aggres_condition
       }
-      const res = await axios.post('https://api.pixora.test/register', payload, { withCredentials: true, withXSRFToken: true });
+      const res = await api.post('/register', payload, { withCredentials: true, withXSRFToken: true });
       if (res.data.success) {
         Swal.fire({
           icon: "success",
@@ -73,7 +74,7 @@ export const SignUp = () => {
   useEffect(() => {
     try {
       const fetchHeroImage = async () => {
-        const res = await axios.get('https://api.pixora.test/get_hero_images', { withCredentials: true });
+        const res = await api.get('/get_hero_images', { withCredentials: true });
         if (res.data.success) {
           setHeroImage(res.data.photo);
         } else {

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import { api } from '../utils/api';
 import React from 'react'
 import { EmptyContent } from '../Pages/EmptyContent'
 import { Search } from 'lucide-react'
@@ -7,7 +7,10 @@ import { Search } from 'lucide-react'
 export const SearchsList = ({ term, onSelect }) => {
     const fetchList = async () => {
         try {
-            const res = await axios.get(`https://api.pixora.test/get_search_suggestions`, { params: { term: term } }, { withCredentials: true });
+            const res = await api.get('/get_search_suggestions', {
+                params: { term },
+                withCredentials: true,
+            });
             return res.data;
         } catch (err) {
 

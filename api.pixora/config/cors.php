@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://www.pixora.test'],
+    'allowed_origins' => [rtrim((string) config('app.frontend_url'), '/')],
 
     'allowed_origins_patterns' => [],
 

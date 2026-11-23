@@ -6,7 +6,7 @@ import { FaLocationDot, FaPencil, FaX } from "react-icons/fa6";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { initEdit, toggleEdit, updateField } from "../Store/photoSlice";
-import axios from "axios";
+import { api } from '../utils/api';
 import Comments from "./Comments";
 
 import LightBox from 'yet-another-react-lightbox';
@@ -52,7 +52,7 @@ export const Photo = (props) => {
     const { fields, isEdit, dirty } = useSelector(state => state.photo);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const url = `https://api.pixora.test/photo/${id}`;
+    const url = `/photo/${id}`;
     const photoUrl = window.location.href;
     const encodeUrl = encodeURIComponent(photoUrl);
     const { show, openModal, closeModal } = useModal();
@@ -63,7 +63,7 @@ export const Photo = (props) => {
     const [request, setRequest] = useState("");
     const [photosEdits, setPhotosEdits] = useState([]);
     useEffect(() => {
-        axios.get(url, { params: { id }, withCredentials: true })
+        api.get(url, { params: { id }, withCredentials: true })
             .then((res) => {
                 if (res.data.success) {
                     setPhoto(res.data.photo);
@@ -84,7 +84,7 @@ export const Photo = (props) => {
         try {
             const oldLiked = liked;
             setLiked(!liked);
-            const res = await axios.post("https://api.pixora.test/add_like", { photo_id: photoid }, { withCredentials: true, withXSRFToken: true });
+            const res = await api.post("/add_like", { photo_id: photoid }, { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 setPhoto((prevPhoto) =>
                     ({ ...prevPhoto, isLiked: !prevPhoto.isLiked, totalLikes: res.data.totalLikes })
@@ -105,7 +105,7 @@ export const Photo = (props) => {
     const handleFeaturedToggle = () => {
         try {
             const changeStatus = async () => {
-                const res = await axios.post(`https://api.pixora.test/change_featured/${id}`, { withCredentials: true, withXSRFToken: true });
+                const res = await api.post(`/change_featured/${id}`, { withCredentials: true, withXSRFToken: true });
                 if (!res.data.success) {
                     console.log(res.data.message);
                 }
@@ -119,7 +119,7 @@ export const Photo = (props) => {
 
     useEffect(() => {
         try {
-            axios.get('https://api.pixora.test/get_galleries', { withCredentials: true, withXSRFToken: true })
+            api.get('/get_galleries', { withCredentials: true, withXSRFToken: true })
                 .then((res) => {
                     if (res.data.success) {
                         setGalleries(res.data.galleries);
@@ -152,7 +152,7 @@ export const Photo = (props) => {
 
     useEffect(() => {
         try {
-            axios.get('https://api.pixora.test/get_categories')
+            api.get('/get_categories')
                 .then(res => {
                     if (res.data.success) {
                         setCategories(res.data.categories);
@@ -175,7 +175,7 @@ export const Photo = (props) => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await axios.delete(url, { withCredentials: true, withXSRFToken: true });
+                    const res = await api.delete(url, { withCredentials: true, withXSRFToken: true });
                     if (res.data.success) {
                         showPixoraToast(res.data.message);
                     } else {
@@ -192,7 +192,7 @@ export const Photo = (props) => {
 
     const handleEdit = async (data) => {
         try {
-            const res = await axios.post(`https://api.pixora.test/photo/${id}`, { photo_id: photo.id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id, visibility: fields?.visibility, tags: fields?.tags, galleries: selected }, { withCredentials: true, withXSRFToken: true });
+            const res = await api.post(`/photo/${id}`, { photo_id: photo.id, title: fields?.title, description: fields?.description, location: fields?.location, category_id: fields?.category_id, visibility: fields?.visibility, tags: fields?.tags, galleries: selected }, { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 dispatch(initEdit(data))
                 showPixoraToast(res.data.message);
@@ -228,7 +228,7 @@ export const Photo = (props) => {
     const requestEditForm = async () => {
         try {
             const sendRequestEdit = async () => {
-                const res = await axios.post('https://api.pixora.test/send_request', { message: requestMessage, owner_id: photo?.user?.id, image_id: photo?.id }, { withCredentials: true, withXSRFToken: true });
+                const res = await api.post('/send_request', { message: requestMessage, owner_id: photo?.user?.id, image_id: photo?.id }, { withCredentials: true, withXSRFToken: true });
                 if (res.data.success) {
                     showPixoraToast(res.data.message);
                     window.location.reload();
@@ -248,7 +248,7 @@ export const Photo = (props) => {
 
     const fetchPhotos = async () => {
         try {
-            const res = await axios.get('https://api.pixora.test/photos_like_original', {
+            const res = await api.get('/photos_like_original', {
                 params: {
                     id:photo?.id,
                     title: photo?.title,

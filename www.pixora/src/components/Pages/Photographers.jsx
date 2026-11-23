@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { api } from '../utils/api';
 import Avatar from './Avatar';
 import { Truncate } from './Truncate';
 import { useAuth } from '../context/AuthProvider';
@@ -23,7 +23,7 @@ const Photographers = () => {
     const [localFollows, setLocalFollows] = useState([]);
     const fetchUsers = async () => {
         try {
-            const res = await axios.get(`https://api.pixora.test/get_users/${type}`, { withCredentials: true, withXSRFToken: true });
+            const res = await api.get(`/get_users/${type}`, { withCredentials: true, withXSRFToken: true });
             const uniqueUsers = res.data.users.filter((user, index, self) => index === self.findIndex(u => u.id === user.id));
             return uniqueUsers;
         } catch (err) {
@@ -38,7 +38,7 @@ const Photographers = () => {
     const { data: follows = [] } = useQuery({
         queryKey: ['follows'],
         queryFn: async () => {
-            const res = await axios.get('https://api.pixora.test/follows', { withCredentials: true, withXSRFToken: true });
+            const res = await api.get('/follows', { withCredentials: true, withXSRFToken: true });
             console.log(res.data.users);
             return res.data?.users?.map(f => f.following_id) || [];
         },
@@ -72,7 +72,7 @@ const Photographers = () => {
         queryClient.setQueryData(['follows'], newFollows);
 
         try {
-            await axios.post('https://api.pixora.test/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
+            await api.post('/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
         } catch (err) {
             queryClient.setQueryData(['follows'], previousFollows);
             console.log(err?.response?.data);

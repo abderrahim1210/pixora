@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { api } from '../utils/api';
 import React, { useState } from 'react'
 import LatestRequests from './LatestRequests';
 import { Navbar } from './Layouts/Navbar';
@@ -11,7 +11,7 @@ export const AllRequestsAdmin = () => {
     const [statusFilter, setStatusFilter] = useState('all');
     const fetchRequests = async () => {
         try {
-            const res = await axios.get('https://api.pixora.test/get_requests_admin', { withCredentials: true, withXSRFToken: true });
+            const res = await api.get('/get_requests_admin', { withCredentials: true, withXSRFToken: true });
             if (res.data.success) {
                 return res.data.requests;
             }

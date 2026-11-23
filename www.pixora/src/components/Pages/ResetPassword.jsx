@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from '../utils/api';
 import { CheckCircle2, Eye, EyeOff, Lock as LockIcon } from 'lucide-react';
 import React, { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -31,7 +31,7 @@ export const ResetPassword = () => {
         }, 2000);
 
         try{
-            const res = await axios.post('https://api.pixora.test/reset_password',formData,{withCredentials:true});
+            const res = await api.post('/reset_password',formData,{withCredentials:true});
             if (res.data.success){
                 setStatus('success');
                 setLoading(false);

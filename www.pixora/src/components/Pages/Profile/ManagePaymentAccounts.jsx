@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import axios from 'axios';
+import { api } from '../../utils/api';
 import React from 'react'
 import Spinner from '../Spinner';
 import { EmptyContent } from '../EmptyContent';
@@ -18,7 +18,7 @@ export const ManagePaymentAccounts = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['payment_accounts'],
     queryFn: async () => {
-      const res = await axios.get('https://api.pixora.test/get_payment_accounts', { withCredentials: true, withXSRFToken: true });
+      const res = await api.get('/get_payment_accounts', { withCredentials: true, withXSRFToken: true });
       if (res.data.success) return res.data;
     }
   });
@@ -62,7 +62,7 @@ export const ManagePaymentAccounts = () => {
   const queryClient = useQueryClient();
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
-      const res = await axios.delete(`https://api.pixora.test/delete_payout_account/${id}`, { withCredentials: true, withXSRFToken: true });
+      const res = await api.delete(`/delete_payout_account/${id}`, { withCredentials: true, withXSRFToken: true });
       return res.data;
     },
     onSuccess: (data) => {

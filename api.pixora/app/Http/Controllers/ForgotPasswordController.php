@@ -27,7 +27,10 @@ class ForgotPasswordController extends Controller
 
         $token = Password::createToken($user);
 
-        $url = "https://www.pixora.test/reset-password?token=" . $token . "&email=" . urlencode($user->email);
+        $url = rtrim((string) config('app.frontend_url'), '/') . '/reset-password?' . http_build_query([
+            'token' => $token,
+            'email' => $user->email,
+        ]);
 
         Mail::to($user->email)->send(new ResetPasswordMail($url));
 
