@@ -8,7 +8,7 @@ export const GoogleLoginButton = () => {
         window.location.href = apiUrl('/auth/google/redirect');
     }
     return (
-        <button className="google-login-btn" onClick={handleGoogleCallbalck}>
+        <button type="button" className="google-login-btn" onClick={handleGoogleCallbalck}>
             <svg className="google-icon" viewBox="0 0 24 24">
                 <path
                     fill="#4285F4"

@@ -71,6 +71,12 @@ export const SignUp = () => {
       console.log(err.response?.data);
     }
   }
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (step === 4) {
+      handleSubmit(e);
+    }
+  }
   useEffect(() => {
     try {
       const fetchHeroImage = async () => {
@@ -131,13 +137,14 @@ export const SignUp = () => {
           </Link>
           <div>
             <form
-              method="post"
               id="signupForm"
+              noValidate
+              onSubmit={handleFormSubmit}
             >
               {step === 1 && <StepOne next={next} step={step} navigate={navigate} />}
               {step === 2 && <StepTwo next={next} prev={prev} step={step} navigate={navigate} user={user} setUser={setUser} />}
               {step === 3 && <StepThree next={next} prev={prev} step={step} navigate={navigate} user={user} setUser={setUser} countries={countries} />}
-              {step === 4 && <StepFour next={next} prev={prev} step={step} navigate={navigate} user={user} setUser={setUser} handleSubmit={handleSubmit} />}
+              {step === 4 && <StepFour prev={prev} step={step} />}
             </form>
           </div>
         </div>
@@ -158,7 +165,7 @@ function StepOne({ next, step }) {
           <div className="feature-item"><FaUsers /> Follow creators</div>
         </div>
       </div>
-      <button onClick={next} className={`actionButton btn w-50 next`}>Create Account</button>
+      <button type="button" onClick={next} className={`actionButton btn w-50 next`}>Create Account</button>
     </section>
 
   )
@@ -246,11 +253,13 @@ function StepTwo({ next, prev, step, navigate, user, setUser }) {
           <GoogleLoginButton />
           <div className="actions mt-2 mb-2">
             <button
+              type="button"
               onClick={prev} className={`actionButton btn prev`}
             >
               Prev
             </button>
             <button
+              type="button"
               id="signupButton"
               onClick={next} className={`actionButton btn next ${!ok ? "disabled" : ""}`}
             >
@@ -356,11 +365,13 @@ function StepThree({ prev, next, step, user, setUser, countries }) {
           </div>
           <div className="actions mt-2 mb-2">
             <button
+              type="button"
               onClick={prev} className={`actionButton btn prev`}
             >
               Prev
             </button>
             <button
+              type="button"
               id="signupButton"
               onClick={next} className={`actionButton btn next`}
             >
@@ -373,7 +384,7 @@ function StepThree({ prev, next, step, user, setUser, countries }) {
   )
 }
 
-function StepFour({ prev, next, step, navigate, handleSubmit }) {
+function StepFour({ prev, step }) {
   return (
     <section className={`step ${step === 4 ? "active" : ""}`} id="step4" data-step={4}>
       <div className="text-start col">
@@ -398,13 +409,15 @@ function StepFour({ prev, next, step, navigate, handleSubmit }) {
         <div>
           <div className="actions mb-2">
             <button
+              type="button"
               onClick={prev} className={`actionButton btn prev`}
             >
               Prev
             </button>
             <button
+              type="submit"
               id="signupButton"
-              onClick={handleSubmit} className={`actionButton btn next`}
+              className={`actionButton btn next`}
             >
               Sign Up
             </button>
