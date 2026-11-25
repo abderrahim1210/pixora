@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: '/backend',
+  baseURL: process.env.REACT_APP_API_URL,
   withCredentials: true,
   withXSRFToken: true,
   headers: {
@@ -32,4 +32,4 @@ api.interceptors.request.use(async (config) => {
 });
 
 export const apiUrl = (path) =>
-  `/backend/${path.replace(/^\/+/, '')}`;
+  `${process.env.REACT_APP_API_URL}/${path.replace(/^\/+/, '')}`;
