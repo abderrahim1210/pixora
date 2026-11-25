@@ -15,7 +15,6 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.get('/sanctum/csrf-cookie', { withCredentials: true, withXSRFToken: true });
       const res = await api.post('/login', { email, password }, {
         withCredentials: true, withXSRFToken: true, headers: {
           'Accept': 'application/json',

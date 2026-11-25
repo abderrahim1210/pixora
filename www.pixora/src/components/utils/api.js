@@ -1,13 +1,7 @@
 import axios from 'axios';
 
-const apiBaseUrl = import.meta.env.VITE_API_URL ?? 'https://api.pixora.test';
-
-if (!apiBaseUrl) {
-  throw new Error('VITE_API_URL must be configured before the app starts.');
-}
-
 export const api = axios.create({
-  baseURL: apiBaseUrl,
+  baseURL: '/backend',
   withCredentials: true,
   withXSRFToken: true,
   headers: {
@@ -19,5 +13,23 @@ export const api = axios.create({
 api.defaults.xsrfCookieName = 'XSRF-TOKEN';
 api.defaults.xsrfHeaderName = 'X-XSRF-TOKEN';
 
+let csrfCookieRequest;
+const stateChangingMethods = new Set(['post', 'put', 'patch', 'delete']);
+
+api.interceptors.request.use(async (config) => {
+  if (stateChangingMethods.has(config.method?.toLowerCase() ?? 'get')) {
+    if (!csrfCookieRequest) {
+      csrfCookieRequest = api.get('/sanctum/csrf-cookie').catch((error) => {
+        csrfCookieRequest = undefined;
+        throw error;
+      });
+    }
+
+    await csrfCookieRequest;
+  }
+
+  return config;
+});
+
 export const apiUrl = (path) =>
-  `${apiBaseUrl.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`;
+  `/backend/${path.replace(/^\/+/, '')}`;

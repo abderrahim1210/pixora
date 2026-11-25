@@ -10,6 +10,13 @@ export default defineConfig({
       host: 'www.pixora.test',
       protocol: 'wss', 
     },
+    proxy: {
+      '/backend': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/backend/, ''),
+      },
+    },
   },
   plugins: [react()],
 })
