@@ -1,7 +1,7 @@
 # 📸 PIXORA - Professional Photography Platform
 
 <p align="center">
-  <img src="./www.pixora/public/outils/pngs/logo_dark.png" alt="Pixora Logo" width="300"/>
+  <img src="./www.pixora/public/outils/pngs/logo_dark.webp" alt="Pixora Logo" width="300"/>
 </p>
 
 <p align="center">

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { FaTrash } from 'react-icons/fa';
 import { FaPencil } from 'react-icons/fa6';
 
-const EditProfile = ({ user, register, errors, openModal, handleDeleteAvatar, setEdit, handleSubmit, edit, onSubmit }) => {
+const EditProfile = ({ user, originalUser, register, errors, openModal, handleDeleteAvatar, setEdit, handleSubmit, edit, onSubmit }) => {
     const [countries, setCountries] = useState([]);
     useEffect(() => {
         axios.get("/json/countries.json").then((res) => res.data).then(data => {
@@ -21,14 +21,13 @@ const EditProfile = ({ user, register, errors, openModal, handleDeleteAvatar, se
                         className="d-none"
                         name="profileImage"
                         id="profile_img"
-                        accept=".png, .jpg"
+                        accept=".webp, .webp"
                     />
                     <img
-                        src={user.photo_profile ? user.photo_profile : "/outils/pngs/useracc2.png"}
-                        width="100px"
-                        className="img_acc mt-2 mb-2"
+                        src={user.photo_profile ? user.photo_profile : "/outils/pngs/useracc2.webp"}
+                        className="img_acc edit-profile-avatar mt-2 mb-2"
                         id="imgAcc1"
-                        alt=""
+                        alt={user.username ? `${user.username}'s profile picture` : "Profile picture"}
                         data-bs-toggle="tooltip"
                         title=""
                     />
@@ -236,7 +235,7 @@ const EditProfile = ({ user, register, errors, openModal, handleDeleteAvatar, se
                                                 id="instagram"
                                                 className="form-control"
                                                 rows={1}
-                                                {...register('instagram')}
+                                                {...register('insta')}
                                                 defaultValue={user.instagram}
                                             />
                                         </div>

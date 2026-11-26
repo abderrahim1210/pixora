@@ -99,7 +99,7 @@ export const Notification = () => {
                                         <div className="notification-item__status-icon">
                                             {notif.type.includes('PostLikedNotification') && <img src={notif.data.photo_url} alt='Photo' />}
                                             {notif.type.includes('CommentNotification') && <Link style={{ textDecoration: 'none' }} to={`/photo/${notif.data.photo_id}/${slugiFy(notif.data.photo_title ?? '')}`}><MessageCircleIcon /></Link>}
-                                            {notif.type.includes('FollowNotification') && <Link style={{ textDecoration: 'none' }} to={`/photographer/${notif.data.follower_id}`}><img src={notif.data.follower_avatar ? notif.data.follower_avatar : '/outils/pngs/useracc2.png'} /></Link>}
+                                            {notif.type.includes('FollowNotification') && <Link style={{ textDecoration: 'none' }} to={`/photographer/${notif.data.follower_id}`}><img src={notif.data.follower_avatar ? notif.data.follower_avatar : '/outils/pngs/useracc2.webp'} /></Link>}
                                             {notif.type.includes('AlertGoToPay') && <Link style={{ textDecoration: 'none' }} to={`/payment_verify/${notif.data.req_id}`}><Pencil /></Link>}
                                         </div>
 

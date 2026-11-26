@@ -17,7 +17,7 @@ const RequestsCard = ({ r, handleAccept,downloadImage,uploadResAction }) => {
 
             <div className="card-content">
                 <div className="user-info">
-                    <img src={r?.user?.photo_profile ? r?.user?.photo_profile : '/outils/pngs/useracc2.png'} className='avatar' alt="Avatar" />
+                    <img src={r?.user?.photo_profile ? r?.user?.photo_profile : '/outils/pngs/useracc2.webp'} className='avatar' alt="Avatar" />
                     <span>{r?.user?.username}</span>
                 </div>
                 <Truncate text={r?.edition_requests?.message ?? ''} maxChars={50}>

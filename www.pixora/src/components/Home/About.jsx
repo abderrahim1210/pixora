@@ -62,7 +62,7 @@ const About = () => {
             </div>
             <div className="owner-infos mt-3 mb-3">
                 <div className="owner-image">
-                    <img src="/outils/jpg/owner.jpg" alt="owner" />
+                    <img src="/outils/jpg/owner.webp" alt="owner" />
                 </div>
                 <div className="owner-texts">
                     <h3>Founder-Building Pixora</h3>

@@ -24,7 +24,7 @@ export const Navbar = ({ type }) => {
                   {
                     localStorage.getItem('theme') === 'light' ? (
                       <img
-                        src="/outils/pngs/logo_styled.png"
+                        src="/outils/pngs/logo_styled.webp"
                         style={{
                           padding: "0%",
                           width: 100,
@@ -35,7 +35,7 @@ export const Navbar = ({ type }) => {
                       />
                     ) : (
                       <img
-                        src="/outils/pngs/logo_dark.png"
+                        src="/outils/pngs/logo_dark.webp"
                         style={{
                           padding: "0%",
                           width: 100,

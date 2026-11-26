@@ -1,13 +1,18 @@
 import React, { useState } from 'react'
 import { Offcanvas, Nav } from 'react-bootstrap';
 import { Home, Compass, Image, PlusSquare, User, Settings, LogOut, X, Images, LogIn, UserPlus } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../../context/AuthProvider';
-import Avatar from '../Avatar';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { api } from '../../utils/api';
+import Spinner from '../Spinner';
 const OffcanvasTemplate = ({ user, page = 'home' }) => {
     const [show, setShow] = useState(false);
     const [exploreOpen, setExploreOpen] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [logoutError, setLogoutError] = useState('');
     const location = useLocation();
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const navLinks = [
         { name: 'Home', path: '/', icon: <Home size={20} /> },
         ...(user ? [
@@ -19,6 +24,27 @@ const OffcanvasTemplate = ({ user, page = 'home' }) => {
             { name: 'Login', path: `/login`, icon: <UserPlus size={20} /> },
         ])
     ];
+
+    const handleLogout = async () => {
+        if (isLoggingOut) return;
+        setIsLoggingOut(true);
+        setLogoutError('');
+
+        try {
+            const response = await api.delete('/logout', { withCredentials: true, withXSRFToken: true });
+            if (!response.data.success) {
+                throw new Error(response.data.message || 'Unable to log out. Please try again.');
+            }
+
+            queryClient.setQueryData(['user'], null);
+            setShow(false);
+            navigate('/login', { replace: true });
+        } catch (error) {
+            setLogoutError(error.response?.data?.message || error.message || 'Unable to log out. Please try again.');
+        } finally {
+            setIsLoggingOut(false);
+        }
+    };
 
     return (
         <>
@@ -70,7 +96,7 @@ const OffcanvasTemplate = ({ user, page = 'home' }) => {
                                     {user && (
                                         <div className="user-profile-section px-4 py-3 mb-3 d-flex align-items-center gap-3">
                                             <div className="avatar-wrapper">
-                                                <img src={user?.photo_profile ? user.photo_profile : '/outils/pngs/useracc2.png'} alt="avatar" />
+                                                <img src={user?.photo_profile ? user.photo_profile : '/outils/pngs/useracc2.webp'} alt="avatar" />
                                             </div>
                                             <div className="user-info">
                                                 <h6 className="mb-0 fw-bold">{user.display_name}</h6>
@@ -141,9 +167,15 @@ const OffcanvasTemplate = ({ user, page = 'home' }) => {
                     {
                         user && (
                             <div className="offcanvas-footer px-4 py-4 border-top mt-auto bg-light bg-opacity-50">
-                                <button className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 rounded-3 py-2">
-                                    <LogOut size={18} />
-                                    <span>Logout</span>
+                                {logoutError && <p className="text-danger small mb-2" role="alert">{logoutError}</p>}
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 rounded-3 py-2"
+                                    onClick={handleLogout}
+                                    disabled={isLoggingOut}
+                                >
+                                    {isLoggingOut ? <Spinner type="inline" label="Logging out" /> : <LogOut size={18} />}
+                                    <span>{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
                                 </button>
                             </div>
                         )

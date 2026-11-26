@@ -11,7 +11,7 @@ const PhotographersTemplate = ({ photographers }) => {
                         <img
                             src={`${u.photo_profile
                                 ? u.photo_profile
-                                : "/outils/pngs/useracc2.png"
+                                : "/outils/pngs/useracc2.webp"
                                 }`}
                             id="imgAcc"
                             width="100px"

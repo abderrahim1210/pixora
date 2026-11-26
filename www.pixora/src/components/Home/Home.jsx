@@ -275,7 +275,7 @@ export const Home = () => {
         className="div2"
         aria-busy={heroLoading}
         style={{
-          backgroundImage: `url(${heroImage?.filename || '/outils/backgrounds/background_pixora.jpg'})`
+          backgroundImage: `url(${heroImage?.filename || '/outils/backgrounds/background_pixora.webp'})`
         }}
       >
         <div className="container-fluid p-0">

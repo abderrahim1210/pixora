@@ -61,7 +61,7 @@ const ForYou = ({
                                     )}
                                     {users.filter(u => u.id !== user?.id).slice(0, 6).map(u => (
                                         <div className="mini-user-card" key={u.id}>
-                                            <Avatar src={u.photo_profile ?? "/outils/pngs/useracc2.png"} size={60} />
+                                            <Avatar src={u.photo_profile ?? "/outils/pngs/useracc2.webp"} size={60} />
                                             <Link to={`/photographer/${u.id}`} style={{textDecoration:'none',color:'#454545'}}>
                                                 <Truncate text={u.username} maxChars={25}>
                                                     {({ text }) => (

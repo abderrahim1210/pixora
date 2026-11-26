@@ -36,7 +36,7 @@ const Infos = ({ user, openModal, statistics, loading, photos, photosCount }) =>
                                     className="d-none"
                                     name="coverFile"
                                     id="cover_file"
-                                    accept=".png, .jpeg"
+                                    accept=".webp, .webp"
                                 />
                             </form>
                             <FaCamera />
@@ -54,7 +54,7 @@ const Infos = ({ user, openModal, statistics, loading, photos, photosCount }) =>
                                 name="profileImage"
                                 className="d-none"
                                 id="profile_img"
-                                accept=".png, .jpeg"
+                                accept=".webp, .webp"
                             />
                         </form>
                         <div className="avatar">
@@ -62,7 +62,7 @@ const Infos = ({ user, openModal, statistics, loading, photos, photosCount }) =>
                                 src={
                                     user.photo_profile
                                         ? user.photo_profile
-                                        : "/outils/pngs/useracc2.png"
+                                        : "/outils/pngs/useracc2.webp"
                                 }
                                 onClick={() => openModal("profilePicture")}
                                 onContextMenu={(e) => e.preventDefault()}

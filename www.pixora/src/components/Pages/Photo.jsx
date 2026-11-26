@@ -379,8 +379,7 @@ export const Photo = (props) => {
                                 loading="lazy"
                                 decoding="async"
                                 onContextMenu={(e) => e.preventDefault()}
-                                width="100%"
-                                className="img-fluid"
+                                className="img-fluid photo-preview-image"
                                 alt={photo.title}
                                 style={{ cursor: "pointer" }}
                                 onClick={() => {

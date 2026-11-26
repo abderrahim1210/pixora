@@ -59,7 +59,7 @@ const RequestCard = ({ group, onStatusChange }) => {
                     group?.map((req) => (
                         <div key={req.id} className="user-request-item">
                             <div className="user-info">
-                                <img src={req?.requester?.photo_profile ?? '/outils/pngs/useracc2.png'} alt="User" className='avatar' />
+                                <img src={req?.requester?.photo_profile ?? '/outils/pngs/useracc2.webp'} alt="User" className='avatar' />
                                 <div className="user-text">
                                     <strong>{req?.requester?.username}</strong>
                                     <span>{req?.message}</span>

@@ -51,7 +51,7 @@ export const ReportDetails = () => {
             return (
                 <div className="preview-container photo-preview">
                     <img src={report?.photo_url} alt="Reported Content" onError={(e) => {
-                        e.target.src = '/assets/images/deleted-placeholder.png';
+                        e.target.src = '/assets/images/deleted-placeholder.webp';
                     }} />
                     <div className="preview-meta">Photo ID: #{report?.reportable_id}</div>
                 </div>

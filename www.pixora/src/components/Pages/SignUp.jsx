@@ -92,7 +92,7 @@ export const SignUp = () => {
       </Helmet>
       <div className="dv1">
         <div className="dv1-0 login_div" style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('${heroImage?.filename ?? "/outils/jpg/photographe4.png"}')`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('${heroImage?.filename ?? "/outils/jpg/photographe4.webp"}')`,
           backgroundPosition: heroImage?.focal_point || 'center'
         }} aria-busy={heroLoading}>
           <div className="login-label">Sign up Page</div>
@@ -112,7 +112,7 @@ export const SignUp = () => {
             {
               localStorage.getItem('theme') === 'light' ? (
                 <img
-                  src="outils/pngs/logo_styled.png"
+                  src="outils/pngs/logo_styled.webp"
                   className="img-fluid"
                   width="150px"
                   alt="logo"
@@ -120,7 +120,7 @@ export const SignUp = () => {
                 />
               ) : (
                 <img
-                  src="outils/pngs/logo_dark.png"
+                  src="outils/pngs/logo_dark.webp"
                   className="img-fluid"
                   width="150px"
                   alt="logo"

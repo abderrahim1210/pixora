@@ -225,7 +225,7 @@ function StepTwo({ step, prev, next, photo, setPhoto }) {
                   name="photoFile"
                   className="form-control d-none"
                   id="uploadPhoto"
-                  accept=".png, .jpg, .jpeg"
+                  accept=".webp, .webp, .webp"
                   required
                   ref={fileRef}
                   onChange={handleChange}
@@ -266,7 +266,7 @@ function StepTwo({ step, prev, next, photo, setPhoto }) {
                         </tbody>
                       </table></div>) : (<div id="choose_photo" onClick={handleClick}>
                         <img
-                          src="/outils/pngs/upload_image_icon.png"
+                          src="/outils/pngs/upload_image_icon.webp"
                           id="icon"
                           width="150px"
                           height="auto"

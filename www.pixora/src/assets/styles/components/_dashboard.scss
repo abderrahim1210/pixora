@@ -115,6 +115,14 @@
     transition: transform 0.3s ease;
   }
 
+  .card-info .edit-profile-avatar {
+    display: block;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
   .card-info .img_acc:hover {
     transform: scale(1.08);
   }

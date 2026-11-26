@@ -43,7 +43,7 @@ export const DownloadImage = () => {
                             {imageURL && imageURL.path && (
                                 <>
                                     <img src={imageURL.path} alt="Edited Preview" className="image-preview" />
-                                    <a href={imageURL.path} download="pixora_edited.jpg" target="_blank" rel="noreferrer" className="btn-download">
+                                    <a href={imageURL.path} download="pixora_edited.webp" target="_blank" rel="noreferrer" className="btn-download">
                                         Download Edited Photo
                                     </a>
                                 </>

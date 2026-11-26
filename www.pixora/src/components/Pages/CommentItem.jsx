@@ -34,7 +34,7 @@ const CommentItem = ({ c,
                     src={
                         c.user?.photo_profile
                             ? c.user?.photo_profile
-                            : "/outils/pngs/useracc2.png"
+                            : "/outils/pngs/useracc2.webp"
                     }
                     alt={c.user?.username}
                     className="comment-avatar"

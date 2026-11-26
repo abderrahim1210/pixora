@@ -67,6 +67,7 @@ import { Helmet } from "react-helmet-async";
 import { MergeModalFollows } from "./MergeModalFollows";
 import { useQuery } from "@tanstack/react-query";
 import { showPixoraToast } from "../../assets/js/toast";
+import Spinner from "./Spinner";
 
 export const MyProfile = () => {
   const [user, setUser] = useState({});
@@ -85,6 +86,8 @@ export const MyProfile = () => {
   const coverRef = useRef();
   const [loading, setLoading] = useState(true);
   const [profileError, setProfileError] = useState('');
+  const [profileImageUploading, setProfileImageUploading] = useState(false);
+  const [coverImageUploading, setCoverImageUploading] = useState(false);
   const [preview, setPreview] = useState(null);
   const [taskId, setTaskId] = useState(null);
   const [ownerId, setOwnerId] = useState(null);
@@ -234,51 +237,54 @@ export const MyProfile = () => {
   const deleteProfilePictureURL = "/edit_profile_pictures/delete_avatar";
   const deleteCoverPictureURL = "/edit_profile_pictures/delete_cover";
 
-  const handleProfileSelect = async () => {
-
-    const file = profileRef.current.files[0];
-    if (!file) return;
-
+  const readImageAsDataUrl = (file) => new Promise((resolve, reject) => {
     const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error('Unable to read the selected image.'));
     reader.readAsDataURL(file);
+  });
 
-    reader.onload = async () => {
-      const base64Image = reader.result;
-      try {
-        const res = await api.post(profilePicturesURL, { profile_image: base64Image }, { withCredentials: true, withXSRFToken: true });
-        if (res.data.success) {
-          showPixoraToast(res.data.message);
-          return window.location.reload();
-        } else {
-          showPixoraToast(`Error : ${res.data.message}`);
-        }
-      } catch (err) {
-        console.log(err.response?.data);
+  const handleProfileSelect = async () => {
+    const file = profileRef.current?.files?.[0];
+    if (!file || profileImageUploading) return;
+
+    setProfileImageUploading(true);
+    try {
+      const base64Image = await readImageAsDataUrl(file);
+      const res = await api.post(profilePicturesURL, { profile_image: base64Image }, { withCredentials: true, withXSRFToken: true });
+      if (!res.data.success) {
+        throw new Error(res.data.message || 'Unable to update your profile picture.');
       }
+
+      showPixoraToast(res.data.message);
+      window.location.reload();
+    } catch (err) {
+      showPixoraToast(`Error: ${err.response?.data?.message || err.message || 'Unable to update your profile picture.'}`);
+    } finally {
+      setProfileImageUploading(false);
+      if (profileRef.current) profileRef.current.value = '';
     }
   }
 
   const handleCoverSelect = async () => {
+    const file = coverRef.current?.files?.[0];
+    if (!file || coverImageUploading) return;
 
-    const file = coverRef.current.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-
-    reader.onload = async () => {
-      const base64Image = reader.result;
-      try {
-        const res = await api.post(coverPictureURL, { cover_image: base64Image }, { withCredentials: true, withXSRFToken: true });
-        if (res.data.success) {
-          showPixoraToast(res.data.message);
-          return window.location.reload();
-        } else {
-          showPixoraToast(`Error : ${res.data.message}`);
-        }
-      } catch (err) {
-        console.log(err.response?.data);
+    setCoverImageUploading(true);
+    try {
+      const base64Image = await readImageAsDataUrl(file);
+      const res = await api.post(coverPictureURL, { cover_image: base64Image }, { withCredentials: true, withXSRFToken: true });
+      if (!res.data.success) {
+        throw new Error(res.data.message || 'Unable to update your cover picture.');
       }
+
+      showPixoraToast(res.data.message);
+      window.location.reload();
+    } catch (err) {
+      showPixoraToast(`Error: ${err.response?.data?.message || err.message || 'Unable to update your cover picture.'}`);
+    } finally {
+      setCoverImageUploading(false);
+      if (coverRef.current) coverRef.current.value = '';
     }
   }
 
@@ -389,8 +395,14 @@ export const MyProfile = () => {
                         <div className="sheet-icon">
                           <FiUpload size={25} />
                         </div>
-                        <a style={{ cursor: "pointer" }} className="sheet-link" onClick={() => (profileRef.current.click())}>
-                          <span>Upload profile picture</span>
+                        <a
+                          style={{ cursor: profileImageUploading ? "wait" : "pointer" }}
+                          className="sheet-link"
+                          aria-disabled={profileImageUploading}
+                          onClick={() => !profileImageUploading && profileRef.current?.click()}
+                        >
+                          <span>{profileImageUploading ? 'Uploading profile picture...' : 'Upload profile picture'}</span>
+                          {profileImageUploading && <Spinner type="inline" label="Uploading profile picture" />}
                         </a>
                       </div>
                       <div className="sheet-item">
@@ -427,16 +439,18 @@ export const MyProfile = () => {
                 <div>
                   <div className="profile_settings p-0">
                     <div className="sheet-item">
-                      <input type="file" ref={coverRef} onChange={handleCoverSelect} hidden />
+                      <input type="file" ref={coverRef} onChange={handleCoverSelect} accept="image/*" hidden />
                       <div className="sheet-icon">
                         <FiUpload size={25} />
                       </div>
                       <a
                         className="sheet-link"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => coverRef.current.click()}
+                        aria-disabled={coverImageUploading}
+                        style={{ cursor: coverImageUploading ? "wait" : "pointer" }}
+                        onClick={() => !coverImageUploading && coverRef.current?.click()}
                       >
-                        <span>Upload cover picture</span>
+                        <span>{coverImageUploading ? 'Uploading cover picture...' : 'Upload cover picture'}</span>
+                        {coverImageUploading && <Spinner type="inline" label="Uploading cover picture" />}
                       </a>
                     </div>
                     <div className="sheet-item">
@@ -516,7 +530,7 @@ export const MyProfile = () => {
                   <TopBar user={user} />
                   <div className="tab-content">
                     <Infos user={user} openModal={openModal} statistics={statistics} loading={loading} photos={photos} photosCount={photosCount} />
-                    <EditProfile user={user} register={register} errors={errors} openModal={openModal} handleDeleteAvatar={handleDeleteAvatar} setEdit={setEdit} handleSubmit={handleSubmit} edit={edit} onSubmit={onSubmit} />
+                    <EditProfile user={user} originalUser={originalUser} register={register} errors={errors} openModal={openModal} handleDeleteAvatar={handleDeleteAvatar} setEdit={setEdit} handleSubmit={handleSubmit} edit={edit} onSubmit={onSubmit} />
                     <Settings handleLogOut={handleLogOut} paymentsSettings={paymentsSettings} />
                     {
                       user?.role === 'admin' && (
