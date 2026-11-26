@@ -1,12 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../utils/api';
 import Avatar from './Avatar';
 import { Truncate } from './Truncate';
 import { useAuth } from '../context/AuthProvider';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { FaCameraRetro } from 'react-icons/fa';
-import { fetchFollows, toggleFollowAction } from '../utils/getFollows';
 import { Navbar } from './Layouts/Navbar';
 import { EmptyContent } from './EmptyContent';
 import Spinner from './Spinner';
@@ -15,34 +14,36 @@ import { Footer } from './Layouts/Footer';
 import PhotographersList from './PhotographersList';
 const Photographers = () => {
     const [search, setSearch] = useState("");
-    const navigate = useNavigate();
     const { user } = useAuth();
     const [visible, setVisible] = useState(16);
     const [searchParams] = useSearchParams();
     const type = searchParams.get('type') || 'all';
-    const [localFollows, setLocalFollows] = useState([]);
+    const [pendingFollowIds, setPendingFollowIds] = useState(() => new Set());
+    const [followActionError, setFollowActionError] = useState('');
     const fetchUsers = async () => {
-        try {
-            const res = await api.get(`/get_users/${type}`, { withCredentials: true, withXSRFToken: true });
-            const uniqueUsers = res.data.users.filter((user, index, self) => index === self.findIndex(u => u.id === user.id));
-            return uniqueUsers;
-        } catch (err) {
-            console.log(err?.response?.data);
-        }
+        const res = await api.get(`/get_users/${type}`, { withCredentials: true, withXSRFToken: true });
+        const uniqueUsers = res.data.users.filter((user, index, self) => index === self.findIndex(u => u.id === user.id));
+        return uniqueUsers;
     }
-    const { data: users = [], isLoading, error } = useQuery({
+    const { data: users = [], isLoading, error, refetch } = useQuery({
         queryKey: ['users', type],
         queryFn: fetchUsers
     });
 
-    const { data: follows = [] } = useQuery({
+    const {
+        data: follows = [],
+        isLoading: followsLoading,
+        error: followsError,
+    } = useQuery({
         queryKey: ['follows'],
         queryFn: async () => {
-            const res = await api.get('/follows', { withCredentials: true, withXSRFToken: true });
-            console.log(res.data.users);
+            const res = await api.get('/follows', {
+                withCredentials: true,
+                withXSRFToken: true,
+                skipGlobalLoading: true,
+            });
             return res.data?.users?.map(f => f.following_id) || [];
         },
-        // onSuccess: (data) => setLocalFollows(data),
         staleTime: 1000 * 60 * 5,
     });
 
@@ -66,16 +67,37 @@ const Photographers = () => {
 
     const queryClient = useQueryClient();
     const addFollow = async (id) => {
+        if (pendingFollowIds.has(id) || followsLoading) return;
+
         await queryClient.cancelQueries({ queryKey: ['follows'] });
-        const newFollows = follows.includes(id) ? follows.filter(fid => fid !== id) : [...follows, id];
-        const previousFollows = queryClient.getQueryData(['follows']) || [];
-        queryClient.setQueryData(['follows'], newFollows);
+        const previousFollows = queryClient.getQueryData(['follows']) || follows;
+        const wasFollowing = previousFollows.includes(id);
+        queryClient.setQueryData(['follows'], (currentFollows = previousFollows) =>
+            currentFollows.includes(id)
+                ? currentFollows.filter((followedId) => followedId !== id)
+                : [...currentFollows, id]
+        );
+        setPendingFollowIds((pending) => new Set(pending).add(id));
+        setFollowActionError('');
 
         try {
             await api.post('/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
         } catch (err) {
-            queryClient.setQueryData(['follows'], previousFollows);
-            console.log(err?.response?.data);
+            queryClient.setQueryData(['follows'], (currentFollows = []) => {
+                const currentlyFollowing = currentFollows.includes(id);
+                if (currentlyFollowing === wasFollowing) return currentFollows;
+
+                return wasFollowing
+                    ? [...currentFollows, id]
+                    : currentFollows.filter((followedId) => followedId !== id);
+            });
+            setFollowActionError(err.response?.data?.message || 'Unable to update follow status. Please try again.');
+        } finally {
+            setPendingFollowIds((pending) => {
+                const next = new Set(pending);
+                next.delete(id);
+                return next;
+            });
         }
     }
 
@@ -112,7 +134,27 @@ const Photographers = () => {
                     </div>
                 </div>
                 <hr />
-                <PhotographersList user={user} filtredUsers={filtredUsers} isLoading={isLoading} visible={visible} addFollow={addFollow} />
+                {(followsError || followActionError) && (
+                    <p role="alert">{followActionError || 'Unable to load follow status.'}</p>
+                )}
+                {error ? (
+                    <div className="text-center" role="alert">
+                        <p>Unable to load photographers. {error.message}</p>
+                        <button type="button" className="btn-show-more" onClick={() => refetch()}>
+                            Try again
+                        </button>
+                    </div>
+                ) : (
+                    <PhotographersList
+                        user={user}
+                        filtredUsers={filtredUsers}
+                        isLoading={isLoading}
+                        followsLoading={followsLoading}
+                        pendingFollowIds={pendingFollowIds}
+                        visible={visible}
+                        addFollow={addFollow}
+                    />
+                )}
                 {
                     visible < filtredUsers.length && (
                         <div className='show-more-wrapper'>

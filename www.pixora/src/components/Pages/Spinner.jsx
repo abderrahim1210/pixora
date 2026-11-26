@@ -1,29 +1,33 @@
-import React from 'react'
+const Spinner = ({ type, text = "Wait a few seconds ...", label = "Loading" }) => {
+  const inline = type === "inline";
+  const className = inline
+    ? "inline-spinner"
+    : type === "mini"
+      ? "mini-loader-wrapper text-center py-5 w-100"
+      : "spinner-container";
+  const indicatorClass = `pixora-spinner${inline ? " pixora-spinner-small" : ""}`;
 
-const Spinner = ({ type, text = "Wait a few seconds ..." }) => {
+  if (inline) {
+    return (
+      <span className={className} role="status" aria-live="polite" aria-atomic="true">
+        <span className={indicatorClass} aria-hidden="true" />
+        <span className="spinner-visually-hidden">{label}</span>
+      </span>
+    );
+  }
+
   return (
-    type === "mini" ? (<div className='mini-loader-wrapper text-center py-5 w-100'>
-      <div className="custom-spinner" style={{ width: '3rem', height: '3rem' }}></div>
-
-      <p className="mt-3 loader-text-mini">
-        <strong>Pixora.</strong><br />
-        <span>{text}</span>
-      </p>
-    </div>) : (<div className='spinner-container'>
-      {/* <div className="spinner"></div> */}
-      <div className="camera-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <p className='spinner-text'>
-        {text}
-      </p>
-    </div>)
-  )
-}
+    <div className={className} role="status" aria-live="polite" aria-atomic="true">
+      <span className={indicatorClass} aria-hidden="true" />
+      <span className="spinner-visually-hidden">{label}</span>
+      {text && (
+        <p className={type === "mini" ? "mt-3 loader-text-mini" : "spinner-text"}>
+          {type === "mini" && <><strong>Pixora.</strong><br /></>}
+          <span>{text}</span>
+        </p>
+      )}
+    </div>
+  );
+};
 
 export default Spinner

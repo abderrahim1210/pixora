@@ -12,9 +12,12 @@ import { FiInfo } from "react-icons/fi";
 import { Truncate } from "./Truncate";
 import { Helmet } from "react-helmet-async";
 import { showPixoraToast } from "../../assets/js/toast";
+import Spinner from "./Spinner";
 
 export const Upload = () => {
   const [step, setStep] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const navigate = useNavigate();
   const { user } = useAuth();
   const steps = ['Get started', 'Upload', 'Details', 'Publish'];
@@ -42,6 +45,8 @@ export const Upload = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError('');
     try {
       const { file } = photo;
       const payload = {
@@ -69,7 +74,9 @@ export const Upload = () => {
         }
       }
     } catch (err) {
-      console.log(err.response?.data);
+      setSubmitError(err.response?.data?.message || 'Unable to upload this photo. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -114,7 +121,8 @@ export const Upload = () => {
               {step === 0 && <StepZero next={next} step={step} />}
               {step === 1 && <StepTwo next={next} prev={prev} step={step} photo={photo} setPhoto={setPhoto} />}
               {step === 2 && <StepThree next={next} prev={prev} step={step} photo={photo} setPhoto={setPhoto} />}
-              {step === 3 && <StepFour prev={prev} step={step} photo={photo} user={user} />}
+              {step === 3 && <StepFour prev={prev} step={step} photo={photo} user={user} isSubmitting={isSubmitting} />}
+              {submitError && <p className="text-danger" role="alert">{submitError}</p>}
             </div>
           </form>
         </div>
@@ -442,7 +450,7 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
     </>
   );
 }
-function StepFour({ step, prev, photo, user }) {
+function StepFour({ step, prev, photo, user, isSubmitting }) {
   return (
     <>
       <section className={`step ${step === 3 ? "active" : ""}`} id="step4" data-step={4}>
@@ -508,8 +516,9 @@ function StepFour({ step, prev, photo, user }) {
             </button>
           </li>
           <li className="page-item">
-            <button type="submit" className="page-link prev">
-              Publish
+            <button type="submit" className="page-link prev" disabled={isSubmitting}>
+              {isSubmitting && <Spinner type="inline" />}
+              {isSubmitting ? 'Publishing...' : 'Publish'}
             </button>
           </li>
         </div>

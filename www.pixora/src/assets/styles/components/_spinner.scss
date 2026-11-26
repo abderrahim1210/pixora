@@ -17,23 +17,89 @@
   color: rgb(19, 94, 196);
 }
 
-.mini-loader-wrapper{
-    .custom-spinner{
-        display: inline-block;
-        border: 3px solid rgba(0, 51, 204, 0.1);
-        border-left-color: var(--special_color);
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-    }
+.pixora-spinner {
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid rgba(0, 51, 204, 0.16);
+  border-inline-end-color: var(--special_color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
 
-    .loader-text-min{
-        color: #1d293b;
-        font-size: 0.9rem;
-        letter-spacing: 0.5px;
+.pixora-spinner-small {
+  width: 1rem;
+  height: 1rem;
+  border-width: 2px;
+  vertical-align: middle;
+}
 
-        strong{color: var(--principal_color);}
-        span{color: #64748b;font-weight: 400;}
+.inline-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
 
-        animation: pulseText 1.5s infinite;
-    }
+.spinner-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.mini-loader-wrapper .loader-text-mini {
+  color: #1d293b;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  animation: pulseText 1.5s infinite;
+
+  strong {
+    color: var(--principal_color);
+  }
+
+  span {
+    color: #64748b;
+    font-weight: 400;
+  }
+}
+
+.global-loading-indicator {
+  position: fixed;
+  z-index: 11000;
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: 3px;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--special_color) 45%,
+    transparent 100%
+  );
+  transform-origin: left center;
+  animation: global-loading-progress 1.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes global-loading-progress {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixora-spinner,
+  .global-loading-indicator {
+    animation: none;
+  }
 }

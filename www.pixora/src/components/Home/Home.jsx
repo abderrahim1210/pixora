@@ -41,6 +41,8 @@ import PolicyNotice from "../Pages/PolicyNotice";
 import { Compass, Info, LayoutGrid, Sparkles } from "lucide-react";
 import { BannedOverlay } from "../Pages/BannedOverlay";
 import { SearchsList } from "./SearchsList";
+import Spinner from "../Pages/Spinner";
+import { useHeroImage } from "../utils/useHeroImage";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -48,21 +50,19 @@ export const Home = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [term, setTerm] = useState('');
-  const [heroImage, setHeroImage] = useState([]);
+  const { heroImage, loading: heroLoading, error: heroError } = useHeroImage();
   const [fade, setFade] = useState(true);
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const [showSuggestions,setShowSuggestions] = useState(false);
+  const [pendingFollowIds, setPendingFollowIds] = useState(() => new Set());
+  const [followActionError, setFollowActionError] = useState('');
 
   const fetchData = async () => {
-    try {
-      const res = await api.get("/homepage", { withCredentials: true });
-      return res.data;
-    } catch (err) {
-      console.log(err?.response?.data);
-    }
+    const res = await api.get("/homepage", { withCredentials: true });
+    return res.data;
   }
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['data'],
     queryFn: fetchData,
     staleTime: 1000 * 60 * 5,
@@ -73,45 +73,58 @@ export const Home = () => {
   const explorePhotos = data?.explore_photos || [];
   const galleries = data?.galleries || [];
 
-  const { data: follows = [] } = useQuery({
+  const {
+    data: follows = [],
+    isLoading: followsLoading,
+    error: followsError,
+  } = useQuery({
     queryKey: ['follows'],
     queryFn: async () => {
-      const res = await api.get('/follows', { withCredentials: true, withXSRFToken: true });
+      const res = await api.get('/follows', {
+        withCredentials: true,
+        withXSRFToken: true,
+        skipGlobalLoading: true,
+      });
       return res.data?.users?.map(f => f.following_id) || [];
     },
     staleTime: 1000 * 60 * 5,
-    onSuccess: (data) => setLocalFollows(data)
   });
 
   const queryClient = useQueryClient();
   const addFollow = async (id) => {
-    const newFollows = follows.includes(id) ? follows.filter(fid => fid !== id) : [...follows, id];
-    queryClient.setQueryData(['follows'], newFollows);
+    if (pendingFollowIds.has(id) || followsLoading) return;
+
+    await queryClient.cancelQueries({ queryKey: ['follows'] });
+    const previousFollows = queryClient.getQueryData(['follows']) || follows;
+    const wasFollowing = previousFollows.includes(id);
+    queryClient.setQueryData(['follows'], (currentFollows = previousFollows) =>
+      currentFollows.includes(id)
+        ? currentFollows.filter((followedId) => followedId !== id)
+        : [...currentFollows, id]
+    );
+    setPendingFollowIds((pending) => new Set(pending).add(id));
+    setFollowActionError('');
 
     try {
       await api.post('/follows', { followingID: id }, { withCredentials: true, withXSRFToken: true });
     } catch (err) {
-      queryClient.setQueryData(['follows'], previousFollows);
-      console.log(err?.response?.data);
+      queryClient.setQueryData(['follows'], (currentFollows = []) => {
+        const currentlyFollowing = currentFollows.includes(id);
+        if (currentlyFollowing === wasFollowing) return currentFollows;
+
+        return wasFollowing
+          ? [...currentFollows, id]
+          : currentFollows.filter((followedId) => followedId !== id);
+      });
+      setFollowActionError(err.response?.data?.message || 'Unable to update follow status. Please try again.');
+    } finally {
+      setPendingFollowIds((pending) => {
+        const next = new Set(pending);
+        next.delete(id);
+        return next;
+      });
     }
   }
-
-  useEffect(() => {
-    try {
-      const fetchHeroImage = async () => {
-        const res = await api.get('/get_hero_images', { withCredentials: true });
-        if (res.data.success) {
-          setHeroImage(res.data.photo);
-        } else {
-          console.log(res.data.message);
-        }
-      }
-
-      fetchHeroImage();
-    } catch (err) {
-      console.log(err?.response?.data);
-    }
-  }, []);
 
   const { user } = useAuth();
 
@@ -121,7 +134,7 @@ export const Home = () => {
 
 
   const handleLike = async (photoid) => {
-    let previousPhotos;
+    const previousData = queryClient.getQueryData(['data']);
     queryClient.setQueryData(['data'], (oldData) => {
       if (!oldData) return oldData;
       const updateMap = (list) => list.map((p) =>
@@ -156,7 +169,7 @@ export const Home = () => {
         throw new Error('Not authorized');
       }
     } catch (err) {
-      setPhotos(previousPhotos);
+      queryClient.setQueryData(['data'], previousData);
       navigate('/login', { state: { liked: true, message: "You have to logged first for add like" } });
       console.log(err.response?.data);
     }
@@ -258,10 +271,16 @@ export const Home = () => {
         </nav>
       </div>
 
-      <div className="div2" style={
-        { backgroundImage: `url(${heroImage?.filename})` }
-      }>
+      <div
+        className="div2"
+        aria-busy={heroLoading}
+        style={{
+          backgroundImage: `url(${heroImage?.filename || '/outils/backgrounds/background_pixora.jpg'})`
+        }}
+      >
         <div className="container-fluid p-0">
+          {heroLoading && <Spinner type="inline" label="Loading hero image" />}
+          {heroError && <p role="alert">{heroError}</p>}
           <Motion>
             <h1>discover amazing photos on Pixora</h1>
             <p id="quote" className={`mb-2 hero__subtitle ${fade ? 'fade-in' : 'fade-out'}`}>
@@ -315,7 +334,23 @@ export const Home = () => {
       </div>
 
       <div className="tab-content">
-        <ForYou photos={photos} user={user} isLoading={isLoading} users={users} follows={follows} addFollow={addFollow} getGreeting={getGreeting} slugiFy={slugiFy} handleLike={handleLike} />
+        <ForYou
+          photos={photos}
+          user={user}
+          isLoading={isLoading}
+          error={error}
+          onRetry={refetch}
+          users={users}
+          follows={follows}
+          followsLoading={followsLoading}
+          followsError={followsError}
+          pendingFollowIds={pendingFollowIds}
+          followActionError={followActionError}
+          addFollow={addFollow}
+          getGreeting={getGreeting}
+          slugiFy={slugiFy}
+          handleLike={handleLike}
+        />
         <Explore photos={explorePhotos} user={user} slugiFy={slugiFy} handleLike={handleLike} galleries={galleries} />
         <Categories />
         <About />

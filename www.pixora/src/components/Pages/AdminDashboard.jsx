@@ -17,8 +17,9 @@ import ShowMoreButton from './ShowMoreButton'
 import { ReportCard } from './ReportCard'
 import { useQueryClient } from '@tanstack/react-query';
 import { StaffManagement as useStaffManagement } from './StaffManagement';
+import Spinner from './Spinner';
 
-const AdminDashboard = ({ user, analytics, setAnalytics }) => {
+const AdminDashboard = ({ user, analytics, loading, error, onRetry }) => {
     const [staffVisible, setStaffVisible] = useState(4);
     const showMore = () => {
         setStaffVisible(prev => prev + 4);
@@ -33,7 +34,16 @@ const AdminDashboard = ({ user, analytics, setAnalytics }) => {
                     <p>
                         Track platform activity and performance in real-time
                     </p>
-                    {
+                    {loading ? (
+                        <Spinner type="mini" text="Loading analytics..." />
+                    ) : error ? (
+                        <div className="text-center" role="alert">
+                            <p>Unable to load analytics. {error.message}</p>
+                            <button type="button" className="btn btn-primary" onClick={() => onRetry()}>
+                                Try again
+                            </button>
+                        </div>
+                    ) : (
                         analytics ? (
                             <>
                                 <div className="stat-container">
@@ -195,7 +205,7 @@ const AdminDashboard = ({ user, analytics, setAnalytics }) => {
                         ) : (
                             <EmptyContent icon={<FaChartLine className='faIcon' />} text={"No statistics for now — try again later"} />
                         )
-                    }
+                    )}
 
                 </div>
             </div>

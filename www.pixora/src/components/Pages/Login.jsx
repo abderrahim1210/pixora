@@ -5,15 +5,20 @@ import Cookies from 'js-cookie';
 import { Helmet } from "react-helmet-async";
 import { showPixoraToast } from "../../assets/js/toast";
 import { GoogleLoginButton } from "./GoogleLoginButton";
+import Spinner from "./Spinner";
+import { useHeroImage } from "../utils/useHeroImage";
 
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  const [heroImage, setHeroImage] = useState([]);
+  const { heroImage, loading: heroLoading, error: heroError } = useHeroImage();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
     try {
       const res = await api.post('/login', { email, password }, {
         withCredentials: true, withXSRFToken: true, headers: {
@@ -32,6 +37,8 @@ export const Login = () => {
     }
     catch (err) {
       setError(err.response?.data?.message || 'Server error')
+    } finally {
+      setIsSubmitting(false);
     }
   }
   useEffect(() => {
@@ -40,22 +47,6 @@ export const Login = () => {
       navigate(location.pathname, { replace: true, state: {} })
     }
   }, [location.state]);
-  useEffect(() => {
-    try {
-      const fetchHeroImage = async () => {
-        const res = await api.get('/get_hero_images', { withCredentials: true });
-        if (res.data.success) {
-          setHeroImage(res.data.photo);
-        } else {
-          console.log(res.data.message);
-        }
-      }
-
-      fetchHeroImage();
-    } catch (err) {
-      console.log(err?.response?.data);
-    }
-  }, []);
   return (
     <div data-bs-page="login" id="login">
       <Helmet>
@@ -65,10 +56,12 @@ export const Login = () => {
         <div className="dv1-0 login_div" style={{
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('${heroImage?.filename ?? "/outils/jpg/Photographe1.png"}')`,
           backgroundPosition: heroImage?.focal_point || 'center'
-        }}>
+        }} aria-busy={heroLoading}>
           <div className="login-label">Login Page</div>
 
-          {heroImage && (<div className="photographer-name">
+          {heroLoading && <Spinner type="inline" label="Loading hero image" />}
+          {heroError && <p role="alert">{heroError}</p>}
+          {heroImage?.filename && (<div className="photographer-name">
             Shot by <strong>{heroImage?.username || 'Anonymous'}</strong>
           </div>)}
         </div>
@@ -142,8 +135,10 @@ export const Login = () => {
                     type="submit"
                     className="btn w-100 actionButton"
                     title="Click for login."
+                    disabled={isSubmitting}
                   >
-                    Login
+                    {isSubmitting && <Spinner type="inline" />}
+                    {isSubmitting ? 'Signing in...' : 'Login'}
                   </button>
                 </div>
                 <GoogleLoginButton />

@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ThemeProvider from './components/context/ThemeProvider';
 import { Toaster } from 'sonner';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import GlobalLoadingIndicator from './components/Pages/GlobalLoadingIndicator';
 const AppRoutes = React.lazy(() => import('./components/routes/AppRoutes'));
 const queryClient = new QueryClient();
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <ThemeProvider>
             <AuthProvider>
               <ModalProvider>
+                <GlobalLoadingIndicator />
                 <Suspense fallback={<Spinner />}>
                   <PayPalScriptProvider options={initilaOptions}>
                     <AppRoutes />

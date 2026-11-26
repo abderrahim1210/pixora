@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Navbar } from "./Layouts/Navbar";
 import {
   FaBan,
@@ -84,6 +84,7 @@ export const MyProfile = () => {
   const profileRef = useRef();
   const coverRef = useRef();
   const [loading, setLoading] = useState(true);
+  const [profileError, setProfileError] = useState('');
   const [preview, setPreview] = useState(null);
   const [taskId, setTaskId] = useState(null);
   const [ownerId, setOwnerId] = useState(null);
@@ -122,29 +123,42 @@ export const MyProfile = () => {
     return;
   }
 
-  useEffect(() => {
-    api
-      .get("/myprofile", {
+  const loadProfile = useCallback(async () => {
+    setLoading(true);
+    setProfileError('');
+    try {
+      const res = await api.get("/myprofile", {
         withCredentials: true,
         withXSRFToken: true,
         headers: {
           "Content-Type": "application/json",
         }
-      })
-      .then((res) => {
-        if (res.data.success) {
-          setUser(res.data.user);
-          setPhotos(res.data.photos);
-          setLoading(false);
-          setStatistics(res.data.statistics);
-          setOriginalUser(res.data.user);
-          setPhotosCount(res.data.photosCount);
-          setPaymentsSettings(res.data.paymentsSettings);
-          reset(res.data.user);
-        }
+      });
+      if (!res.data.success) {
+        throw new Error(res.data.message || 'Unable to load your profile.');
       }
-      ).catch(err => console.log(err.response?.data));
-  }, []);
+
+      setUser(res.data.user);
+      setPhotos(res.data.photos);
+      setStatistics(res.data.statistics);
+      setOriginalUser(res.data.user);
+      setPhotosCount(res.data.photosCount);
+      setPaymentsSettings(res.data.paymentsSettings);
+      reset(res.data.user);
+    } catch (requestError) {
+      setProfileError(
+        requestError.response?.data?.message ||
+        requestError.message ||
+        'Unable to load your profile.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [reset]);
+
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
 
   const onSubmit = async (data) => {
     try {
@@ -180,17 +194,23 @@ export const MyProfile = () => {
     }
   }
 
-  const { data: adminAnalytics = [], isLoading, error } = useQuery({
+  const {
+    data: adminAnalytics = [],
+    isLoading: analyticsLoading,
+    error: analyticsError,
+    refetch: refetchAnalytics,
+  } = useQuery({
     queryKey: ['adminAnalytics'],
     queryFn: async () => {
-      try {
-        const res = await api.get('/admin_analytics', { withCredentials: true, withXSRFToken: true });
-        if (res.data.success) {
-          return res.data;
-        }
-      } catch (err) {
-        console.log(err?.response?.data || err?.message);
+      const res = await api.get('/admin_analytics', {
+        withCredentials: true,
+        withXSRFToken: true,
+        skipGlobalLoading: true,
+      });
+      if (!res.data.success) {
+        throw new Error(res.data.message || 'Unable to load analytics.');
       }
+      return res.data;
     },
     staleTime: 1000 * 60 * 5,
     enabled: !!user && user.role === "admin",
@@ -348,7 +368,16 @@ export const MyProfile = () => {
       </Helmet>
       <Navbar />
       {
-        !loading ? (
+        loading ? (
+          <PageSkeleton page='myprofile' />
+        ) : profileError ? (
+          <div className="text-center p-4" role="alert">
+            <p>{profileError}</p>
+            <button type="button" className="btn btn-primary" onClick={loadProfile}>
+              Try again
+            </button>
+          </div>
+        ) : (
           <>
             {show === "profilePicture" && (
               <>
@@ -491,7 +520,13 @@ export const MyProfile = () => {
                     <Settings handleLogOut={handleLogOut} paymentsSettings={paymentsSettings} />
                     {
                       user?.role === 'admin' && (
-                        <AdminDashboard user={user} analytics={analytics} />
+                        <AdminDashboard
+                          user={user}
+                          analytics={analytics}
+                          loading={analyticsLoading}
+                          error={analyticsError}
+                          onRetry={refetchAnalytics}
+                        />
                       )
                     }
                     {
@@ -509,7 +544,7 @@ export const MyProfile = () => {
               </div>
             </main>
           </>
-        ) : (<PageSkeleton page='myprofile' />)
+        )
       }
       <BottomNav page={'profile'} user={user} />
       <Footer type={"dash"} />

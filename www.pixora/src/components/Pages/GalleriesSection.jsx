@@ -7,20 +7,18 @@ import { Footer } from './Layouts/Footer'
 import { Navbar } from './Layouts/Navbar'
 import { BiChevronDown, BiSearchAlt } from 'react-icons/bi'
 import { Helmet } from 'react-helmet-async'
+import Spinner from './Spinner'
 const GalleriesSection = () => {
     const [visible, setVisible] = useState(5);
     const [searchTerme,setSearchTerme] = useState('');
     const fetchGalleries = async () => {
-        try {
-            const res = await api.get('/get_all_galleries', { withCredentials: true, withXSRFToken: true });
-            if (res.data.success) {
-                return res.data.galleries;
-            }
-        } catch (err) {
-            console.log(err?.response?.data);
+        const res = await api.get('/get_all_galleries', { withCredentials: true, withXSRFToken: true });
+        if (!res.data.success) {
+            throw new Error(res.data.message || 'Unable to load galleries.');
         }
+        return res.data.galleries || [];
     }
-    const { data: galleries = [], isLoading, error } = useQuery({
+    const { data: galleries = [], isLoading, error, refetch } = useQuery({
         queryKey: ['galleries'],
         queryFn: fetchGalleries
     });
@@ -68,16 +66,29 @@ const GalleriesSection = () => {
                     </div>
                 </div>
                 <hr />
-                <GalleriesTemplate galleries={filtreGalleries} visible={visible} showMoreProducts={showMoreProducts} />
-                {
-                    visible < filtreGalleries.length && (
-                        <div className='show-more-wrapper'>
-                            <button className='btn-show-more' onClick={showMoreProducts}>
-                                Show more <BiChevronDown size={18} />
-                            </button>
-                        </div>
-                    )
-                }
+                {isLoading ? (
+                    <Spinner type="mini" text="Loading galleries..." />
+                ) : error ? (
+                    <div className="text-center" role="alert">
+                        <p>Unable to load galleries. {error.message}</p>
+                        <button type="button" className="btn-show-more" onClick={() => refetch()}>
+                            Try again
+                        </button>
+                    </div>
+                ) : (
+                    <>
+                        <GalleriesTemplate galleries={filtreGalleries} visible={visible} showMoreProducts={showMoreProducts} />
+                        {
+                            visible < filtreGalleries.length && (
+                                <div className='show-more-wrapper'>
+                                    <button className='btn-show-more' onClick={showMoreProducts}>
+                                        Show more <BiChevronDown size={18} />
+                                    </button>
+                                </div>
+                            )
+                        }
+                    </>
+                )}
             </div>
             <Footer type={'footer'} />
         </>

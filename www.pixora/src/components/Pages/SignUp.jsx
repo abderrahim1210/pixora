@@ -9,11 +9,14 @@ import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
 import { showPixoraToast } from "../../assets/js/toast";
 import { GoogleLoginButton } from "./GoogleLoginButton";
+import Spinner from "./Spinner";
+import { useHeroImage } from "../utils/useHeroImage";
 
 
 export const SignUp = () => {
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [user, setUser] = useState({
     username: "",
     email: "",
@@ -29,7 +32,7 @@ export const SignUp = () => {
   const next = () => setStep((s) => s + 1);
   const prev = () => setStep((s) => s - 1);
   const [countries, setCountries] = useState([]);
-  const [heroImage, setHeroImage] = useState([]);
+  const { heroImage, loading: heroLoading, error: heroError } = useHeroImage();
   useEffect(() => {
     try {
       axios.get('/json/countries.json')
@@ -41,6 +44,8 @@ export const SignUp = () => {
   }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
     try {
       const payload = {
         username: user.username,
@@ -65,10 +70,13 @@ export const SignUp = () => {
         });
         navigate('/login');
       } else {
+        setError(res.data.message || 'Unable to create your account.');
         showPixoraToast(`Error : ${res.data.message}`);
       }
     } catch (err) {
-      console.log(err.response?.data);
+      setError(err.response?.data?.message || 'Unable to create your account. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   }
   const handleFormSubmit = (e) => {
@@ -77,22 +85,6 @@ export const SignUp = () => {
       handleSubmit(e);
     }
   }
-  useEffect(() => {
-    try {
-      const fetchHeroImage = async () => {
-        const res = await api.get('/get_hero_images', { withCredentials: true });
-        if (res.data.success) {
-          setHeroImage(res.data.photo);
-        } else {
-          console.log(res.data.message);
-        }
-      }
-
-      fetchHeroImage();
-    } catch (err) {
-      console.log(err?.response?.data);
-    }
-  }, []);
   return (
     <div data-bs-page="signup" id="signup">
       <Helmet>
@@ -102,11 +94,13 @@ export const SignUp = () => {
         <div className="dv1-0 login_div" style={{
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('${heroImage?.filename ?? "/outils/jpg/photographe4.png"}')`,
           backgroundPosition: heroImage?.focal_point || 'center'
-        }}>
+        }} aria-busy={heroLoading}>
           <div className="login-label">Sign up Page</div>
 
+          {heroLoading && <Spinner type="inline" label="Loading hero image" />}
+          {heroError && <p role="alert">{heroError}</p>}
           {
-            heroImage && (
+            heroImage?.filename && (
               <div className="photographer-name">
                 Shot by <strong>{heroImage?.username || 'Anonymous'}</strong>
               </div>
@@ -144,8 +138,9 @@ export const SignUp = () => {
               {step === 1 && <StepOne next={next} step={step} navigate={navigate} />}
               {step === 2 && <StepTwo next={next} prev={prev} step={step} navigate={navigate} user={user} setUser={setUser} />}
               {step === 3 && <StepThree next={next} prev={prev} step={step} navigate={navigate} user={user} setUser={setUser} countries={countries} />}
-              {step === 4 && <StepFour prev={prev} step={step} />}
+              {step === 4 && <StepFour prev={prev} step={step} isSubmitting={isSubmitting} />}
             </form>
+            {error && <p className="text-danger" role="alert">{error}</p>}
           </div>
         </div>
       </div>
@@ -384,7 +379,7 @@ function StepThree({ prev, next, step, user, setUser, countries }) {
   )
 }
 
-function StepFour({ prev, step }) {
+function StepFour({ prev, step, isSubmitting }) {
   return (
     <section className={`step ${step === 4 ? "active" : ""}`} id="step4" data-step={4}>
       <div className="text-start col">
@@ -418,8 +413,10 @@ function StepFour({ prev, step }) {
               type="submit"
               id="signupButton"
               className={`actionButton btn next`}
+              disabled={isSubmitting}
             >
-              Sign Up
+              {isSubmitting && <Spinner type="inline" />}
+              {isSubmitting ? 'Creating account...' : 'Sign Up'}
             </button>
           </div>
         </div>

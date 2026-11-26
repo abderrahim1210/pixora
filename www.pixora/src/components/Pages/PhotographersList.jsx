@@ -7,7 +7,7 @@ import { FaCameraRetro } from 'react-icons/fa'
 import Spinner from './Spinner'
 import { Helmet } from 'react-helmet-async'
 
-const PhotographersList = ({ user,filtredUsers, isLoading, visible,addFollow }) => {
+const PhotographersList = ({ user,filtredUsers, isLoading, followsLoading, pendingFollowIds, visible,addFollow }) => {
     const navigate = useNavigate();
     return (
 
@@ -37,8 +37,10 @@ const PhotographersList = ({ user,filtredUsers, isLoading, visible,addFollow }) 
                                             className={`followButton ${u.followClasse} ${user && user?.role === "admin" && "disabled"} btn`}
                                             id="followButton"
                                             onClick={() => addFollow(u.id)}
+                                            disabled={followsLoading || pendingFollowIds.has(u.id) || user?.role === "admin" || user?.role === "editor"}
                                         >
-                                            {u.followText}
+                                            {(followsLoading || pendingFollowIds.has(u.id)) && <Spinner type="inline" />}
+                                            {pendingFollowIds.has(u.id) ? 'Updating...' : followsLoading ? 'Loading...' : u.followText}
                                         </button>
                                     </div>
                                 ) : (

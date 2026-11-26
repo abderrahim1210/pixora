@@ -6,8 +6,25 @@ import { FaPhotoFilm } from 'react-icons/fa6'
 import Photos from './Photos'
 import { Link } from 'react-router-dom'
 import { EmptyContent } from '../Pages/EmptyContent'
+import Spinner from '../Pages/Spinner'
 
-const ForYou = ({ photos, user, isLoading, users, follows, addFollow, getGreeting, slugiFy, handleLike }) => {
+const ForYou = ({
+    photos,
+    user,
+    isLoading,
+    error,
+    onRetry,
+    users,
+    follows,
+    followsLoading,
+    followsError,
+    pendingFollowIds,
+    followActionError,
+    addFollow,
+    getGreeting,
+    slugiFy,
+    handleLike
+}) => {
     return (
         <div
             className="container-fluid tab-pane fade show active mt-3 mb-3"
@@ -21,7 +38,14 @@ const ForYou = ({ photos, user, isLoading, users, follows, addFollow, getGreetin
                 </span>
             </div>
             <div className="photos">
-                {isLoading ? Array(4).fill().map((_, i) => <PageSkeleton key={i} page={'photos'} />) : photos.length > 0 ? photos.map((p, index) => (
+                {error ? (
+                    <div className="text-center" role="alert">
+                        <p>Unable to load photos. {error.message}</p>
+                        <button type="button" className="btn-show-more" onClick={() => onRetry()}>
+                            Try again
+                        </button>
+                    </div>
+                ) : isLoading ? Array(4).fill().map((_, i) => <PageSkeleton key={i} page={'photos'} />) : photos.length > 0 ? photos.map((p, index) => (
                     <React.Fragment key={index}>
                         {(index + 1) % 4 === 0 && (
                             <div className="feed-break-section">
@@ -30,6 +54,11 @@ const ForYou = ({ photos, user, isLoading, users, follows, addFollow, getGreetin
                                     <Link to="/photographers">See all</Link>
                                 </div>
                                 <div className="photographers-horizontal-scroll">
+                                    {(followsError || followActionError) && (
+                                        <p role="alert">
+                                            {followActionError || 'Unable to load follow status.'}
+                                        </p>
+                                    )}
                                     {users.filter(u => u.id !== user?.id).slice(0, 6).map(u => (
                                         <div className="mini-user-card" key={u.id}>
                                             <Avatar src={u.photo_profile ?? "/outils/pngs/useracc2.png"} size={60} />
@@ -40,7 +69,14 @@ const ForYou = ({ photos, user, isLoading, users, follows, addFollow, getGreetin
                                                     )}
                                                 </Truncate>
                                             </Link>
-                                            <button className={`btn-follow-sm ${follows.includes(u.id) ? 'followed' : ''} ${user?.role === 'admin' && 'disabled'}`} disabled={user?.role === 'admin'} onClick={() => addFollow(u.id)}>{follows.includes(u.id) ? 'Followed' : 'Follow'}</button>
+                                            <button
+                                                className={`btn-follow-sm ${follows.includes(u.id) ? 'followed' : ''} ${(user?.role === 'admin' || user?.role === 'editor') && 'disabled'}`}
+                                                disabled={followsLoading || pendingFollowIds.has(u.id) || user?.role === 'admin' || user?.role === 'editor'}
+                                                onClick={() => addFollow(u.id)}
+                                            >
+                                                {(followsLoading || pendingFollowIds.has(u.id)) && <Spinner type="inline" />}
+                                                {pendingFollowIds.has(u.id) ? 'Updating...' : followsLoading ? 'Loading...' : follows.includes(u.id) ? 'Followed' : 'Follow'}
+                                            </button>
                                         </div>
                                     ))}
                                 </div>
