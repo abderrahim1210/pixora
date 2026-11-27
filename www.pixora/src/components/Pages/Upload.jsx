@@ -225,7 +225,7 @@ function StepTwo({ step, prev, next, photo, setPhoto }) {
                   name="photoFile"
                   className="form-control d-none"
                   id="uploadPhoto"
-                  accept=".webp, .webp, .webp"
+                  accept=".png, .jpg, .jpeg"
                   required
                   ref={fileRef}
                   onChange={handleChange}
@@ -343,7 +343,6 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
               <input
                 name="title"
                 type="text"
-                // id="titlePhoto"
                 className="form-control"
                 placeholder="Give it a catchy name..."
                 required
@@ -360,7 +359,6 @@ function StepThree({ step, prev, next, photo, setPhoto }) {
               </label>
               <textarea
                 name="description"
-                // id="descriptionPhoto"
                 className="form-control"
                 placeholder="The story behind this shot..."
                 required
@@ -481,7 +479,6 @@ function StepFour({ step, prev, photo, user, isSubmitting }) {
                       <><strong className={className} style={style}>{text}</strong></>
                     )}
                   </Truncate>
-                  {/* <strong>{photo.description}</strong> */}
                 </li>)
               }
               {
@@ -522,9 +519,6 @@ function StepFour({ step, prev, photo, user, isSubmitting }) {
             </button>
           </li>
         </div>
-        {/* <button type="submit" className="btn" id="uploadButton">
-          Upload
-        </button> */}
       </section>
     </>
   );
