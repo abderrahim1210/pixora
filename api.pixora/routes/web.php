@@ -49,6 +49,7 @@ use App\Http\Controllers\UploadResult;
 use App\Models\Category;
 use App\Models\Gallery;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -56,8 +57,8 @@ Route::get('/', function () {
     return ['Laravel' => app()->version()];
 });
 
-Route::get('/user', function () {
-    $user = Auth::user();
+Route::get('/user', function (Request $request) {
+    $user = $request->user('sanctum');
     if (!$user) {
         return response()->json(['success' => false], 401);
     }
@@ -67,7 +68,7 @@ Route::get('/user', function () {
         'username' => $user->username,
         'photo_profile' => $user->photo_profile,
         'role' => $user->role,
-        'status' => $user->status
+        'status' => $user->status,
     ]]);
 });
 

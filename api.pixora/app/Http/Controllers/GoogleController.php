@@ -28,15 +28,17 @@ class GoogleController extends Controller
 
             if (!$user) {
                 $user = User::create([
-                    'username' => $googleUser->getName(),
+                    'username' => strtolower(str_replace(' ', '', $googleUser->getName())) . '_' . uniqid(),
                     'email' => $googleUser->getEmail(),
-                    'password' => bcrypt(Str::random(16))
+                    'password' => bcrypt(Str::random(16)),
                 ]);
             }
 
-            Auth::login($user);
+            $token = $user->createToken('google')->plainTextToken;
 
-            return redirect(rtrim((string) config('app.frontend_url'), '/') . '/');
+            return redirect(
+                rtrim((string) config('app.frontend_url'), '/') . '/auth/callback?token=' . urlencode($token)
+            );
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

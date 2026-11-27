@@ -24,6 +24,7 @@ import { useAuth } from "../context/AuthProvider";
 import { ManagePaymentAccounts } from "../Pages/Profile/ManagePaymentAccounts";
 import { PaymentVerify } from "../Pages/PaymentVerify";
 import { DownloadImage } from "../Pages/DownloadImage";
+import AuthCallback from "../Pages/AuthCallback";
 const AppRoutes = () => {
   const { user } = useAuth();
   const location = useLocation();
@@ -40,6 +41,7 @@ const AppRoutes = () => {
         <Route path="/upload" element={<Upload />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path={`/user/:username/dashboard`} element={<UserDashboard />} />
         <Route path={`/user/:username/myprofile`} element={<MyProfile />} />
         <Route path="/photo/:id/:slug" element={<Photo />} />
