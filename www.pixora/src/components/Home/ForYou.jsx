@@ -30,7 +30,6 @@ const ForYou = ({
             className="container-fluid tab-pane fade show active mt-3 mb-3"
             id="foryou"
         >
-            {/* <h1 className="text-center fw-bold">For you</h1> */}
             <div className="for-you-header d-flex justify-content-center align-items-center flex-column text-center gap-1 mb-2">
                 <h1 className="fw-bold text-center">For you</h1>
                 <span className="text-muted fw-light greeting-text">

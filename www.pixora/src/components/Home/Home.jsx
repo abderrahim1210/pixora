@@ -129,7 +129,7 @@ export const Home = () => {
   const { user } = useAuth();
 
   function slugiFy(text) {
-    return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+    return text ? text.toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu, "").replace(/\s+/g, "-").replace(/-+/g, "-") : 'photo';
   }
 
 
