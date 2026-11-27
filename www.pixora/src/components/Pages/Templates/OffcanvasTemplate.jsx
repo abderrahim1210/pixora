@@ -42,6 +42,8 @@ const OffcanvasTemplate = ({ user, page = 'home' }) => {
         } catch (error) {
             setLogoutError(error.response?.data?.message || error.message || 'Unable to log out. Please try again.');
         } finally {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
             setIsLoggingOut(false);
         }
     };

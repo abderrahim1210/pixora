@@ -229,6 +229,9 @@ export const MyProfile = () => {
       }
     } catch (err) {
       console.log(err?.response?.data);
+    } finally {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
     }
   }
 
