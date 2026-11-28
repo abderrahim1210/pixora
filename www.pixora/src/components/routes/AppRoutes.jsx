@@ -18,12 +18,8 @@ import { ResetPassword } from "../Pages/ResetPassword";
 import { Reports } from "../Pages/Reports";
 import { ReportDetails } from "../Pages/ReportDetails";
 import { AllStaff } from "../Pages/AllStaff";
-import { AllRequestsAdmin } from "../Pages/AllRequestsAdmin";
 import { BannedOverlay } from "../Pages/BannedOverlay";
 import { useAuth } from "../context/AuthProvider";
-import { ManagePaymentAccounts } from "../Pages/Profile/ManagePaymentAccounts";
-import { PaymentVerify } from "../Pages/PaymentVerify";
-import { DownloadImage } from "../Pages/DownloadImage";
 import AuthCallback from "../Pages/AuthCallback";
 const AppRoutes = () => {
   const { user } = useAuth();
@@ -56,10 +52,6 @@ const AppRoutes = () => {
         <Route path="/reports" element={<Reports />} />
         <Route path="/report/:id" element={<ReportDetails />} />
         <Route path="/staff" element={<AllStaff />} />
-        <Route path="/requests" element={<AllRequestsAdmin />} />
-        <Route path="/manage_payment_accounts" element={<ManagePaymentAccounts />} />
-        <Route path="/payment_verify/:req_id" element={<PaymentVerify />} />
-        <Route path="/download/image/:req_id" element={<DownloadImage />} />
       </Routes>
     </>
   );

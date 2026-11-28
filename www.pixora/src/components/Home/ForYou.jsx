@@ -40,9 +40,6 @@ const ForYou = ({
                 {error ? (
                     <div className="text-center" role="alert">
                         <p>Unable to load photos. {error.message}</p>
-                        <button type="button" className="btn-show-more" onClick={() => onRetry()}>
-                            Try again
-                        </button>
                     </div>
                 ) : isLoading ? Array(4).fill().map((_, i) => <PageSkeleton key={i} page={'photos'} />) : photos.length > 0 ? photos.map((p, index) => (
                     <React.Fragment key={index}>

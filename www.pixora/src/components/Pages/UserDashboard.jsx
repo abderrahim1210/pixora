@@ -13,10 +13,8 @@ import { Footer } from "./Layouts/Footer";
 import { useModal } from "../context/ModalProvider";
 import ModalTemplate from "./Templates/ModalTemplate";
 import GalleriesTemplate from "./Templates/GalleriesTemplate";
-import RequestCard from "./RequestCard";
 import TopBarPhotos from "./Photos/TopBarPhotos";
 import ListePhotos from "./Photos/ListePhotos";
-import Requests from "./Photos/Requests";
 import Likes from "./Photos/Likes";
 import Galleries from "./Photos/Galleries";
 import BottomNav from "./Layouts/BottomNav";
@@ -157,7 +155,6 @@ export const UserDashboard = () => {
             <TopBarPhotos />
             <div className="tab-content">
               <ListePhotos loading={loading} photos={photos} />
-              <Requests requests={requests} setRequests={setRequests} myRequests={myRequests} />
               <Likes photosLikes={photosLikes} loading={loading} />
               <Galleries galleries={galleries} openModal={openModal} />
             </div>

@@ -18,15 +18,6 @@ const TopBarPhotos = () => {
                     </li>
                     <li className="nav-item">
                         <a
-                            data-bs-target="#requests"
-                            data-bs-toggle="tab"
-                            className="nav-link"
-                        >
-                            <FaEdit /> requests
-                        </a>
-                    </li>
-                    <li className="nav-item">
-                        <a
                             data-bs-target="#likes"
                             data-bs-toggle="tab"
                             className="nav-link"

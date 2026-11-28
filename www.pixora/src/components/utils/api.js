@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: '/backend',
+  baseURL: "https://api.pixora.test",
   withCredentials: true,
   withXSRFToken: true,
   headers: {

@@ -1,21 +1,13 @@
 import React, { useState } from 'react'
 import { FaCamera, FaCameraRetro, FaChartArea, FaChartLine, FaCheckCircle, FaClock, FaComment, FaComments, FaFlag, FaMedal, FaStar, FaTimesCircle, FaTrophy, FaUserPlus, FaUsers, FaUserShield } from 'react-icons/fa'
-import { MdComment, MdEdit, MdPending } from 'react-icons/md'
-import { Truncate } from './Truncate'
 import { Link } from 'react-router-dom'
 import PhotosTemplate from './Templates/PhotosTemplate'
 import PhotographersTemplate from './Templates/PhotographersTemplate'
 import { EmptyContent } from './EmptyContent'
-import { FiUserPlus, FiUsers } from 'react-icons/fi'
-import LatestRequests from './LatestRequests'
 import StaffUserCard from './StaffUserCard'
 import { Flag, Star, Stars } from 'lucide-react'
-import axios from 'axios'
-import Swal from 'sweetalert2'
-import withReactComponent from 'sweetalert2-react-content'
 import ShowMoreButton from './ShowMoreButton'
 import { ReportCard } from './ReportCard'
-import { useQueryClient } from '@tanstack/react-query';
 import { StaffManagement as useStaffManagement } from './StaffManagement';
 import Spinner from './Spinner';
 
@@ -53,11 +45,6 @@ const AdminDashboard = ({ user, analytics, loading, error, onRetry }) => {
                                         <p>{analytics?.counters?.total_photos ?? 0}</p>
                                     </div>
                                     <div className="stat-card">
-                                        <MdEdit size={25} className='stat-icon' />
-                                        <h3>Requests</h3>
-                                        <p>{analytics?.counters?.total_requests ?? 0}</p>
-                                    </div>
-                                    <div className="stat-card">
                                         <FaUsers size={25} className='stat-icon' />
                                         <h3>All Users</h3>
                                         <p>{analytics.counters?.total_users ?? 0}</p>
@@ -73,8 +60,6 @@ const AdminDashboard = ({ user, analytics, loading, error, onRetry }) => {
                                     <nav className='nav'>
                                         <li className='nav-item'><a href="" data-bs-target="#top_photographers"
                                             data-bs-toggle="tab" className='nav-link active'><FaTrophy /> Top photographers <span className='badge-count'>({analytics?.top_photographers?.length ?? 0})</span></a></li>
-                                        <li className='nav-item'><a href="" data-bs-target="#requests"
-                                            data-bs-toggle="tab" className='nav-link'><MdEdit /> Requests <span className="badge-count">({analytics?.requests?.length ?? 0})</span></a></li>
                                         <li className='nav-item'><a href="" data-bs-target="#staff"
                                             data-bs-toggle="tab" className='nav-link'><FaUserShield /> Staff <span className='badge-count'>({analytics?.staff?.filter(s => s.id !== user?.id)?.length ?? 0})</span></a></li>
                                         <li className='nav-item'><a href="" data-bs-target="#reports"
@@ -91,20 +76,6 @@ const AdminDashboard = ({ user, analytics, loading, error, onRetry }) => {
                                                     <EmptyContent icon={<FaTrophy size={40} style={{ cursor: "pointer" }} />} text={"No photographers yet — try again later !"} />
                                                 )
                                             }
-                                        </div>
-                                    </div>
-                                    <div className="tab-pane fade show" id="requests">
-                                        <div>
-                                            {analytics?.requests?.length > 0 && (<div className='section-header'><div className='d-flex gap-1 align-items-center'><MdEdit /><h4>Requests <span className='text-primary'>({analytics?.requests?.length ?? 0})</span></h4></div><Link to={'/requests'}>See all</Link></div>)}
-                                            <div className='container-fluid mt-0 div3'>
-                                                {
-                                                    analytics.requests?.length > 0 ? (
-                                                        <LatestRequests requests={analytics.requests} />
-                                                    ) : (
-                                                        <EmptyContent icon={<MdEdit className='faIcon' />} text={"No top requests found it - try again later"} />
-                                                    )
-                                                }
-                                            </div>
                                         </div>
                                     </div>
                                     <div className="tab-pane fade show" id="staff">

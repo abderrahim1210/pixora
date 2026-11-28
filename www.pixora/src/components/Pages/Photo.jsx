@@ -25,7 +25,6 @@ import { Footer } from "./Layouts/Footer";
 import GalleriesTemplate from "./Templates/GalleriesTemplate";
 import EditButton from "./EditButton";
 import PhotosTemplate from "./Templates/PhotosTemplate";
-import PhotosEdited from "./PhotosEdited";
 import Tooltip from "../Overlays/Tooltip";
 import { Flag } from "lucide-react";
 import Report from "./Report";
@@ -34,7 +33,6 @@ import { PhotosLikeOriginal } from "./PhotosLikeOriginal";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from 'sonner';
 import { showPixoraToast } from "../../assets/js/toast";
-import { RequestEditModal } from "./RequestEditModal";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -225,25 +223,6 @@ export const Photo = (props) => {
         setSelected((prev) => prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]);
     }
 
-    const requestEditForm = async () => {
-        try {
-            const sendRequestEdit = async () => {
-                const res = await api.post('/send_request', { message: requestMessage, owner_id: photo?.user?.id, image_id: photo?.id }, { withCredentials: true, withXSRFToken: true });
-                if (res.data.success) {
-                    showPixoraToast(res.data.message);
-                    window.location.reload();
-                    return;
-                } else {
-                    console.log(res.data.message);
-                }
-            }
-
-            sendRequestEdit();
-        } catch (err) {
-            console.log(err?.response?.data);
-        }
-    }
-
     const categoryPhoto = categories?.find(c => c.id === fields.category_id)?.name;
 
     const fetchPhotos = async () => {
@@ -343,14 +322,6 @@ export const Photo = (props) => {
                                 }
                             </div>
                         </div>
-                    </ModalTemplate>
-                )
-            }
-
-            {
-                show === "request_edit" && (
-                    <ModalTemplate show={show} closeModal={closeModal}>
-                        <RequestEditModal photo={photo} />
                     </ModalTemplate>
                 )
             }

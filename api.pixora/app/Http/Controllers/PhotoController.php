@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\EditionRequest;
-use App\Models\Image;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,18 +19,11 @@ class PhotoController extends Controller
                 'message' => 'Photo not found'
             ]);
         }
-        $request = null;
-        if ($user) {
-            $request = EditionRequest::where('image_id', $photo->id)->where('requester_id', $user->id)->first();
-        }
-
         $photo->created_at_human = $photo->created_at->diffForHumans();
         $photo->comments->each(function ($comment) {
             $comment->created_at_human = $comment->created_at->diffForHumans();
         });
         $photo->isLiked = $user ? $photo->likes->contains('user_id', $user->id) : false;
-
-        $photos_edits = Image::with(['parent:id,filename','request.requester:id,username','editor:id,username'])->where('parent_id', $photo->id)->where('is_paid',1)->get();
 
         return response()->json([
             'success' => true,
@@ -43,8 +34,6 @@ class PhotoController extends Controller
             'categories' => [],
             'comments' => $photo->comments,
             'galleries' => $photo->galleries,
-            'request' => $request,
-            'photos_edits' => $photos_edits
         ]);
     }
 

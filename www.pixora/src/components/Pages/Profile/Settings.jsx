@@ -6,9 +6,8 @@ import ModalTemplate from "../Templates/ModalTemplate";
 import UpdateData from '../Settings/UpdateData';
 import { useTheme } from '../../context/ThemeProvider';
 import DeleteAccount from '../Settings/DeleteAccount';
-import { PaymentSettings } from '../Settings/PaymentSettings';
 import { useNavigate } from 'react-router-dom';
-const Settings = ({ handleLogOut, paymentsSettings }) => {
+const Settings = ({ handleLogOut }) => {
     const { show, openModal, closeModal } = useModal();
     const { dark, setDark } = useTheme();
 
@@ -29,13 +28,6 @@ const Settings = ({ handleLogOut, paymentsSettings }) => {
                 show === 'deleteAccount' && (
                     <ModalTemplate show={show} closeModal={closeModal}>
                         <DeleteAccount />
-                    </ModalTemplate>
-                )
-            }
-            {
-                show === 'paymentSettings' && (
-                    <ModalTemplate show={show} closeModal={closeModal}>
-                        <PaymentSettings closeModal={closeModal} />
                     </ModalTemplate>
                 )
             }
@@ -79,40 +71,6 @@ const Settings = ({ handleLogOut, paymentsSettings }) => {
                             Change
                         </button>
                     </div>
-                </div>
-                <div className="settings-group mb-4">
-                    <h5 className="text-secondary mb-3">
-                        <FaWallet className="me-2" />
-                        Financials &amp; Payouts
-                    </h5>
-                    <div className="setting-card">
-                        <div className="setting-info">
-                            <FaWallet />
-                            <div>
-                                <h6>Payouts Accounts</h6>
-                                <p>Configure your preferred method to receive earnings (PayPal active).</p>
-                            </div>
-                        </div>
-                        <button onClick={() => openModal('paymentSettings')} type="button" className="btn btn-sm">
-                            Configure
-                        </button>
-                    </div>
-                    {
-                        paymentsSettings?.length > 0 && (
-                            <div className="setting-card">
-                                <div className="setting-info">
-                                    <FaListUl />
-                                    <div>
-                                        <h6>Manage Payment Methods</h6>
-                                        <p>You have {paymentsSettings?.length ?? 0} connected account(s). View and switch active methods.</p>
-                                    </div>
-                                </div>
-                                <button onClick={() => navigate('/manage_payment_accounts')} type="button" className="btn btn-sm">
-                                    Manage accounts
-                                </button>
-                            </div>
-                        )
-                    }
                 </div>
                 <div className="settings-group mb-4">
                     <h5 className="text-secondary mb-3">

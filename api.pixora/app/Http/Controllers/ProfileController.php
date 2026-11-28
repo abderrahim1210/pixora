@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Follow;
-use App\Models\PaymentSetting;
 use App\Models\User;
 // use Illuminate\Http\Client\Request;
 use Illuminate\Http\Request;
@@ -29,14 +28,11 @@ class ProfileController extends Controller
 
         $photos_count = DB::table('photos')->where('user_id', $user->id)->count();
 
-        $paymentsSettings = PaymentSetting::where('user_id', $user->id)->get();
-
         return response()->json([
             'success' => true,
             'user' => $user,
             'photos' => $user->photos,
             'photosCount' => $photos_count,
-            'paymentsSettings' => $paymentsSettings,
             'statistics' => [
                 'likes' => $user->likes_count,
                 'followers' => $user->followers_count,
@@ -75,7 +71,7 @@ class ProfileController extends Controller
             'country',
             'facebook',
             'website',
-            'insta',
+            'instagram',
             'x'
         ]));
 

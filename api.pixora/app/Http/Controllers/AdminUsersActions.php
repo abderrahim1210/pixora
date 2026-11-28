@@ -41,7 +41,7 @@ class AdminUsersActions extends Controller
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'role' => 'required|in:admin,editor,user',
+            'role' => 'required|in:admin,user',
         ]);
 
         if (Auth::user()->role !== 'admin') {

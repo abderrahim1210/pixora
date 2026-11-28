@@ -51,12 +51,8 @@ import { useAuth } from "../context/AuthProvider";
 import { Truncate } from "./Truncate";
 import PageSkeleton from "./PageSkeleton";
 import AdminDashboard from "./AdminDashboard";
-import PhotosTemplate from "./Templates/PhotosTemplate";
-import { EmptyContent } from "./EmptyContent";
 import ModalTemplate from "./Templates/ModalTemplate";
 import { Footer } from "./Layouts/Footer";
-import EditorDashboard from "./EditorDashboard";
-import RequestCard from "./RequestCard";
 import TopBar from "./Profile/TopBar";
 import Infos from "./Profile/Infos";
 import EditProfile from "./Profile/EditProfile";
@@ -544,11 +540,6 @@ export const MyProfile = () => {
                           error={analyticsError}
                           onRetry={refetchAnalytics}
                         />
-                      )
-                    }
-                    {
-                      user?.role === "editor" && (
-                        <EditorDashboard uploadResAction={uploadResAction} />
                       )
                     }
                     {

@@ -40,10 +40,6 @@ class Photo extends Model
         return $this->belongsToMany(Gallery::class, 'gallery_photos');
     }
 
-    public function editingRequests()
-    {
-        return $this->hasMany(EditingTasks::class, 'image_od');
-    }
 
     public function reports()
     {

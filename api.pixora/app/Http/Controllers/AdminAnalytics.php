@@ -14,7 +14,6 @@ class AdminAnalytics extends Controller
                 SELECT
                     (SELECT COUNT(*) FROM users) as users_count,
                     (SELECT COUNT(*) FROM photos) as photos_count,
-                    (SELECT COUNT(*) FROM edition_requests) as requests_count,
                     (SELECT COUNT(*) FROM comments) as comments_count,
                     (SELECT COUNT(*) FROM reports) as reports_count
             ");
@@ -50,13 +49,6 @@ class AdminAnalytics extends Controller
                 ->limit(4)
                 ->get();
 
-            $totalEditionRequests = DB::table('edition_requests')->count();
-
-            // $requestsByStatus = DB::table('edition_requests')
-            //     ->select('status', DB::raw('COUNT(*) as total'))
-            //     ->groupBy('status')
-            //     ->get();
-
             $top_uploaders = DB::table('users as u')
                 ->join('photos as p', 'u.id', '=', 'p.user_id')
                 ->select(DB::raw('COUNT(p.id) as totalUploads'), 'u.id', 'u.username', 'u.photo_profile')
@@ -72,26 +64,9 @@ class AdminAnalytics extends Controller
                 ->limit(4)
                 ->get();
 
-            $latestRequests = DB::table('edition_requests as er')
-                ->join('users as req', 'er.requester_id', '=', 'req.id') // Editor
-                ->join('users as own', 'er.owner_id', '=', 'own.id')      // Photographer
-                ->join('photos as p', 'er.image_id', '=', 'p.id')
-                ->select(
-                    'er.id',
-                    'req.username as editor_name',
-                    'own.username as owner_name',
-                    'p.title as photo_title',
-                    'p.filename',
-                    'er.status',
-                    'er.created_at'
-                )
-                ->orderByDesc('er.created_at')
-                ->limit(5)
-                ->get();
-
             $staff = DB::table('users')
                 ->select('id', 'username', 'role')
-                ->whereIn('role', ['admin', 'editor'])
+                ->whereIn('role', ['admin'])
                 ->limit(5)
                 ->get();
 
@@ -140,16 +115,10 @@ class AdminAnalytics extends Controller
                     'counters' => [
                         'total_users' => $stats->users_count,
                         'total_photos' => $stats->photos_count,
-                        'total_requests' => $stats->requests_count,
                         'total_comments' => $stats->comments_count,
                         'total_reports' => $stats->reports_count,
-                        'pending_editions' => DB::table('edition_requests')->where('status', 'pending')->count(),
-                        'active_tasks' => DB::table('editing_tasks')->where('status', 'in_progress')->count()
                     ],
 
-                    'edition_requests' => $totalEditionRequests,
-                    // 'latest_edition_resquests' => $latestRequests,
-                    'requests' => $latestRequests,
                     'recent_users' => $usersThisMonth,
                     'top_photographers' => $top_photographers,
                     'most_commented' => $mostCommented,
