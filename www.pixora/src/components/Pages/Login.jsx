@@ -51,6 +51,8 @@ export const Login = () => {
     <div data-bs-page="login" id="login">
       <Helmet>
         <title>Pixora | Login</title>
+        <meta name="description" content="Pixora | Login" />
+        <link rel="canonical" href="https://pixora-brf.pages.dev/login" />
       </Helmet>
       <div className="dv1">
         <div className="dv1-0 login_div" style={{

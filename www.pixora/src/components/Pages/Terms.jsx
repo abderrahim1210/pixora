@@ -10,6 +10,8 @@ const Terms = () => {
         <div className="legal-container">
             <Helmet>
                 <title>Pixora | Terms , Privacy & Cookies</title>
+                <meta name="description" content="Pixora | Terms ,Privacy & Cookies" />
+                <link rel="canonical" href="https://pixora-brf.pages.dev/legal/privacy" />
             </Helmet>
             <div className="legal-wrapper">
                 <aside className="legal-sidebar">
@@ -76,7 +78,7 @@ const Terms = () => {
 
                             <h3>1. What are Cookies?</h3>
                             <p>Cookies are small text files stored on your device when you visit a website. They help us remember your preferences and keep you logged in.</p>
-                            
+
                             <h3>2. How We Use Them</h3>
                             <p>We use cookies for:
                                 <ul>
@@ -85,7 +87,7 @@ const Terms = () => {
                                     <li><strong>Analytics:</strong> To understand how users interact with Pixora and fix bugs.</li>
                                 </ul>
                             </p>
-                            
+
                             <h3>3. Managing Cookies</h3>
                             <p>You can control or reset your cookies through your browser settings. However, please note that some features of Pixora may not function properly if cookies are disabled.</p>
                         </section>

@@ -68,6 +68,8 @@ const Photograher = () => {
         <div data-bs-page='myprofile'>
             <Helmet>
                 <title>Pixora | Photographer</title>
+                <meta name="description" content="Pixora | Photographer" />
+                <link rel="canonical" href={`https://pixora-brf.pages.dev/photographer/${photographer?.id}`} />
             </Helmet>
             {
                 show === 'report_user' && (

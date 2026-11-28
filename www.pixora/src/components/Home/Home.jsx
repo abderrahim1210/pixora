@@ -44,6 +44,10 @@ import { SearchsList } from "./SearchsList";
 import Spinner from "../Pages/Spinner";
 import { useHeroImage } from "../utils/useHeroImage";
 
+export function slugiFy(text) {
+  return text ? text.toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu, "").replace(/\s+/g, "-").replace(/-+/g, "-") : 'photo';
+}
+
 export const Home = () => {
   const navigate = useNavigate();
   const [usrSearched, setUsrSearched] = useState([]);
@@ -53,7 +57,7 @@ export const Home = () => {
   const { heroImage, loading: heroLoading, error: heroError } = useHeroImage();
   const [fade, setFade] = useState(true);
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
-  const [showSuggestions,setShowSuggestions] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [pendingFollowIds, setPendingFollowIds] = useState(() => new Set());
   const [followActionError, setFollowActionError] = useState('');
 
@@ -127,10 +131,6 @@ export const Home = () => {
   }
 
   const { user } = useAuth();
-
-  function slugiFy(text) {
-    return text ? text.toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu, "").replace(/\s+/g, "-").replace(/-+/g, "-") : 'photo';
-  }
 
 
   const handleLike = async (photoid) => {

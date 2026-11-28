@@ -33,6 +33,7 @@ import { PhotosLikeOriginal } from "./PhotosLikeOriginal";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from 'sonner';
 import { showPixoraToast } from "../../assets/js/toast";
+import { slugiFy } from "../Home/Home";
 export const Photo = (props) => {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
@@ -229,7 +230,7 @@ export const Photo = (props) => {
         try {
             const res = await api.get('/photos_like_original', {
                 params: {
-                    id:photo?.id,
+                    id: photo?.id,
                     title: photo?.title,
                     category: photo?.category_id,
                     tags: photo?.tags
@@ -243,15 +244,17 @@ export const Photo = (props) => {
     }
 
     const { data: photos_like_original = [], isLoading, error } = useQuery({
-        queryKey: ['photos_like_original',photo?.id],
+        queryKey: ['photos_like_original', photo?.id],
         queryFn: fetchPhotos,
-        enabled:!!photo.id
+        enabled: !!photo.id
     });
 
     return (
         <div data-bs-page="photo">
             <Helmet>
                 <title>Pixora | Photo Preview</title>
+                <meta name="description" content={`${photo.title}, photo by ${photo.username} on Pixora.`} />
+                <link rel="canonical" href={`https://pixora-brf.pages.dev/photo/${photo.id}/${slugiFy(photo?.title)}`} />
             </Helmet>
             <Navbar />
             {

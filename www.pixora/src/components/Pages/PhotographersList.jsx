@@ -14,6 +14,8 @@ const PhotographersList = ({ user,filtredUsers, isLoading, followsLoading, pendi
         <div className="container-fluid div3">
             <Helmet>
                 <title>Pixora | Photographers</title>
+                <meta name="description" content="Pixora | Photographers" />
+                <link rel="canonical" href="https://pixora-brf.pages.dev/photographers" />
             </Helmet>
             {
                 !isLoading ? filtredUsers?.length > 0 ? (

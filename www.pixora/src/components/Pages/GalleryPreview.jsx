@@ -14,6 +14,7 @@ import { useAuth } from '../context/AuthProvider';
 import Swal from 'sweetalert2';
 import { Calendar, ChevronDown, ImageIcon, Loader2, Trash2, User } from 'lucide-react';
 import { showPixoraToast } from '../../assets/js/toast';
+import moment from 'moment';
 
 const GalleryPreview = () => {
     const { id } = useParams();
@@ -119,7 +120,7 @@ const GalleryPreview = () => {
                                                     </div>
                                                     <div className="meta-item">
                                                         <Calendar size={16} className="text-primary" />
-                                                        <span>April 2026</span>
+                                                        <span>{moment(gallery?.created_at).fromNow()}</span>
                                                     </div>
                                                 </div>
                                             </div>
