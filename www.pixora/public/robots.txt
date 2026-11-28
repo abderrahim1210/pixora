@@ -1,6 +1,15 @@
 User-agent: *
 Disallow: /login
 Disallow: /signup
+Disallow: /forgot_password
+Disallow: /reset-password
+Disallow: /upload
+Disallow: /profile/
+Disallow: /auth/callback
+Disallow: /staff
+Disallow: /reports/
+Disallow: /report/
 Disallow: /user/
-Disallow: /auth/
+Disallow: /photo/
+
 Sitemap: https://pixora-brf.pages.dev/sitemap.xml
